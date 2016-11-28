@@ -1,0 +1,14 @@
+
+version: '2'
+
+services:
+  storer_client:
+    user: nobody
+    image: cyberdojo/storer_client
+    ports: [ "4578:4578" ]
+    container_name: storer_client
+
+  storer_server:
+    user: root
+    image: cyberdojo/storer
+    container_name: storer_server
