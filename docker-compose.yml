@@ -5,10 +5,18 @@ services:
   storer_client:
     user: nobody
     image: cyberdojo/storer_client
+    build:
+      context: client
+      args:
+        PORT: 4578
     ports: [ "4578:4578" ]
     container_name: storer_client
 
   storer_server:
     user: root
     image: cyberdojo/storer
+    build:
+      context: server
+      args:
+        PORT: 4577
     container_name: storer_server
