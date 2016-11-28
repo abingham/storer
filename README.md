@@ -3,4 +3,4 @@
 
 # cyberdojo/storer docker image
 
-Will be a micro-service for [cyber-dojo](http://cyber-dojo.org).
+Will be a micro-service for [cyber-dojo](http://cyber-dojo.org) providing API access to katas/
