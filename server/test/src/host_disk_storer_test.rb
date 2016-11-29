@@ -2,7 +2,7 @@ require_relative './storer_test_base'
 
 class HostDiskStorerTest < StorerTestBase
 
-  def self.hex_prefix; 'E4FDA'; end
+  def self.hex_prefix; 'E4FDA20'; end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
   # parent
@@ -34,28 +34,43 @@ class HostDiskStorerTest < StorerTestBase
 
   test '55F',
   'kata_exists?(id) for string not 10 chars long is false' do
-    nine = '60408161A'
-    assert_equal 9, nine.length
-    refute storer.kata_exists?(nine)
+    invalid = '60408161A'
+    assert_equal 9, invalid.length
+    refute storer.kata_exists?(invalid)
   end
 
   test '8F9',
   'kata_exists?(id) for string 10 chars long but not all hex is false' do
-    ten = '60408161AG'
-    assert_equal 10, ten.length
-    refute storer.kata_exists?(ten)
+    invalid = '60408161AG'
+    assert_equal 10, invalid.length
+    refute storer.kata_exists?(invalid)
   end
 
-=begin
   test '79A',
-  'kata_exists?(id) false' do
-    ten = 'CE121BE38A'
-    assert_equal 10, ten.length
-    refute storer.kata_exists?(ten)
+  'kata_exists?(good-id) false' do
+    assert_equal 10, test_id.length
+    refute storer.kata_exists?(test_id)
   end
-=end
+
+  test 'D70',
+  'kata_exists?(good-id) true' do
+    kata_id = 'CE121BE38A'
+    assert_equal 10, kata_id.length
+    make_dir(kata_id)
+    assert storer.kata_exists?(kata_id)
+  end
+
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  #
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   private
+
+  def make_dir(id)
+    outer = id.upcase[0..1]
+    inner = id.upcase[2..-1]
+    disk[storer.path + '/' + outer + '/' + inner].make
+  end
 
 end
 

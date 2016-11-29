@@ -14,18 +14,20 @@ class HostDiskStorer
   end
 
   def kata_exists?(id)
-    valid?(id) #&& kata_dir(id).exists?
+    valid?(id) && kata_dir(id).exists?
   end
+
+  #...
 
   private
 
-  #def kata_dir(id)
-  #  disk[kata_path(id)]
-  #end
+  def kata_dir(id)
+    disk[kata_path(id)]
+  end
 
-  #def kata_path(id)
-  #  path + '/' + outer(id) + '/' + inner(id)
-  #end
+  def kata_path(id)
+    path + '/' + outer(id) + '/' + inner(id)
+  end
 
   def valid?(id)
     id.class.name == 'String' &&
@@ -37,17 +39,17 @@ class HostDiskStorer
     '0123456789ABCDEF'.include?(char)
   end
 
-  #def outer(id)
-  #  id.upcase[0..1]  # 'E5'
-  #end
+  def outer(id)
+    id.upcase[0..1]  # 'E5'
+  end
 
-  #def inner(id)
-  #  id.upcase[2..-1] # '6A3327FE'
-  #end
+  def inner(id)
+    id.upcase[2..-1] # '6A3327FE'
+  end
 
-  #def disk; nearest_external(:disk); end
+  def disk; nearest_external(:disk); end
   #def git; nearest_external(:git); end
 
-  #include NearestExternal
+  include NearestExternal
 
 end

@@ -34,7 +34,7 @@ class ExternalGitterTest < StorerTestBase
   'git.add' do
     hex_tmp_dir do |path|
       git.setup(path, user_name, user_email)
-      disk.write(path + '/' + filename, content)
+      disk[path].write(filename, content)
       git.add(path, filename)
       cd_exec(path, 'git status')
       assert_status 0
@@ -50,7 +50,7 @@ class ExternalGitterTest < StorerTestBase
   'git.commit' do
     hex_tmp_dir do |path|
       git.setup(path, user_name, user_email)
-      disk.write(path + '/' + filename, content)
+      disk[path].write(filename, content)
       git.add(path, filename)
       git.commit(path, tag=0)
       cd_exec(path, 'git log')
@@ -70,7 +70,7 @@ class ExternalGitterTest < StorerTestBase
   'git.show' do
     hex_tmp_dir do |path|
       git.setup(path, user_name, user_email)
-      disk.write(path + '/' + filename, content)
+      disk[path].write(filename, content)
       git.add(path, filename)
       git.commit(path, tag=0)
       assert_equal content, git.show(path, "#{tag}:#{filename}")
@@ -83,7 +83,7 @@ class ExternalGitterTest < StorerTestBase
   'for git.rm' do
     hex_tmp_dir do |path|
       git.setup(path, user_name, user_email)
-      disk.write(path + '/' + filename, content + "\n")
+      disk[path].write(filename, content + "\n")
       git.add(path, filename)
       git.commit(path, was_tag=0)
       git.rm(path, filename)
