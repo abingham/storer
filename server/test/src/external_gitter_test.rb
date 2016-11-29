@@ -13,7 +13,7 @@ class ExternalGitterTest < StorerTestBase
 
   test 'DC3',
   'git.setup' do
-    Dir.mktmpdir(ENV['CYBER_DOJO_TEST_HEX_ID']) do |path|
+    hex_tmp_dir do |path|
       git.setup(path, user_name, user_email)
       cd_exec(path, 'git status')
       assert_status 0
@@ -32,7 +32,7 @@ class ExternalGitterTest < StorerTestBase
 
   test 'F2F',
   'git.add' do
-    Dir.mktmpdir(ENV['CYBER_DOJO_TEST_HEX_ID']) do |path|
+    hex_tmp_dir do |path|
       git.setup(path, user_name, user_email)
       filename = 'limerick.txt'
       content = 'the boy stood on the burning deck'
@@ -50,7 +50,7 @@ class ExternalGitterTest < StorerTestBase
 
   test 'F72',
   'git.commit' do
-    Dir.mktmpdir(ENV['CYBER_DOJO_TEST_HEX_ID']) do |path|
+    hex_tmp_dir do |path|
       git.setup(path, user_name, user_email)
       filename = 'limerick.txt'
       content = 'the boy stood on the burning deck'
@@ -72,7 +72,7 @@ class ExternalGitterTest < StorerTestBase
 
   test '6F8',
   'git.show' do
-    Dir.mktmpdir(ENV['CYBER_DOJO_TEST_HEX_ID']) do |path|
+    hex_tmp_dir do |path|
       git.setup(path, user_name, user_email)
       filename = 'limerick.txt'
       content = 'the boy stood on the burning deck'
@@ -86,6 +86,12 @@ class ExternalGitterTest < StorerTestBase
   # - - - - - - - - - - - - - - - - -
 
   private
+
+  def hex_tmp_dir
+    Dir.mktmpdir(ENV['CYBER_DOJO_TEST_HEX_ID']) do |path|
+      yield path
+    end
+  end
 
   def user_name
     'lion'
