@@ -70,6 +70,37 @@ class ExternalGitterTest < StorerTestBase
 
   # - - - - - - - - - - - - - - - - -
 
+  test '31A',
+  'git.diff' do
+    Dir.mktmpdir(ENV['CYBER_DOJO_TEST_HEX_ID']) do |avatar_path|
+      git.setup(avatar_path, user_name, user_email)
+      sandbox_path = avatar_path + '/sandbox'
+      shell.exec("mkdir #{sandbox_path}")
+      filename = 'limerick.txt'
+      content = 'the boy stood on the burning deck' + "\n"
+      disk.write(sandbox_path + '/' + filename, content)
+      git.add(sandbox_path, filename)
+      git.commit(avatar_path, was_tag=0)
+      content += 'he gave a cough, his leg fell off' + "\n"
+      disk.write(sandbox_path + '/' + filename, content)
+      git.add(sandbox_path, filename)
+      git.commit(avatar_path, now_tag=1)
+      expected = [
+        'diff --git a/sandbox/limerick.txt b/sandbox/limerick.txt',
+        'index 334ac44..e9ab257 100644',
+        '--- a/sandbox/limerick.txt',
+        '+++ b/sandbox/limerick.txt',
+        '@@ -1 +1,2 @@',
+        ' the boy stood on the burning deck',
+        '+he gave a cough, his leg fell off'
+      ]
+      @stdout = git.diff(avatar_path, was_tag, now_tag)
+      assert_stdout expected.join("\n")+"\n"
+    end
+  end
+
+  # - - - - - - - - - - - - - - - - -
+
   private
 
   def user_name
@@ -122,17 +153,6 @@ class ExternalGitterTest < StorerTestBase
     options = '--quiet'
     expect(["git show #{options}"])
     git.show(path, options)
-  end
-
-  # - - - - - - - - - - - - - - - - -
-
-  test '31A9A2',
-  'shell.cd_exec for git.diff' do
-    was_tag = 2
-    now_tag = 3
-    options = "--ignore-space-at-eol --find-copies-harder #{was_tag} #{now_tag} sandbox"
-    expect(["git diff #{options}"])
-    git.diff(path, was_tag, now_tag)
   end
 
   # - - - - - - - - - - - - - - - - -
