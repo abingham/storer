@@ -20,7 +20,7 @@ class ExternalSheller
         log << "STDOUT:#{stdout}"
         log << "STDERR:#{stderr}"
       end
-      [stdout, stderr, status]
+      [stdout,stderr,status]
     rescue StandardError => error
       log << line
       log << "COMMAND:#{command}"
@@ -28,6 +28,10 @@ class ExternalSheller
       log << "RAISED-TO_S:#{error.to_s}"
       raise error
     end
+  end
+
+  def cd_exec(path, command, logging = true)
+    exec("cd #{path} && #{command}", logging)
   end
 
   def success; 0; end
