@@ -83,11 +83,23 @@ class ExternalGitterTest < StorerTestBase
   'for git.rm' do
     hex_tmp_dir do |path|
       git.setup(path, user_name, user_email)
-      disk.write(path + '/' + filename, content)
+      disk.write(path + '/' + filename, content + "\n")
       git.add(path, filename)
-      git.commit(path, tag=0)
+      git.commit(path, was_tag=0)
+      git.rm(path, filename)
+      git.commit(path, now_tag=1)
 
-      #...
+      expected = [
+        'diff --git a/limerick.txt b/limerick.txt',
+        'deleted file mode 100644',
+        'index 334ac44..0000000',
+        '--- a/limerick.txt',
+        '+++ /dev/null',
+        '@@ -1 +0,0 @@',
+        '-the boy stood on the burning deck'
+       ]
+       cd_exec(path, "git diff #{was_tag} #{now_tag}")
+       assert_stdout expected.join("\n")+"\n"
     end
   end
 
