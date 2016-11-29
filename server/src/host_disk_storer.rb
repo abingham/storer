@@ -13,6 +13,17 @@ class HostDiskStorer
     @path ||= ENV['CYBER_DOJO_KATAS_ROOT']
   end
 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # katas
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  #def completed(id)
+  #def ids_for(outer_dir)
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # kata
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
   def kata_exists?(id)
     valid?(id) && kata_dir(id).exists?
   end

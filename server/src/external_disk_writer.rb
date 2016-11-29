@@ -10,7 +10,7 @@ class ExternalDiskWriter
   attr_reader :parent
 
   def [](dir_name)
-    ExternalDirWriter.new(@parent, dir_name)
+    ExternalDirWriter.new(self, dir_name)
   end
 
 end
@@ -50,10 +50,23 @@ class ExternalDirWriter
     IO.read(pathed(filename))
   end
 
+  # - - - - - - - - - - - - - - - - - - - - - - - -
+
+  def each_dir
+    return enum_for(:each_dir) unless block_given?
+    Dir.entries(name).each do |entry|
+      yield entry if parent[pathed(entry)].exists? && !dot?(pathed(entry))
+    end
+  end
+
   private
 
-  def pathed(filename)
-    name + '/' + filename
+  def pathed(entry)
+    name + '/' + entry
+  end
+
+  def dot?(name)
+    name.end_with?('/.') || name.end_with?('/..')
   end
 
   def shell; nearest_external(:shell); end

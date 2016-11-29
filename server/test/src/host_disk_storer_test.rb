@@ -66,6 +66,13 @@ class HostDiskStorerTest < StorerTestBase
     assert_hash_equal manifest, storer.kata_manifest(kata_id)
   end
 
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # completed
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # ids_for
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   private
 
@@ -81,4 +88,3 @@ class HostDiskStorerTest < StorerTestBase
   end
 
 end
-

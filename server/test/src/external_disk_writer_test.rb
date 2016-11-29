@@ -35,12 +35,32 @@ class ExternalDiskWriterTest < StorerTestBase
   # - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'D4C',
-  'what gets written gets read back' do
+  'dir.read() reads back what dir.write() wrote' do
     dir = disk['/tmp/D4C']
     dir.make
     dir.write(filename, content)
     assert_equal content, dir.read(filename)
   end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  test '0CC',
+  'dir.each_dir() returns dir names but not . or ..' do
+    dir = disk['/tmp/0CC']
+    disk['/tmp/0CC/alpha'].make
+    disk['/tmp/0CC/beta' ].make
+    disk['/tmp/0CC/gamma'].make
+    assert_equal %w( alpha beta gamma ), dir.each_dir.entries.sort
+  end
+
+  test '7E1',
+  'dir.each_dir() returns [] when there are no sub-dirs' do
+    dir = disk['/tmp/0CC']
+    dir.make
+    assert_equal [], dir.each_dir.entries
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - -
 
   private
 
