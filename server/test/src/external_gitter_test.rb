@@ -70,6 +70,21 @@ class ExternalGitterTest < StorerTestBase
 
   # - - - - - - - - - - - - - - - - -
 
+  test '6F8',
+  'git.show' do
+    Dir.mktmpdir(ENV['CYBER_DOJO_TEST_HEX_ID']) do |path|
+      git.setup(path, user_name, user_email)
+      filename = 'limerick.txt'
+      content = 'the boy stood on the burning deck'
+      disk.write(path + '/' + filename, content)
+      git.add(path, filename)
+      git.commit(path, tag=0)
+      assert_equal content, git.show(path, "#{tag}:#{filename}")
+    end
+  end
+
+  # - - - - - - - - - - - - - - - - -
+
   private
 
   def user_name
@@ -117,12 +132,6 @@ class ExternalGitterTest < StorerTestBase
 =begin
   # - - - - - - - - - - - - - - - - -
 
-  test '6F8B85',
-  'shell.cd_exec for git.show' do
-    options = '--quiet'
-    expect(["git show #{options}"])
-    git.show(path, options)
-  end
 
   # - - - - - - - - - - - - - - - - -
 
