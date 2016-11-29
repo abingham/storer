@@ -23,7 +23,7 @@ class ExternalGitter
       "git config user.name #{quoted(user_name)}",
       "git config user.email #{quoted(user_email)}"
     ]
-    commands.each { |command| cd_exec(path, command) }
+    cd_exec(path, *commands)
   end
 
   def rm(path, filename)
@@ -40,25 +40,25 @@ class ExternalGitter
       'git gc --auto --quiet',
       "git tag -m '#{tag}' #{tag} HEAD"
     ]
-    commands.each { |command| cd_exec(path, command) }
+    cd_exec(path, *commands)
   end
 
   private
 
-  def cd_exec(path, command)
-    shell.cd_exec(path, command)
+  def cd_exec(path, *commands)
+    commands.each { |command| shell.cd_exec(path, command) }
   end
 
-  include NearestExternal
-  def shell; nearest_external(:shell); end
+  def output_of(path, command)
+    stdout,_stderr,_status = shell.cd_exec(path, command)
+    stdout
+  end
 
   def quoted(s)
     "'" + s + "'"
   end
 
-  def output_of(path, command)
-    stdout,_stderr,_status = cd_exec(path, command)
-    stdout
-  end
+  def shell; nearest_external(:shell); end
+  include NearestExternal
 
 end
