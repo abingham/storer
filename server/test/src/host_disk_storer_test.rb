@@ -146,10 +146,9 @@ class HostDiskStorerTest < StorerTestBase
   end
 
   def create_kata(id)
-    manifest = {
-      image_name: 'cyberdojofoundation/python_behave',
-      id: id
-    }
+    manifest = {}
+    manifest[:image_name] = 'cyberdojofoundation/python_behave'
+    manifest[:id] = id
     storer.create_kata(manifest)
     manifest
   end
