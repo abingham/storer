@@ -13,14 +13,34 @@ class ExternalGitterTest < StorerTestBase
 
   test 'DC3',
   'git.setup' do
-    user_name = 'lion'
-    user_email = 'lion@cyber-dojo.org'
     Dir.mktmpdir(ENV['CYBER_DOJO_TEST_HEX_ID']) do |path|
       git.setup(path, user_name, user_email)
       cd_exec(path, 'git status')
       assert_status 0
-      assert_stdout_includes  'On branch master'
-      assert_stdout_includes  'Initial commit'
+      assert_stdout_include  'On branch master'
+      assert_stdout_include  'Initial commit'
+      assert_stderr ''
+      assert_log []
+      cd_exec(path, 'git config user.name')
+      assert_success 'lion' + "\n"
+      cd_exec(path, 'git config user.email')
+      assert_success 'lion@cyber-dojo.org' + "\n"
+    end
+  end
+
+  # - - - - - - - - - - - - - - - - -
+
+  test 'F2F',
+  'git.add' do
+    Dir.mktmpdir(ENV['CYBER_DOJO_TEST_HEX_ID']) do |path|
+      git.setup(path, user_name, user_email)
+      filename = 'limerick.txt'
+      content = 'the boy stood on the burning deck'
+      disk.write(path + '/' + filename, content)
+      git.add(path, filename)
+      cd_exec(path, 'git status')
+      assert_status 0
+      assert_stdout_include 'new file:   limerick.txt'
       assert_stderr ''
       assert_log []
     end
@@ -30,16 +50,35 @@ class ExternalGitterTest < StorerTestBase
 
   private
 
+  def user_name
+    'lion'
+  end
+
+  def user_email
+    'lion@cyber-dojo.org'
+  end
+
   def cd_exec(path, command, logging = true)
     @stdout,@stderr,@status = shell.cd_exec(path, command, logging)
+  end
+
+  def assert_success(expected)
+    assert_status 0
+    assert_stdout  expected
+    assert_stderr ''
+    assert_log []
   end
 
   def assert_status(expected)
     assert_equal expected, @status
   end
 
-  def assert_stdout_includes(expected)
+  def assert_stdout_include(expected)
     assert @stdout.include?(expected), @stdout
+  end
+
+  def assert_stdout(expected)
+    assert_equal expected, @stdout
   end
 
   def assert_stderr(expected)
@@ -81,15 +120,6 @@ class ExternalGitterTest < StorerTestBase
     filename = 'wibble.c'
     expect(["git rm '#{filename}'"])
     git.rm(path, filename)
-  end
-
-  # - - - - - - - - - - - - - - - - -
-
-  test 'F2FAD5',
-  'shell.cd_exec for git.add' do
-    filename = 'wibble.h'
-    expect(["git add '#{filename}'"])
-    git.add(path, filename)
   end
 
   # - - - - - - - - - - - - - - - - -
