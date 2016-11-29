@@ -56,9 +56,9 @@ class ExternalGitterTest < StorerTestBase
       cd_exec(path, 'git log')
       assert_status 0
       assert_match /commit (\h*)/, @stdout
-      assert_match /Author: lion <lion@cyber-dojo.org>/, @stdout
+      assert_match /Author: #{user_name} <#{user_email}>/, @stdout
       assert_match /Date:\s\s\s(.*)/, @stdout
-      assert_match /\s\s\s0/, @stdout
+      assert_match /\s\s\s#{tag}/, @stdout
       assert_stderr ''
       assert_log []
     end
