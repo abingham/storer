@@ -7,8 +7,7 @@ services:
     image: cyberdojo/storer_client
     build:
       context: client
-      args:
-        PORT: 4578
+      args: [ PORT=4578 ]
     ports: [ "4578:4578" ]
     container_name: storer_client
 
@@ -17,7 +16,6 @@ services:
     image: cyberdojo/storer
     build:
       context: server
-      args:
-        PORT: 4577
+      args: [ PORT=4577 ]
     container_name: storer_server
     environment: [ CYBER_DOJO_KATAS_ROOT=/tmp ]
