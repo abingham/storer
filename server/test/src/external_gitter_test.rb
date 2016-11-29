@@ -48,6 +48,28 @@ class ExternalGitterTest < StorerTestBase
 
   # - - - - - - - - - - - - - - - - -
 
+  test 'F72',
+  'git.commit' do
+    Dir.mktmpdir(ENV['CYBER_DOJO_TEST_HEX_ID']) do |path|
+      git.setup(path, user_name, user_email)
+      filename = 'limerick.txt'
+      content = 'the boy stood on the burning deck'
+      disk.write(path + '/' + filename, content)
+      git.add(path, filename)
+      git.commit(path, tag=0)
+      cd_exec(path, 'git log')
+      assert_status 0
+      assert_match /commit (\h*)/, @stdout
+      assert_match /Author: lion <lion@cyber-dojo.org>/, @stdout
+      assert_match /Date:\s\s\s(.*)/, @stdout
+      assert_match /\s\s\s0/, @stdout
+      assert_stderr ''
+      assert_log []
+    end
+  end
+
+  # - - - - - - - - - - - - - - - - -
+
   private
 
   def user_name
@@ -122,18 +144,6 @@ class ExternalGitterTest < StorerTestBase
     git.rm(path, filename)
   end
 
-  # - - - - - - - - - - - - - - - - -
-
-  test 'F728AB',
-  'shell.cd_exec for git.commit' do
-    tag = 6
-    expect([
-      "git commit -a -m #{tag} --quiet",
-      'git gc --auto --quiet',
-      "git tag -m '#{tag}' #{tag} HEAD"
-    ])
-    git.commit(path, tag)
-  end
 =end
 
 end
