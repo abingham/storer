@@ -48,28 +48,36 @@ class HostDiskStorerTest < StorerTestBase
 
   test '79A',
   'kata_exists?(good-id) false' do
-    assert_equal 10, test_id.length
-    refute storer.kata_exists?(test_id)
-  end
-
-  test 'D70',
-  'kata_exists?(good-id) true' do
-    kata_id = 'CE121BE38A'
-    assert_equal 10, kata_id.length
-    make_dir(kata_id)
-    assert storer.kata_exists?(kata_id)
+    refute storer.kata_exists?(kata_id)
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  #
+  # create_kata
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  test 'B99',
+  'after create_kata(manifest) kata_exists?(id) is true and manifest can be retrieved' do
+    manifest = {
+      image_name: 'cyberdojofoundation/python_behave',
+      id: kata_id
+    }
+    storer.create_kata(manifest)
+    assert storer.kata_exists?(test_id)
+    assert_hash_equal manifest, storer.kata_manifest(kata_id)
+  end
+
 
   private
 
-  def make_dir(id)
-    outer = id.upcase[0..1]
-    inner = id.upcase[2..-1]
-    disk[storer.path + '/' + outer + '/' + inner].make
+  def kata_id
+    test_id
+  end
+
+  def assert_hash_equal(expected, actual)
+    assert_equal expected.size, actual.size
+    expected.each do |symbol,value|
+      assert_equal value, actual[symbol.to_s]
+    end
   end
 
 end
