@@ -11,6 +11,13 @@ class HostDiskStorerTest < StorerTestBase
     assert_equal self, storer.parent
   end
 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  test '218',
+  'path is set to /tmp in docker-compose.yml' do
+    assert_equal '/tmp', storer.path
+  end
+
   private
 
 end
