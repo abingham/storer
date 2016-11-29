@@ -34,13 +34,11 @@ class ExternalGitterTest < StorerTestBase
   'git.add' do
     hex_tmp_dir do |path|
       git.setup(path, user_name, user_email)
-      filename = 'limerick.txt'
-      content = 'the boy stood on the burning deck'
       disk.write(path + '/' + filename, content)
       git.add(path, filename)
       cd_exec(path, 'git status')
       assert_status 0
-      assert_stdout_include 'new file:   limerick.txt'
+      assert_stdout_include "new file:   #{filename}"
       assert_stderr ''
       assert_log []
     end
@@ -52,8 +50,6 @@ class ExternalGitterTest < StorerTestBase
   'git.commit' do
     hex_tmp_dir do |path|
       git.setup(path, user_name, user_email)
-      filename = 'limerick.txt'
-      content = 'the boy stood on the burning deck'
       disk.write(path + '/' + filename, content)
       git.add(path, filename)
       git.commit(path, tag=0)
@@ -74,8 +70,6 @@ class ExternalGitterTest < StorerTestBase
   'git.show' do
     hex_tmp_dir do |path|
       git.setup(path, user_name, user_email)
-      filename = 'limerick.txt'
-      content = 'the boy stood on the burning deck'
       disk.write(path + '/' + filename, content)
       git.add(path, filename)
       git.commit(path, tag=0)
@@ -88,6 +82,11 @@ class ExternalGitterTest < StorerTestBase
   test '7A3',
   'for git.rm' do
     hex_tmp_dir do |path|
+      git.setup(path, user_name, user_email)
+      disk.write(path + '/' + filename, content)
+      git.add(path, filename)
+      git.commit(path, tag=0)
+
       #...
     end
   end
@@ -98,6 +97,14 @@ class ExternalGitterTest < StorerTestBase
     Dir.mktmpdir(ENV['CYBER_DOJO_TEST_HEX_ID']) do |path|
       yield path
     end
+  end
+
+  def filename
+    'limerick.txt'
+  end
+
+  def content
+    'the boy stood on the burning deck'
   end
 
   def user_name
