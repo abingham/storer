@@ -99,7 +99,7 @@ table =
     [ 'skips',                  skip_count,         '==',   0 ],
     [ 'assertions/s',           assertions_per_sec, '>=', 100 ],
     [ 'duration(test)[s]',      test_duration,      '<=',   5 ],
-    [ 'coverage(src)[%]',       src_coverage,       '>=', 100 ],
+    [ 'coverage(src)[%]',       src_coverage,       '>=',  97 ],
     [ 'coverage(test)[%]',      test_coverage,      '>=', 100 ],
     [ 'hits_per_line(src)',     hits_per_line_src,  '<=',  10 ],
     [ 'hits_per_line(test)',    hits_per_line_test, '<=',   3 ],
