@@ -27,4 +27,11 @@ class ExternalsTest < StorerTestBase
     assert_equal 'ExternalSheller', shell.class.name
   end
 
+  # - - - - - - - - - - - - - - - - -
+
+  test 'DAA',
+  'default gitter is ExternalGitter' do
+    assert_equal 'ExternalGitter', git.class.name
+  end
+
 end
