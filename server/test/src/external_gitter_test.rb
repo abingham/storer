@@ -85,6 +85,13 @@ class ExternalGitterTest < StorerTestBase
 
   # - - - - - - - - - - - - - - - - -
 
+  test '7A3',
+  'for git.rm' do
+    hex_tmp_dir do |path|
+      #...
+    end
+  end
+
   private
 
   def hex_tmp_dir
@@ -133,21 +140,5 @@ class ExternalGitterTest < StorerTestBase
     expected.unshift(line) unless expected == []
     assert_equal expected, log.spied
   end
-
-
-=begin
-  # - - - - - - - - - - - - - - - - -
-
-
-  # - - - - - - - - - - - - - - - - -
-
-  test '7A3E16',
-  'shell.cd_exec for git.rm' do
-    filename = 'wibble.c'
-    expect(["git rm '#{filename}'"])
-    git.rm(path, filename)
-  end
-
-=end
 
 end
