@@ -6,7 +6,7 @@ class ExternalDiskWriterTest < StorerTestBase
 
   test 'D4C',
   'what gets written gets read back' do
-    Dir.mktmpdir('file_writer') do |tmp_dir|
+    Dir.mktmpdir(ENV['CYBER_DOJO_TEST_HEX_ID']) do |tmp_dir|
       pathed_filename = tmp_dir + '/limerick.txt'
       content = 'the boy stood on the burning deck'
       disk.write(pathed_filename, content)
