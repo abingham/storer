@@ -22,9 +22,9 @@ class ExternalGitterTest < StorerTestBase
       assert_stderr ''
       assert_log []
       cd_exec(path, 'git config user.name')
-      assert_success 'lion' + "\n"
+      assert_success user_name + "\n"
       cd_exec(path, 'git config user.email')
-      assert_success 'lion@cyber-dojo.org' + "\n"
+      assert_success user_email + "\n"
     end
   end
 
