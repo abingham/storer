@@ -55,7 +55,7 @@ class ExternalDiskWriterTest < StorerTestBase
 
   test '7E1',
   'dir.each_dir() returns [] when there are no sub-dirs' do
-    dir = disk['/tmp/0CC']
+    dir = disk['/tmp/7E1']
     dir.make
     assert_equal [], dir.each_dir.entries
   end
