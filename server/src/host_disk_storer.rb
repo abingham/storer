@@ -72,12 +72,35 @@ class HostDiskStorer
 
   def kata_started_avatars(id)
     started = kata_dir(id).each_dir.collect { |name| name }
-    started & avatars_names
+    started & all_avatar_names
   end
 
-  #def kata_start_avatar(id, avatar_names)
-  #def avatar_increments(id, name)
-  #def avatar_visible_files(id, name)
+  def kata_start_avatar(id, avatar_names)
+    # Needs to be atomic otherwise two laptops in the same practice session
+    # could start as the same animal. This relies on mkdir being atomic on
+    # a (non NFS) POSIX file system.
+    # Note: Don't do the & with operands swapped - you lose randomness
+    valid_names = avatar_names & all_avatar_names
+    name = valid_names.detect { |name| avatar_dir(id, name).make }
+    return nil if name.nil? # full!
+
+    visible_files = kata_manifest(id)['visible_files']
+    write_avatar_manifest(id, name, visible_files)
+    write_avatar_increments(id, name, [])
+
+    name
+  end
+
+  def avatar_increments(id, name)
+    # implicitly for current (latest) tag
+    JSON.parse(avatar_dir(id, name).read(increments_filename))
+  end
+
+  def avatar_visible_files(id, name)
+    # implicitly for current (latest) tag
+    JSON.parse(avatar_dir(id, name).read(manifest_filename))
+  end
+
   #def avatar_ran_tests(id, name, delta, files, now, output, colour)
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -87,6 +110,20 @@ class HostDiskStorer
   #def tag_visible_files(id, name, tag)
 
   private
+
+  def all_avatar_names
+    %w(alligator antelope   bat     bear     bee      beetle       buffalo   butterfly
+       cheetah   crab       deer    dolphin  eagle    elephant     flamingo  fox
+       frog      gopher     gorilla heron    hippo    hummingbird  hyena     jellyfish
+       kangaroo  kingfisher koala   leopard  lion     lizard       lobster   moose
+       mouse     ostrich    owl     panda    parrot   peacock      penguin   porcupine
+       puffin    rabbit     raccoon ray      rhino    salmon       seal      shark
+       skunk     snake      spider  squid    squirrel starfish     swan      tiger
+       toucan    tuna       turtle  vulture  walrus   whale        wolf      zebra
+    )
+  end
+
+  # - - - - - - - - - - -
 
   def kata_dir(id)
     disk[kata_path(id)]
@@ -138,18 +175,20 @@ class HostDiskStorer
     'manifest.json'
   end
 
+  def write_avatar_manifest(id, name, visible_files)
+    avatar_dir(id, name).write(manifest_filename, JSON.unparse(visible_files))
+  end
+
   # - - - - - - - - - - -
 
-  def avatars_names
-    %w(alligator antelope   bat     bear     bee      beetle       buffalo   butterfly
-       cheetah   crab       deer    dolphin  eagle    elephant     flamingo  fox
-       frog      gopher     gorilla heron    hippo    hummingbird  hyena     jellyfish
-       kangaroo  kingfisher koala   leopard  lion     lizard       lobster   moose
-       mouse     ostrich    owl     panda    parrot   peacock      penguin   porcupine
-       puffin    rabbit     raccoon ray      rhino    salmon       seal      shark
-       skunk     snake      spider  squid    squirrel starfish     swan      tiger
-       toucan    tuna       turtle  vulture  walrus   whale        wolf      zebra
-    )
+  def increments_filename
+    # Each avatar's increments stores a cache of colours and time-stamps
+    # for all the avatar's [test]s. Helps optimize traffic-lights views.
+    'increments.json'
+  end
+
+  def write_avatar_increments(id, name, increments)
+    avatar_dir(id, name).write(increments_filename, JSON.unparse(increments))
   end
 
   # - - - - - - - - - - -

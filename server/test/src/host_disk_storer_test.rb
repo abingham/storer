@@ -146,7 +146,7 @@ class HostDiskStorerTest < StorerTestBase
   test 'A6B',
   'avatar_exists? is false before avatar starts' do
     create_kata(kata_id)
-    refute storer.avatar_exists?(kata_id, 'lion')
+    refute storer.avatar_exists?(kata_id, lion)
     assert_equal [], storer.kata_started_avatars(kata_id)
   end
 
@@ -160,18 +160,66 @@ class HostDiskStorerTest < StorerTestBase
     assert_equal [], storer.kata_started_avatars(kata_id)
   end
 
+  test 'E0C',
+  'avatar_exists? is true after avatar_starts' do
+    create_kata(kata_id)
+    storer.kata_start_avatar(kata_id, [lion])
+    assert storer.avatar_exists?(kata_id, lion)
+    assert_equal [lion], storer.kata_started_avatars(kata_id)
+    assert_equal [], storer.avatar_increments(kata_id, lion)
+    assert_hash_equal starting_files, storer.avatar_visible_files(kata_id, lion)
+  end
+
+  test 'B1C',
+  'avatar_start succeeds 64 times then kata is full' do
+    create_kata(kata_id)
+    avatar_names.each do |name|
+      storer.kata_start_avatar(kata_id, [name])
+      assert storer.avatar_exists?(kata_id, name)
+    end
+    assert_equal avatar_names.sort, storer.kata_started_avatars(kata_id).sort
+    assert_nil storer.kata_start_avatar(kata_id, avatar_names)
+  end
+
+
+
   private
 
   def kata_id
+    # reversed so I don't get common outer(id)s
     test_id.reverse
+  end
+
+  def lion
+    'lion'
+  end
+
+  def avatar_names
+    %w(alligator antelope   bat     bear     bee      beetle       buffalo   butterfly
+       cheetah   crab       deer    dolphin  eagle    elephant     flamingo  fox
+       frog      gopher     gorilla heron    hippo    hummingbird  hyena     jellyfish
+       kangaroo  kingfisher koala   leopard  lion     lizard       lobster   moose
+       mouse     ostrich    owl     panda    parrot   peacock      penguin   porcupine
+       puffin    rabbit     raccoon ray      rhino    salmon       seal      shark
+       skunk     snake      spider  squid    squirrel starfish     swan      tiger
+       toucan    tuna       turtle  vulture  walrus   whale        wolf      zebra
+    )
   end
 
   def create_kata(id)
     manifest = {}
     manifest[:image_name] = 'cyberdojofoundation/python_behave'
+    manifest[:visible_files] = starting_files
     manifest[:id] = id
     storer.create_kata(manifest)
     manifest
+  end
+
+  def starting_files
+    { 'cyber-dojo.sh' => 'gcc',
+      'hiker.c' => '#include "hiker.h"',
+      'hiker.h' => '#include <stdio.h>'
+    }
   end
 
   def outer(id)
