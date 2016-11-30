@@ -139,6 +139,27 @@ class HostDiskStorerTest < StorerTestBase
     assert_equal expected.sort, storer.ids_for('7F').sort
   end
 
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # avatars
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  test 'A6B',
+  'avatar_exists? is false before avatar starts' do
+    create_kata(kata_id)
+    refute storer.avatar_exists?(kata_id, 'lion')
+    assert_equal [], storer.kata_started_avatars(kata_id)
+  end
+
+  test 'F6E',
+  'rogue sub-dirs in kata-dir are not reported as avatars' do
+    create_kata(kata_id)
+    kata_path = storer.path + '/' + outer(kata_id) + '/' + inner(kata_id)
+    rogue = 'flintstone'
+    disk[kata_path + '/' + rogue].make
+    assert_equal [rogue], disk[kata_path].each_dir.collect { |name| name }
+    assert_equal [], storer.kata_started_avatars(kata_id)
+  end
+
   private
 
   def kata_id
@@ -151,6 +172,10 @@ class HostDiskStorerTest < StorerTestBase
     manifest[:id] = id
     storer.create_kata(manifest)
     manifest
+  end
+
+  def outer(id)
+    id[0..1]
   end
 
   def inner(id)

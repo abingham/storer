@@ -26,10 +26,8 @@ class HostDiskStorer
     # it would provide a way for anyone to find the full id of a cyber-dojo
     # and potentially interfere with a live session.
     if !id.nil? && id.length >= 6
-      # outer-dir has 2-characters
       outer_dir = disk[path + '/' + outer(id)]
       if outer_dir.exists?
-        # inner-dir has 8-characters
         dirs = outer_dir.each_dir.select { |inner_dir| inner_dir.start_with?(inner(id)) }
         id = outer(id) + dirs[0] if dirs.length == 1
       end
@@ -39,11 +37,6 @@ class HostDiskStorer
 
   def ids_for(outer_dir)
     # for Batch-Method iteration over large number of katas...
-    # (0..255).map{|n| '%02X' % n}.each do |outer|
-    #   storer.ids_for(outer).each do |inner|
-    #     ids << (outer + inner)
-    #   end
-    # end
     return [] unless disk[path + '/' + outer_dir].exists?
     disk[path + '/' + outer_dir].each_dir.collect { |dir| dir }
   end
@@ -70,6 +63,28 @@ class HostDiskStorer
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # avatar
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  def avatar_exists?(id, name)
+    avatar_dir(id, name).exists?
+  end
+
+  def kata_started_avatars(id)
+    started = kata_dir(id).each_dir.collect { |name| name }
+    started & avatars_names
+  end
+
+  #def kata_start_avatar(id, avatar_names)
+  #def avatar_increments(id, name)
+  #def avatar_visible_files(id, name)
+  #def avatar_ran_tests(id, name, delta, files, now, output, colour)
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # tag
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  #def tag_visible_files(id, name, tag)
 
   private
 
@@ -77,17 +92,31 @@ class HostDiskStorer
     disk[kata_path(id)]
   end
 
+  def avatar_dir(id, name)
+    disk[avatar_path(id, name)]
+  end
+
+  # - - - - - - - - - - -
+
   def kata_path(id)
     path + '/' + outer(id) + '/' + inner(id)
   end
 
+  def avatar_path(id, name)
+    kata_path(id) + '/' + name
+  end
+
+  # - - - - - - - - - - -
+
   def outer(id)
-    id.upcase[0..1]  # 'E5
+    id.upcase[0..1]  # eg 'E5' 2-chars long
   end
 
   def inner(id)
-    inner = id.upcase[2..-1] # '6A3327FE'
+    inner = id.upcase[2..-1] # eg '6A3327FE' 8-chars long
   end
+
+  # - - - - - - - - - - -
 
   def valid?(id)
     id.class.name == 'String' &&
@@ -99,6 +128,8 @@ class HostDiskStorer
     '0123456789ABCDEF'.include?(char)
   end
 
+  # - - - - - - - - - - -
+
   def manifest_filename
     # Each kata's manifest stores the kata's meta information
     # such as the chosen language, tests, exercise.
@@ -106,6 +137,22 @@ class HostDiskStorer
     # current visible files [filenames and contents].
     'manifest.json'
   end
+
+  # - - - - - - - - - - -
+
+  def avatars_names
+    %w(alligator antelope   bat     bear     bee      beetle       buffalo   butterfly
+       cheetah   crab       deer    dolphin  eagle    elephant     flamingo  fox
+       frog      gopher     gorilla heron    hippo    hummingbird  hyena     jellyfish
+       kangaroo  kingfisher koala   leopard  lion     lizard       lobster   moose
+       mouse     ostrich    owl     panda    parrot   peacock      penguin   porcupine
+       puffin    rabbit     raccoon ray      rhino    salmon       seal      shark
+       skunk     snake      spider  squid    squirrel starfish     swan      tiger
+       toucan    tuna       turtle  vulture  walrus   whale        wolf      zebra
+    )
+  end
+
+  # - - - - - - - - - - -
 
   def disk; nearest_external(:disk); end
   #def git; nearest_external(:git); end
