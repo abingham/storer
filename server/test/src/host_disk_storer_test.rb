@@ -140,7 +140,7 @@ class HostDiskStorerTest < StorerTestBase
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  # avatars
+  # start_avatar
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'A6B',
@@ -160,6 +160,12 @@ class HostDiskStorerTest < StorerTestBase
     assert_equal [], storer.kata_started_avatars(kata_id)
   end
 
+  test 'CBF',
+  'avatar_start(not-a-known-avatar-name) fails' do
+    create_kata(kata_id)
+    assert_nil storer.kata_start_avatar(kata_id, ['pencil'])
+  end
+
   test 'E0C',
   'avatar_exists? is true after avatar_starts' do
     create_kata(kata_id)
@@ -168,6 +174,7 @@ class HostDiskStorerTest < StorerTestBase
     assert_equal [lion], storer.kata_started_avatars(kata_id)
     assert_equal [], storer.avatar_increments(kata_id, lion)
     assert_hash_equal starting_files, storer.avatar_visible_files(kata_id, lion)
+    assert_hash_equal starting_files, storer.tag_visible_files(kata_id, lion, tag=0)
   end
 
   test 'B1C',
@@ -180,6 +187,10 @@ class HostDiskStorerTest < StorerTestBase
     assert_equal avatar_names.sort, storer.kata_started_avatars(kata_id).sort
     assert_nil storer.kata_start_avatar(kata_id, avatar_names)
   end
+
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # ran_tests
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 
 

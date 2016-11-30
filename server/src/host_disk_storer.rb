@@ -84,20 +84,30 @@ class HostDiskStorer
     name = valid_names.detect { |name| avatar_dir(id, name).make }
     return nil if name.nil? # full!
 
+    user_name = name + '_' + id
+    user_email = name + '@cyber-dojo.org'
+    git.setup(avatar_path(id, name), user_name, user_email)
+
     visible_files = kata_manifest(id)['visible_files']
+
     write_avatar_manifest(id, name, visible_files)
+    git.add(avatar_path(id, name), manifest_filename)
+
     write_avatar_increments(id, name, [])
+    #git.add(avatar_path(id, name), increments_filename)
+
+    git.commit(avatar_path(id, name), tag=0)
 
     name
   end
 
   def avatar_increments(id, name)
-    # implicitly for current (latest) tag
+    # for current (latest) tag
     JSON.parse(avatar_dir(id, name).read(increments_filename))
   end
 
   def avatar_visible_files(id, name)
-    # implicitly for current (latest) tag
+    # for current (latest) tag
     JSON.parse(avatar_dir(id, name).read(manifest_filename))
   end
 
@@ -107,7 +117,10 @@ class HostDiskStorer
   # tag
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  #def tag_visible_files(id, name, tag)
+  def tag_visible_files(id, name, tag)
+    # retrieve all the files in one go
+    JSON.parse(git.show(avatar_path(id, name), "#{tag}:#{manifest_filename}"))
+  end
 
   private
 
@@ -194,7 +207,7 @@ class HostDiskStorer
   # - - - - - - - - - - -
 
   def disk; nearest_external(:disk); end
-  #def git; nearest_external(:git); end
+  def git; nearest_external(:git); end
 
   include NearestExternal
 
