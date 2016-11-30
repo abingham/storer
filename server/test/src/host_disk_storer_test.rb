@@ -145,14 +145,14 @@ class HostDiskStorerTest < StorerTestBase
 
   test 'A6B',
   'avatar_exists? is false before avatar starts' do
-    create_kata(kata_id)
+    create_kata
     refute storer.avatar_exists?(kata_id, lion)
     assert_equal [], storer.kata_started_avatars(kata_id)
   end
 
   test 'F6E',
   'rogue sub-dirs in kata-dir are not reported as avatars' do
-    create_kata(kata_id)
+    create_kata
     kata_path = storer.path + '/' + outer(kata_id) + '/' + inner(kata_id)
     rogue = 'flintstone'
     disk[kata_path + '/' + rogue].make
@@ -162,13 +162,13 @@ class HostDiskStorerTest < StorerTestBase
 
   test 'CBF',
   'avatar_start(not-a-known-avatar-name) fails' do
-    create_kata(kata_id)
+    create_kata
     assert_nil storer.kata_start_avatar(kata_id, ['pencil'])
   end
 
   test 'E0C',
   'avatar_exists? is true after avatar_starts' do
-    create_kata(kata_id)
+    create_kata
     storer.kata_start_avatar(kata_id, [lion])
     assert storer.avatar_exists?(kata_id, lion)
     assert_equal [lion], storer.kata_started_avatars(kata_id)
@@ -179,7 +179,7 @@ class HostDiskStorerTest < StorerTestBase
 
   test 'B1C',
   'avatar_start succeeds 64 times then kata is full' do
-    create_kata(kata_id)
+    create_kata
     avatar_names.each do |name|
       storer.kata_start_avatar(kata_id, [name])
       assert storer.avatar_exists?(kata_id, name)
@@ -217,7 +217,7 @@ class HostDiskStorerTest < StorerTestBase
     )
   end
 
-  def create_kata(id)
+  def create_kata(id = kata_id)
     manifest = {}
     manifest[:image_name] = 'cyberdojofoundation/python_behave'
     manifest[:visible_files] = starting_files
