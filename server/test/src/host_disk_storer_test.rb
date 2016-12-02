@@ -57,9 +57,9 @@ class HostDiskStorerTest < StorerTestBase
 
   test 'B99',
   'after create_kata(manifest) kata_exists?(id) is true and manifest can be retrieved' do
-    manifest = create_kata(kata_id)
+    manifest = create_kata
     assert storer.kata_exists?(kata_id)
-    assert_hash_equal manifest, storer.kata_manifest(kata_id)
+    assert_hash_equal manifest, kata_manifest
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -173,9 +173,9 @@ class HostDiskStorerTest < StorerTestBase
     storer.kata_start_avatar(kata_id, [lion])
     assert storer.avatar_exists?(kata_id, lion)
     assert_equal [lion], storer.kata_started_avatars(kata_id)
-    assert_equal [], storer.avatar_increments(kata_id, lion)
-    assert_hash_equal starting_files, storer.avatar_visible_files(kata_id, lion)
-    assert_hash_equal starting_files, storer.tag_visible_files(kata_id, lion, tag=0)
+    assert_equal [], avatar_increments(lion)
+    assert_hash_equal starting_files, avatar_visible_files(lion)
+    assert_hash_equal starting_files, tag_visible_files(lion, tag=0)
   end
 
   test 'B1C',
@@ -207,15 +207,15 @@ class HostDiskStorerTest < StorerTestBase
     tag = 1
     # traffic-lights
     expected = [ {'colour'=>colour, 'time'=>time_now, 'number'=>tag} ]
-    assert_equal expected, storer.avatar_increments(kata_id, lion)
+    assert_equal expected, avatar_increments(lion)
     # current tag
-    visible_files = storer.avatar_visible_files(kata_id, lion)
+    visible_files = avatar_visible_files(lion)
     assert_equal output, visible_files['output'], 'output'
     starting_files.each do |filename,content|
       assert_equal content, visible_files[filename], filename
     end
     # by tag
-    visible_files = storer.tag_visible_files(kata_id, lion, tag)
+    visible_files = tag_visible_files(lion, tag)
     assert_equal output, visible_files['output'], 'output'
     starting_files.each do |filename,content|
       assert_equal content, visible_files[filename], filename
@@ -232,6 +232,24 @@ class HostDiskStorerTest < StorerTestBase
   end
 
   private
+
+  def kata_manifest
+    JSON.parse(storer.kata_manifest(kata_id))
+  end
+
+  def avatar_increments(name)
+    JSON.parse(storer.avatar_increments(kata_id, name))
+  end
+
+  def avatar_visible_files(name)
+    JSON.parse(storer.avatar_visible_files(kata_id, name))
+  end
+
+  def tag_visible_files(name, tag)
+    JSON.parse(storer.tag_visible_files(kata_id, name, tag))
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - -
 
   def kata_id
     test_id.reverse # reversed so I don't get common outer(id)s
