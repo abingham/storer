@@ -7,12 +7,12 @@ class SpyLoggerTest < StorerTestBase
 
   test '20C',
   'logged message is spied' do
-    logger = SpyLogger.new(nil)
-    assert_equal [], logger.spied
-    logger << 'hello'
-    assert_equal ['hello'], logger.spied
-    logger << 'world'
-    assert_equal ['hello','world'], logger.spied
+    @log = SpyLogger.new(nil)
+    assert_equal [], log.spied
+    log << 'hello'
+    assert_equal ['hello'], log.spied
+    log << 'world'
+    assert_equal ['hello','world'], log.spied
   end
 
 end
