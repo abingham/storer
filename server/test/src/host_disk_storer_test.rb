@@ -195,19 +195,16 @@ class HostDiskStorerTest < StorerTestBase
   'after ran_tests() there is one more tag, one more traffic-light;',
   'visible_files are retrievable by current and specific git-tag and contain output' do
     create_kata
-    storer.kata_start_avatar(kata_id, [lion]) # tag 0
-    args = []
-    args << kata_id
-    args << lion
-    args << delta = { unchanged:[starting_files.keys], changed:[], deleted:[], new:[] }
-    args << starting_files
-    args << time_now
-    args << output = 'Assertion failed: answer() == 42'
-    args << colour = 'red'
-    storer.avatar_ran_tests(*args)
+    storer.kata_start_avatar(kata_id, [lion])
+    tag = 0
+
+    delta = empty_delta
+    delta[:unchanged] = starting_files.keys
+    storer.avatar_ran_tests(*make_args(delta, starting_files))
     tag = 1
+
     # traffic-lights
-    expected = [ {'colour'=>colour, 'time'=>time_now, 'number'=>tag} ]
+    expected = [ {'colour'=>'red', 'time'=>time_now, 'number'=>tag} ]
     assert_equal expected, avatar_increments(lion)
     # current tag
     visible_files = avatar_visible_files(lion)
@@ -240,13 +237,14 @@ class HostDiskStorerTest < StorerTestBase
   'output file is NOT git versioned' do
     @log = SpyLogger.new(nil)
     create_kata
-    storer.kata_start_avatar(kata_id, [lion]) # tag 0
+    storer.kata_start_avatar(kata_id, [lion])
+    tag = 0
 
     delta = empty_delta
     delta[:unchanged] = [starting_files.keys]
     storer.avatar_ran_tests(*make_args(delta, starting_files))
-
     tag = 1
+
     filename = 'sandbox/output'
     git.show(avatar_path(lion), "#{tag}:#{filename}")
     assert log.spied.include? "STDERR:fatal: Path 'sandbox/output' does not exist in '1'\n"
@@ -255,7 +253,8 @@ class HostDiskStorerTest < StorerTestBase
   test '04A',
   'changed files are git commited to the tag' do
     create_kata
-    storer.kata_start_avatar(kata_id, [lion]) # tag 0
+    storer.kata_start_avatar(kata_id, [lion])
+    tag = 0
 
     hiker_c = starting_files['hiker.c'] + "\nint main(){}"
     files = starting_files
@@ -264,8 +263,8 @@ class HostDiskStorerTest < StorerTestBase
     delta[:unchanged] = [starting_files.keys]-['hiker.c']
     delta[:changed] = ['hiker.c']
     storer.avatar_ran_tests(*make_args(delta, files))
-
     tag = 1
+
     files.each do |filename,content|
       assert_equal content, git.show(avatar_path(lion), "#{tag}:sandbox/#{filename}")
     end
@@ -275,7 +274,8 @@ class HostDiskStorerTest < StorerTestBase
   'deleted files are git removed from the tag' do
     @log = SpyLogger.new(nil)
     create_kata
-    storer.kata_start_avatar(kata_id, [lion]) # tag 0
+    storer.kata_start_avatar(kata_id, [lion])
+    tag = 0
 
     files = starting_files
     files.delete('hiker.h')
@@ -283,8 +283,8 @@ class HostDiskStorerTest < StorerTestBase
     delta[:unchanged] = [starting_files.keys]-['hiker.h']
     delta[:deleted] = ['hiker.h']
     storer.avatar_ran_tests(*make_args(delta, files))
-
     tag = 1
+
     filename = 'sandbox/hiker.h'
     git.show(avatar_path(lion), "#{tag}:#{filename}")
     assert log.spied.include? "STDERR:fatal: Path 'sandbox/hiker.h' does not exist in '1'\n"
@@ -293,7 +293,8 @@ class HostDiskStorerTest < StorerTestBase
   test '08F',
   'new files are git added to the tag' do
     create_kata
-    storer.kata_start_avatar(kata_id, [lion]) # tag 0
+    storer.kata_start_avatar(kata_id, [lion])
+    tag = 0
 
     files = starting_files
     delta = empty_delta
@@ -301,8 +302,8 @@ class HostDiskStorerTest < StorerTestBase
     files['readme.txt'] = 'NB:'
     delta[:new] = ['readme.txt']
     storer.avatar_ran_tests(*make_args(delta, files))
-
     tag = 1
+
     filename = 'sandbox/readme.txt'
     assert_equal 'NB:', git.show(avatar_path(lion), "#{tag}:#{filename}")
   end
@@ -378,9 +379,13 @@ class HostDiskStorerTest < StorerTestBase
     args << delta
     args << files
     args << time_now
-    args << output = 'Assertion failed: answer() == 42'
+    args << output
     args << colour = 'red'
     args
+  end
+
+  def output
+    'Assertion failed: answer() == 42'
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - -
