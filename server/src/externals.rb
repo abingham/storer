@@ -13,7 +13,7 @@ module Externals
 end
 
 #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# How does Externals work? How are they designed to be used?
+# Use with NearestExternal as follows:
 #
 # 1. include Externals in your top-level scope.
 #
@@ -22,15 +22,15 @@ end
 #      ...
 #      private
 #      include Externals
-#      def runner; DockerRunner.new(self); end
+#      def storer; HostDiskStorer.new(self); end
 #      ...
 #    end
 #
-# 2. All child objects have access to their parent
+# 2. ensure all child objects have access to their parent
 #    and gain access to the externals via nearest_external()
 #
 #    require_relative './nearest_external'
-#    class DockerRunner
+#    class HostDiskStorer
 #      def initialize(parent)
 #        @parent = parent
 #      end
@@ -39,18 +39,17 @@ end
 #      private
 #      include NearestExternal
 #      def log; nearest_external(:log); end
-#      ...
 #    end
 #
-# 3. In tests you can simply set the external directly.
-#    Note that Externals.log uses ||=
+# 3. tests simply set the external directly.
+#    Note that Externals.log uses @log ||= ...
 #
-#    class ExampleTest < MiniTest::Test
+#    class HostDiskStorerTest < MiniTest::Test
 #      def test_something
 #        @log = SpyLogger.new(...)
-#        runner = DockerRunner.new(self)
-#        runner.do_something
-#        assert_equal 'expected', @log.spied
+#        storer = HostDiskStorer.new(self)
+#        storer.do_something
+#        assert_equal 'expected', log.spied
 #      end
 #    end
 #
