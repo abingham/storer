@@ -153,7 +153,7 @@ class HostDiskStorerTest < StorerTestBase
   test 'F6E',
   'rogue sub-dirs in kata-dir are not reported as avatars' do
     create_kata
-    kata_path = storer.path + '/' + outer(kata_id) + '/' + inner(kata_id)
+    #kata_path = storer.path + '/' + outer(kata_id) + '/' + inner(kata_id)
     rogue = 'flintstone'
     disk[kata_path + '/' + rogue].make
     assert_equal [rogue], disk[kata_path].each_dir.collect { |name| name }
@@ -161,7 +161,7 @@ class HostDiskStorerTest < StorerTestBase
   end
 
   test 'CBF',
-  'avatar_start(not-a-known-avatar-name) fails' do
+  'avatar_start(not-an-avatar-name) fails' do
     create_kata
     assert_nil storer.kata_start_avatar(kata_id, ['pencil'])
   end
@@ -231,7 +231,7 @@ class HostDiskStorerTest < StorerTestBase
     create_kata
     storer.kata_start_avatar(kata_id, [lion])
     tag = 0
-    path = storer.path + '/' + kata_id[0..1] + '/' + kata_id[2..-1] + '/' + lion
+    path = kata_path + '/' + lion
     filename = 'increments.json'
     assert_equal '[]', git.show(path, "#{tag}:#{filename}")
   end
@@ -272,6 +272,10 @@ class HostDiskStorerTest < StorerTestBase
       'hiker.c' => '#include "hiker.h"',
       'hiker.h' => '#include <stdio.h>'
     }
+  end
+
+  def kata_path
+    storer.path + '/' + outer(kata_id) + '/' + inner(kata_id)
   end
 
   def outer(id)
