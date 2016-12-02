@@ -93,31 +93,29 @@ class HostDiskStorer
     user_email = name + '@cyber-dojo.org'
     git.setup(avatar_path(id, name), user_name, user_email)
     git.add(avatar_path(id, name), manifest_filename)
-    #git.add(avatar_path(id, name), increments_filename) # NB: for tgz compatibility
+    git.add(avatar_path(id, name), increments_filename) # download tgz compatibility
     git.commit(avatar_path(id, name), tag=0)
 
     name
   end
 
   def avatar_increments(id, name)
-    # for current (latest) tag
-    JSON.parse(avatar_dir(id, name).read(increments_filename))
+    JSON.parse(avatar_dir(id, name).read(increments_filename)) # latest tag
   end
 
   def avatar_visible_files(id, name)
-    # for current (latest) tag
-    JSON.parse(avatar_dir(id, name).read(manifest_filename))
+    JSON.parse(avatar_dir(id, name).read(manifest_filename)) # latest tag
   end
 
   def avatar_ran_tests(id, name, delta, files, now, output, colour)
     #sandbox_save(id, name, delta, files)
-    #sandbox_dir(id, name).write('output', output) # NB: no git.add for output file... BUG?
+    #sandbox_dir(id, name).write('output', output) # NB: no git.add as git.commit does -a
     files['output'] = output
     write_avatar_manifest(id, name, files)
     rags = avatar_increments(id, name)
     tag = rags.length + 1
     rags << { 'colour' => colour, 'time' => now, 'number' => tag }
-    write_avatar_increments(id, name, rags)
+    write_avatar_increments(id, name, rags) # NB: no git.add as git.commit does -a
     git.commit(avatar_path(id, name), tag)
   end
 
@@ -169,6 +167,7 @@ class HostDiskStorer
       git.add(sandbox_path(id, name), filename)
     end
     delta[:changed].each do |filename|
+      # no git.add as git.commit does -a
       sandbox_write(id, name, filename, files[filename])
     end
   end
@@ -193,7 +192,7 @@ class HostDiskStorer
     # An avatar's source files are _not_ held in its own folder
     # (but in it's sandbox folder) because its own folder
     # is used for the manifest.json and increments.json files.
-    avatar_path(id, name) + '/sandbox'
+    avatar_path(id, name) + '/' + 'sandbox'
   end
 =end
 

@@ -226,7 +226,15 @@ class HostDiskStorerTest < StorerTestBase
     end
   end
 
-  # traffic-lights are git versioned to maintain compatibility with download tgz format
+  test  '1FB',
+  'traffic-lights are git versioned to maintain compatibility with download tgz format' do
+    create_kata
+    storer.kata_start_avatar(kata_id, [lion])
+    tag = 0
+    path = storer.path + '/' + kata_id[0..1] + '/' + kata_id[2..-1] + '/' + lion
+    filename = 'increments.json'
+    assert_equal '[]', git.show(path, "#{tag}:#{filename}")
+  end
 
   private
 
