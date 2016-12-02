@@ -223,6 +223,10 @@ class HostDiskStorerTest < StorerTestBase
     end
   end
 
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # git commits
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
   test '1FB',
   'traffic-lights are git versioned to maintain compatibility with download tgz format' do
     create_kata
@@ -250,6 +254,83 @@ class HostDiskStorerTest < StorerTestBase
     filename = 'sandbox/output'
     git.show(avatar_path(lion), "#{tag}:#{filename}")
     assert log.spied.include? "STDERR:fatal: Path 'sandbox/output' does not exist in '1'\n"
+  end
+
+  test '04A',
+  'changed files are git commited to the tag' do
+    create_kata
+    storer.kata_start_avatar(kata_id, [lion]) # tag 0
+
+    hiker_c = starting_files['hiker.c'] + "\nint main(){}"
+    files = starting_files
+    files['hiker.c'] = hiker_c
+
+    args = []
+    args << kata_id
+    args << lion
+    args << delta = { unchanged:[starting_files.keys]-['hiker.c'], changed:['hiker.c'], deleted:[], new:[] }
+    args << files
+    args << time_now = [2016, 12, 2, 6, 14, 57]
+    args << output = 'Assertion failed: answer() == 42'
+    args << colour = 'red'
+    storer.avatar_ran_tests(*args)
+    tag = 1
+    files.each do |filename,content|
+      assert_equal content, git.show(avatar_path(lion), "#{tag}:sandbox/#{filename}")
+    end
+  end
+
+  test 'BE5',
+  'deleted files are git removed from the tag' do
+    @log = SpyLogger.new(nil)
+    create_kata
+    storer.kata_start_avatar(kata_id, [lion]) # tag 0
+
+    files = starting_files
+    files.delete('hiker.h')
+
+    delta = { changed:[], new:[] }
+    delta[:unchanged] = [starting_files.keys]-['hiker.h']
+    delta[:deleted] = ['hiker.h']
+
+    args = []
+    args << kata_id
+    args << lion
+    args << delta
+    args << files
+    args << time_now = [2016, 12, 2, 6, 14, 57]
+    args << output = 'Assertion failed: answer() == 42'
+    args << colour = 'red'
+    storer.avatar_ran_tests(*args)
+    tag = 1
+    filename = 'sandbox/hiker.h'
+    git.show(avatar_path(lion), "#{tag}:#{filename}")
+    assert log.spied.include? "STDERR:fatal: Path 'sandbox/hiker.h' does not exist in '1'\n"
+  end
+
+  test '08F',
+  'new files are git added to the tag' do
+    create_kata
+    storer.kata_start_avatar(kata_id, [lion]) # tag 0
+
+    files = starting_files
+    delta = { changed:[], deleted:[] }
+    delta[:unchanged] = [files.keys]
+    files['readme.txt'] = 'NB:'
+    delta[:new] = ['readme.txt']
+
+    args = []
+    args << kata_id
+    args << lion
+    args << delta
+    args << files
+    args << time_now = [2016, 12, 2, 6, 14, 57]
+    args << output = 'Assertion failed: answer() == 42'
+    args << colour = 'red'
+    storer.avatar_ran_tests(*args)
+    tag = 1
+    filename = 'sandbox/readme.txt'
+    assert_equal 'NB:', git.show(avatar_path(lion), "#{tag}:#{filename}")
   end
 
   private

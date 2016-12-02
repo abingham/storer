@@ -87,13 +87,17 @@ class HostDiskStorer
     visible_files = JSON.parse(kata_manifest(id))['visible_files']
     write_avatar_manifest(id, name, visible_files)
     write_avatar_increments(id, name, [])
-    #sandbox_dir(id, name).make
 
     user_name = name + '_' + id
     user_email = name + '@cyber-dojo.org'
     git.setup(avatar_path(id, name), user_name, user_email)
     git.add(avatar_path(id, name), manifest_filename)
     git.add(avatar_path(id, name), increments_filename) # download tgz compatibility
+    sandbox_dir(id, name).make
+    visible_files.each do |filename, content|
+      sandbox_dir(id, name).write(filename, content)
+      git.add(sandbox_path(id, name), filename)
+    end
     git.commit(avatar_path(id, name), tag=0)
 
     name
@@ -108,11 +112,12 @@ class HostDiskStorer
   end
 
   def avatar_ran_tests(id, name, delta, files, now, output, colour)
-    #sandbox_save(id, name, delta, files)
+    sandbox_save(id, name, delta, files)
 
     # cyberdojo/web writes output to sandbox/output file
     # but it does *not* git.add it (which I intended to do)
 
+    files = files.clone # don't alter caller's files argument
     files['output'] = output
     write_avatar_manifest(id, name, files)
 
@@ -120,6 +125,7 @@ class HostDiskStorer
     tag = rags.length + 1
     rags << { 'colour' => colour, 'time' => now, 'number' => tag }
     write_avatar_increments(id, name, rags) # NB: no git.add as git.commit does -a
+
     git.commit(avatar_path(id, name), tag)
   end
 
@@ -156,7 +162,6 @@ class HostDiskStorer
     disk[avatar_path(id, name)]
   end
 
-=begin
   def sandbox_dir(id, name)
     disk[sandbox_path(id, name)]
   end
@@ -179,7 +184,6 @@ class HostDiskStorer
   def sandbox_write(id, name, filename, content)
     sandbox_dir(id, name).write(filename, content)
   end
-=end
 
   # - - - - - - - - - - -
 
@@ -191,14 +195,12 @@ class HostDiskStorer
     kata_path(id) + '/' + name
   end
 
-=begin
   def sandbox_path(id, name)
     # An avatar's source files are _not_ held in its own folder
     # (but in it's sandbox folder) because its own folder
     # is used for the manifest.json and increments.json files.
     avatar_path(id, name) + '/' + 'sandbox'
   end
-=end
 
   # - - - - - - - - - - -
 
