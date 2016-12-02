@@ -97,7 +97,7 @@ table =
     [ 'failures',               failure_count,      '==',   0 ],
     [ 'errors',                 error_count,        '==',   0 ],
     [ 'skips',                  skip_count,         '==',   0 ],
-    [ 'assertions/s',           assertions_per_sec, '>=', 150 ],
+    [ 'assertions/s',           assertions_per_sec, '>=', 125 ],
     [ 'duration(test)[s]',      test_duration,      '<=',   2 ],
     [ 'coverage(src)[%]',       src_coverage,       '>=', 100 ],
     [ 'coverage(test)[%]',      test_coverage,      '>=', 100 ],
