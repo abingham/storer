@@ -204,7 +204,7 @@ class HostDiskStorerTest < StorerTestBase
     tag = 1
 
     # traffic-lights
-    expected = [ {'colour'=>'red', 'time'=>time_now, 'number'=>tag} ]
+    expected = [ { 'colour' => red, 'time' => time_now, 'number' => tag } ]
     assert_equal expected, avatar_increments(lion)
     # current tag
     visible_files = avatar_visible_files(lion)
@@ -336,10 +336,6 @@ class HostDiskStorerTest < StorerTestBase
     'lion'
   end
 
-  def time_now
-    [2016, 12, 2, 6, 14, 57]
-  end
-
   def all_avatar_names
     %w(alligator antelope   bat     bear     bee      beetle       buffalo   butterfly
        cheetah   crab       deer    dolphin  eagle    elephant     flamingo  fox
@@ -354,7 +350,7 @@ class HostDiskStorerTest < StorerTestBase
 
   def create_kata(id = kata_id)
     manifest = {}
-    manifest[:image_name] = 'cyberdojofoundation/python_behave'
+    manifest[:image_name] = 'cyberdojofoundation/gcc_assert'
     manifest[:visible_files] = starting_files
     manifest[:id] = id
     storer.create_kata(manifest)
@@ -373,29 +369,29 @@ class HostDiskStorerTest < StorerTestBase
   end
 
   def make_args(delta, files)
-    args = []
-    args << kata_id
-    args << lion
-    args << delta
-    args << files
-    args << time_now
-    args << output
-    args << colour = 'red'
-    args
+    [ kata_id, lion, delta, files, time_now, output, red ]
+  end
+
+  def time_now
+    [2016, 12, 2, 6, 14, 57]
   end
 
   def output
     'Assertion failed: answer() == 42'
   end
 
-  # - - - - - - - - - - - - - - - - - - - - - - - -
-
-  def kata_path
-    storer.path + '/' + outer(kata_id) + '/' + inner(kata_id)
+  def red
+    'red'
   end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - -
 
   def avatar_path(name)
     kata_path + '/' + name
+  end
+
+  def kata_path
+    storer.path + '/' + outer(kata_id) + '/' + inner(kata_id)
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - -
@@ -407,6 +403,8 @@ class HostDiskStorerTest < StorerTestBase
   def inner(id)
     id[2..-1]
   end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - -
 
   def assert_hash_equal(expected, actual)
     assert_equal expected.size, actual.size
