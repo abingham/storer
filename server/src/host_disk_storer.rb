@@ -87,7 +87,7 @@ class HostDiskStorer
     visible_files = kata_manifest(id)['visible_files']
     write_avatar_manifest(id, name, visible_files)
     write_avatar_increments(id, name, [])
-    sandbox_dir(id, name).make
+    #sandbox_dir(id, name).make
 
     user_name = name + '_' + id
     user_email = name + '@cyber-dojo.org'
@@ -111,7 +111,7 @@ class HostDiskStorer
 
   def avatar_ran_tests(id, name, delta, files, now, output, colour)
     #sandbox_save(id, name, delta, files)
-    sandbox_dir(id, name).write('output', output) # NB: no git.add for output file... BUG?
+    #sandbox_dir(id, name).write('output', output) # NB: no git.add for output file... BUG?
     files['output'] = output
     write_avatar_manifest(id, name, files)
     rags = avatar_increments(id, name)
@@ -154,11 +154,11 @@ class HostDiskStorer
     disk[avatar_path(id, name)]
   end
 
+=begin
   def sandbox_dir(id, name)
     disk[sandbox_path(id, name)]
   end
 
-=begin
     def sandbox_save(id, name, delta, files)
     # Unchanged files are *not* re-saved.
     delta[:deleted].each do |filename|
@@ -188,12 +188,14 @@ class HostDiskStorer
     kata_path(id) + '/' + name
   end
 
+=begin
   def sandbox_path(id, name)
     # An avatar's source files are _not_ held in its own folder
-    # (but in the it's sandbox folder) because its own folder
+    # (but in it's sandbox folder) because its own folder
     # is used for the manifest.json and increments.json files.
     avatar_path(id, name) + '/sandbox'
   end
+=end
 
   # - - - - - - - - - - -
 
@@ -220,10 +222,10 @@ class HostDiskStorer
   # - - - - - - - - - - -
 
   def manifest_filename
-    # Each kata's manifest stores the kata's meta information
+    # A kata manifest stores the kata's meta information
     # such as the chosen language, tests, exercise.
-    # Each avatar's manifest stores a cache of the avatar's
-    # current visible files [filenames and contents].
+    # An avatar manifest stores the avatar's
+    # current visible files (filenames and contents).
     'manifest.json'
   end
 
