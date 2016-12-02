@@ -244,16 +244,8 @@ class HostDiskStorerTest < StorerTestBase
 
     delta = { changed:[], deleted:[], new:[] }
     delta[:unchanged] = [starting_files.keys]
+    storer.avatar_ran_tests(*make_args(delta, starting_files))
 
-    args = []
-    args << kata_id
-    args << lion
-    args << delta
-    args << starting_files
-    args << time_now
-    args << output = 'Assertion failed: answer() == 42'
-    args << colour = 'red'
-    storer.avatar_ran_tests(*args)
     tag = 1
     filename = 'sandbox/output'
     git.show(avatar_path(lion), "#{tag}:#{filename}")
@@ -268,20 +260,11 @@ class HostDiskStorerTest < StorerTestBase
     hiker_c = starting_files['hiker.c'] + "\nint main(){}"
     files = starting_files
     files['hiker.c'] = hiker_c
-
     delta = { deleted:[], new:[] }
     delta[:unchanged] = [starting_files.keys]-['hiker.c']
     delta[:changed] = ['hiker.c']
+    storer.avatar_ran_tests(*make_args(delta, files))
 
-    args = []
-    args << kata_id
-    args << lion
-    args << delta
-    args << files
-    args << time_now
-    args << output = 'Assertion failed: answer() == 42'
-    args << colour = 'red'
-    storer.avatar_ran_tests(*args)
     tag = 1
     files.each do |filename,content|
       assert_equal content, git.show(avatar_path(lion), "#{tag}:sandbox/#{filename}")
@@ -296,20 +279,11 @@ class HostDiskStorerTest < StorerTestBase
 
     files = starting_files
     files.delete('hiker.h')
-
     delta = { changed:[], new:[] }
     delta[:unchanged] = [starting_files.keys]-['hiker.h']
     delta[:deleted] = ['hiker.h']
+    storer.avatar_ran_tests(*make_args(delta, files))
 
-    args = []
-    args << kata_id
-    args << lion
-    args << delta
-    args << files
-    args << time_now
-    args << output = 'Assertion failed: answer() == 42'
-    args << colour = 'red'
-    storer.avatar_ran_tests(*args)
     tag = 1
     filename = 'sandbox/hiker.h'
     git.show(avatar_path(lion), "#{tag}:#{filename}")
@@ -326,16 +300,8 @@ class HostDiskStorerTest < StorerTestBase
     delta[:unchanged] = [files.keys]
     files['readme.txt'] = 'NB:'
     delta[:new] = ['readme.txt']
+    storer.avatar_ran_tests(*make_args(delta, files))
 
-    args = []
-    args << kata_id
-    args << lion
-    args << delta
-    args << files
-    args << time_now
-    args << output = 'Assertion failed: answer() == 42'
-    args << colour = 'red'
-    storer.avatar_ran_tests(*args)
     tag = 1
     filename = 'sandbox/readme.txt'
     assert_equal 'NB:', git.show(avatar_path(lion), "#{tag}:#{filename}")
@@ -399,6 +365,18 @@ class HostDiskStorerTest < StorerTestBase
       'hiker.c' => '#include "hiker.h"',
       'hiker.h' => '#include <stdio.h>'
     }
+  end
+
+  def make_args(delta, files)
+    args = []
+    args << kata_id
+    args << lion
+    args << delta
+    args << files
+    args << time_now
+    args << output = 'Assertion failed: answer() == 42'
+    args << colour = 'red'
+    args
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - -
