@@ -183,8 +183,9 @@ class HostDiskStorerTest < StorerTestBase
   'avatar_start succeeds 64 times then kata is full' do
     create_kata
     avatar_names.each do |name|
-      storer.kata_start_avatar(kata_id, [name])
-      assert storer.avatar_exists?(kata_id, name)
+      #storer.kata_start_avatar(kata_id, [name])
+      #assert storer.avatar_exists?(kata_id, name)
+      disk[kata_path + '/' + name].make
     end
     assert_equal avatar_names.sort, storer.kata_started_avatars(kata_id).sort
     assert_nil storer.kata_start_avatar(kata_id, avatar_names)
