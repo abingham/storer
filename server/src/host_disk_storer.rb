@@ -109,9 +109,13 @@ class HostDiskStorer
 
   def avatar_ran_tests(id, name, delta, files, now, output, colour)
     #sandbox_save(id, name, delta, files)
-    #sandbox_dir(id, name).write('output', output) # NB: no git.add as git.commit does -a
+
+    # cyberdojo/web writes output to sandbox/output file
+    # but it does *not* git.add it (which I intended to do)
+
     files['output'] = output
     write_avatar_manifest(id, name, files)
+
     rags = JSON.parse(avatar_increments(id, name))
     tag = rags.length + 1
     rags << { 'colour' => colour, 'time' => now, 'number' => tag }
@@ -157,7 +161,7 @@ class HostDiskStorer
     disk[sandbox_path(id, name)]
   end
 
-    def sandbox_save(id, name, delta, files)
+  def sandbox_save(id, name, delta, files)
     # Unchanged files are *not* re-saved.
     delta[:deleted].each do |filename|
       git.rm(sandbox_path(id, name), filename)

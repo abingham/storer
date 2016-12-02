@@ -222,13 +222,33 @@ class HostDiskStorerTest < StorerTestBase
     end
   end
 
-  test  '1FB',
+  test '1FB',
   'traffic-lights are git versioned to maintain compatibility with download tgz format' do
     create_kata
     storer.kata_start_avatar(kata_id, [lion])
     tag = 0
     filename = 'increments.json'
     assert_equal '[]', git.show(avatar_path(lion), "#{tag}:#{filename}")
+  end
+
+  test '78B',
+  'output file is NOT git versioned' do
+    @log = SpyLogger.new(nil)
+    create_kata
+    storer.kata_start_avatar(kata_id, [lion]) # tag 0
+    args = []
+    args << kata_id
+    args << lion
+    args << delta = { unchanged:[starting_files.keys], changed:[], deleted:[], new:[] }
+    args << starting_files
+    args << time_now = [2016, 12, 2, 6, 14, 57]
+    args << output = 'Assertion failed: answer() == 42'
+    args << colour = 'red'
+    storer.avatar_ran_tests(*args)
+    tag = 1
+    filename = 'sandbox/output'
+    git.show(avatar_path(lion), "#{tag}:#{filename}")
+    assert log.spied.include? "STDERR:fatal: Path 'sandbox/output' does not exist in '1'\n"
   end
 
   private
@@ -287,13 +307,17 @@ class HostDiskStorerTest < StorerTestBase
     }
   end
 
-  def avatar_path(name)
-    kata_path + '/' + name
-  end
+  # - - - - - - - - - - - - - - - - - - - - - - - -
 
   def kata_path
     storer.path + '/' + outer(kata_id) + '/' + inner(kata_id)
   end
+
+  def avatar_path(name)
+    kata_path + '/' + name
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - -
 
   def outer(id)
     id[0..1]
