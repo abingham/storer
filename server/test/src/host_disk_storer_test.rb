@@ -153,7 +153,6 @@ class HostDiskStorerTest < StorerTestBase
   test 'F6E',
   'rogue sub-dirs in kata-dir are not reported as avatars' do
     create_kata
-    #kata_path = storer.path + '/' + outer(kata_id) + '/' + inner(kata_id)
     rogue = 'flintstone'
     disk[kata_path + '/' + rogue].make
     assert_equal [rogue], disk[kata_path].each_dir.collect { |name| name }
