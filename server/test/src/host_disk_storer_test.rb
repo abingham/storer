@@ -201,7 +201,7 @@ class HostDiskStorerTest < StorerTestBase
     args << lion
     args << delta = { unchanged:[starting_files.keys], changed:[], deleted:[], new:[] }
     args << starting_files
-    args << time_now = [2016, 12, 2, 6, 14, 57]
+    args << time_now
     args << output = 'Assertion failed: answer() == 42'
     args << colour = 'red'
     storer.avatar_ran_tests(*args)
@@ -246,7 +246,7 @@ class HostDiskStorerTest < StorerTestBase
     args << lion
     args << delta = { unchanged:[starting_files.keys], changed:[], deleted:[], new:[] }
     args << starting_files
-    args << time_now = [2016, 12, 2, 6, 14, 57]
+    args << time_now
     args << output = 'Assertion failed: answer() == 42'
     args << colour = 'red'
     storer.avatar_ran_tests(*args)
@@ -270,7 +270,7 @@ class HostDiskStorerTest < StorerTestBase
     args << lion
     args << delta = { unchanged:[starting_files.keys]-['hiker.c'], changed:['hiker.c'], deleted:[], new:[] }
     args << files
-    args << time_now = [2016, 12, 2, 6, 14, 57]
+    args << time_now
     args << output = 'Assertion failed: answer() == 42'
     args << colour = 'red'
     storer.avatar_ran_tests(*args)
@@ -298,7 +298,7 @@ class HostDiskStorerTest < StorerTestBase
     args << lion
     args << delta
     args << files
-    args << time_now = [2016, 12, 2, 6, 14, 57]
+    args << time_now
     args << output = 'Assertion failed: answer() == 42'
     args << colour = 'red'
     storer.avatar_ran_tests(*args)
@@ -324,7 +324,7 @@ class HostDiskStorerTest < StorerTestBase
     args << lion
     args << delta
     args << files
-    args << time_now = [2016, 12, 2, 6, 14, 57]
+    args << time_now
     args << output = 'Assertion failed: answer() == 42'
     args << colour = 'red'
     storer.avatar_ran_tests(*args)
@@ -359,6 +359,10 @@ class HostDiskStorerTest < StorerTestBase
 
   def lion
     'lion'
+  end
+
+  def time_now
+    [2016, 12, 2, 6, 14, 57]
   end
 
   def all_avatar_names
