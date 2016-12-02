@@ -242,7 +242,7 @@ class HostDiskStorerTest < StorerTestBase
     create_kata
     storer.kata_start_avatar(kata_id, [lion]) # tag 0
 
-    delta = { changed:[], deleted:[], new:[] }
+    delta = empty_delta
     delta[:unchanged] = [starting_files.keys]
     storer.avatar_ran_tests(*make_args(delta, starting_files))
 
@@ -260,7 +260,7 @@ class HostDiskStorerTest < StorerTestBase
     hiker_c = starting_files['hiker.c'] + "\nint main(){}"
     files = starting_files
     files['hiker.c'] = hiker_c
-    delta = { deleted:[], new:[] }
+    delta = empty_delta
     delta[:unchanged] = [starting_files.keys]-['hiker.c']
     delta[:changed] = ['hiker.c']
     storer.avatar_ran_tests(*make_args(delta, files))
@@ -279,7 +279,7 @@ class HostDiskStorerTest < StorerTestBase
 
     files = starting_files
     files.delete('hiker.h')
-    delta = { changed:[], new:[] }
+    delta = empty_delta
     delta[:unchanged] = [starting_files.keys]-['hiker.h']
     delta[:deleted] = ['hiker.h']
     storer.avatar_ran_tests(*make_args(delta, files))
@@ -296,7 +296,7 @@ class HostDiskStorerTest < StorerTestBase
     storer.kata_start_avatar(kata_id, [lion]) # tag 0
 
     files = starting_files
-    delta = { changed:[], deleted:[] }
+    delta = empty_delta
     delta[:unchanged] = [files.keys]
     files['readme.txt'] = 'NB:'
     delta[:new] = ['readme.txt']
@@ -365,6 +365,10 @@ class HostDiskStorerTest < StorerTestBase
       'hiker.c' => '#include "hiker.h"',
       'hiker.h' => '#include <stdio.h>'
     }
+  end
+
+  def empty_delta
+    { changed:[], unchanged:[], new:[], deleted:[] }
   end
 
   def make_args(delta, files)
