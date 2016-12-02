@@ -241,10 +241,14 @@ class HostDiskStorerTest < StorerTestBase
     @log = SpyLogger.new(nil)
     create_kata
     storer.kata_start_avatar(kata_id, [lion]) # tag 0
+
+    delta = { changed:[], deleted:[], new:[] }
+    delta[:unchanged] = [starting_files.keys]
+
     args = []
     args << kata_id
     args << lion
-    args << delta = { unchanged:[starting_files.keys], changed:[], deleted:[], new:[] }
+    args << delta
     args << starting_files
     args << time_now
     args << output = 'Assertion failed: answer() == 42'
@@ -265,10 +269,14 @@ class HostDiskStorerTest < StorerTestBase
     files = starting_files
     files['hiker.c'] = hiker_c
 
+    delta = { deleted:[], new:[] }
+    delta[:unchanged] = [starting_files.keys]-['hiker.c']
+    delta[:changed] = ['hiker.c']
+
     args = []
     args << kata_id
     args << lion
-    args << delta = { unchanged:[starting_files.keys]-['hiker.c'], changed:['hiker.c'], deleted:[], new:[] }
+    args << delta
     args << files
     args << time_now
     args << output = 'Assertion failed: answer() == 42'
