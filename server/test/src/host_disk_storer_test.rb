@@ -167,7 +167,9 @@ class HostDiskStorerTest < StorerTestBase
   end
 
   test 'E0C',
-  'avatar_exists? is true after avatar_starts' do
+  'avatar_exists? is true after avatar_starts;',
+  'avatar has no traffic-lights;',
+  "avatar's visible_files are from the kata"  do
     create_kata
     storer.kata_start_avatar(kata_id, [lion])
     assert storer.avatar_exists?(kata_id, lion)
@@ -192,13 +194,44 @@ class HostDiskStorerTest < StorerTestBase
   # ran_tests
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+  test '3CF',
+  'after ran_tests() there is one more tag, one more traffic-light;',
+  'visible_files are retrievable by current and specific git-tag and contain output' do
+    create_kata
+    storer.kata_start_avatar(kata_id, [lion]) # tag 0
+    args = []
+    args << kata_id
+    args << lion
+    args << delta = { unchanged:[starting_files.keys], changed:[], deleted:[], new:[] }
+    args << starting_files
+    args << time_now = [2016, 12, 2, 6, 14, 57]
+    args << output = 'Assertion failed: answer() == 42'
+    args << colour = 'red'
+    storer.avatar_ran_tests(*args)
+    tag = 1
+    # traffic-lights
+    expected = [ {'colour'=>colour, 'time'=>time_now, 'number'=>tag} ]
+    assert_equal expected, storer.avatar_increments(kata_id, lion)
+    # current tag
+    visible_files = storer.avatar_visible_files(kata_id, lion)
+    assert_equal output, visible_files['output'], 'output'
+    starting_files.each do |filename,content|
+      assert_equal content, visible_files[filename], filename
+    end
+    # by tag
+    visible_files = storer.tag_visible_files(kata_id, lion, tag)
+    assert_equal output, visible_files['output'], 'output'
+    starting_files.each do |filename,content|
+      assert_equal content, visible_files[filename], filename
+    end
+  end
 
+  # traffic-lights are git versioned to maintain compatibility with download tgz format
 
   private
 
   def kata_id
-    # reversed so I don't get common outer(id)s
-    test_id.reverse
+    test_id.reverse # reversed so I don't get common outer(id)s
   end
 
   def lion
@@ -244,7 +277,7 @@ class HostDiskStorerTest < StorerTestBase
   def assert_hash_equal(expected, actual)
     assert_equal expected.size, actual.size
     expected.each do |symbol,value|
-      assert_equal value, actual[symbol.to_s]
+      assert_equal value, actual[symbol.to_s], symbol.to_s
     end
   end
 

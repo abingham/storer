@@ -77,25 +77,23 @@ class HostDiskStorer
 
   def kata_start_avatar(id, avatar_names)
     # Needs to be atomic otherwise two laptops in the same practice session
-    # could start as the same animal. This relies on mkdir being atomic on
+    # could start as the same animal. Relies on mkdir being atomic on
     # a (non NFS) POSIX file system.
     # Note: Don't do the & with operands swapped - you lose randomness
     valid_names = avatar_names & all_avatar_names
     name = valid_names.detect { |name| avatar_dir(id, name).make }
     return nil if name.nil? # full!
 
+    visible_files = kata_manifest(id)['visible_files']
+    write_avatar_manifest(id, name, visible_files)
+    write_avatar_increments(id, name, [])
+    sandbox_dir(id, name).make
+
     user_name = name + '_' + id
     user_email = name + '@cyber-dojo.org'
     git.setup(avatar_path(id, name), user_name, user_email)
-
-    visible_files = kata_manifest(id)['visible_files']
-
-    write_avatar_manifest(id, name, visible_files)
     git.add(avatar_path(id, name), manifest_filename)
-
-    write_avatar_increments(id, name, [])
-    #git.add(avatar_path(id, name), increments_filename)
-
+    #git.add(avatar_path(id, name), increments_filename) # NB: for tgz compatibility
     git.commit(avatar_path(id, name), tag=0)
 
     name
@@ -111,7 +109,17 @@ class HostDiskStorer
     JSON.parse(avatar_dir(id, name).read(manifest_filename))
   end
 
-  #def avatar_ran_tests(id, name, delta, files, now, output, colour)
+  def avatar_ran_tests(id, name, delta, files, now, output, colour)
+    #sandbox_save(id, name, delta, files)
+    sandbox_dir(id, name).write('output', output) # NB: no git.add for output file... BUG?
+    files['output'] = output
+    write_avatar_manifest(id, name, files)
+    rags = avatar_increments(id, name)
+    tag = rags.length + 1
+    rags << { 'colour' => colour, 'time' => now, 'number' => tag }
+    write_avatar_increments(id, name, rags)
+    git.commit(avatar_path(id, name), tag)
+  end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # tag
@@ -146,6 +154,30 @@ class HostDiskStorer
     disk[avatar_path(id, name)]
   end
 
+  def sandbox_dir(id, name)
+    disk[sandbox_path(id, name)]
+  end
+
+=begin
+    def sandbox_save(id, name, delta, files)
+    # Unchanged files are *not* re-saved.
+    delta[:deleted].each do |filename|
+      git.rm(sandbox_path(id, name), filename)
+    end
+    delta[:new].each do |filename|
+      sandbox_write(id, name, filename, files[filename])
+      git.add(sandbox_path(id, name), filename)
+    end
+    delta[:changed].each do |filename|
+      sandbox_write(id, name, filename, files[filename])
+    end
+  end
+
+  def sandbox_write(id, name, filename, content)
+    sandbox_dir(id, name).write(filename, content)
+  end
+=end
+
   # - - - - - - - - - - -
 
   def kata_path(id)
@@ -154,6 +186,13 @@ class HostDiskStorer
 
   def avatar_path(id, name)
     kata_path(id) + '/' + name
+  end
+
+  def sandbox_path(id, name)
+    # An avatar's source files are _not_ held in its own folder
+    # (but in the it's sandbox folder) because its own folder
+    # is used for the manifest.json and increments.json files.
+    avatar_path(id, name) + '/sandbox'
   end
 
   # - - - - - - - - - - -
