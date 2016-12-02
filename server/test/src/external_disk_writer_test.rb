@@ -50,7 +50,8 @@ class ExternalDiskWriterTest < StorerTestBase
     disk['/tmp/0CC/alpha'].make
     disk['/tmp/0CC/beta' ].make
     disk['/tmp/0CC/gamma'].make
-    assert_equal %w( alpha beta gamma ), dir.each_dir.entries.sort
+    disk['/tmp/0CC/.git' ].make
+    assert_equal %w( .git alpha beta gamma ), dir.each_dir.entries.sort
   end
 
   test '7E1',
