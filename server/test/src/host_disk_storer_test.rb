@@ -182,11 +182,9 @@ class HostDiskStorerTest < StorerTestBase
   test 'B1C',
   'avatar_start succeeds 64 times then kata is full' do
     create_kata
-    avatar_names.each do |name|
-      disk[kata_path + '/' + name].make
-    end
-    assert_equal avatar_names.sort, storer.kata_started_avatars(kata_id).sort
-    assert_nil storer.kata_start_avatar(kata_id, avatar_names)
+    all_avatar_names.each { |name| disk[avatar_path(name)].make }
+    assert_equal all_avatar_names.sort, storer.kata_started_avatars(kata_id).sort
+    assert_nil storer.kata_start_avatar(kata_id, all_avatar_names)
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -230,9 +228,8 @@ class HostDiskStorerTest < StorerTestBase
     create_kata
     storer.kata_start_avatar(kata_id, [lion])
     tag = 0
-    path = kata_path + '/' + lion
     filename = 'increments.json'
-    assert_equal '[]', git.show(path, "#{tag}:#{filename}")
+    assert_equal '[]', git.show(avatar_path(lion), "#{tag}:#{filename}")
   end
 
   private
@@ -245,7 +242,7 @@ class HostDiskStorerTest < StorerTestBase
     'lion'
   end
 
-  def avatar_names
+  def all_avatar_names
     %w(alligator antelope   bat     bear     bee      beetle       buffalo   butterfly
        cheetah   crab       deer    dolphin  eagle    elephant     flamingo  fox
        frog      gopher     gorilla heron    hippo    hummingbird  hyena     jellyfish
@@ -271,6 +268,10 @@ class HostDiskStorerTest < StorerTestBase
       'hiker.c' => '#include "hiker.h"',
       'hiker.h' => '#include <stdio.h>'
     }
+  end
+
+  def avatar_path(name)
+    kata_path + '/' + name
   end
 
   def kata_path
