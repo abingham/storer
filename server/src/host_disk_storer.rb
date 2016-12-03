@@ -53,7 +53,7 @@ class HostDiskStorer
     # a kata's id has 10 hex chars. This gives 16^10 possibilities
     # which is 1,099,511,627,776 which is big enough to not
     # need to check that a kata with the id already exists.
-    dir = kata_dir(manifest[:id])
+    dir = kata_dir(manifest['id'])
     dir.make
     dir.write(manifest_filename, JSON.unparse(manifest))
   end
@@ -168,14 +168,14 @@ class HostDiskStorer
 
   def sandbox_save(id, name, delta, files)
     # Unchanged files are *not* re-saved.
-    delta[:deleted].each do |filename|
+    delta['deleted'].each do |filename|
       git.rm(sandbox_path(id, name), filename)
     end
-    delta[:new].each do |filename|
+    delta['new'].each do |filename|
       sandbox_write(id, name, filename, files[filename])
       git.add(sandbox_path(id, name), filename)
     end
-    delta[:changed].each do |filename|
+    delta['changed'].each do |filename|
       # no git.add as git.commit does -a
       sandbox_write(id, name, filename, files[filename])
     end

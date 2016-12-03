@@ -199,7 +199,7 @@ class HostDiskStorerTest < StorerTestBase
     tag = 0
 
     delta = empty_delta
-    delta[:unchanged] = starting_files.keys
+    delta['unchanged'] = starting_files.keys
     storer.avatar_ran_tests(*make_args(delta, starting_files))
     tag = 1
 
@@ -241,7 +241,7 @@ class HostDiskStorerTest < StorerTestBase
     tag = 0
 
     delta = empty_delta
-    delta[:unchanged] = [starting_files.keys]
+    delta['unchanged'] = [starting_files.keys]
     storer.avatar_ran_tests(*make_args(delta, starting_files))
     tag = 1
 
@@ -260,8 +260,8 @@ class HostDiskStorerTest < StorerTestBase
     files = starting_files
     files['hiker.c'] = hiker_c
     delta = empty_delta
-    delta[:unchanged] = [starting_files.keys]-['hiker.c']
-    delta[:changed] = ['hiker.c']
+    delta['unchanged'] = [starting_files.keys]-['hiker.c']
+    delta['changed'] = ['hiker.c']
     storer.avatar_ran_tests(*make_args(delta, files))
     tag = 1
 
@@ -280,8 +280,8 @@ class HostDiskStorerTest < StorerTestBase
     files = starting_files
     files.delete('hiker.h')
     delta = empty_delta
-    delta[:unchanged] = [starting_files.keys]-['hiker.h']
-    delta[:deleted] = ['hiker.h']
+    delta['unchanged'] = [starting_files.keys]-['hiker.h']
+    delta['deleted'] = ['hiker.h']
     storer.avatar_ran_tests(*make_args(delta, files))
     tag = 1
 
@@ -298,9 +298,9 @@ class HostDiskStorerTest < StorerTestBase
 
     files = starting_files
     delta = empty_delta
-    delta[:unchanged] = [files.keys]
+    delta['unchanged'] = [files.keys]
     files['readme.txt'] = 'NB:'
-    delta[:new] = ['readme.txt']
+    delta['new'] = ['readme.txt']
     storer.avatar_ran_tests(*make_args(delta, files))
     tag = 1
 
@@ -350,9 +350,9 @@ class HostDiskStorerTest < StorerTestBase
 
   def create_kata(id = kata_id)
     manifest = {}
-    manifest[:image_name] = 'cyberdojofoundation/gcc_assert'
-    manifest[:visible_files] = starting_files
-    manifest[:id] = id
+    manifest['image_name'] = 'cyberdojofoundation/gcc_assert'
+    manifest['visible_files'] = starting_files
+    manifest['id'] = id
     storer.create_kata(manifest)
     manifest
   end
@@ -365,7 +365,7 @@ class HostDiskStorerTest < StorerTestBase
   end
 
   def empty_delta
-    { changed:[], unchanged:[], new:[], deleted:[] }
+    { 'changed'=>[], 'unchanged'=>[], 'new'=>[], 'deleted'=>[] }
   end
 
   def make_args(delta, files)
