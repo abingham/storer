@@ -11,7 +11,7 @@ class MicroService < Sinatra::Base
   end
 
   post '/create_kata' do
-    jasoned(1) { storer.create_kata(manifest); }
+    jasoned(0) { storer.create_kata(manifest); }
   end
 
   private
@@ -32,11 +32,11 @@ class MicroService < Sinatra::Base
   def jasoned(n)
     content_type :json
     case n
+    when 0
+      yield
+      return { status:0 }.to_json
     when 1
       return { status:yield }.to_json
-    when 3
-      stdout,stderr,status = yield
-      return { stdout:stdout, stderr:stderr, status:status }.to_json
     end
   rescue StandardError => e
     return { stdout:'', stderr:e.to_s, status:1 }.to_json

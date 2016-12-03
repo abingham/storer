@@ -17,13 +17,13 @@ class KataExistsTest < ClientTestBase
   end
 
   test '5F9',
-  'kata_exists() is true after create_kata()' do
+  'kata_exists() succeeds after create_kata()' do
     manifest = {}
     manifest['image_name'] = 'cyberdojofoundation/gcc_assert'
     manifest['visible_files'] = starting_files
     manifest['id'] = kata_id
     create_kata(manifest)
-    assert_status true
+    assert_success
     kata_exists?(kata_id)
     assert_status true
   end

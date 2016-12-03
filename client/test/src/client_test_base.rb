@@ -24,6 +24,10 @@ class ClientTestBase < HexMiniTest
 
   # - - - - - - - - - - - - - - - - - - - - - - -
 
+  def success; 0; end
+
+  def assert_success; assert_equal success, status, json.to_s; end
+
   def assert_stdout(expected); assert_equal expected, stdout, json.to_s; end
   def assert_stderr(expected); assert_equal expected, stderr, json.to_s; end
   def assert_status(expected); assert_equal expected, status, json.to_s; end
