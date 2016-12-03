@@ -11,7 +11,7 @@ class MicroService < Sinatra::Base
   end
 
   post '/create_kata' do
-    jasoned(3) { storer.create_kata(manifest) }
+    jasoned(1) { storer.create_kata(manifest); }
   end
 
   private
