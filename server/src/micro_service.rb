@@ -10,7 +10,9 @@ class MicroService < Sinatra::Base
     jasoned(1) { storer.kata_exists?(kata_id) }
   end
 
-
+  post '/create_kata' do
+    jasoned(3) { storer.create_kata(manifest) }
+  end
 
   private
 
@@ -19,7 +21,8 @@ class MicroService < Sinatra::Base
 
   def args; @args ||= request_body_args; end
 
-  def kata_id; args['kata_id']; end
+  def kata_id;  args['kata_id' ]; end
+  def manifest; args['manifest']; end
 
   def request_body_args
     request.body.rewind
@@ -31,9 +34,10 @@ class MicroService < Sinatra::Base
     case n
     when 1
       return { status:yield }.to_json
+    when 3
+      stdout,stderr,status = yield
+      return { stdout:stdout, stderr:stderr, status:status }.to_json
     end
-  #rescue DockerRunnerError => e
-    #return { stdout:e.stdout, stderr:e.stderr, status:e.status }.to_json
   rescue StandardError => e
     return { stdout:'', stderr:e.to_s, status:1 }.to_json
   end

@@ -7,6 +7,10 @@ class StorerPostAdapter
     get('kata_exists', { kata_id:kata_id })
   end
 
+  def create_kata(manifest)
+    post(__method__, { manifest:manifest })
+  end
+
   private
 
   def get(method, args)
