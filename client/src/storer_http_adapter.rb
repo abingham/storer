@@ -49,6 +49,10 @@ class StorerHttpAdapter
     post(__method__, kata_id, avatar_name, delta, files, now, output, colour)
   end
 
+  def tag_visible_files(kata_id, avatar_name, tag)
+    get(__method__, kata_id, avatar_name, tag)
+  end
+
   private
 
   def get(method, *args)

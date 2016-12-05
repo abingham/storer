@@ -93,6 +93,8 @@ class KataExistsTest < ClientTestBase
 
     expected = [ { 'colour' => colour, 'time' => now, 'number' => tag } ]
     assert_equal expected, avatar_increments(kata_id, lion)
+    files['output'] = output
+    assert_equal files, tag_visible_files(kata_id, lion, tag)
   end
 
 
