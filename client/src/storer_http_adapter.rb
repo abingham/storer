@@ -7,14 +7,6 @@ class StorerHttpAdapter
     post(__method__, manifest)
   end
 
-  def kata_exists(kata_id)
-    get(__method__, kata_id)
-  end
-
-  def kata_manifest(kata_id)
-    get(__method__, kata_id)
-  end
-
   # - - - - - - - - - - - -
 
   def completed(id)
@@ -27,13 +19,23 @@ class StorerHttpAdapter
 
   # - - - - - - - - - - - -
 
-  def kata_started_avatars(kata_id)
+  def kata_exists(kata_id)
+    get(__method__, kata_id)
+  end
+
+  def kata_manifest(kata_id)
     get(__method__, kata_id)
   end
 
   def kata_start_avatar(kata_id, avatar_names)
     post(__method__, kata_id, avatar_names)
   end
+
+  def kata_started_avatars(kata_id)
+    get(__method__, kata_id)
+  end
+
+  # - - - - - - - - - - - -
 
   def avatar_increments(kata_id, avatar_name)
     get(__method__, kata_id, avatar_name)

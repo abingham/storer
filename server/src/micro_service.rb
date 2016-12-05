@@ -10,14 +10,6 @@ class MicroService < Sinatra::Base
     poster(__method__, manifest)
   end
 
-  get '/kata_exists' do
-    getter(__method__, kata_id)
-  end
-
-  get '/kata_manifest' do
-    getter(__method__, kata_id)
-  end
-
   # - - - - - - - - - - - - - - -
 
   get '/completed' do
@@ -30,13 +22,23 @@ class MicroService < Sinatra::Base
 
   # - - - - - - - - - - - - - - -
 
-  get '/kata_started_avatars' do
+  get '/kata_exists' do
+    getter(__method__, kata_id)
+  end
+
+  get '/kata_manifest' do
     getter(__method__, kata_id)
   end
 
   post '/kata_start_avatar' do
     poster(__method__, kata_id, avatar_names)
   end
+
+  get '/kata_started_avatars' do
+    getter(__method__, kata_id)
+  end
+
+  # - - - - - - - - - - - - - - -
 
   get '/avatar_increments' do
     getter(__method__, kata_id, avatar_name)
@@ -48,17 +50,16 @@ class MicroService < Sinatra::Base
 
   private
 
-  def getter(caller, *args)
-    name = caller.to_s['GET /'.length .. -1]
-    httper(name, *args)
+  def getter(name, *args)
+    httper('GET /', name, *args)
   end
 
-  def poster(caller, *args)
-    name = caller.to_s['POST /'.length .. -1]
-    httper(name, *args)
+  def poster(name, *args)
+    httper('POST /', name, *args)
   end
 
-  def httper(name, *args)
+  def httper(prefix, caller, *args)
+    name = caller.to_s[prefix.length .. -1]
     { name => HostDiskStorer.new(self).send(name, *args) }.to_json
   end
 
