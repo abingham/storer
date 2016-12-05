@@ -42,25 +42,29 @@ class MicroService < Sinatra::Base
 
   def getter(caller, *args)
     name = caller.to_s['GET /'.length .. -1]
-    { name => storer.send(name, *args) }.to_json
+    httper(name, *args)
   end
 
   def poster(caller, *args)
     name = caller.to_s['POST /'.length .. -1]
-    { name => storer.send(name, *args) }.to_json
+    httper(name, *args)
+  end
+
+  def httper(name, *args)
+    { name => HostDiskStorer.new(self).send(name, *args) }.to_json
   end
 
   # - - - - - - - - - - - - - - - -
 
   include Externals
-  def storer; HostDiskStorer.new(self); end
+
+  def self.request_args(*names)
+    names.each { |name|  define_method name, &lambda { args[name.to_s] } }
+  end
+
+  request_args :kata_id, :manifest, :id, :avatar_names
 
   def args; @args ||= request_body_args; end
-
-  def      kata_id; args['kata_id'     ]; end
-  def     manifest; args['manifest'    ]; end
-  def           id; args['id'          ]; end
-  def avatar_names; args['avatar_names']; end
 
   def request_body_args
     request.body.rewind
