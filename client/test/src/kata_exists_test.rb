@@ -49,6 +49,21 @@ class KataExistsTest < ClientTestBase
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+  test '990',
+  'after kata_start_avatar() succeeds then another avatar has started' do
+    manifest = {}
+    manifest['image_name'] = 'cyberdojofoundation/gcc_assert'
+    manifest['visible_files'] = starting_files
+    manifest['id'] = kata_id
+
+    create_kata(manifest)
+
+    assert_equal lion, kata_start_avatar(kata_id, [lion])
+    assert_equal [lion], kata_started_avatars(kata_id)
+
+    assert_equal salmon, kata_start_avatar(kata_id, [salmon])
+    assert_equal [lion,salmon].sort, kata_started_avatars(kata_id).sort
+  end
 
 
   private
@@ -57,6 +72,9 @@ class KataExistsTest < ClientTestBase
     # reversed so I don't get common outer(id)s
     test_id.reverse + '0' * (10-test_id.length);
   end
+
+  def lion; 'lion'; end
+  def salmon; 'salmon'; end
 
   def starting_files
     { 'cyber-dojo.sh' => 'gcc',

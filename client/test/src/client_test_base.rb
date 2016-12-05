@@ -31,7 +31,12 @@ class ClientTestBase < HexMiniTest
     getter(__method__, kata_id)
   end
 
-  # - - - - - - - - - - - - - - - - - - - - - - -
+  def kata_start_avatar(kata_id, avatar_names)
+    poster(__method__, kata_id, avatar_names)
+  end
+
+
+  private
 
   def getter(caller, *args)
     name = caller.to_s
@@ -40,7 +45,7 @@ class ClientTestBase < HexMiniTest
 
   def poster(caller, *args)
     name = caller.to_s
-    http.send(name, *args)
+    http.send(name, *args)[name]
   end
 
   def http; StorerHttpAdapter.new; end

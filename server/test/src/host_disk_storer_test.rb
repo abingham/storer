@@ -171,7 +171,7 @@ class HostDiskStorerTest < StorerTestBase
   'avatar has no traffic-lights;',
   "avatar's visible_files are from the kata"  do
     create_kata
-    storer.kata_start_avatar(kata_id, [lion])
+    assert_equal lion, storer.kata_start_avatar(kata_id, [lion])
     assert avatar_exists?(kata_id, lion)
     assert_equal [lion], storer.kata_started_avatars(kata_id)
     assert_equal [], avatar_increments(lion)

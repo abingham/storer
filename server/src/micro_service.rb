@@ -34,6 +34,10 @@ class MicroService < Sinatra::Base
     getter(__method__, kata_id)
   end
 
+  post '/kata_start_avatar' do
+    poster(__method__, kata_id, avatar_names)
+  end
+
   private
 
   def getter(caller, *args)
@@ -43,8 +47,7 @@ class MicroService < Sinatra::Base
 
   def poster(caller, *args)
     name = caller.to_s['POST /'.length .. -1]
-    storer.send(name, *args)
-    {}.to_json
+    { name => storer.send(name, *args) }.to_json
   end
 
   # - - - - - - - - - - - - - - - -
@@ -54,9 +57,10 @@ class MicroService < Sinatra::Base
 
   def args; @args ||= request_body_args; end
 
-  def kata_id;  args['kata_id' ]; end
-  def manifest; args['manifest']; end
-  def      id;  args['id'      ]; end
+  def      kata_id; args['kata_id'     ]; end
+  def     manifest; args['manifest'    ]; end
+  def           id; args['id'          ]; end
+  def avatar_names; args['avatar_names']; end
 
   def request_body_args
     request.body.rewind
