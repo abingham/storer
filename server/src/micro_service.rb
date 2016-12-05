@@ -6,12 +6,29 @@ require_relative './host_disk_storer'
 
 class MicroService < Sinatra::Base
 
+  def getter(caller, *args)
+    caller = caller.to_s
+    method_name = caller['GET /'.length .. -1]
+    json_key = method_name
+    json_key = json_key.chomp('?') if json_key.end_with?('?')
+    puts "http:get----------"
+    puts ":#{method_name}:"
+    puts ":#{json_key}:" #
+    puts "http:get----------"
+    json_value = storer.send(method_name, *args)
+
+    { json_key => json_value }.to_json
+  end
+
+  # - - - - - - - - - - - - - - - -
+
   get '/kata_exists' do
-    jasoned(:kata_exists) { storer.kata_exists?(kata_id) }
+    getter(__method__.to_s + '?', kata_id)
   end
 
   post '/create_kata' do
     jasoned(0) { storer.create_kata(manifest) }
+    #http(__method__, manifest)
   end
 
   get '/kata_manifest' do
@@ -19,11 +36,11 @@ class MicroService < Sinatra::Base
   end
 
   get '/completed' do
-    jasoned(:completed) { storer.completed(id) }
+    getter(__method__, id)
   end
 
   get '/ids_for' do
-    jasoned(:ids_for) { storer.ids_for(id) }
+    getter(__method__, id)
   end
 
   private
