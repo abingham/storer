@@ -13,6 +13,12 @@ class StorerTestBase < HexMiniTest
     storer.avatar_exists(kata_id, avatar_name)
   end
 
+  def kata_manifest
+    storer.kata_manifest(kata_id)
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
   include Externals
   def storer; @storer ||= HostDiskStorer.new(self); end
 

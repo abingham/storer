@@ -61,7 +61,7 @@ class HostDiskStorer
   end
 
   def kata_manifest(id)
-    kata_dir(id).read(manifest_filename)
+    JSON.parse(kata_dir(id).read(manifest_filename))
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -87,7 +87,7 @@ class HostDiskStorer
     name = valid_names.detect { |name| avatar_dir(id, name).make }
     return nil if name.nil? # full!
 
-    visible_files = JSON.parse(kata_manifest(id))['visible_files']
+    visible_files = kata_manifest(id)['visible_files']
     write_avatar_manifest(id, name, visible_files)
     write_avatar_increments(id, name, [])
 

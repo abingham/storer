@@ -310,10 +310,6 @@ class HostDiskStorerTest < StorerTestBase
 
   private
 
-  def kata_manifest
-    JSON.parse(storer.kata_manifest(kata_id))
-  end
-
   def avatar_increments(name)
     JSON.parse(storer.avatar_increments(kata_id, name))
   end
