@@ -30,16 +30,8 @@ class MicroService < Sinatra::Base
   private
 
   def getter(caller, *args)
-    caller = caller.to_s
-    method_name = caller['GET /'.length .. -1]
-    json_key = method_name
-    json_key = json_key.chomp('?') if json_key.end_with?('?')
-    #puts "http:get----------"
-    #puts ":#{method_name}:"
-    #puts ":#{json_key}:" #
-    #puts "http:get----------"
-    json_value = storer.send(method_name, *args)
-    { json_key => json_value }.to_json
+    name = caller.to_s['GET /'.length .. -1]
+    { name => storer.send(name, *args) }.to_json
   end
 
   # - - - - - - - - - - - - - - - -
