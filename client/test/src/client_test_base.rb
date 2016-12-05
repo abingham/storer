@@ -5,18 +5,27 @@ class ClientTestBase < HexMiniTest
 
   def kata_exists?(kata_id)
     @json = storer.kata_exists?(kata_id)
+    status
   end
 
   def create_kata(manifest)
     @json = storer.create_kata(manifest)
+    status
   end
 
   def kata_manifest(kata_id)
     @json = storer.kata_manifest(kata_id)
+    JSON.parse(stdout)
   end
 
   def completed(id)
     @json = storer.completed(id)
+    stdout
+  end
+
+  def ids_for(outer_dir) # TODO: refactor to completions(id)
+    @json = storer.ids_for(outer_dir)
+    stdout
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - -

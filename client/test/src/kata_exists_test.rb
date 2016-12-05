@@ -7,37 +7,42 @@ class KataExistsTest < ClientTestBase
 
   test 'E98',
   'kata_exists?() for a kata_id that is not a 10-digit hex-string is false' do
-    kata_exists?('123')
-    assert_status false
+    refute kata_exists?('123')
   end
 
   test '33F',
   'kata_exists?() for a kata_id that is 10-digit hex-string but not a kata is false' do
-    kata_exists?(kata_id)
-    assert_status false
+    refute kata_exists?(kata_id)
   end
 
   test '5F9',
   'after create_kata() then',
   'kata_exists?() is true',
   'and manifest can be retrieved',
-  'and id can be completed' do
+  'and id can be completed',
+  'and id can be batched' do
     manifest = {}
     manifest['image_name'] = 'cyberdojofoundation/gcc_assert'
     manifest['visible_files'] = starting_files
     manifest['id'] = kata_id
 
-    create_kata(manifest)
-    assert_success
+    assert create_kata(manifest)
+    assert kata_exists?(kata_id)
 
-    kata_exists?(kata_id)
-    assert_status true
+    assert_equal manifest, kata_manifest(kata_id)
 
-    kata_manifest(kata_id)
-    assert_equal manifest, JSON.parse(stdout)
+    no_match = kata_id.reverse[0..5]
+    assert_equal no_match, completed(no_match)
 
-    completed(kata_id[0..5])
-    assert_equal kata_id, stdout
+    too_short = kata_id[0..4]
+    assert_equal too_short, completed(too_short)
+
+    six = kata_id[0..5]
+    assert_equal 6, six.size
+    assert_equal kata_id, completed(six)
+
+    outer = kata_id[0..1]
+    assert_equal [kata_id[2..-1]], ids_for(outer)
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -

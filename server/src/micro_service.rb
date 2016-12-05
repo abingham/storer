@@ -22,6 +22,10 @@ class MicroService < Sinatra::Base
     jasoned(:stdout) { storer.completed(id) }
   end
 
+  get '/ids_for' do
+    jasoned(:stdout) { storer.ids_for(id) }
+  end
+
   private
 
   include Externals

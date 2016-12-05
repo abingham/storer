@@ -19,6 +19,10 @@ class StorerPostAdapter
     get(__method__, { id:id })
   end
 
+  def ids_for(id)
+    get(__method__, { id:id })
+  end
+
   private
 
   def get(method, args)
