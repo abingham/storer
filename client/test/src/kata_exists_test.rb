@@ -20,7 +20,8 @@ class KataExistsTest < ClientTestBase
   'kata_exists?() is true',
   'and manifest can be retrieved',
   'and id can be completed',
-  'and id can be batched' do
+  'and id can be batched',
+  'and no avatars have started' do
     manifest = {}
     manifest['image_name'] = 'cyberdojofoundation/gcc_assert'
     manifest['visible_files'] = starting_files
@@ -43,6 +44,8 @@ class KataExistsTest < ClientTestBase
 
     outer = kata_id[0..1]
     assert_equal [kata_id[2..-1]], ids_for(outer)
+
+    assert_equal [], kata_started_avatars(kata_id)
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -

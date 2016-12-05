@@ -26,6 +26,10 @@ class MicroService < Sinatra::Base
     getter(__method__, id)
   end
 
+  get '/kata_started_avatars' do
+    getter(__method__, kata_id)
+  end
+
   private
 
   def getter(caller, *args)

@@ -23,6 +23,10 @@ class StorerHttpAdapter
     get(__method__, { id:id })
   end
 
+  def kata_started_avatars(kata_id)
+    get(__method__, { kata_id:kata_id })
+  end
+
   private
 
   def get(method, args)
