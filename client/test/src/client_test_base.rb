@@ -11,6 +11,14 @@ class ClientTestBase < HexMiniTest
     @json = storer.create_kata(manifest)
   end
 
+  def kata_manifest(kata_id)
+    @json = storer.kata_manifest(kata_id)
+  end
+
+  def completed(id)
+    @json = storer.completed(id)
+  end
+
   # - - - - - - - - - - - - - - - - - - - - - - -
 
   def storer; StorerPostAdapter.new; end

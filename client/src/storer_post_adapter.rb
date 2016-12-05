@@ -11,6 +11,14 @@ class StorerPostAdapter
     post(__method__, { manifest:manifest })
   end
 
+  def kata_manifest(kata_id)
+    get(__method__, { kata_id:kata_id })
+  end
+
+  def completed(id)
+    get(__method__, { id:id })
+  end
+
   private
 
   def get(method, args)

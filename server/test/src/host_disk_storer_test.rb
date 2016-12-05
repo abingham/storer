@@ -10,7 +10,7 @@ class HostDiskStorerTest < StorerTestBase
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '72D',
-  "Storer's parent object is the test object" do
+  "storer's parent object is the test object" do
     assert_equal self, storer.parent
   end
 
