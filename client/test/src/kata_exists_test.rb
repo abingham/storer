@@ -26,7 +26,7 @@ class KataExistsTest < ClientTestBase
     manifest['visible_files'] = starting_files
     manifest['id'] = kata_id
 
-    assert create_kata(manifest)
+    create_kata(manifest)
     assert kata_exists?(kata_id)
 
     assert_equal manifest, kata_manifest(kata_id)

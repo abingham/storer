@@ -11,8 +11,7 @@ class MicroService < Sinatra::Base
   end
 
   post '/create_kata' do
-    jasoned(0) { storer.create_kata(manifest) }
-    #http(__method__, manifest)
+    poster(__method__, manifest)
   end
 
   get '/kata_manifest' do
@@ -34,6 +33,12 @@ class MicroService < Sinatra::Base
     { name => storer.send(name, *args) }.to_json
   end
 
+  def poster(caller, *args)
+    name = caller.to_s['POST /'.length .. -1]
+    storer.send(name, *args)
+    {}.to_json
+  end
+
   # - - - - - - - - - - - - - - - -
 
   include Externals
@@ -50,14 +55,10 @@ class MicroService < Sinatra::Base
     JSON.parse(request.body.read)
   end
 
-  def jasoned(n)
-    content_type :json
-    case n
-    when 0
-      yield; return { status:0 }.to_json
-    end
-  rescue StandardError => e
-    return { stdout:'', stderr:e.to_s, status:1 }.to_json
-  end
+  #def jasoned(n)
+  #  content_type :json
+  #rescue StandardError => e
+  #  return { stdout:'', stderr:e.to_s, status:1 }.to_json
+  #end
 
 end
