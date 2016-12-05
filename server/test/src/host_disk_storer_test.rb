@@ -24,32 +24,32 @@ class HostDiskStorerTest < StorerTestBase
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  # kata_exists?(id)
+  # kata_exists(id)
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'D0A',
   'kata_exists?(id) for id that is not a string is false' do
     not_string = Object.new
-    refute storer.kata_exists?(not_string)
+    refute kata_exists?(not_string)
   end
 
   test '55F',
   'kata_exists?(id) for string not 10 chars long is false' do
     invalid = '60408161A'
     assert_equal 9, invalid.length
-    refute storer.kata_exists?(invalid)
+    refute kata_exists?(invalid)
   end
 
   test '8F9',
   'kata_exists?(id) for string 10 chars long but not all hex is false' do
     invalid = '60408161AG'
     assert_equal 10, invalid.length
-    refute storer.kata_exists?(invalid)
+    refute kata_exists?(invalid)
   end
 
   test '79A',
   'kata_exists?(good-id) false' do
-    refute storer.kata_exists?(kata_id)
+    refute kata_exists?(kata_id)
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -59,7 +59,7 @@ class HostDiskStorerTest < StorerTestBase
   test 'B99',
   'after create_kata(manifest) kata_exists?(id) is true and manifest can be retrieved' do
     manifest = create_kata
-    assert storer.kata_exists?(kata_id)
+    assert kata_exists?(kata_id)
     assert_hash_equal manifest, kata_manifest
   end
 
@@ -147,7 +147,7 @@ class HostDiskStorerTest < StorerTestBase
   test 'A6B',
   'avatar_exists? is false before avatar starts' do
     create_kata
-    refute storer.avatar_exists?(kata_id, lion)
+    refute avatar_exists?(kata_id, lion)
     assert_equal [], storer.kata_started_avatars(kata_id)
   end
 
@@ -172,7 +172,7 @@ class HostDiskStorerTest < StorerTestBase
   "avatar's visible_files are from the kata"  do
     create_kata
     storer.kata_start_avatar(kata_id, [lion])
-    assert storer.avatar_exists?(kata_id, lion)
+    assert avatar_exists?(kata_id, lion)
     assert_equal [lion], storer.kata_started_avatars(kata_id)
     assert_equal [], avatar_increments(lion)
     assert_hash_equal starting_files, avatar_visible_files(lion)

@@ -5,6 +5,14 @@ require_relative './../../src/externals'
 
 class StorerTestBase < HexMiniTest
 
+  def kata_exists?(kata_id)
+    storer.kata_exists(kata_id)
+  end
+
+  def avatar_exists?(kata_id, avatar_name)
+    storer.avatar_exists(kata_id, avatar_name)
+  end
+
   include Externals
   def storer; @storer ||= HostDiskStorer.new(self); end
 

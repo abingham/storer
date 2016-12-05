@@ -46,7 +46,8 @@ class HostDiskStorer
   # kata
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  def kata_exists?(id)
+  def kata_exists(id)
+    # drop ? suffix to simplify micro_service.rb
     valid?(id) && kata_dir(id).exists?
   end
 
@@ -67,7 +68,8 @@ class HostDiskStorer
   # avatar
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  def avatar_exists?(id, name)
+  def avatar_exists(id, name)
+    # drop ? suffix to simplify micro_service.rb
     avatar_dir(id, name).exists?
   end
 

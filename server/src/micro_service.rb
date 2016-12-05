@@ -23,7 +23,7 @@ class MicroService < Sinatra::Base
   # - - - - - - - - - - - - - - - -
 
   get '/kata_exists' do
-    getter(__method__.to_s + '?', kata_id)
+    getter(__method__, kata_id)
   end
 
   post '/create_kata' do
