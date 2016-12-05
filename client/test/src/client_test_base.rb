@@ -45,6 +45,10 @@ class ClientTestBase < HexMiniTest
     getter(__method__, kata_id, avatar_name)
   end
 
+  def avatar_ran_tests(kata_id, avatar_name, delta, files, now, output, colour)
+    poster(__method__, kata_id, avatar_name, delta, files, now, output, colour)
+  end
+
   private
 
   def getter(caller, *args)

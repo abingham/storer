@@ -57,7 +57,6 @@ class KataExistsTest < ClientTestBase
     manifest['image_name'] = 'cyberdojofoundation/gcc_assert'
     manifest['visible_files'] = starting_files
     manifest['id'] = kata_id
-
     create_kata(manifest)
 
     assert_equal lion, kata_start_avatar(kata_id, [lion])
@@ -69,6 +68,31 @@ class KataExistsTest < ClientTestBase
     assert_equal [], avatar_increments(kata_id, salmon)
     assert_equal starting_files, avatar_visible_files(kata_id, salmon)
     assert_equal [lion,salmon].sort, kata_started_avatars(kata_id).sort
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  test 'A21',
+  'after avatar_ran_tests() there is one more traffic-light' do
+    manifest = {}
+    manifest['image_name'] = 'cyberdojofoundation/gcc_assert'
+    manifest['visible_files'] = starting_files
+    manifest['id'] = kata_id
+    create_kata(manifest)
+    assert_equal lion, kata_start_avatar(kata_id, [lion])
+    tag = 0
+
+    delta = { 'unchanged':[], 'changed':[], 'new':[], 'deleted':['hiker.h'] }
+    files = starting_files
+    files.delete('hiker.h')
+    now = [2016, 12, 5, 21, 01, 34]
+    output = 'missing include'
+    colour = 'amber'
+    avatar_ran_tests(kata_id, lion, delta, files, now, output, colour)
+    tag = 1
+
+    expected = [ { 'colour' => colour, 'time' => now, 'number' => tag } ]
+    assert_equal expected, avatar_increments(kata_id, lion)
   end
 
 

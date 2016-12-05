@@ -48,6 +48,10 @@ class MicroService < Sinatra::Base
     getter(__method__, kata_id, avatar_name)
   end
 
+  post '/avatar_ran_tests' do
+    poster(__method__, kata_id, avatar_name, delta, files, now, output, colour)
+  end
+
   private
 
   def getter(name, *args)
@@ -72,6 +76,7 @@ class MicroService < Sinatra::Base
   end
 
   request_args :kata_id, :manifest, :id, :avatar_names, :avatar_name
+  request_args :delta, :files, :now, :output, :colour
 
   def args; @args ||= request_body_args; end
 
