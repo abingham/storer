@@ -21,7 +21,7 @@ class StorerHttpAdapter
     get(__method__, { id:id })
   end
 
-  def ids_for(id)
+  def completions(id)
     get(__method__, { id:id })
   end
 

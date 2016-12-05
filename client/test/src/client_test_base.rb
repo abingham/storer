@@ -21,7 +21,7 @@ class ClientTestBase < HexMiniTest
     getter(__method__, id)
   end
 
-  def ids_for(outer_dir) # TODO: refactor to completions(id)
+  def completions(outer_dir)
     getter(__method__, outer_dir)
   end
 

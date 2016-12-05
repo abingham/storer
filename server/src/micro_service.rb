@@ -6,25 +6,29 @@ require_relative './host_disk_storer'
 
 class MicroService < Sinatra::Base
 
-  get '/kata_exists' do
-    getter(__method__, kata_id)
-  end
-
   post '/create_kata' do
     poster(__method__, manifest)
+  end
+
+  get '/kata_exists' do
+    getter(__method__, kata_id)
   end
 
   get '/kata_manifest' do
     getter(__method__, kata_id)
   end
 
+  # - - - - - - - - - - - - - - -
+
   get '/completed' do
     getter(__method__, id)
   end
 
-  get '/ids_for' do
+  get '/completions' do
     getter(__method__, id)
   end
+
+  # - - - - - - - - - - - - - - -
 
   get '/kata_started_avatars' do
     getter(__method__, kata_id)

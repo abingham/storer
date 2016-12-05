@@ -109,19 +109,19 @@ class HostDiskStorerTest < StorerTestBase
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  # ids_for
+  # completions
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '35C',
   'ids_for(outer) zero matches' do
-    assert_equal [], storer.ids_for('C5')
+    assert_equal [], storer.completions('C5')
   end
 
   test '0D6',
   'ids_for(outer) returns inner-dirs, one match' do
     kata_id = '0D6E4FDA26'
     create_kata(kata_id)
-    assert_equal [inner(kata_id)], storer.ids_for('0D')
+    assert_equal [inner(kata_id)], storer.completions('0D')
   end
 
   test 'A03',
@@ -129,7 +129,7 @@ class HostDiskStorerTest < StorerTestBase
     kata_ids = [ 'A03E4FDA20', 'A03E4FDA21' ]
     kata_ids.each { |id| create_kata(id) }
     expected = kata_ids.collect { |id| inner(id) }
-    assert_equal expected.sort, storer.ids_for('A0').sort
+    assert_equal expected.sort, storer.completions('A0').sort
   end
 
   test '7FC',
@@ -137,7 +137,7 @@ class HostDiskStorerTest < StorerTestBase
     kata_ids = [ '7FC2034534', '7FD92F11B0', '7F13E86582' ]
     kata_ids.each { |id| create_kata(id) }
     expected = kata_ids.collect { |id| inner(id) }
-    assert_equal expected.sort, storer.ids_for('7F').sort
+    assert_equal expected.sort, storer.completions('7F').sort
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
