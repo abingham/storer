@@ -15,7 +15,7 @@ class MicroService < Sinatra::Base
   end
 
   get '/kata_manifest' do
-    jasoned(:stdout) { storer.kata_manifest(kata_id) }
+    jasoned(:stdout) { JSON.parse(storer.kata_manifest(kata_id)) }
   end
 
   get '/completed' do

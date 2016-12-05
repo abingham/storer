@@ -15,7 +15,7 @@ class ClientTestBase < HexMiniTest
 
   def kata_manifest(kata_id)
     @json = storer.kata_manifest(kata_id)
-    JSON.parse(stdout)
+    stdout
   end
 
   def completed(id)
