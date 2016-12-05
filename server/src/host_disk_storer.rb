@@ -36,7 +36,6 @@ class HostDiskStorer
   end
 
   def ids_for(outer_dir)
-    log << "server:ids_for(#{outer_dir})"
     # for Batch-Method iteration over large number of katas...
     return [] unless disk[path + '/' + outer_dir].exists?
     r = disk[path + '/' + outer_dir].each_dir.collect { |dir| dir }
@@ -256,7 +255,6 @@ class HostDiskStorer
 
   def disk; nearest_external(:disk); end
   def git; nearest_external(:git); end
-  def log; nearest_external(:log); end
 
   include NearestExternal
 

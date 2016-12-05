@@ -1,7 +1,7 @@
 require 'json'
 require 'net/http'
 
-class StorerPostAdapter
+class StorerHttpAdapter
 
   def kata_exists?(kata_id)
     get('kata_exists', { kata_id:kata_id })

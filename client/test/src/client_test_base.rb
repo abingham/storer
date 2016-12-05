@@ -1,11 +1,11 @@
 require_relative './../hex_mini_test'
-require_relative './../../src/storer_post_adapter'
+require_relative './../../src/storer_http_adapter'
 
 class ClientTestBase < HexMiniTest
 
   def kata_exists?(kata_id)
     @json = storer.kata_exists?(kata_id)
-    status
+    @json['kata_exists']
   end
 
   def create_kata(manifest)
@@ -15,22 +15,22 @@ class ClientTestBase < HexMiniTest
 
   def kata_manifest(kata_id)
     @json = storer.kata_manifest(kata_id)
-    stdout
+    @json['kata_manifest']
   end
 
   def completed(id)
     @json = storer.completed(id)
-    stdout
+    @json['completed']
   end
 
   def ids_for(outer_dir) # TODO: refactor to completions(id)
     @json = storer.ids_for(outer_dir)
-    stdout
+    @json['ids_for']
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - -
 
-  def storer; StorerPostAdapter.new; end
+  def storer; StorerHttpAdapter.new; end
 
   def json; @json; end
   def status; json['status']; end

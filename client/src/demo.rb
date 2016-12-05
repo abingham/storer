@@ -1,7 +1,7 @@
 require 'sinatra'
 require 'sinatra/base'
 
-require_relative './storer_post_adapter'
+require_relative './storer_http_adapter'
 
 class Demo < Sinatra::Base
 
@@ -11,7 +11,7 @@ class Demo < Sinatra::Base
   private
 
   def storer
-    StorerPostAdapter.new
+    StorerHttpAdapter.new
   end
 
 end
