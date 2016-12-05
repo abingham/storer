@@ -35,6 +35,9 @@ class ClientTestBase < HexMiniTest
     poster(__method__, kata_id, avatar_names)
   end
 
+  def avatar_increments(kata_id, avatar_name)
+    getter(__method__, kata_id, avatar_name)
+  end
 
   private
 

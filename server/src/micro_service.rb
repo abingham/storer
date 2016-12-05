@@ -38,6 +38,10 @@ class MicroService < Sinatra::Base
     poster(__method__, kata_id, avatar_names)
   end
 
+  get '/avatar_increments' do
+    getter(__method__, kata_id, avatar_name)
+  end
+
   private
 
   def getter(caller, *args)
@@ -62,7 +66,7 @@ class MicroService < Sinatra::Base
     names.each { |name|  define_method name, &lambda { args[name.to_s] } }
   end
 
-  request_args :kata_id, :manifest, :id, :avatar_names
+  request_args :kata_id, :manifest, :id, :avatar_names, :avatar_name
 
   def args; @args ||= request_body_args; end
 

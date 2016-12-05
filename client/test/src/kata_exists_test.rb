@@ -50,7 +50,9 @@ class KataExistsTest < ClientTestBase
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '990',
-  'after kata_start_avatar() succeeds then another avatar has started' do
+  'after kata_start_avatar() succeeds',
+  'then another avatar has started',
+  'and has no traffic-lights yet' do
     manifest = {}
     manifest['image_name'] = 'cyberdojofoundation/gcc_assert'
     manifest['visible_files'] = starting_files
@@ -60,9 +62,11 @@ class KataExistsTest < ClientTestBase
 
     assert_equal lion, kata_start_avatar(kata_id, [lion])
     assert_equal [lion], kata_started_avatars(kata_id)
+    assert_equal [], avatar_increments(kata_id, lion)
 
     assert_equal salmon, kata_start_avatar(kata_id, [salmon])
     assert_equal [lion,salmon].sort, kata_started_avatars(kata_id).sort
+    assert_equal [], avatar_increments(kata_id, salmon)
   end
 
 

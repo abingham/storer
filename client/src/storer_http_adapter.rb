@@ -35,6 +35,9 @@ class StorerHttpAdapter
     post(__method__, kata_id, avatar_names)
   end
 
+  def avatar_increments(kata_id, avatar_name)
+    get(__method__, kata_id, avatar_name)
+  end
 
   private
 
