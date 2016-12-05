@@ -39,6 +39,10 @@ class ClientTestBase < HexMiniTest
     getter(__method__, kata_id, avatar_name)
   end
 
+  def avatar_visible_files(kata_id, avatar_name)
+    getter(__method__, kata_id, avatar_name)
+  end
+
   private
 
   def getter(caller, *args)

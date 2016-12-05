@@ -42,6 +42,10 @@ class MicroService < Sinatra::Base
     getter(__method__, kata_id, avatar_name)
   end
 
+  get '/avatar_visible_files' do
+    getter(__method__, kata_id, avatar_name)
+  end
+
   private
 
   def getter(caller, *args)

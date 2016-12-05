@@ -39,6 +39,10 @@ class StorerHttpAdapter
     get(__method__, kata_id, avatar_name)
   end
 
+  def avatar_visible_files(kata_id, avatar_name)
+    get(__method__, kata_id, avatar_name)
+  end
+
   private
 
   def get(method, *args)
