@@ -3,37 +3,46 @@ require_relative './../../src/storer_http_adapter'
 
 class ClientTestBase < HexMiniTest
 
-  def kata_exists?(kata_id)
-    json = storer.kata_exists?(kata_id)
-    json['kata_exists']
+  def create_kata(manifest)
+    poster(__method__, manifest)
   end
 
-  def create_kata(manifest)
-    storer.create_kata(manifest)
+  def kata_exists?(kata_id)
+    getter('kata_exists', kata_id)
   end
 
   def kata_manifest(kata_id)
-    json = storer.kata_manifest(kata_id)
-    json['kata_manifest']
-  end
-
-  def completed(id)
-    json = storer.completed(id)
-    json['completed']
-  end
-
-  def ids_for(outer_dir) # TODO: refactor to completions(id)
-    json = storer.ids_for(outer_dir)
-    json['ids_for']
-  end
-
-  def kata_started_avatars(kata_id)
-    json = storer.kata_started_avatars(kata_id)
-    json['kata_started_avatars']
+    getter(__method__, kata_id)
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - -
 
-  def storer; StorerHttpAdapter.new; end
+  def completed(id)
+    getter(__method__, id)
+  end
+
+  def ids_for(outer_dir) # TODO: refactor to completions(id)
+    getter(__method__, outer_dir)
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - -
+
+  def kata_started_avatars(kata_id)
+    getter(__method__, kata_id)
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - -
+
+  def getter(caller, *args)
+    name = caller.to_s
+    http.send(name, *args)[name]
+  end
+
+  def poster(caller, *args)
+    name = caller.to_s
+    http.send(name, *args)
+  end
+
+  def http; StorerHttpAdapter.new; end
 
 end

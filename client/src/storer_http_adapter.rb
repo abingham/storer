@@ -3,17 +3,19 @@ require 'net/http'
 
 class StorerHttpAdapter
 
-  def kata_exists?(kata_id)
-    get('kata_exists', { kata_id:kata_id })
-  end
-
   def create_kata(manifest)
     post(__method__, { manifest:manifest })
+  end
+
+  def kata_exists(kata_id)
+    get(__method__, { kata_id:kata_id })
   end
 
   def kata_manifest(kata_id)
     get(__method__, { kata_id:kata_id })
   end
+
+  # - - - - - - - - - - - -
 
   def completed(id)
     get(__method__, { id:id })
@@ -22,6 +24,8 @@ class StorerHttpAdapter
   def ids_for(id)
     get(__method__, { id:id })
   end
+
+  # - - - - - - - - - - - -
 
   def kata_started_avatars(kata_id)
     get(__method__, { kata_id:kata_id })
