@@ -17,6 +17,18 @@ class StorerTestBase < HexMiniTest
     storer.kata_manifest(kata_id)
   end
 
+  def avatar_increments(name)
+    storer.avatar_increments(kata_id, name)
+  end
+
+  def avatar_visible_files(name)
+    storer.avatar_visible_files(kata_id, name)
+  end
+
+  def tag_visible_files(name, tag)
+    storer.tag_visible_files(kata_id, name, tag)
+  end
+
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   include Externals

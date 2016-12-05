@@ -107,11 +107,11 @@ class HostDiskStorer
   end
 
   def avatar_increments(id, name)
-    avatar_dir(id, name).read(increments_filename) # latest tag
+    JSON.parse(avatar_dir(id, name).read(increments_filename)) # latest tag
   end
 
   def avatar_visible_files(id, name)
-    avatar_dir(id, name).read(manifest_filename) # latest tag
+    JSON.parse(avatar_dir(id, name).read(manifest_filename)) # latest tag
   end
 
   def avatar_ran_tests(id, name, delta, files, now, output, colour)
@@ -124,7 +124,7 @@ class HostDiskStorer
     files['output'] = output
     write_avatar_manifest(id, name, files)
 
-    rags = JSON.parse(avatar_increments(id, name))
+    rags = avatar_increments(id, name)
     tag = rags.length + 1
     rags << { 'colour' => colour, 'time' => now, 'number' => tag }
     write_avatar_increments(id, name, rags) # NB: no git.add as git.commit does -a
@@ -138,7 +138,7 @@ class HostDiskStorer
 
   def tag_visible_files(id, name, tag)
     # retrieve all the files in one go
-    git.show(avatar_path(id, name), "#{tag}:#{manifest_filename}")
+    JSON.parse(git.show(avatar_path(id, name), "#{tag}:#{manifest_filename}"))
   end
 
   private

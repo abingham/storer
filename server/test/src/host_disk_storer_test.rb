@@ -310,20 +310,6 @@ class HostDiskStorerTest < StorerTestBase
 
   private
 
-  def avatar_increments(name)
-    JSON.parse(storer.avatar_increments(kata_id, name))
-  end
-
-  def avatar_visible_files(name)
-    JSON.parse(storer.avatar_visible_files(kata_id, name))
-  end
-
-  def tag_visible_files(name, tag)
-    JSON.parse(storer.tag_visible_files(kata_id, name, tag))
-  end
-
-  # - - - - - - - - - - - - - - - - - - - - - - - -
-
   def kata_id
     test_id.reverse # reversed so I don't get common outer(id)s
   end
