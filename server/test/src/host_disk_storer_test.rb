@@ -233,6 +233,8 @@ class HostDiskStorerTest < StorerTestBase
     assert_equal '[]', git.show(avatar_path(lion), "#{tag}:#{filename}")
   end
 
+  #- - - - - - - - - - - - - - - - - - - - - - - -
+
   test '78B',
   'output file is NOT git versioned' do
     @log = SpyLogger.new(nil)
@@ -249,6 +251,8 @@ class HostDiskStorerTest < StorerTestBase
     git.show(avatar_path(lion), "#{tag}:#{filename}")
     assert log.spied.include? "STDERR:fatal: Path 'sandbox/output' does not exist in '1'\n"
   end
+
+  #- - - - - - - - - - - - - - - - - - - - - - - -
 
   test '04A',
   'changed files are git commited to the tag' do
@@ -270,6 +274,8 @@ class HostDiskStorerTest < StorerTestBase
     end
   end
 
+  #- - - - - - - - - - - - - - - - - - - - - - - -
+
   test 'BE5',
   'deleted files are git removed from the tag' do
     @log = SpyLogger.new(nil)
@@ -289,6 +295,8 @@ class HostDiskStorerTest < StorerTestBase
     git.show(avatar_path(lion), "#{tag}:#{filename}")
     assert log.spied.include? "STDERR:fatal: Path 'sandbox/hiker.h' does not exist in '1'\n"
   end
+
+  #- - - - - - - - - - - - - - - - - - - - - - - -
 
   test '08F',
   'new files are git added to the tag' do
