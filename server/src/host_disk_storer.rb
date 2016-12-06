@@ -38,8 +38,7 @@ class HostDiskStorer
   def completions(outer_dir)
     # for Batch-Method iteration over large number of katas...
     return [] unless disk[path + '/' + outer_dir].exists?
-    r = disk[path + '/' + outer_dir].each_dir.collect { |dir| dir }
-    r
+    disk[path + '/' + outer_dir].each_dir.collect { |dir| dir }
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

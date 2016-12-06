@@ -69,6 +69,9 @@ class MicroService < Sinatra::Base
   def storer_json(prefix, caller, *args)
     name = caller.to_s[prefix.length .. -1]
     { name => HostDiskStorer.new(self).send(name, *args) }.to_json
+  rescue Exception => e
+    log << "EXCEPTION: #{e.class.name} #{e.to_s}"
+    { 'exception' => e.class.name }.to_json
   end
 
   # - - - - - - - - - - - - - - - -
@@ -88,11 +91,5 @@ class MicroService < Sinatra::Base
     request.body.rewind
     JSON.parse(request.body.read)
   end
-
-  #def jasoned(n)
-  #  content_type :json
-  #rescue StandardError => e
-  #  return { stdout:'', stderr:e.to_s, status:1 }.to_json
-  #end
 
 end

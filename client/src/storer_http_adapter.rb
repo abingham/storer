@@ -1,5 +1,6 @@
 require 'json'
 require 'net/http'
+require_relative './storer_service_error'
 
 module StorerHttpAdapter # mix-in
 
@@ -58,12 +59,20 @@ module StorerHttpAdapter # mix-in
   def get(method, *args)
     name = method.to_s
     json = http(name, args_hash(name, *args)) { |uri| Net::HTTP::Get.new(uri) }
-    json[name]
+    result(json, name)
   end
 
   def post(method, *args)
     name = method.to_s
     json = http(name, args_hash(name, *args)) { |uri| Net::HTTP::Post.new(uri) }
+    result(json, name)
+  end
+
+  def result(json, name)
+    raise StorerServiceError.new('json.nil?') if json.nil?
+    raise StorerServiceError.new('bad json') unless json.class.name == 'Hash'
+    raise StorerServiceError.new(json['exception']) unless json['exception'].nil?
+    raise StorerServiceError.new('no key') if json[name].nil?
     json[name]
   end
 
@@ -83,5 +92,3 @@ module StorerHttpAdapter # mix-in
   end
 
 end
-
-
