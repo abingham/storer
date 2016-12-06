@@ -1,7 +1,7 @@
 require 'json'
 require_relative './client_test_base'
 
-class KataExistsTest < ClientTestBase
+class StorerServiceTest < ClientTestBase
 
   def self.hex_prefix; '6AA1B'; end
 
