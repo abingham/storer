@@ -15,6 +15,8 @@ class KataExistsTest < ClientTestBase
     refute kata_exists?(kata_id)
   end
 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
   test '5F9',
   'after create_kata() then',
   'kata_exists?() is true',
@@ -73,28 +75,42 @@ class KataExistsTest < ClientTestBase
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'A21',
-  'after avatar_ran_tests() there is one more traffic-light' do
+  'after avatar_ran_tests()',
+  'then there is one more traffic-light',
+  'and visible_files can be retrieved for any tag' do
     manifest = {}
     manifest['image_name'] = 'cyberdojofoundation/gcc_assert'
     manifest['visible_files'] = starting_files
     manifest['id'] = kata_id
     create_kata(manifest)
     assert_equal lion, kata_start_avatar(kata_id, [lion])
-    tag = 0
 
-    delta = { 'unchanged':[], 'changed':[], 'new':[], 'deleted':['hiker.h'] }
-    files = starting_files
-    files.delete('hiker.h')
+    delta = { 'unchanged'=>[], 'changed'=>[], 'new'=>[], 'deleted'=>['hiker.h'] }
+    tag1_files = starting_files
+    tag1_files.delete('hiker.h')
     now = [2016, 12, 5, 21, 01, 34]
     output = 'missing include'
     colour = 'amber'
-    avatar_ran_tests(kata_id, lion, delta, files, now, output, colour)
-    tag = 1
-
-    expected = [ { 'colour' => colour, 'time' => now, 'number' => tag } ]
+    avatar_ran_tests(kata_id, lion, delta, tag1_files, now, output, colour)
+    expected = []
+    expected << { 'colour' => colour, 'time' => now, 'number' => tag=1 }
     assert_equal expected, avatar_increments(kata_id, lion)
-    files['output'] = output
-    assert_equal files, tag_visible_files(kata_id, lion, tag)
+    tag1_files['output'] = output
+    assert_equal tag1_files, tag_visible_files(kata_id, lion, tag=1)
+
+    tag2_files = tag1_files.clone
+    tag2_files.delete('output')
+    tag2_files['readme.txt'] = 'Your task is to print...'
+    delta['new'] << 'readme.txt'
+    now = [2016, 12, 6, 9, 31, 56]
+    output = 'All tests passed'
+    colour = 'green'
+    avatar_ran_tests(kata_id, lion, delta, tag2_files, now, output, colour)
+    expected << { 'colour' => colour, 'time' => now, 'number' => tag=2 }
+    assert_equal expected, avatar_increments(kata_id, lion)
+    tag2_files['output'] = output
+    assert_equal tag1_files, tag_visible_files(kata_id, lion, tag=1)
+    assert_equal tag2_files, tag_visible_files(kata_id, lion, tag=2)
   end
 
 
