@@ -20,9 +20,9 @@ class KataExistsTest < ClientTestBase
   test '5F9',
   'after create_kata() then',
   'kata_exists?() is true',
-  'and manifest can be retrieved',
-  'and id can be completed',
-  'and no avatars have started' do
+  "and the kata's manifest can be retrieved",
+  "and the kata's id can be completed",
+  'and no avatars have yet started' do
     manifest = {}
     manifest['image_name'] = 'cyberdojofoundation/gcc_assert'
     manifest['visible_files'] = starting_files
@@ -47,6 +47,27 @@ class KataExistsTest < ClientTestBase
     assert_equal [kata_id[2..-1]], completions(outer)
 
     assert_equal [], kata_started_avatars(kata_id)
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  test 'C18',
+  'multiple katas with common first 2 digits can be completed' do
+    manifest = {}
+    manifest['image_name'] = 'cyberdojofoundation/gcc_assert'
+    manifest['visible_files'] = starting_files
+
+    id1 = kata_id[0..-2] + '4'
+    manifest['id'] = id1
+    create_kata(manifest)
+    assert kata_exists?(id1)
+    assert_equal [id1[2..-1]], completions(kata_id[0..1])
+
+    id2 = kata_id[0..-2] + '9'
+    manifest['id'] = id2
+    create_kata(manifest)
+    assert kata_exists?(id2)
+    assert_equal [id1[2..-1],id2[2..-1]].sort, completions(kata_id[0..1]).sort
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
