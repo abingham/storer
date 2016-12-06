@@ -23,10 +23,7 @@ class KataExistsTest < ClientTestBase
   "and the kata's manifest can be retrieved",
   "and the kata's id can be completed",
   'and no avatars have yet started' do
-    manifest = {}
-    manifest['image_name'] = 'cyberdojofoundation/gcc_assert'
-    manifest['visible_files'] = starting_files
-    manifest['id'] = kata_id
+    manifest = make_manifest
 
     create_kata(manifest)
     assert kata_exists?(kata_id)
@@ -53,19 +50,13 @@ class KataExistsTest < ClientTestBase
 
   test 'C18',
   'multiple katas with common first 2 digits can be completed' do
-    manifest = {}
-    manifest['image_name'] = 'cyberdojofoundation/gcc_assert'
-    manifest['visible_files'] = starting_files
-
     id1 = kata_id[0..-2] + '4'
-    manifest['id'] = id1
-    create_kata(manifest)
+    create_kata(make_manifest(id1))
     assert kata_exists?(id1)
     assert_equal [id1[2..-1]], completions(kata_id[0..1])
 
     id2 = kata_id[0..-2] + '9'
-    manifest['id'] = id2
-    create_kata(manifest)
+    create_kata(make_manifest(id2))
     assert kata_exists?(id2)
     assert_equal [id1[2..-1],id2[2..-1]].sort, completions(kata_id[0..1]).sort
   end
@@ -76,11 +67,7 @@ class KataExistsTest < ClientTestBase
   'after kata_start_avatar() succeeds',
   'then another avatar has started',
   'and has no traffic-lights yet' do
-    manifest = {}
-    manifest['image_name'] = 'cyberdojofoundation/gcc_assert'
-    manifest['visible_files'] = starting_files
-    manifest['id'] = kata_id
-    create_kata(manifest)
+    create_kata(make_manifest)
 
     assert_equal lion, kata_start_avatar(kata_id, [lion])
     assert_equal [], avatar_increments(kata_id, lion)
@@ -99,16 +86,12 @@ class KataExistsTest < ClientTestBase
   'after avatar_ran_tests()',
   'then there is one more traffic-light',
   'and visible_files can be retrieved for any tag' do
-    manifest = {}
-    manifest['image_name'] = 'cyberdojofoundation/gcc_assert'
-    manifest['visible_files'] = starting_files
-    manifest['id'] = kata_id
-    create_kata(manifest)
+    create_kata(make_manifest)
     assert_equal lion, kata_start_avatar(kata_id, [lion])
 
-    delta = { 'unchanged'=>[], 'changed'=>[], 'new'=>[], 'deleted'=>['hiker.h'] }
     tag1_files = starting_files
     tag1_files.delete('hiker.h')
+    delta = { 'unchanged'=>[], 'changed'=>[], 'new'=>[], 'deleted'=>['hiker.h'] }
     now = [2016, 12, 5, 21, 01, 34]
     output = 'missing include'
     colour = 'amber'
@@ -134,8 +117,15 @@ class KataExistsTest < ClientTestBase
     assert_equal tag2_files, tag_visible_files(kata_id, lion, tag=2)
   end
 
-
   private
+
+  def make_manifest(id = kata_id)
+    {
+      'image_name' => 'cyberdojofoundation/gcc_assert',
+      'visible_files' => starting_files,
+      'id' => id
+    }
+  end
 
   def kata_id
     # reversed so I don't get common outer(id)s
