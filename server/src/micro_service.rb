@@ -59,14 +59,14 @@ class MicroService < Sinatra::Base
   private
 
   def getter(name, *args)
-    httper('GET /', name, *args)
+    storer_json('GET /', name, *args)
   end
 
   def poster(name, *args)
-    httper('POST /', name, *args)
+    storer_json('POST /', name, *args)
   end
 
-  def httper(prefix, caller, *args)
+  def storer_json(prefix, caller, *args)
     name = caller.to_s[prefix.length .. -1]
     { name => HostDiskStorer.new(self).send(name, *args) }.to_json
   end

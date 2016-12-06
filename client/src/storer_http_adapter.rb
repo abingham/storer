@@ -1,7 +1,7 @@
 require 'json'
 require 'net/http'
 
-class StorerHttpAdapter
+module StorerHttpAdapter # mix-in
 
   def create_kata(manifest)
     post(__method__, manifest)
@@ -56,11 +56,15 @@ class StorerHttpAdapter
   private
 
   def get(method, *args)
-    http(method, args_hash(method, *args)) { |uri| Net::HTTP::Get.new(uri) }
+    name = method.to_s
+    json = http(method, args_hash(method, *args)) { |uri| Net::HTTP::Get.new(uri) }
+    json[name]
   end
 
   def post(method, *args)
-    http(method, args_hash(method, *args)) { |uri| Net::HTTP::Post.new(uri) }
+    name = method.to_s
+    json = http(method, args_hash(method, *args)) { |uri| Net::HTTP::Post.new(uri) }
+    json[name]
   end
 
   def args_hash(method, *args)
