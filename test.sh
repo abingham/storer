@@ -34,7 +34,7 @@ run_server_tests ${*}
 run_client_tests ${*}
 
 if [[ ( ${server_status} == 0 && ${client_status} == 0 ) ]]; then
-  #docker-compose down
+  docker-compose down
   echo "------------------------------------------------------"
   echo "All passed"
   exit 0
