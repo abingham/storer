@@ -1,4 +1,3 @@
-require 'sinatra'
 require 'sinatra/base'
 
 require_relative './storer_service'
