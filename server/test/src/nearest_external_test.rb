@@ -1,5 +1,32 @@
 require_relative './storer_test_base'
 
+class NearestExternalTest < StorerTestBase
+
+  def self.hex_prefix; '9D4'; end
+
+  def hex_setup
+    anna = Anna.new
+    natalie = Natalie.new(anna)
+    @ellie = Ellie.new(natalie)
+  end
+
+  test 'BF1',
+  'finds_nearest_external_when_there_is_one' do
+    assert_equal 'hello world:anna', @ellie.uses_disk # 2 up
+    assert_equal 'natalie:42', @ellie.uses_store # 1 up
+  end
+
+  test 'A1E',
+  'raises_when_parent_chain_runs_out' do
+    raised = assert_raises(RuntimeError) { @ellie.uses_log }
+    assert_equal 'Anna does not have a parent', raised.to_s
+  end
+
+end
+
+# - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - - - - - - - - - - - -
+
 class DummyDisk
   def initialize(who); @who = who; end
   def read; 'hello world:' + @who; end
@@ -43,30 +70,4 @@ class Ellie
   def disk; nearest_external(:disk); end
   def store; nearest_external(:store); end
   def log; nearest_external(:log); end
-end
-
-# - - - - - - - - - - - - - - - - - - - - - - - -
-
-class TestNearestExternal < StorerTestBase
-
-  def self.hex_prefix; '9D4'; end
-
-  def hex_setup
-    anna = Anna.new
-    natalie = Natalie.new(anna)
-    @ellie = Ellie.new(natalie)
-  end
-
-  test 'BF1',
-  'finds_nearest_external_when_there_is_one' do
-    assert_equal 'hello world:anna', @ellie.uses_disk # 2 up
-    assert_equal 'natalie:42', @ellie.uses_store # 1 up
-  end
-
-  test 'A1E',
-  'raises_when_parent_chain_runs_out' do
-    raised = assert_raises(RuntimeError) { @ellie.uses_log }
-    assert_equal 'Anna does not have a parent', raised.to_s
-  end
-
 end
