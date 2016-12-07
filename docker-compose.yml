@@ -11,7 +11,7 @@ services:
     ports: [ "4578:4578" ]
     container_name: storer_client
 
-  storer_server:
+  storer:
     user: root
     image: cyberdojo/storer
     build:

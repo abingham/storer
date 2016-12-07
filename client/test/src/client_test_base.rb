@@ -1,9 +1,9 @@
 require_relative './../hex_mini_test'
-require_relative './../../src/storer_http_adapter'
+require_relative './../../src/storer_service'
 
 class ClientTestBase < HexMiniTest
 
-  include StorerHttpAdapter
+  include StorerService
 
   def kata_exists?(kata_id)
     kata_exists(kata_id)
