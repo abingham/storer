@@ -19,3 +19,5 @@ services:
       args: [ PORT=4577 ]
     container_name: storer_server
     environment: [ CYBER_DOJO_KATAS_ROOT=/tmp ]
+    read_only: true
+    tmpfs: /tmp
