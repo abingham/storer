@@ -69,7 +69,9 @@ class StorerServiceTest < ClientTestBase
   'and has no traffic-lights yet' do
     create_kata(make_manifest)
 
+    refute avatar_exists?(kata_id, lion)
     assert_equal lion, kata_start_avatar(kata_id, [lion])
+    assert avatar_exists?(kata_id, lion)
     assert_equal [], avatar_increments(kata_id, lion)
     assert_equal starting_files, avatar_visible_files(kata_id, lion)
     assert_equal [lion], kata_started_avatars(kata_id)

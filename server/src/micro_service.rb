@@ -40,6 +40,10 @@ class MicroService < Sinatra::Base
 
   # - - - - - - - - - - - - - - -
 
+  get '/avatar_exists' do
+    getter(__method__, kata_id, avatar_name)
+  end
+
   get '/avatar_increments' do
     getter(__method__, kata_id, avatar_name)
   end

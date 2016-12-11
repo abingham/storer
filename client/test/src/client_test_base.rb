@@ -9,4 +9,8 @@ class ClientTestBase < HexMiniTest
     kata_exists(kata_id)
   end
 
+  def avatar_exists?(kata_id, avatar_name)
+    avatar_exists(kata_id, avatar_name)
+  end
+
 end
