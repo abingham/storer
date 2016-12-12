@@ -115,7 +115,12 @@ class HostDiskStorer
     if tag == 0
       kata_manifest(id)['visible_files']
     else
-      JSON.parse(tag_dir(id, name, tag).read(manifest_filename))
+      dir = tag_dir(id, name, tag)
+      if dir.exists?
+        JSON.parse(tag_dir(id, name, tag).read(manifest_filename))
+      else # old git-format
+        JSON.parse(git.show(avatar_path(id, name), "#{tag}:#{manifest_filename}"))
+      end
     end
   end
 
@@ -186,7 +191,6 @@ class HostDiskStorer
   # - - - - - - - - - - -
 
   include NearestExternal
-
   def disk; nearest_external(:disk); end
   def git; nearest_external(:git); end
 
