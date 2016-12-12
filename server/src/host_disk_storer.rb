@@ -82,7 +82,6 @@ class HostDiskStorer
     valid_names = avatar_names & all_avatar_names
     name = valid_names.detect { |name| avatar_dir(id, name).make }
     return nil if name.nil? # full!
-
     write_avatar_increments(id, name, [])
     name
   end
@@ -117,10 +116,11 @@ class HostDiskStorer
     else
       dir = tag_dir(id, name, tag)
       if dir.exists?
-        JSON.parse(tag_dir(id, name, tag).read(manifest_filename))
+        src = tag_dir(id, name, tag).read(manifest_filename)
       else # old git-format
-        JSON.parse(git.show(avatar_path(id, name), "#{tag}:#{manifest_filename}"))
+        src = git.show(avatar_path(id, name), "#{tag}:#{manifest_filename}")
       end
+      JSON.parse(src)
     end
   end
 
