@@ -263,6 +263,25 @@ class HostDiskStorerTest < StorerTestBase
     assert_equal expected_filenames.sort, files.keys.sort
   end
 
+  #- - - - - - - - - - - - - - - - - - - - - - - -
+
+  test '765',
+  'old git-format tag-non-zero visible-files can be retrieved' do
+    kata_id = '5A0F824303'
+    spider = 'spider'
+    files = storer.tag_visible_files(kata_id, spider, tag=1)
+    expected_filenames = [
+      'cyber-dojo.sh',
+      'instructions',
+      'README',
+      'hiker.feature',
+      'hiker.py',
+      'hiker_steps.py',
+      'output'
+    ]
+    assert_equal expected_filenames.sort, files.keys.sort
+  end
+
 
 =begin
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
