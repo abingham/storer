@@ -18,3 +18,9 @@ docker run --rm -it \
   --volumes-from cyber-dojo-gitted-katas-DATA-CONTAINER \
   cyberdojo/ruby:latest \
   sh -c "chown -R cyber-dojo /tmp/katas"
+
+docker run --rm -it \
+  --volumes-from cyber-dojo-gitted-katas-DATA-CONTAINER \
+  cyberdojo/ruby:latest \
+  sh -c "cd /tmp/katas/5A/0F824303/spider && ls -al"
+

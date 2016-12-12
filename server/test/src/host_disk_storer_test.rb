@@ -325,6 +325,7 @@ class HostDiskStorerTest < StorerTestBase
     assert avatar_dir.exists?
     git_path = avatar_path + '/.git'
     git_dir = disk[git_path]
+    puts `cd #{avatar_path} && ls -al`
     assert git_dir.exists?
   end
 
