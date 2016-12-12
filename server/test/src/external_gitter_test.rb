@@ -9,98 +9,16 @@ class ExternalGitterTest < StorerTestBase
     @log = SpyLogger.new(self)
   end
 
-  # - - - - - - - - - - - - - - - - -
-
-  test 'DC3',
-  'git.setup' do
-    hex_tmp_dir do |path|
-      git.setup(path, user_name, user_email)
-      cd_exec(path, 'git status')
-      assert_status 0
-      assert_stdout_include  'On branch master'
-      assert_stdout_include  'Initial commit'
-      assert_stderr ''
-      assert_log []
-      cd_exec(path, 'git config user.name')
-      assert_success user_name + "\n"
-      cd_exec(path, 'git config user.email')
-      assert_success user_email + "\n"
-    end
-  end
-
-  # - - - - - - - - - - - - - - - - -
-
-  test 'F2F',
-  'git.add' do
-    hex_tmp_dir do |path|
-      git.setup(path, user_name, user_email)
-      disk[path].write(filename, content)
-      git.add(path, filename)
-      cd_exec(path, 'git status')
-      assert_status 0
-      assert_stdout_include "new file:   #{filename}"
-      assert_stderr ''
-      assert_log []
-    end
-  end
-
-  # - - - - - - - - - - - - - - - - -
-
-  test 'F72',
-  'git.commit' do
-    hex_tmp_dir do |path|
-      git.setup(path, user_name, user_email)
-      disk[path].write(filename, content)
-      git.add(path, filename)
-      git.commit(path, tag=0)
-      cd_exec(path, 'git log')
-      assert_status 0
-      assert_match /commit (\h*)/, @stdout
-      assert_match /Author: #{user_name} <#{user_email}>/, @stdout
-      assert_match /Date:\s\s\s(.*)/, @stdout
-      assert_match /\s\s\s#{tag}/, @stdout
-      assert_stderr ''
-      assert_log []
-    end
-  end
-
-  # - - - - - - - - - - - - - - - - -
-
-  test '6F8',
-  'git.show' do
-    hex_tmp_dir do |path|
-      git.setup(path, user_name, user_email)
-      disk[path].write(filename, content)
-      git.add(path, filename)
-      git.commit(path, tag=0)
-      assert_equal content, git.show(path, "#{tag}:#{filename}")
-    end
-  end
-
-  # - - - - - - - - - - - - - - - - -
-
-  test '7A3',
-  'for git.rm' do
-    hex_tmp_dir do |path|
-      git.setup(path, user_name, user_email)
-      disk[path].write(filename, content + "\n")
-      git.add(path, filename)
-      git.commit(path, was_tag=0)
-      git.rm(path, filename)
-      git.commit(path, now_tag=1)
-
-      expected = [
-        'diff --git a/limerick.txt b/limerick.txt',
-        'deleted file mode 100644',
-        'index 334ac44..0000000',
-        '--- a/limerick.txt',
-        '+++ /dev/null',
-        '@@ -1 +0,0 @@',
-        '-the boy stood on the burning deck'
-       ]
-       cd_exec(path, "git diff #{was_tag} #{now_tag}")
-       assert_stdout expected.join("\n")+"\n"
-    end
+  test '65D',
+  'retrieval of visible-files in known old-git-format kata' do
+    path = storer.path + '/5A/0F824303/spider'
+    tag = 1
+    filename = 'hiker.py'
+    src = git.show(path, "#{tag}:sandbox/#{filename}")
+    refute_nil src
+    assert src.include? 'class Hiker:'
+    assert src.include?   'def answer(self, first, second):'
+    assert src.include?     'return first * second'
   end
 
   private
