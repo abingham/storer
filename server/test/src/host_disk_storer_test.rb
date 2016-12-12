@@ -193,7 +193,9 @@ class HostDiskStorerTest < StorerTestBase
 
   test '3CF',
   'after ran_tests() there is one more tag, one more traffic-light;',
-  'visible_files are retrievable by current and specific git-tag and contain output' do
+  'visible_files are retrievable by implicit current-tag',
+  'visible_files and retrievable by explicit git-tag',
+  'visible_files do not contain output' do
     create_kata
     storer.kata_start_avatar(kata_id, [lion])
     tag = 0
@@ -220,6 +222,21 @@ class HostDiskStorerTest < StorerTestBase
     end
   end
 
+  #- - - - - - - - - - - - - - - - - - - - - - - -
+
+  test 'C33',
+  'katas/5A/0F824303/spider already exists and is in old git format' do
+    avatar_path = '/tmp/katas/5A/0F824303/spider'
+    avatar_dir = disk[avatar_path]
+    assert avatar_dir.exists?
+    git_path = avatar_path + '/.git'
+    git_dir = disk[git_path]
+    assert git_dir.exists?
+  end
+
+  #- - - - - - - - - - - - - - - - - - - - - - - -
+
+=begin
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # git commits
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -315,18 +332,7 @@ class HostDiskStorerTest < StorerTestBase
     filename = 'sandbox/readme.txt'
     assert_equal 'NB:', git.show(avatar_path(lion), "#{tag}:#{filename}")
   end
-
-  #- - - - - - - - - - - - - - - - - - - - - - - -
-
-  test 'C33',
-  'katas/5A/0F824303/spider already exists and is in old git format' do
-    avatar_path = '/tmp/katas/5A/0F824303/spider'
-    avatar_dir = disk[avatar_path]
-    assert avatar_dir.exists?
-    git_path = avatar_path + '/.git'
-    git_dir = disk[git_path]
-    assert git_dir.exists?
-  end
+=end
 
   private
 

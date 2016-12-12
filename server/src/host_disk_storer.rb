@@ -15,7 +15,6 @@ class HostDiskStorer
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # katas
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   def completed(id)
     # Used only in enter_controller/check
@@ -43,7 +42,6 @@ class HostDiskStorer
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # kata
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   def kata_exists(id)
     # drop ? suffix to simplify micro_service.rb
@@ -65,10 +63,9 @@ class HostDiskStorer
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # avatar
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   def avatar_exists(id, name)
-    # drop ? suffix to simplify micro_service.rb
+    # no ? suffix to simplify micro_service.rb
     avatar_dir(id, name).exists?
   end
 
@@ -86,57 +83,40 @@ class HostDiskStorer
     name = valid_names.detect { |name| avatar_dir(id, name).make }
     return nil if name.nil? # full!
 
-    visible_files = kata_manifest(id)['visible_files']
-    write_avatar_manifest(id, name, visible_files)
     write_avatar_increments(id, name, [])
-
-    user_name = name + '_' + id
-    user_email = name + '@cyber-dojo.org'
-    git.setup(avatar_path(id, name), user_name, user_email)
-    git.add(avatar_path(id, name), manifest_filename)
-    git.add(avatar_path(id, name), increments_filename) # download tgz compatibility
-    sandbox_dir(id, name).make
-    visible_files.each do |filename, content|
-      sandbox_dir(id, name).write(filename, content)
-      git.add(sandbox_path(id, name), filename)
-    end
-    git.commit(avatar_path(id, name), tag=0)
-
     name
   end
 
   def avatar_increments(id, name)
-    JSON.parse(avatar_dir(id, name).read(increments_filename)) # latest tag
+    JSON.parse(avatar_dir(id, name).read(increments_filename))
   end
 
   def avatar_visible_files(id, name)
-    JSON.parse(avatar_dir(id, name).read(manifest_filename)) # latest tag
+    rags = avatar_increments(id, name)
+    tag = rags == [] ? 0 : rags[-1]['number']
+    tag_visible_files(id, name, tag)
   end
 
   def avatar_ran_tests(id, name, delta, files, now, output, colour)
-    sandbox_save(id, name, delta, files)
-    # cyberdojo/web writes output to sandbox/output file
-    # but it does *not* git.add it (which I intended to do)
-
     rags = avatar_increments(id, name)
     tag = rags.length + 1
     rags << { 'colour' => colour, 'time' => now, 'number' => tag }
-    write_avatar_increments(id, name, rags) # NB: no git.add as git.commit does -a
+    write_avatar_increments(id, name, rags)
 
     files = files.clone # don't alter caller's files argument
     files['output'] = output
-    write_avatar_manifest(id, name, files)
-
-    git.commit(avatar_path(id, name), tag)
+    write_tag_manifest(id, name, tag, files)
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # tag
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   def tag_visible_files(id, name, tag)
-    # retrieve all the files in one go
-    JSON.parse(git.show(avatar_path(id, name), "#{tag}:#{manifest_filename}"))
+    if tag == 0
+      kata_manifest(id)['visible_files']
+    else
+      JSON.parse(tag_dir(id, name, tag).read(manifest_filename))
+    end
   end
 
   private
@@ -155,62 +135,29 @@ class HostDiskStorer
 
   # - - - - - - - - - - -
 
-  def kata_dir(id)
-    disk[kata_path(id)]
-  end
-
-  def avatar_dir(id, name)
-    disk[avatar_path(id, name)]
-  end
-
-  def sandbox_dir(id, name)
-    disk[sandbox_path(id, name)]
-  end
-
-  def sandbox_save(id, name, delta, files)
-    # Unchanged files are *not* re-saved.
-    delta['deleted'].each do |filename|
-      git.rm(sandbox_path(id, name), filename)
-    end
-    delta['new'].each do |filename|
-      sandbox_write(id, name, filename, files[filename])
-      git.add(sandbox_path(id, name), filename)
-    end
-    delta['changed'].each do |filename|
-      # no git.add as git.commit does -a
-      sandbox_write(id, name, filename, files[filename])
-    end
-  end
-
-  def sandbox_write(id, name, filename, content)
-    sandbox_dir(id, name).write(filename, content)
-  end
+  def kata_path(id); path + '/' + outer(id) + '/' + inner(id); end
+  def avatar_path(id, name); kata_path(id) + '/' + name; end
+  def tag_path(id, name, tag); avatar_path(id, name) + '/' + tag.to_s; end
 
   # - - - - - - - - - - -
 
-  def kata_path(id)
-    path + '/' + outer(id) + '/' + inner(id)
-  end
-
-  def avatar_path(id, name)
-    kata_path(id) + '/' + name
-  end
-
-  def sandbox_path(id, name)
-    # An avatar's source files are _not_ held in its own folder
-    # (but in it's sandbox folder) because its own folder
-    # is used for the manifest.json and increments.json files.
-    avatar_path(id, name) + '/' + 'sandbox'
-  end
+  def kata_dir(id); disk[kata_path(id)]; end
+  def avatar_dir(id, name); disk[avatar_path(id, name)]; end
+  def tag_dir(id, name, tag); disk[tag_path(id, name, tag)]; end
 
   # - - - - - - - - - - -
 
-  def outer(id)
-    id.upcase[0..1]  # eg 'E5' 2-chars long
-  end
+  def outer(id); id.upcase[0..1]; end  # eg 'E5' 2-chars long
+  def inner(id); inner = id.upcase[2..-1]; end # eg '6A3327FE' 8-chars long
 
-  def inner(id)
-    inner = id.upcase[2..-1] # eg '6A3327FE' 8-chars long
+  # - - - - - - - - - - -
+
+  # Each avatar's increments stores a cache of colours and time-stamps
+  # for all the avatar's [test]s. Helps optimize traffic-lights views.
+  def increments_filename; 'increments.json'; end
+
+  def write_avatar_increments(id, name, increments)
+    avatar_dir(id, name).write(increments_filename, JSON.unparse(increments))
   end
 
   # - - - - - - - - - - -
@@ -221,33 +168,19 @@ class HostDiskStorer
         id.chars.all? { |char| hex?(char) }
   end
 
-  def hex?(char)
-    '0123456789ABCDEF'.include?(char)
-  end
+  def hex?(char); '0123456789ABCDEF'.include?(char); end
 
   # - - - - - - - - - - -
 
-  def manifest_filename
-    # A kata manifest stores the kata's meta information
-    # such as the chosen language, tests, exercise.
-    # An avatar's manifest stores avatar's visible-files.
-    'manifest.json'
-  end
+  # A kata's manifest stores the kata's meta information
+  # such as the chosen language, tests, exercise.
+  # An avatar's manifest stores avatar's visible-files.
+  def manifest_filename; 'manifest.json'; end
 
-  def write_avatar_manifest(id, name, visible_files)
-    avatar_dir(id, name).write(manifest_filename, JSON.unparse(visible_files))
-  end
-
-  # - - - - - - - - - - -
-
-  def increments_filename
-    # Each avatar's increments stores a cache of colours and time-stamps
-    # for all the avatar's [test]s. Helps optimize traffic-lights views.
-    'increments.json'
-  end
-
-  def write_avatar_increments(id, name, increments)
-    avatar_dir(id, name).write(increments_filename, JSON.unparse(increments))
+  def write_tag_manifest(id, name, tag, files)
+    dir = tag_dir(id, name, tag)
+    dir.make
+    dir.write(manifest_filename, JSON.unparse(files))
   end
 
   # - - - - - - - - - - -
