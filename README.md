@@ -5,7 +5,8 @@
 
 # cyberdojo/storer docker image
 
-Will be a micro-service for [cyber-dojo](http://cyber-dojo.org).
+A micro-service for [cyber-dojo](http://cyber-dojo.org).
+It's main task is to store the visible files associated with every avatar's test event.
 A **cyberdojo/storer** docker container runs sinatra on port 4577.
 
 - - - -
