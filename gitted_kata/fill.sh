@@ -20,9 +20,23 @@ docker run \
   cyberdojo/ruby:latest \
   sh -c "cd /tmp/katas && ls -al"
 
-# can't exec directly into container as it is not running
+echo 5
+docker run \
+  --rm \
+  --tty \
+  --volumes-from ${CYBER_DOJO_GITTED_KATAS_DATA_CONTAINER} \
+  cyberdojo/ruby:latest \
+  sh -c "cd /tmp/katas && ls -al"
 
-docker pull cyberdojo/ruby:latest
+echo 6
+docker run \
+  --rm \
+  --tty \
+  --volumes-from ${CYBER_DOJO_GITTED_KATAS_DATA_CONTAINER} \
+  cyberdojo/ruby:latest \
+  sh -c "cat /etc/passwd"
+
+# can't exec directly into container as it is not running
 
 docker run \
   --rm \
@@ -30,6 +44,14 @@ docker run \
   --volumes-from ${CYBER_DOJO_GITTED_KATAS_DATA_CONTAINER} \
   cyberdojo/ruby:latest \
   sh -c "chown -R cyber-dojo /tmp/katas"
+
+echo 7
+docker run \
+  --rm \
+  --tty \
+  --volumes-from ${CYBER_DOJO_GITTED_KATAS_DATA_CONTAINER} \
+  cyberdojo/ruby:latest \
+  sh -c "cd /tmp/katas && ls -al"
 
 docker run \
   --rm \
