@@ -1,5 +1,6 @@
 #!/bin/bash
 set -e
+set -x
 
 MY_DIR="$( cd "$( dirname "${0}" )" && pwd )"
 CYBER_DOJO_GITTED_KATAS_ROOT=/tmp/katas
@@ -11,9 +12,9 @@ docker cp \
 
 # can't exec directly into container as it is not running
 
+docker pull cyberdojo/ruby:latest
+
 docker run --rm -it \
   --volumes-from cyber-dojo-gitted-katas-DATA-CONTAINER \
-  cyberdojo/ruby \
+  cyberdojo/ruby:latest \
   sh -c "chown -R cyber-dojo /tmp/katas"
-
-

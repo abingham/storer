@@ -6,7 +6,7 @@ CONTEXT_DIR=${MY_DIR}
 TAG=cyberdojo/gitted_katas
 CYBER_DOJO_GITTED_KATAS_DATA_CONTAINER=cyber-dojo-gitted-katas-DATA-CONTAINER
 
-docker rm -f ${CYBER_DOJO_GITTED_KATAS_DATA_CONTAINER} || true
+(docker rm -f ${CYBER_DOJO_GITTED_KATAS_DATA_CONTAINER}) || true
 
 cd ${MY_DIR}
 
