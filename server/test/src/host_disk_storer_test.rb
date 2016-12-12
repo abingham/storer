@@ -236,6 +236,34 @@ class HostDiskStorerTest < StorerTestBase
 
   #- - - - - - - - - - - - - - - - - - - - - - - -
 
+  test 'D21',
+  'old git-format increments can be retrieved' do
+    kata_id = '5A0F824303'
+    spider = 'spider'
+    rags = storer.avatar_increments(kata_id, spider)
+    assert 8, rags.size
+  end
+
+  #- - - - - - - - - - - - - - - - - - - - - - - -
+
+  test '694',
+  'old git-format tag-zero visible-files can be retrieved' do
+    kata_id = '5A0F824303'
+    spider = 'spider'
+    files = storer.tag_visible_files(kata_id, spider, tag=0)
+    expected_filenames = [
+      'cyber-dojo.sh',
+      'instructions',
+      'README',
+      'hiker.feature',
+      'hiker.py',
+      'hiker_steps.py',
+      'output'
+    ]
+    assert_equal expected_filenames.sort, files.keys.sort
+  end
+
+
 =begin
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # git commits
