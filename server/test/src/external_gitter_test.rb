@@ -16,6 +16,4 @@ class ExternalGitterTest < StorerTestBase
     assert src.include?     'return first * second'
   end
 
-  private
-
 end
