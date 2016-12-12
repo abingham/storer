@@ -9,9 +9,8 @@ CYBER_DOJO_GITTED_KATAS_DATA_CONTAINER=cyber-dojo-gitted-katas-DATA-CONTAINER
 ls -al ${MY_DIR}/5A
 
 docker cp \
-  ${MY_DIR}/5A/. \
+  ${MY_DIR}/5A \
   ${CYBER_DOJO_GITTED_KATAS_DATA_CONTAINER}:${CYBER_DOJO_GITTED_KATAS_ROOT}/5A
-
 
 echo 4
 docker run \
@@ -19,7 +18,7 @@ docker run \
   --tty \
   --volumes-from ${CYBER_DOJO_GITTED_KATAS_DATA_CONTAINER} \
   cyberdojo/ruby:latest \
-  sh -c "cd /tmp/katas/5A/0F824303/spider && ls -al"
+  sh -c "cd /tmp/katas && ls -al"
 
 # can't exec directly into container as it is not running
 
