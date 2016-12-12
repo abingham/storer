@@ -93,11 +93,10 @@ class StorerServiceTest < ClientTestBase
 
     tag1_files = starting_files
     tag1_files.delete('hiker.h')
-    delta = { 'unchanged'=>[], 'changed'=>[], 'new'=>[], 'deleted'=>['hiker.h'] }
     now = [2016, 12, 5, 21, 01, 34]
     output = 'missing include'
     colour = 'amber'
-    avatar_ran_tests(kata_id, lion, delta, tag1_files, now, output, colour)
+    avatar_ran_tests(kata_id, lion, tag1_files, now, output, colour)
     expected = []
     expected << { 'colour' => colour, 'time' => now, 'number' => tag=1 }
     assert_equal expected, avatar_increments(kata_id, lion)
@@ -107,11 +106,10 @@ class StorerServiceTest < ClientTestBase
     tag2_files = tag1_files.clone
     tag2_files.delete('output')
     tag2_files['readme.txt'] = 'Your task is to print...'
-    delta['new'] << 'readme.txt'
     now = [2016, 12, 6, 9, 31, 56]
     output = 'All tests passed'
     colour = 'green'
-    avatar_ran_tests(kata_id, lion, delta, tag2_files, now, output, colour)
+    avatar_ran_tests(kata_id, lion, tag2_files, now, output, colour)
     expected << { 'colour' => colour, 'time' => now, 'number' => tag=2 }
     assert_equal expected, avatar_increments(kata_id, lion)
     tag2_files['output'] = output

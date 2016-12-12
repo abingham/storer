@@ -201,9 +201,7 @@ class HostDiskStorerTest < StorerTestBase
     storer.kata_start_avatar(kata_id, [lion])
     tag = 0
 
-    delta = empty_delta
-    delta['unchanged'] = starting_files.keys
-    storer.avatar_ran_tests(*make_args(delta, starting_files))
+    storer.avatar_ran_tests(*make_args(starting_files))
     tag = 1
 
     # traffic-lights
@@ -311,12 +309,8 @@ class HostDiskStorerTest < StorerTestBase
     }
   end
 
-  def empty_delta
-    { 'changed'=>[], 'unchanged'=>[], 'new'=>[], 'deleted'=>[] }
-  end
-
-  def make_args(delta, files)
-    [ kata_id, lion, delta, files, time_now, output, red ]
+  def make_args(files)
+    [ kata_id, lion, files, time_now, output, red ]
   end
 
   def time_now
