@@ -1,5 +1,6 @@
 require_relative './storer_test_base'
 require_relative './spy_logger'
+require_relative './../../src/all_avatar_names'
 
 class HostDiskStorerTest < StorerTestBase
 
@@ -391,17 +392,7 @@ class HostDiskStorerTest < StorerTestBase
     'lion'
   end
 
-  def all_avatar_names
-    %w(alligator antelope   bat     bear     bee      beetle       buffalo   butterfly
-       cheetah   crab       deer    dolphin  eagle    elephant     flamingo  fox
-       frog      gopher     gorilla heron    hippo    hummingbird  hyena     jellyfish
-       kangaroo  kingfisher koala   leopard  lion     lizard       lobster   moose
-       mouse     ostrich    owl     panda    parrot   peacock      penguin   porcupine
-       puffin    rabbit     raccoon ray      rhino    salmon       seal      shark
-       skunk     snake      spider  squid    squirrel starfish     swan      tiger
-       toucan    tuna       turtle  vulture  walrus   whale        wolf      zebra
-    )
-  end
+  include AllAvatarNames
 
   def create_kata(id = kata_id)
     manifest = {}

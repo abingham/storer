@@ -1,4 +1,5 @@
 require_relative './nearest_external'
+require_relative './all_avatar_names'
 require 'json'
 
 class HostDiskStorer
@@ -126,20 +127,6 @@ class HostDiskStorer
 
   private
 
-  def all_avatar_names
-    %w(alligator antelope   bat     bear     bee      beetle       buffalo   butterfly
-       cheetah   crab       deer    dolphin  eagle    elephant     flamingo  fox
-       frog      gopher     gorilla heron    hippo    hummingbird  hyena     jellyfish
-       kangaroo  kingfisher koala   leopard  lion     lizard       lobster   moose
-       mouse     ostrich    owl     panda    parrot   peacock      penguin   porcupine
-       puffin    rabbit     raccoon ray      rhino    salmon       seal      shark
-       skunk     snake      spider  squid    squirrel starfish     swan      tiger
-       toucan    tuna       turtle  vulture  walrus   whale        wolf      zebra
-    )
-  end
-
-  # - - - - - - - - - - -
-
   def kata_path(id); path + '/' + outer(id) + '/' + inner(id); end
   def avatar_path(id, name); kata_path(id) + '/' + name; end
   def tag_path(id, name, tag); avatar_path(id, name) + '/' + tag.to_s; end
@@ -190,6 +177,7 @@ class HostDiskStorer
 
   # - - - - - - - - - - -
 
+  include AllAvatarNames
   include NearestExternal
   def disk; nearest_external(:disk); end
   def git; nearest_external(:git); end
