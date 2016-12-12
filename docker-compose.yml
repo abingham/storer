@@ -18,6 +18,8 @@ services:
       context: server
       args: [ PORT=4577 ]
     container_name: storer_server
-    environment: [ CYBER_DOJO_KATAS_ROOT=/tmp ]
+    environment: [ CYBER_DOJO_KATAS_ROOT=/tmp/katas ]
+    volumes_from:
+      - container:cyber-dojo-gitted-katas-DATA-CONTAINER:rw
     read_only: true
     tmpfs: /tmp

@@ -115,18 +115,17 @@ class HostDiskStorer
 
   def avatar_ran_tests(id, name, delta, files, now, output, colour)
     sandbox_save(id, name, delta, files)
-
     # cyberdojo/web writes output to sandbox/output file
     # but it does *not* git.add it (which I intended to do)
-
-    files = files.clone # don't alter caller's files argument
-    files['output'] = output
-    write_avatar_manifest(id, name, files)
 
     rags = avatar_increments(id, name)
     tag = rags.length + 1
     rags << { 'colour' => colour, 'time' => now, 'number' => tag }
     write_avatar_increments(id, name, rags) # NB: no git.add as git.commit does -a
+
+    files = files.clone # don't alter caller's files argument
+    files['output'] = output
+    write_avatar_manifest(id, name, files)
 
     git.commit(avatar_path(id, name), tag)
   end
@@ -231,8 +230,7 @@ class HostDiskStorer
   def manifest_filename
     # A kata manifest stores the kata's meta information
     # such as the chosen language, tests, exercise.
-    # An avatar manifest stores the avatar's
-    # current visible files (filenames and contents).
+    # An avatar's manifest stores avatar's visible-files.
     'manifest.json'
   end
 
@@ -254,9 +252,9 @@ class HostDiskStorer
 
   # - - - - - - - - - - -
 
+  include NearestExternal
+
   def disk; nearest_external(:disk); end
   def git; nearest_external(:git); end
-
-  include NearestExternal
 
 end

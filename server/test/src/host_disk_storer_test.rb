@@ -19,8 +19,8 @@ class HostDiskStorerTest < StorerTestBase
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '218',
-  'path is set to /tmp in docker-compose.yml' do
-    assert_equal '/tmp', storer.path
+  'path is set to /tmp/katas in docker-compose.yml' do
+    assert_equal '/tmp/katas', storer.path
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -314,6 +314,18 @@ class HostDiskStorerTest < StorerTestBase
 
     filename = 'sandbox/readme.txt'
     assert_equal 'NB:', git.show(avatar_path(lion), "#{tag}:#{filename}")
+  end
+
+  #- - - - - - - - - - - - - - - - - - - - - - - -
+
+  test 'C33',
+  'katas/5A/0F824303/spider already exists and is in old git format' do
+    avatar_path = '/tmp/katas/5A/0F824303/spider'
+    avatar_dir = disk[avatar_path]
+    assert avatar_dir.exists?
+    git_path = avatar_path + '/.git'
+    git_dir = disk[git_path]
+    assert git_dir.exists?
   end
 
   private
