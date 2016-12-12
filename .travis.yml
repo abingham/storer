@@ -3,6 +3,7 @@ services: docker
 language: generic
 
 script:
+    - docker --version
     - curl -O https://raw.githubusercontent.com/cyber-dojo/ruby/master/push.sh
     - chmod +x push.sh
     - ./gitted_kata/build.sh
