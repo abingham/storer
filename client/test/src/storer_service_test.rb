@@ -72,12 +72,13 @@ class StorerServiceTest < ClientTestBase
     refute avatar_exists?(kata_id, lion)
     assert_equal lion, kata_start_avatar(kata_id, [lion])
     assert avatar_exists?(kata_id, lion)
-    assert_equal [], avatar_increments(kata_id, lion)
+    tag0 = { 'event' => 'created', 'time' => creation_time, 'number' => 0 }
+    assert_equal [tag0], avatar_increments(kata_id, lion)
     assert_equal starting_files, avatar_visible_files(kata_id, lion)
     assert_equal [lion], kata_started_avatars(kata_id)
 
     assert_equal salmon, kata_start_avatar(kata_id, [salmon])
-    assert_equal [], avatar_increments(kata_id, salmon)
+    assert_equal [tag0], avatar_increments(kata_id, salmon)
     assert_equal starting_files, avatar_visible_files(kata_id, salmon)
     assert_equal [lion,salmon].sort, kata_started_avatars(kata_id).sort
   end
@@ -98,6 +99,7 @@ class StorerServiceTest < ClientTestBase
     colour = 'amber'
     avatar_ran_tests(kata_id, lion, tag1_files, now, output, colour)
     expected = []
+    expected << tag0
     expected << { 'colour' => colour, 'time' => now, 'number' => tag=1 }
     assert_equal expected, avatar_increments(kata_id, lion)
     tag1_files['output'] = output
@@ -123,6 +125,7 @@ class StorerServiceTest < ClientTestBase
     {
       'image_name' => 'cyberdojofoundation/gcc_assert',
       'visible_files' => starting_files,
+      'created' => creation_time,
       'id' => id
     }
   end
@@ -140,6 +143,14 @@ class StorerServiceTest < ClientTestBase
       'hiker.c' => '#include "hiker.h"',
       'hiker.h' => '#include <stdio.h>'
     }
+  end
+
+  def tag0
+    { 'event' => 'created', 'time' => creation_time, 'number' => tag=0 }
+  end
+
+  def creation_time
+    [ 2016, 12, 15, 17, 26, 34 ]
   end
 
 end

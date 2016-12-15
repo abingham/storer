@@ -88,17 +88,25 @@ class HostDiskStorer
   end
 
   def avatar_increments(id, name)
-    JSON.parse(avatar_dir(id, name).read(increments_filename))
+    # return increments with tag0 to avoid client
+    # having to make extra service call
+    tag0 =
+      {
+        'event' => 'created',
+        'time' => kata_manifest(id)['created'],
+        'number' => 0
+      }
+    [tag0] + increments(id, name)
   end
 
   def avatar_visible_files(id, name)
-    rags = avatar_increments(id, name)
+    rags = increments(id, name)
     tag = rags == [] ? 0 : rags[-1]['number']
     tag_visible_files(id, name, tag)
   end
 
   def avatar_ran_tests(id, name, files, now, output, colour)
-    rags = avatar_increments(id, name)
+    rags = increments(id, name)
     tag = rags.length + 1
     rags << { 'colour' => colour, 'time' => now, 'number' => tag }
     write_avatar_increments(id, name, rags)
@@ -116,7 +124,7 @@ class HostDiskStorer
       kata_manifest(id)['visible_files']
     else
       dir = tag_dir(id, name, tag)
-      if dir.exists?
+      if dir.exists? # new non-git-format
         src = tag_dir(id, name, tag).read(manifest_filename)
       else # old git-format
         src = git.show(avatar_path(id, name), "#{tag}:#{manifest_filename}")
@@ -143,9 +151,16 @@ class HostDiskStorer
   def inner(id); inner = id.upcase[2..-1]; end # eg '6A3327FE' 8-chars long
 
   # - - - - - - - - - - -
-
   # Each avatar's increments stores a cache of colours and time-stamps
-  # for all the avatar's [test]s. Helps optimize traffic-lights views.
+  # for all the avatar's [test]s.
+  # Helps optimize dashboard traffic-lights views.
+
+  def increments(id, name)
+    # maintain compatibility with old git-format
+    # do _not_ save tag0 in increments.json
+    JSON.parse(avatar_dir(id, name).read(increments_filename))
+  end
+
   def increments_filename; 'increments.json'; end
 
   def write_avatar_increments(id, name, increments)
@@ -178,8 +193,43 @@ class HostDiskStorer
   # - - - - - - - - - - -
 
   include AllAvatarNames
+
   include NearestExternal
   def disk; nearest_external(:disk); end
   def git; nearest_external(:git); end
 
 end
+
+#- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# tags vs lights
+#- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# When a new avatar enters a dojo its initial "tag-zero"
+# is *not* recorded in its increments.json file which starts as [ ]
+# It probably should be but isn't for existing dojos
+# (created in the old git format) and so for backwards
+# compatibility it stays that way.
+#
+# Every test event stores an entry in the increments.json file.
+# eg
+# [
+#   {
+#     'colour' => 'red',
+#     'time'   => [2014, 2, 15, 8, 54, 6],
+#     'number' => 1
+#   },
+# ]
+#
+# At the moment the only event that creates an
+# increments.json file entry is a [test].
+#
+# However, it's conceivable I may create finer grained tags
+# than just [test] events, eg
+#    o) creating a new file
+#    o) renaming a file
+#    o) deleting a file
+#    o) opening a different file
+#    o) editing a file
+#
+# If this happens the difference between tags and lights
+# will be more pronounced.
+# ------------------------------------------------------

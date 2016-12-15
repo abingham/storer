@@ -170,14 +170,19 @@ class HostDiskStorerTest < StorerTestBase
   test 'E0C',
   'avatar_exists? is true after avatar_starts;',
   'avatar has no traffic-lights;',
-  "avatar's visible_files are from the kata"  do
+  "avatar's visible_files are from the kata",
+  "avatar's increments already have tag zero" do
     create_kata
     assert_equal lion, storer.kata_start_avatar(kata_id, [lion])
     assert avatar_exists?(kata_id, lion)
     assert_equal [lion], storer.kata_started_avatars(kata_id)
-    assert_equal [], avatar_increments(lion)
     assert_hash_equal starting_files, avatar_visible_files(lion)
     assert_hash_equal starting_files, tag_visible_files(lion, tag=0)
+    assert_equal [
+      'event' => 'created',
+      'time' => creation_time,
+      'number' => 0
+    ], avatar_increments(lion)
   end
 
   test 'B1C',
@@ -195,7 +200,7 @@ class HostDiskStorerTest < StorerTestBase
   test '3CF',
   'after ran_tests() there is one more tag, one more traffic-light;',
   'visible_files are retrievable by implicit current-tag',
-  'visible_files and retrievable by explicit git-tag',
+  'visible_files are retrievable by explicit git-tag',
   'visible_files do not contain output' do
     create_kata
     storer.kata_start_avatar(kata_id, [lion])
@@ -205,7 +210,10 @@ class HostDiskStorerTest < StorerTestBase
     tag = 1
 
     # traffic-lights
-    expected = [ { 'colour' => red, 'time' => time_now, 'number' => tag } ]
+    expected = [
+      { 'event' => 'created', 'time' => creation_time, 'number' => 0 },
+      { 'colour' => red, 'time' => time_now, 'number' => tag }
+    ]
     assert_equal expected, avatar_increments(lion)
     # current tag
     visible_files = avatar_visible_files(lion)
@@ -221,6 +229,8 @@ class HostDiskStorerTest < StorerTestBase
     end
   end
 
+  #- - - - - - - - - - - - - - - - - - - - - - - -
+  # old git-format
   #- - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'C33',
@@ -297,6 +307,7 @@ class HostDiskStorerTest < StorerTestBase
     manifest = {}
     manifest['image_name'] = 'cyberdojofoundation/gcc_assert'
     manifest['visible_files'] = starting_files
+    manifest['created'] = creation_time
     manifest['id'] = id
     storer.create_kata(manifest)
     manifest
@@ -311,6 +322,10 @@ class HostDiskStorerTest < StorerTestBase
 
   def make_args(files)
     [ kata_id, lion, files, time_now, output, red ]
+  end
+
+  def creation_time
+    [2016, 12, 2, 6, 13, 23]
   end
 
   def time_now
