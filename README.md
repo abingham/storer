@@ -54,6 +54,13 @@ output, with the given colour.
 
 # queries
 
+## path
+Returns the storer's root path.
+- returns
+  * { "path": "/usr/src/cyber-dojo/katas"  }
+
+- - - -
+
 ## completed
 If it exists, returns the 10-digit kata_id which uniquely completes the given id, otherwise nil.
 - parameters
