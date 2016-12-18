@@ -4,6 +4,12 @@ require_relative './storer_service_error'
 
 module StorerService # mix-in
 
+  def path
+    get(__method__)
+  end
+
+  # - - - - - - - - - - - -
+
   def create_kata(manifest)
     post(__method__, manifest)
   end

@@ -6,13 +6,10 @@ class HostDiskStorer
 
   def initialize(parent)
     @parent = parent
+    @path = ENV['CYBER_DOJO_KATAS_ROOT']
   end
 
-  attr_reader :parent
-
-  def path
-    @path ||= ENV['CYBER_DOJO_KATAS_ROOT']
-  end
+  attr_reader :parent, :path
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # katas

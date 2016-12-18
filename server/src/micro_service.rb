@@ -6,6 +6,12 @@ require_relative './host_disk_storer'
 
 class MicroService < Sinatra::Base
 
+  get '/path' do
+    getter(__method__)
+  end
+
+  # - - - - - - - - - - - - - - -
+
   post '/create_kata' do
     poster(__method__, manifest)
   end

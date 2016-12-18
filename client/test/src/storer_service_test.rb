@@ -5,6 +5,13 @@ class StorerServiceTest < ClientTestBase
 
   def self.hex_prefix; '6AA1B'; end
 
+  test 'D43',
+  'path is set to /tmp/katas from docker-compose.yml' do
+    assert_equal '/tmp/katas', path
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
   test 'E98',
   'kata_exists?() for a kata_id that is not a 10-digit hex-string is false' do
     refute kata_exists?('123')
