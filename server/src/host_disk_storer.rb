@@ -1,5 +1,5 @@
-require_relative './nearest_external'
-require_relative './all_avatar_names'
+require_relative 'nearest_external'
+require_relative 'all_avatar_names'
 require 'json'
 
 class HostDiskStorer
@@ -34,7 +34,7 @@ class HostDiskStorer
 
   def completions(outer_dir)
     # for Batch-Method iteration over large number of katas...
-    return [] unless disk[path + '/' + outer_dir].exists?
+    return [] unless disk[dir_join(path, outer_dir)].exists?
     disk[dir_join(path, outer_dir)].each_dir.collect { |dir| dir }
   end
 
