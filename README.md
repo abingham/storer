@@ -79,15 +79,6 @@ Returns all the kata_id's starting with the given 2-digit long id.
 
 - - - -
 
-## kata_exists
-Returns true if a kata with the given kata_id exists, otherwise false.
-- parameters
-  * kata_id, eg "A551C528C3"
-- returns
-  * { "kata_exists": true }
-
-- - - -
-
 ## kata_manifest
 Returns the manifest used to create the kata with the given kata_id.
 - parameters

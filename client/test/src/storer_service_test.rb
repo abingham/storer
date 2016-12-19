@@ -12,18 +12,6 @@ class StorerServiceTest < ClientTestBase
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  test 'E98',
-  'kata_exists?() for a kata_id that is not a 10-digit hex-string is false' do
-    refute kata_exists?('123')
-  end
-
-  test '33F',
-  'kata_exists?() for a kata_id that is 10-digit hex-string but not a kata is false' do
-    refute kata_exists?(kata_id)
-  end
-
-  # - - - - - - - - - - - - - - - - - - - - - - - - - -
-
   test '5F9',
   'after create_kata() then',
   'kata_exists?() is true',
@@ -33,8 +21,6 @@ class StorerServiceTest < ClientTestBase
     manifest = make_manifest
 
     create_kata(manifest)
-    assert kata_exists?(kata_id)
-
     assert_equal manifest, kata_manifest(kata_id)
 
     no_match = kata_id.reverse[0..5]
@@ -59,12 +45,10 @@ class StorerServiceTest < ClientTestBase
   'multiple katas with common first 2 digits can be completed' do
     id1 = kata_id[0..-2] + '4'
     create_kata(make_manifest(id1))
-    assert kata_exists?(id1)
     assert_equal [id1[2..-1]], completions(kata_id[0..1])
 
     id2 = kata_id[0..-2] + '9'
     create_kata(make_manifest(id2))
-    assert kata_exists?(id2)
     assert_equal [id1[2..-1],id2[2..-1]].sort, completions(kata_id[0..1]).sort
   end
 
@@ -76,9 +60,7 @@ class StorerServiceTest < ClientTestBase
   'and has no traffic-lights yet' do
     create_kata(make_manifest)
 
-    refute avatar_exists?(kata_id, lion)
     assert_equal lion, kata_start_avatar(kata_id, [lion])
-    assert avatar_exists?(kata_id, lion)
     tag0 = { 'event' => 'created', 'time' => creation_time, 'number' => 0 }
     assert_equal [tag0], avatar_increments(kata_id, lion)
     assert_equal starting_files, avatar_visible_files(kata_id, lion)

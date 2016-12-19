@@ -124,42 +124,12 @@ class HostDiskStorerTest < StorerTestBase
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  # kata_exists(id)
-  #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-  test 'D0A',
-  'kata_exists?(id) for id that is not a string is false' do
-    not_string = Object.new
-    refute kata_exists?(not_string)
-  end
-
-  test '55F',
-  'kata_exists?(id) for string not 10 chars long is false' do
-    invalid = '60408161A'
-    assert_equal 9, invalid.length
-    refute kata_exists?(invalid)
-  end
-
-  test '8F9',
-  'kata_exists?(id) for string 10 chars long but not all hex is false' do
-    invalid = '60408161AG'
-    assert_equal 10, invalid.length
-    refute kata_exists?(invalid)
-  end
-
-  test '79A',
-  'kata_exists?(good-id) false' do
-    refute kata_exists?(kata_id)
-  end
-
-  #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # create_kata
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'B99',
-  'after create_kata(manifest) kata_exists?(id) is true and manifest can be retrieved' do
+  'after create_kata(manifest) manifest can be retrieved' do
     manifest = create_kata
-    assert kata_exists?(kata_id)
     assert_hash_equal manifest, kata_manifest
   end
 
@@ -256,9 +226,8 @@ class HostDiskStorerTest < StorerTestBase
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'A6B',
-  'avatar_exists? is false before avatar starts' do
+  'before starting an avatar none exist' do
     create_kata
-    refute avatar_exists?(kata_id, lion)
     assert_equal [], storer.kata_started_avatars(kata_id)
   end
 
@@ -278,13 +247,12 @@ class HostDiskStorerTest < StorerTestBase
   end
 
   test 'E0C',
-  'avatar_exists? is true after avatar_starts;',
+  'after avatar_starts;',
   'avatar has no traffic-lights;',
   "avatar's visible_files are from the kata",
   "avatar's increments already have tag zero" do
     create_kata
     assert_equal lion, storer.kata_start_avatar(kata_id, [lion])
-    assert avatar_exists?(kata_id, lion)
     assert_equal [lion], storer.kata_started_avatars(kata_id)
     assert_hash_equal starting_files, avatar_visible_files(lion)
     assert_hash_equal starting_files, tag_visible_files(lion, tag=0)

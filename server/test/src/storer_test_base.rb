@@ -5,14 +5,6 @@ require_relative './../../src/externals'
 
 class StorerTestBase < HexMiniTest
 
-  def kata_exists?(kata_id)
-    storer.kata_exists(kata_id)
-  end
-
-  def avatar_exists?(kata_id, avatar_name)
-    storer.avatar_exists(kata_id, avatar_name)
-  end
-
   def kata_manifest
     storer.kata_manifest(kata_id)
   end

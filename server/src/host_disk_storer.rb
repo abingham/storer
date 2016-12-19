@@ -41,11 +41,6 @@ class HostDiskStorer
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # kata
 
-  def kata_exists(id)
-    # drop ? suffix to simplify micro_service.rb
-    valid_id?(id) && kata_dir(id).exists?
-  end
-
   def create_kata(manifest)
     id = manifest['id']
     assert_valid_id(id)
@@ -64,11 +59,6 @@ class HostDiskStorer
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # avatar
-
-  def avatar_exists(id, name)
-    # no ? suffix to simplify micro_service.rb
-    avatar_dir(id, name).exists?
-  end
 
   def kata_started_avatars(id)
     assert_kata_exists(id)
@@ -177,20 +167,6 @@ class HostDiskStorer
 
   # - - - - - - - - - - -
 
-  def valid_id?(id)
-    id.class.name == 'String' &&
-      id.length == 10 &&
-        id.chars.all? { |char| hex?(char) }
-  end
-
-  def hex?(char); '0123456789ABCDEF'.include?(char); end
-
-  def valid_avatar?(name)
-    all_avatar_names.include?(name)
-  end
-
-  # - - - - - - - - - - -
-
   # A kata's manifest stores the kata's meta information
   # such as the chosen language, tests, exercise.
   # An avatar's manifest stores avatar's visible-files.
@@ -220,13 +196,35 @@ class HostDiskStorer
 
   def assert_kata_exists(id)
     assert_valid_id(id)
-    raise StandardError.new('Storer.invalid id') unless kata_exists(id)
+    raise StandardError.new('Storer.invalid id') unless kata_exists?(id)
   end
 
   def assert_avatar_exists(id, name)
     assert_kata_exists(id)
     assert_valid_avatar(name)
-    raise StandardError.new('Storer.invalid name') unless avatar_exists(id, name)
+    raise StandardError.new('Storer.invalid name') unless avatar_exists?(id, name)
+  end
+
+  # - - - - - - - - - - -
+
+  def valid_id?(id)
+    id.class.name == 'String' &&
+      id.length == 10 &&
+        id.chars.all? { |char| hex?(char) }
+  end
+
+  def hex?(char); '0123456789ABCDEF'.include?(char); end
+
+  def valid_avatar?(name)
+    all_avatar_names.include?(name)
+  end
+
+  def kata_exists?(id)
+    kata_dir(id).exists?
+  end
+
+  def avatar_exists?(id, name)
+    avatar_dir(id, name).exists?
   end
 
 end
