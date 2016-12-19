@@ -57,6 +57,29 @@ class HostDiskStorerTest < StorerTestBase
   # create_kata
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+  test '933',
+  'create_kata with invalid or missing manifest[id] raises' do
+    manifest = create_manifest
+    manifest.delete('id')
+    error = assert_raises(StandardError) { storer.create_kata(manifest) }
+    assert error.message.start_with?('Storer'), error.message
+    [
+      nil,         # not an object
+      [],          # not a string
+      '',          # not 10 chars
+      '34',        # not 10 chars
+      '345',       # not 10 chars
+      '123456789', # not 10 chars
+      'ABCDEF123X' # not 10 hex chars
+    ].each do |id|
+      manifest['id'] = id
+      error = assert_raises(StandardError) { storer.create_kata(manifest) }
+      assert error.message.start_with?('Storer'), error.message
+    end
+  end
+
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
   test 'B99',
   'after create_kata(manifest) kata_exists?(id) is true and manifest can be retrieved' do
     manifest = create_kata
@@ -303,12 +326,17 @@ class HostDiskStorerTest < StorerTestBase
 
   include AllAvatarNames
 
-  def create_kata(id = kata_id)
+  def create_manifest(id = kata_id)
     manifest = {}
     manifest['image_name'] = 'cyberdojofoundation/gcc_assert'
     manifest['visible_files'] = starting_files
     manifest['created'] = creation_time
     manifest['id'] = id
+    manifest
+  end
+
+  def create_kata(id = kata_id)
+    manifest = create_manifest(id)
     storer.create_kata(manifest)
     manifest
   end

@@ -47,10 +47,12 @@ class HostDiskStorer
   end
 
   def create_kata(manifest)
+    id = manifest['id']
+    assert_valid_id(id)
     # a kata's id has 10 hex chars. This gives 16^10 possibilities
     # which is 1,099,511,627,776 which is big enough to not
     # need to check that a kata with the id already exists.
-    dir = kata_dir(manifest['id'])
+    dir = kata_dir(id)
     dir.make
     dir.write(manifest_filename, JSON.unparse(manifest))
   end
@@ -196,6 +198,10 @@ class HostDiskStorer
   include NearestExternal
   def disk; nearest_external(:disk); end
   def git; nearest_external(:git); end
+
+  def assert_valid_id(id)
+    raise StandardError.new('Storer:invalid id') unless valid?(id)
+  end
 
 end
 
