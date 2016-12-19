@@ -47,29 +47,29 @@ class HostDiskStorerTest < StorerTestBase
   end
 
   test '5DF',
-  'kata_started_avatar(id) with invalid id raises' do
-    assert_invalid_kata_id_raises { |invalid_id|
+  'kata_started_avatar(id) with bad id raises' do
+    assert_bad_kata_id_raises { |invalid_id|
       storer.kata_start_avatar(invalid_id, [lion])
     }
   end
 
   test 'D9F',
-  'avatar_increments(id) with invalid id raises' do
-    assert_invalid_kata_id_raises { |invalid_id|
+  'avatar_increments(id) with bad id raises' do
+    assert_bad_kata_id_raises { |invalid_id|
       storer.avatar_increments(invalid_id, lion)
     }
   end
 
   test '160',
-  'avatar_visible_files(id) with invalid id raises' do
-    assert_invalid_kata_id_raises { |invalid_id|
+  'avatar_visible_files(id) with bad id raises' do
+    assert_bad_kata_id_raises { |invalid_id|
       storer.avatar_visible_files(invalid_id, lion)
     }
   end
 
   test 'D46',
-  'avatar_ran_tests(id) with invalid id raises' do
-    assert_invalid_kata_id_raises { |invalid_id|
+  'avatar_ran_tests(id) with bad id raises' do
+    assert_bad_kata_id_raises { |invalid_id|
       args = []
       args << invalid_id
       args << lion
@@ -82,8 +82,8 @@ class HostDiskStorerTest < StorerTestBase
   end
 
   test '917',
-  'tag_visible_files(id) with invalid id raises' do
-    assert_invalid_kata_id_raises { |invalid_id|
+  'tag_visible_files(id) with bad id raises' do
+    assert_bad_kata_id_raises { |invalid_id|
       storer.tag_visible_files(invalid_id, lion, tag=3)
     }
   end
@@ -451,16 +451,32 @@ class HostDiskStorerTest < StorerTestBase
 
   # - - - - - - - - - - - - - - - - - - - - - - - -
 
-  def assert_invalid_kata_id_raises
+  def invalid_kata_ids
     [
-      nil,         # not an object
-      [],          # not a string
-      '',          # not 10 chars
-      '34',        # not 10 chars
-      '345',       # not 10 chars
-      '123456789', # not 10 chars
-      'ABCDEF123X' # not 10 hex chars
-    ].each do |id|
+      nil,          # not an object
+      [],           # not a string
+      '',           # not 10 chars
+      '34',         # not 10 chars
+      '345',        # not 10 chars
+      '123456789',  # not 10 chars
+      'ABCDEF123X'  # not 10 hex chars
+    ]
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - -
+
+  def assert_invalid_kata_id_raises
+    invalid_kata_ids.each do |id|
+      error = assert_raises(StandardError) { yield id }
+      assert error.message.start_with?('Storer'), error.message
+    end
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - -
+
+  def assert_bad_kata_id_raises
+    valid_but_no_kata = 'F6316A5C7C'
+    (invalid_kata_ids + [ valid_but_no_kata ]).each do |id|
       error = assert_raises(StandardError) { yield id }
       assert error.message.start_with?('Storer'), error.message
     end

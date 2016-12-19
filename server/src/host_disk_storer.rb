@@ -58,7 +58,7 @@ class HostDiskStorer
   end
 
   def kata_manifest(id)
-    assert_valid_id(id)
+    assert_kata_exists(id)
     JSON.parse(kata_dir(id).read(manifest_filename))
   end
 
@@ -71,13 +71,13 @@ class HostDiskStorer
   end
 
   def kata_started_avatars(id)
-    assert_valid_id(id)
+    assert_kata_exists(id)
     started = kata_dir(id).each_dir.collect { |name| name }
     started & all_avatar_names
   end
 
   def kata_start_avatar(id, avatar_names)
-    assert_valid_id(id)
+    assert_kata_exists(id)
     # Needs to be atomic otherwise two laptops in the same practice session
     # could start as the same animal. Relies on mkdir being atomic on
     # a (non NFS) POSIX file system.
@@ -103,14 +103,14 @@ class HostDiskStorer
   end
 
   def avatar_visible_files(id, name)
-    assert_valid_id(id)
+    assert_kata_exists(id)
     rags = increments(id, name)
     tag = rags == [] ? 0 : rags[-1]['number']
     tag_visible_files(id, name, tag)
   end
 
   def avatar_ran_tests(id, name, files, now, output, colour)
-    assert_valid_id(id)
+    assert_kata_exists(id)
     rags = increments(id, name)
     tag = rags.length + 1
     rags << { 'colour' => colour, 'time' => now, 'number' => tag }
@@ -125,7 +125,7 @@ class HostDiskStorer
   # tag
 
   def tag_visible_files(id, name, tag)
-    assert_valid_id(id)
+    assert_kata_exists(id)
     if tag == 0
       kata_manifest(id)['visible_files']
     else
@@ -208,6 +208,11 @@ class HostDiskStorer
 
   def assert_valid_id(id)
     raise StandardError.new('Storer:invalid id') unless valid_id?(id)
+  end
+
+  def assert_kata_exists(id)
+    assert_valid_id(id)
+    raise StandardError.new('Storer.invalid id') unless kata_exists(id)
   end
 
 end
