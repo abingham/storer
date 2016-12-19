@@ -139,7 +139,7 @@ class StorerServiceTest < ClientTestBase
 
   def kata_id
     # reversed so I don't get common outer(id)s
-    test_id.reverse + '0' * (10-test_id.length);
+    test_id.reverse + ('0' * (10-test_id.length))
   end
 
   def lion; 'lion'; end

@@ -24,6 +24,63 @@ class HostDiskStorerTest < StorerTestBase
     assert_equal '/tmp/katas', storer.path
   end
 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # invalid_id on any method raises
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  test '933',
+  'create_kata with invalid or missing manifest[id] raises' do
+    manifest = create_manifest
+    manifest.delete('id')
+    error = assert_raises(StandardError) { storer.create_kata(manifest) }
+    assert_invalid_kata_id_raises do |invalid_id|
+      manifest['id'] = invalid_id
+      storer.create_kata(manifest)
+    end
+  end
+
+  test '965',
+  'kata_started_avatar(id) with invalid id raises' do
+    assert_invalid_kata_id_raises { |invalid_id|
+      storer.kata_started_avatars(invalid_id)
+    }
+  end
+
+  test '5DF',
+  'kata_started_avatar(id) with invalid id raises' do
+    assert_invalid_kata_id_raises { |invalid_id|
+      storer.kata_start_avatar(invalid_id, [lion])
+    }
+  end
+
+  test 'D9F',
+  'avatar_increments(id) with invalid id raises' do
+    assert_invalid_kata_id_raises { |invalid_id|
+      storer.avatar_increments(invalid_id, lion)
+    }
+  end
+
+  test '160',
+  'avatar_visible_files(id) with invalid id raises' do
+    assert_invalid_kata_id_raises { |invalid_id|
+      storer.avatar_visible_files(invalid_id, lion)
+    }
+  end
+
+  test 'D46',
+  'avatar_ran_tests(id) with invalid id raises' do
+    assert_invalid_kata_id_raises { |invalid_id|
+      args = []
+      args << invalid_id
+      args << lion
+      args << starting_files
+      args << time_now
+      args << output
+      args << red
+      storer.avatar_ran_tests(*args)
+    }
+  end
+
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # kata_exists(id)
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -55,29 +112,6 @@ class HostDiskStorerTest < StorerTestBase
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # create_kata
-  #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-  test '933',
-  'create_kata with invalid or missing manifest[id] raises' do
-    manifest = create_manifest
-    manifest.delete('id')
-    error = assert_raises(StandardError) { storer.create_kata(manifest) }
-    assert error.message.start_with?('Storer'), error.message
-    [
-      nil,         # not an object
-      [],          # not a string
-      '',          # not 10 chars
-      '34',        # not 10 chars
-      '345',       # not 10 chars
-      '123456789', # not 10 chars
-      'ABCDEF123X' # not 10 hex chars
-    ].each do |id|
-      manifest['id'] = id
-      error = assert_raises(StandardError) { storer.create_kata(manifest) }
-      assert error.message.start_with?('Storer'), error.message
-    end
-  end
-
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'B99',
@@ -162,6 +196,17 @@ class HostDiskStorerTest < StorerTestBase
     kata_ids.each { |id| create_kata(id) }
     expected = kata_ids.collect { |id| inner(id) }
     assert_equal expected.sort, storer.completions('7F').sort
+  end
+
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # kata_manifest
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  test 'AC2',
+  'kata_manifest(id) with invalid id raises' do
+    assert_invalid_kata_id_raises { |invalid_id|
+      storer.kata_manifest(invalid_id)
+    }
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -394,6 +439,23 @@ class HostDiskStorerTest < StorerTestBase
     assert_equal expected.size, actual.size
     expected.each do |symbol,value|
       assert_equal value, actual[symbol.to_s], symbol.to_s
+    end
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - -
+
+  def assert_invalid_kata_id_raises
+    [
+      nil,         # not an object
+      [],          # not a string
+      '',          # not 10 chars
+      '34',        # not 10 chars
+      '345',       # not 10 chars
+      '123456789', # not 10 chars
+      'ABCDEF123X' # not 10 hex chars
+    ].each do |id|
+      error = assert_raises(StandardError) { yield id }
+      assert error.message.start_with?('Storer'), error.message
     end
   end
 

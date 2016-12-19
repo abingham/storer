@@ -58,6 +58,7 @@ class HostDiskStorer
   end
 
   def kata_manifest(id)
+    assert_valid_id(id)
     JSON.parse(kata_dir(id).read(manifest_filename))
   end
 
@@ -70,11 +71,13 @@ class HostDiskStorer
   end
 
   def kata_started_avatars(id)
+    assert_valid_id(id)
     started = kata_dir(id).each_dir.collect { |name| name }
     started & all_avatar_names
   end
 
   def kata_start_avatar(id, avatar_names)
+    assert_valid_id(id)
     # Needs to be atomic otherwise two laptops in the same practice session
     # could start as the same animal. Relies on mkdir being atomic on
     # a (non NFS) POSIX file system.
@@ -87,7 +90,8 @@ class HostDiskStorer
   end
 
   def avatar_increments(id, name)
-    # return increments with tag0 to avoid client
+    # call to kata_manifest(id) does validity check on id
+    # Return increments with tag0 to avoid client
     # having to make extra service call
     tag0 =
       {
@@ -99,12 +103,14 @@ class HostDiskStorer
   end
 
   def avatar_visible_files(id, name)
+    assert_valid_id(id)
     rags = increments(id, name)
     tag = rags == [] ? 0 : rags[-1]['number']
     tag_visible_files(id, name, tag)
   end
 
   def avatar_ran_tests(id, name, files, now, output, colour)
+    assert_valid_id(id)
     rags = increments(id, name)
     tag = rags.length + 1
     rags << { 'colour' => colour, 'time' => now, 'number' => tag }
