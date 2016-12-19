@@ -44,7 +44,6 @@ output, with the given colour.
 - parameters
   * kata_id, eg "A551C528C3"
   * avatar_name, eg "rhino"
-  * delta
   * files, eg { "hiker.h" => "int answer()...", ... }
   * now, eg [2016,12,6,12,31,15]
   * output, eg "Assert failed: answer() == 42"
