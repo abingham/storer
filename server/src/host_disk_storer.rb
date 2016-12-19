@@ -23,7 +23,7 @@ class HostDiskStorer
     # it would provide a way for anyone to find the full id of a cyber-dojo
     # and potentially interfere with a live session.
     if !id.nil? && id.length >= 6
-      outer_dir = disk[path + '/' + outer(id)]
+      outer_dir = disk[dir_join(path, outer(id))]
       if outer_dir.exists?
         dirs = outer_dir.each_dir.select { |inner_dir| inner_dir.start_with?(inner(id)) }
         id = outer(id) + dirs[0] if dirs.length == 1
@@ -35,7 +35,7 @@ class HostDiskStorer
   def completions(outer_dir)
     # for Batch-Method iteration over large number of katas...
     return [] unless disk[path + '/' + outer_dir].exists?
-    disk[path + '/' + outer_dir].each_dir.collect { |dir| dir }
+    disk[dir_join(path, outer_dir)].each_dir.collect { |dir| dir }
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -132,9 +132,11 @@ class HostDiskStorer
 
   private
 
-  def kata_path(id); path + '/' + outer(id) + '/' + inner(id); end
-  def avatar_path(id, name); kata_path(id) + '/' + name; end
-  def tag_path(id, name, tag); avatar_path(id, name) + '/' + tag.to_s; end
+  def kata_path(id); dir_join(path, outer(id), inner(id)); end
+  def avatar_path(id, name); dir_join(kata_path(id), name); end
+  def tag_path(id, name, tag); dir_join(avatar_path(id, name), tag.to_s); end
+
+  def dir_join(*args); File.join(*args); end
 
   # - - - - - - - - - - -
 
@@ -145,7 +147,7 @@ class HostDiskStorer
   # - - - - - - - - - - -
 
   def outer(id); id.upcase[0..1]; end  # eg 'E5' 2-chars long
-  def inner(id); inner = id.upcase[2..-1]; end # eg '6A3327FE' 8-chars long
+  def inner(id); id.upcase[2..-1]; end # eg '6A3327FE' 8-chars long
 
   # - - - - - - - - - - -
   # Each avatar's increments stores a cache of colours and time-stamps
