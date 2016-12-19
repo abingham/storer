@@ -31,9 +31,9 @@ Attempts to starts an avatar in the kata with the given kata_id.
 If successful, returns the name of the started avatar, otherwise nil.
 - parameters
   * kata_id, eg "A551C528C3"
-  * avatar_names, eg [ "lion", "salmon", "rhino", ... ]
+  * avatar_names, eg [ "lion", "salmon", "rhino" ]
 - returns
-  * { "kata_start_avatar": "rhino" }
+  * { "kata_start_avatar": "lion" }
 
 - - - -
 
@@ -56,7 +56,7 @@ output, with the given colour.
 
 ## path
 Returns the storer's root path.
-- returns
+- returns eg
   * { "path": "/usr/src/cyber-dojo/katas"  }
 
 - - - -
@@ -65,7 +65,7 @@ Returns the storer's root path.
 If it exists, returns the 10-digit kata_id which uniquely completes the given id, otherwise nil.
 - parameters
   * id, eg "A551C5", must be at least 6 characters long.
-- returns
+- returns eg
   * { "completed": "A551C528C3"  }
 
 - - - -
@@ -74,7 +74,7 @@ If it exists, returns the 10-digit kata_id which uniquely completes the given id
 Returns all the kata_id's starting with the given 2-digit long id.
 - parameters
   * id, eg "A5"
-- returns
+- returns eg
   * { "completions": [ "A551C528C3", "A5DA2CDC58", "A5EAFE6E53" ]  }
 
 - - - -
@@ -83,7 +83,7 @@ Returns all the kata_id's starting with the given 2-digit long id.
 Returns the manifest used to create the kata with the given kata_id.
 - parameters
   * kata_id, eg "A551C528C3"
-- returns
+- returns eg
   * { "kata_manifest": {
         "kata_id": "a551c528c3",
         "image_name": "cyberdojofoundation/gcc_assert_",
@@ -97,8 +97,8 @@ Returns the manifest used to create the kata with the given kata_id.
 Returns the names of all avatars who have started in the kata with the given kata_id.
 - parameters
   * kata_id, eg "A551C528C3"
-- returns
-  * { "kata_started_avatars": [ "rhino", "cheetah", "starfish", ... ] }
+- returns eg
+  * { "kata_started_avatars": [ "rhino", "cheetah", "starfish" ] }
 
 - - - -
 
@@ -107,10 +107,12 @@ Returns details of all the traffic-lights of the given avatar in the kata with t
 - parameters
   * kata_id, eg "A551C528C3"
   * avatar_name, eg "rhino"
-- returns
+- returns eg
   * { "avatar_increments": [
-        { "colour" => "red,    "time" => [2016,12,6,12,31,15], "number" => 1 },
-        { "colour" => "green", "time" => [2016,12,6,12,32,56], "number" => 2 }
+        { "event"  => "created", "time" => [2016,12,5,11,15,18], "number" => 0 },
+        { "colour" => "red,      "time" => [2016,12,6,12,31,15], "number" => 1 },
+        { "colour" => "green",   "time" => [2016,12,6,12,32,56], "number" => 2 },
+        { "colour" => "amber",   "time" => [2016,12,6,12,43,19], "number" => 3 }
       ]
     }
 
@@ -121,7 +123,7 @@ Returns the latest set of visible files for the given avatar in the kata with th
 - parameters
   * kata_id, eg "A551C528C3"
   * avatar_name, eg "rhino"
-- returns
+- returns eg
   * { "avatar_visible_files": {
          "hiker.h" => "int answer()...",
          "hiker.c" => "#include \"hiker.h\"...",
@@ -139,7 +141,7 @@ with the given tag number.
   * kata_id, eg "A551C528C3"
   * avatar_name, eg "rhino"
   * tag, eg "2"
-- returns
+- returns eg
   * { "tag_visible_files": {
          "hiker.h" => "int answer()...",
          "hiker.c" => "#include \"hiker.h\"...",
