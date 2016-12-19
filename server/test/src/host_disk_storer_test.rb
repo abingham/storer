@@ -89,6 +89,41 @@ class HostDiskStorerTest < StorerTestBase
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # bad avatar-name on any method raises
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  test 'B5F',
+  'avatar_increments(id, name) with bad name raises' do
+    manifest = create_kata
+    assert_bad_avatar_raises { |valid_id, bad_name|
+      storer.avatar_increments(valid_id, bad_name)
+    }
+  end
+
+  test '679',
+  'avatar_visible_files(id, name) with bad name raises' do
+    manifest = create_kata
+    assert_bad_avatar_raises { |valid_id, bad_name|
+      storer.avatar_visible_files(valid_id, bad_name)
+    }
+  end
+
+  test '941',
+  'avatar_ran_tests(id, name) with bad name raises' do
+    manifest = create_kata
+    assert_bad_avatar_raises { |valid_id, bad_name|
+      args = []
+      args << valid_id
+      args << bad_name
+      args << starting_files
+      args << time_now
+      args << output
+      args << red
+      storer.avatar_ran_tests(*args)
+    }
+  end
+
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # kata_exists(id)
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -478,6 +513,20 @@ class HostDiskStorerTest < StorerTestBase
     valid_but_no_kata = 'F6316A5C7C'
     (invalid_kata_ids + [ valid_but_no_kata ]).each do |id|
       error = assert_raises(StandardError) { yield id }
+      assert error.message.start_with?('Storer'), error.message
+    end
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - -
+
+  def bad_avatar_names
+    [ [], '', 'chub' ]
+  end
+
+  def assert_bad_avatar_raises
+    manifest = create_kata
+    bad_avatar_names.each do |avatar_name|
+      error = assert_raises(StandardError) { yield manifest['id'], avatar_name }
       assert error.message.start_with?('Storer'), error.message
     end
   end

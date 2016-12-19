@@ -90,7 +90,7 @@ class HostDiskStorer
   end
 
   def avatar_increments(id, name)
-    # call to kata_manifest(id) does validity check on id
+    assert_avatar_exists(id, name)
     # Return increments with tag0 to avoid client
     # having to make extra service call
     tag0 =
@@ -103,14 +103,14 @@ class HostDiskStorer
   end
 
   def avatar_visible_files(id, name)
-    assert_kata_exists(id)
+    assert_avatar_exists(id, name)
     rags = increments(id, name)
     tag = rags == [] ? 0 : rags[-1]['number']
     tag_visible_files(id, name, tag)
   end
 
   def avatar_ran_tests(id, name, files, now, output, colour)
-    assert_kata_exists(id)
+    assert_avatar_exists(id, name)
     rags = increments(id, name)
     tag = rags.length + 1
     rags << { 'colour' => colour, 'time' => now, 'number' => tag }
@@ -185,6 +185,10 @@ class HostDiskStorer
 
   def hex?(char); '0123456789ABCDEF'.include?(char); end
 
+  def valid_avatar?(name)
+    all_avatar_names.include?(name)
+  end
+
   # - - - - - - - - - - -
 
   # A kata's manifest stores the kata's meta information
@@ -210,9 +214,19 @@ class HostDiskStorer
     raise StandardError.new('Storer:invalid id') unless valid_id?(id)
   end
 
+  def assert_valid_avatar(name)
+    raise StandardError.new('Storer:invalid name') unless valid_avatar?(name)
+  end
+
   def assert_kata_exists(id)
     assert_valid_id(id)
     raise StandardError.new('Storer.invalid id') unless kata_exists(id)
+  end
+
+  def assert_avatar_exists(id, name)
+    assert_kata_exists(id)
+    assert_valid_avatar(name)
+    raise StandardError.new('Storer.invalid name') unless avatar_exists(id, name)
   end
 
 end
