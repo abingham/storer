@@ -81,6 +81,13 @@ class HostDiskStorerTest < StorerTestBase
     }
   end
 
+  test '917',
+  'tag_visible_files(id) with invalid id raises' do
+    assert_invalid_kata_id_raises { |invalid_id|
+      storer.tag_visible_files(invalid_id, lion, tag=3)
+    }
+  end
+
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # kata_exists(id)
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

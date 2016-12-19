@@ -125,6 +125,7 @@ class HostDiskStorer
   # tag
 
   def tag_visible_files(id, name, tag)
+    assert_valid_id(id)
     if tag == 0
       kata_manifest(id)['visible_files']
     else
