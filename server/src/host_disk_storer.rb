@@ -43,7 +43,7 @@ class HostDiskStorer
 
   def kata_exists(id)
     # drop ? suffix to simplify micro_service.rb
-    valid?(id) && kata_dir(id).exists?
+    valid_id?(id) && kata_dir(id).exists?
   end
 
   def create_kata(manifest)
@@ -177,7 +177,7 @@ class HostDiskStorer
 
   # - - - - - - - - - - -
 
-  def valid?(id)
+  def valid_id?(id)
     id.class.name == 'String' &&
       id.length == 10 &&
         id.chars.all? { |char| hex?(char) }
@@ -207,7 +207,7 @@ class HostDiskStorer
   def git; nearest_external(:git); end
 
   def assert_valid_id(id)
-    raise StandardError.new('Storer:invalid id') unless valid?(id)
+    raise StandardError.new('Storer:invalid id') unless valid_id?(id)
   end
 
 end
