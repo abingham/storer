@@ -22,13 +22,13 @@ class HostDiskStorerPosixFsTest < StorerTestBase
       names = []
       threads.size.times { |i|
         threads[i] = Thread.new {
-          name = storer.kata_start_avatar(kata_id, animals)
+          name = storer.start_avatar(kata_id, animals)
           names << name unless name.nil?
         }
       }
       threads.size.times { |i| threads[i].join }
       assert_equal animals.sort, names.sort
-      assert_equal names.sort, storer.kata_started_avatars(kata_id).sort
+      assert_equal names.sort, storer.started_avatars(kata_id).sort
     end
   end
 
@@ -46,7 +46,7 @@ class HostDiskStorerPosixFsTest < StorerTestBase
       read_pipe, write_pipe = IO.pipe
       pids.size.times { |i|
         pids[i] = Process.fork {
-          name = storer.kata_start_avatar(kata_id, animals)
+          name = storer.start_avatar(kata_id, animals)
           write_pipe.puts "#{name} " unless name.nil?
         }
       }
@@ -55,7 +55,7 @@ class HostDiskStorerPosixFsTest < StorerTestBase
       names = read_pipe.read.split
       read_pipe.close
       assert_equal animals.sort, names.sort
-      assert_equal names.sort, storer.kata_started_avatars(kata_id).sort
+      assert_equal names.sort, storer.started_avatars(kata_id).sort
     end
   end
 
@@ -73,9 +73,10 @@ class HostDiskStorerPosixFsTest < StorerTestBase
   end
 
   def starting_files
-    { 'cyber-dojo.sh' => 'gcc',
-      'hiker.c' => '#include "hiker.h"',
-      'hiker.h' => '#include <stdio.h>'
+    {
+      'cyber-dojo.sh' => 'gcc',
+      'hiker.c'       => '#include "hiker.h"',
+      'hiker.h'       => '#include <stdio.h>'
     }
   end
 

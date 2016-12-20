@@ -32,11 +32,11 @@ class MicroService < Sinatra::Base
 
   # - - - - - - - - - - - - - - -
 
-  post '/kata_start_avatar' do
+  post '/start_avatar' do
     poster(__method__, kata_id, avatar_names)
   end
 
-  get '/kata_started_avatars' do
+  get '/started_avatars' do
     getter(__method__, kata_id)
   end
 

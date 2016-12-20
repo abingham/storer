@@ -26,7 +26,7 @@ Creates a kata from the given manifest.
 
 - - - -
 
-## kata_start_avatar
+## start_avatar
 Attempts to starts an avatar in the kata with the given kata_id.
 If successful, returns the name of the started avatar, otherwise nil.
 - parameters
@@ -92,7 +92,7 @@ Returns the manifest used to create the kata with the given kata_id.
 
 - - - -
 
-## kata_started_avatars
+## started_avatars
 Returns the names of all avatars who have started in the kata with the given kata_id.
 - parameters
   * kata_id, eg "A551C528C3"

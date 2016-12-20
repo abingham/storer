@@ -44,7 +44,7 @@ class StorerServiceTest < ClientTestBase
     outer = kata_id[0..1]
     assert_equal [kata_id[2..-1]], completions(outer)
 
-    assert_equal [], kata_started_avatars(kata_id)
+    assert_equal [], started_avatars(kata_id)
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -68,16 +68,16 @@ class StorerServiceTest < ClientTestBase
   'and has no traffic-lights yet' do
     create_kata(make_manifest)
 
-    assert_equal lion, kata_start_avatar(kata_id, [lion])
+    assert_equal lion, start_avatar(kata_id, [lion])
     tag0 = { 'event' => 'created', 'time' => creation_time, 'number' => 0 }
     assert_equal [tag0], avatar_increments(kata_id, lion)
     assert_equal starting_files, avatar_visible_files(kata_id, lion)
-    assert_equal [lion], kata_started_avatars(kata_id)
+    assert_equal [lion], started_avatars(kata_id)
 
-    assert_equal salmon, kata_start_avatar(kata_id, [salmon])
+    assert_equal salmon, start_avatar(kata_id, [salmon])
     assert_equal [tag0], avatar_increments(kata_id, salmon)
     assert_equal starting_files, avatar_visible_files(kata_id, salmon)
-    assert_equal [lion,salmon].sort, kata_started_avatars(kata_id).sort
+    assert_equal [lion,salmon].sort, started_avatars(kata_id).sort
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -87,7 +87,7 @@ class StorerServiceTest < ClientTestBase
   'then there is one more traffic-light',
   'and visible_files can be retrieved for any tag' do
     create_kata(make_manifest)
-    assert_equal lion, kata_start_avatar(kata_id, [lion])
+    assert_equal lion, start_avatar(kata_id, [lion])
 
     tag1_files = starting_files
     tag1_files.delete('hiker.h')
@@ -136,14 +136,19 @@ class StorerServiceTest < ClientTestBase
   def salmon; 'salmon'; end
 
   def starting_files
-    { 'cyber-dojo.sh' => 'gcc',
-      'hiker.c' => '#include "hiker.h"',
-      'hiker.h' => '#include <stdio.h>'
+    {
+      'cyber-dojo.sh' => 'gcc',
+      'hiker.c'       => '#include "hiker.h"',
+      'hiker.h'       => '#include <stdio.h>'
     }
   end
 
   def tag0
-    { 'event' => 'created', 'time' => creation_time, 'number' => tag=0 }
+    {
+      'event'  => 'created',
+      'time'   => creation_time,
+      'number' => tag=0
+    }
   end
 
   def creation_time

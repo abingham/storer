@@ -40,16 +40,16 @@ class HostDiskStorerTest < StorerTestBase
   end
 
   test '965',
-  'kata_started_avatar(id) with invalid id raises' do
+  'started_avatars(id) with invalid id raises' do
     assert_invalid_kata_id_raises { |invalid_id|
-      storer.kata_started_avatars(invalid_id)
+      storer.started_avatars(invalid_id)
     }
   end
 
   test '5DF',
-  'kata_started_avatar(id) with bad id raises' do
+  'start_avatar(id) with bad id raises' do
     assert_bad_kata_id_raises { |invalid_id|
-      storer.kata_start_avatar(invalid_id, [lion])
+      storer.start_avatar(invalid_id, [lion])
     }
   end
 
@@ -228,7 +228,7 @@ class HostDiskStorerTest < StorerTestBase
   test 'A6B',
   'before starting an avatar none exist' do
     create_kata
-    assert_equal [], storer.kata_started_avatars(kata_id)
+    assert_equal [], storer.started_avatars(kata_id)
   end
 
   test 'F6E',
@@ -237,13 +237,13 @@ class HostDiskStorerTest < StorerTestBase
     rogue = 'flintstone'
     disk[kata_path + '/' + rogue].make
     assert_equal [rogue], disk[kata_path].each_dir.collect { |name| name }
-    assert_equal [], storer.kata_started_avatars(kata_id)
+    assert_equal [], storer.started_avatars(kata_id)
   end
 
   test 'CBF',
   'avatar_start(not-an-avatar-name) fails' do
     create_kata
-    assert_nil storer.kata_start_avatar(kata_id, ['pencil'])
+    assert_nil storer.start_avatar(kata_id, ['pencil'])
   end
 
   test 'E0C',
@@ -252,8 +252,8 @@ class HostDiskStorerTest < StorerTestBase
   "avatar's visible_files are from the kata",
   "avatar's increments already have tag zero" do
     create_kata
-    assert_equal lion, storer.kata_start_avatar(kata_id, [lion])
-    assert_equal [lion], storer.kata_started_avatars(kata_id)
+    assert_equal lion, storer.start_avatar(kata_id, [lion])
+    assert_equal [lion], storer.started_avatars(kata_id)
     assert_hash_equal starting_files, avatar_visible_files(lion)
     assert_hash_equal starting_files, tag_visible_files(lion, tag=0)
     assert_equal [
@@ -267,8 +267,8 @@ class HostDiskStorerTest < StorerTestBase
   'avatar_start succeeds 64 times then kata is full' do
     create_kata
     all_avatar_names.each { |name| disk[avatar_path(name)].make }
-    assert_equal all_avatar_names.sort, storer.kata_started_avatars(kata_id).sort
-    assert_nil storer.kata_start_avatar(kata_id, all_avatar_names)
+    assert_equal all_avatar_names.sort, storer.started_avatars(kata_id).sort
+    assert_nil storer.start_avatar(kata_id, all_avatar_names)
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -281,7 +281,7 @@ class HostDiskStorerTest < StorerTestBase
   'visible_files are retrievable by explicit git-tag',
   'visible_files do not contain output' do
     create_kata
-    storer.kata_start_avatar(kata_id, [lion])
+    storer.start_avatar(kata_id, [lion])
     tag = 0
 
     storer.avatar_ran_tests(*make_args(starting_files))

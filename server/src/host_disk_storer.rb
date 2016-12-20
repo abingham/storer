@@ -60,7 +60,7 @@ class HostDiskStorer
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # avatar-start
 
-  def kata_start_avatar(id, avatar_names)
+  def start_avatar(id, avatar_names)
     assert_kata_exists(id)
     # NB: Doing the & with operands swapped loses randomness
     valid_names = avatar_names & all_avatar_names
@@ -70,7 +70,7 @@ class HostDiskStorer
     name
   end
 
-  def kata_started_avatars(id)
+  def started_avatars(id)
     assert_kata_exists(id)
     started = kata_dir(id).each_dir.collect { |name| name }
     started & all_avatar_names
