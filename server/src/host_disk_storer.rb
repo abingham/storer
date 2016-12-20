@@ -102,8 +102,8 @@ class HostDiskStorer
     # having to make extra service call
     tag0 =
       {
-        'event' => 'created',
-        'time' => kata_manifest(id)['created'],
+        'event'  => 'created',
+        'time'   => kata_manifest(id)['created'],
         'number' => 0
       }
     [tag0] + increments(id, name)
