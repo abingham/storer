@@ -15,17 +15,19 @@ class HostDiskStorer
   # katas
 
   def completed(id)
-    # Used only in enter_controller/check
-    # If at least 6 characters of the id are provided attempt to complete
-    # it into the full 10 character id. Doing completion with fewer characters
-    # would likely result in a lot of disk activity and no unique outcome.
-    # Also, if completion was attempted for a very short id (say 3 characters)
-    # it would provide a way for anyone to find the full id of a cyber-dojo
+    # If at least 6 characters of the id are provided attempt to
+    # complete it into the full 10 character id. Doing completion
+    # with fewer characters would likely result in a lot of disk
+    # activity and no unique outcome. Also, if completion was
+    # attempted for a very short id (say 3 characters) it would
+    # provide a way for anyone to find the full id of a cyber-dojo
     # and potentially interfere with a live session.
     if !id.nil? && id.length >= 6
       outer_dir = disk[dir_join(path, outer(id))]
       if outer_dir.exists?
-        dirs = outer_dir.each_dir.select { |inner_dir| inner_dir.start_with?(inner(id)) }
+        dirs = outer_dir.each_dir.select { |inner_dir|
+          inner_dir.start_with?(inner(id))
+        }
         id = outer(id) + dirs[0] if dirs.length == 1
       end
     end
@@ -119,17 +121,14 @@ class HostDiskStorer
 
   def tag_visible_files(id, name, tag)
     assert_tag_exists(id, name, tag)
-    if tag == 0
-      kata_manifest(id)['visible_files']
-    else
-      dir = tag_dir(id, name, tag)
-      if dir.exists? # new non-git-format
-        src = tag_dir(id, name, tag).read(manifest_filename)
-      else # old git-format
-        src = git.show(avatar_path(id, name), "#{tag}:#{manifest_filename}")
-      end
-      JSON.parse(src)
+    return kata_manifest(id)['visible_files'] if tag == 0
+    dir = tag_dir(id, name, tag)
+    if dir.exists? # new non-git-format
+      src = tag_dir(id, name, tag).read(manifest_filename)
+    else # old git-format
+      src = git.show(avatar_path(id, name), "#{tag}:#{manifest_filename}")
     end
+    JSON.parse(src)
   end
 
   #def tags_visible_files(id, name, was_tag, now_tag)
@@ -290,17 +289,18 @@ class HostDiskStorer
 
 end
 
-#- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+#- - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # tags vs lights
-#- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# When a new avatar enters a dojo its initial "tag-zero"
-# is *not* recorded in its increments.json file which starts as [ ]
+#- - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# When a new avatar enters a dojo its initial
+# "tag-zero" is *not* recorded in its increments.json
+# file which starts as [ ]
 # It probably should be but isn't for existing dojos
 # (created in the old git format) and so for backwards
 # compatibility it stays that way.
 #
-# Every test event stores an entry in the increments.json file.
-# eg
+# Every test event stores an entry in the increments.json
+# file. eg
 # [
 #   {
 #     'colour' => 'red',
@@ -312,8 +312,8 @@ end
 # At the moment the only event that creates an
 # increments.json file entry is a [test].
 #
-# However, it's conceivable I may create finer grained tags
-# than just [test] events, eg
+# However, it's conceivable I may create finer grained
+# tags than just [test] events, eg
 #    o) creating a new file
 #    o) renaming a file
 #    o) deleting a file
