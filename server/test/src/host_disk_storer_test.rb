@@ -124,6 +124,17 @@ class HostDiskStorerTest < StorerTestBase
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # bad tag on any method raises
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  test '388',
+  'tag_visible_files() with bad tag raises' do
+    assert_bad_tag_raises { |valid_id, valid_name, bad_tag|
+      storer.tag_visible_files(valid_id, valid_name, bad_tag)
+    }
+  end
+
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # create_kata
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -466,16 +477,12 @@ class HostDiskStorerTest < StorerTestBase
     ]
   end
 
-  # - - - - - - - - - - - - - - - - - - - - - - - -
-
   def assert_invalid_kata_id_raises
     invalid_kata_ids.each do |id|
       error = assert_raises(StandardError) { yield id }
       assert error.message.start_with?('Storer'), error.message
     end
   end
-
-  # - - - - - - - - - - - - - - - - - - - - - - - -
 
   def assert_bad_kata_id_raises
     valid_but_no_kata = 'F6316A5C7C'
@@ -488,13 +495,29 @@ class HostDiskStorerTest < StorerTestBase
   # - - - - - - - - - - - - - - - - - - - - - - - -
 
   def bad_avatar_names
-    [ [], '', 'chub' ]
+    [ nil, [], '', 'chub' ]  # ADD nil?
   end
 
   def assert_bad_avatar_raises
     manifest = create_kata
     bad_avatar_names.each do |avatar_name|
       error = assert_raises(StandardError) { yield manifest['id'], avatar_name }
+      assert error.message.start_with?('Storer'), error.message
+    end
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - -
+
+  def bad_tags
+    [ nil, [], 'sunglasses', 999 ]
+  end
+
+  def assert_bad_tag_raises
+    create_kata
+    storer.start_avatar(kata_id, [lion])
+    bad_tags.each do |bad_tag|
+      # ArgumentError?
+      error = assert_raises(StandardError) { yield kata_id, lion, bad_tag }
       assert error.message.start_with?('Storer'), error.message
     end
   end

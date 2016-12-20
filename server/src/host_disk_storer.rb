@@ -58,7 +58,7 @@ class HostDiskStorer
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  # avatar-start
+  # avatar start
 
   def start_avatar(id, avatar_names)
     assert_kata_exists(id)
@@ -118,7 +118,7 @@ class HostDiskStorer
   # tag
 
   def tag_visible_files(id, name, tag)
-    assert_kata_exists(id)
+    assert_tag_exists(id, name, tag)
     if tag == 0
       kata_manifest(id)['visible_files']
     else
@@ -132,46 +132,35 @@ class HostDiskStorer
     end
   end
 
+  #def tags_visible_files(id, name, was_tag, now_tag)
+  #end
+
   private
 
-  def kata_dir(id); disk[kata_path(id)]; end
-  def kata_path(id); dir_join(path, outer(id), inner(id)); end
-
-  def avatar_dir(id, name); disk[avatar_path(id, name)]; end
-  def avatar_path(id, name); dir_join(kata_path(id), name); end
-
-  def tag_dir(id, name, tag); disk[tag_path(id, name, tag)]; end
-  def tag_path(id, name, tag); dir_join(avatar_path(id, name), tag.to_s); end
-
-  def dir_join(*args); File.join(*args); end
-
-  # - - - - - - - - - - -
-
-  def outer(id); id.upcase[0..1]; end  # eg 'E5' 2-chars long
-  def inner(id); id.upcase[2..-1]; end # eg '6A3327FE' 8-chars long
-
-  # - - - - - - - - - - -
-
   def increments(id, name)
-    # Each avatar's increments stores a cache of colours and time-stamps
-    # for all the avatar's [test]s.
+    # Each avatar's increments stores a cache of colours
+    # and time-stamps for all the avatar's [test]s.
     # Helps optimize dashboard traffic-lights views.
     # Do _not_ save tag0 in increments.json
     # to maintain compatibility with old git-format
     JSON.parse(avatar_dir(id, name).read(increments_filename))
   end
 
-  def increments_filename; 'increments.json'; end
+  def increments_filename
+    'increments.json'
+  end
 
   def write_avatar_increments(id, name, increments)
-    avatar_dir(id, name).write(increments_filename, JSON.unparse(increments))
+    dir = avatar_dir(id, name)
+    dir.write(increments_filename, JSON.unparse(increments))
   end
 
   # - - - - - - - - - - -
 
   def manifest_filename
     # A kata's manifest stores the kata's meta information
-    # such as the chosen language, tests, exercise.
+    # such as the chosen language, chosen tests framework,
+    # chosen exercise.
     # An avatar's manifest stores avatar's visible-files.
     'manifest.json'
   end
@@ -184,30 +173,14 @@ class HostDiskStorer
 
   # - - - - - - - - - - -
 
-  def assert_valid_id(id)
-    raise error('id') unless valid_id?(id)
-  end
-
-  def assert_valid_avatar(name)
-    raise error('name') unless valid_avatar?(name)
-  end
-
   def assert_kata_exists(id)
     assert_valid_id(id)
-    raise error('id') unless kata_exists?(id)
+    fail error('id') unless kata_exists?(id)
   end
 
-  def assert_avatar_exists(id, name)
-    assert_kata_exists(id)
-    assert_valid_avatar(name)
-    raise error('name') unless avatar_exists?(id, name)
+  def assert_valid_id(id)
+    fail error('id') unless valid_id?(id)
   end
-
-  def error(s)
-    ArgumentError.new("Storer:invalid #{s}")
-  end
-
-  # - - - - - - - - - - -
 
   def valid_id?(id)
     id.class.name == 'String' &&
@@ -219,16 +192,92 @@ class HostDiskStorer
     '0123456789ABCDEF'.include?(char)
   end
 
-  def valid_avatar?(name)
-    all_avatar_names.include?(name)
-  end
-
   def kata_exists?(id)
     kata_dir(id).exists?
   end
 
+  def kata_dir(id)
+    disk[kata_path(id)]
+  end
+
+  def kata_path(id)
+    dir_join(path, outer(id), inner(id))
+  end
+
+  def outer(id)
+    id.upcase[0..1]  # eg 'E5' 2-chars long
+  end
+
+  def inner(id)
+    id.upcase[2..-1] # eg '6A3327FE' 8-chars long
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - -
+
+  def assert_avatar_exists(id, name)
+    assert_kata_exists(id)
+    assert_valid_name(name)
+    fail error('name') unless avatar_exists?(id, name)
+  end
+
+  def assert_valid_name(name)
+    fail error('name') unless valid_avatar?(name)
+  end
+
+  def valid_avatar?(name)
+    all_avatar_names.include?(name)
+  end
+
   def avatar_exists?(id, name)
     avatar_dir(id, name).exists?
+  end
+
+  def avatar_dir(id, name)
+    disk[avatar_path(id, name)]
+  end
+
+  def avatar_path(id, name)
+    dir_join(kata_path(id), name)
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - -
+
+  def assert_tag_exists(id, name, tag)
+    assert_avatar_exists(id, name)
+    assert_valid_tag(tag)
+    fail error('tag') unless tag_exists?(id, name, tag)
+  end
+
+  def assert_valid_tag(tag)
+    fail error('tag') unless valid_tag?(tag)
+  end
+
+  def valid_tag?(tag)
+    tag.class.name == 'Fixnum'
+  end
+
+  def tag_exists?(id, name, tag)
+    # Has to work with old git-format
+    # and new non-git format
+    tag <= increments(id, name).size
+  end
+
+  def tag_dir(id, name, tag)
+    disk[tag_path(id, name, tag)]
+  end
+
+  def tag_path(id, name, tag)
+    dir_join(avatar_path(id, name), tag.to_s)
+  end
+
+  # - - - - - - - - - - -
+
+  def dir_join(*args)
+    File.join(*args)
+  end
+
+  def error(message)
+    ArgumentError.new("Storer:invalid #{message}")
   end
 
   # - - - - - - - - - - -
