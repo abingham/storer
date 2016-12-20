@@ -16,6 +16,10 @@ class MicroService < Sinatra::Base
     poster(__method__, manifest)
   end
 
+  get '/kata_manifest' do
+    getter(__method__, kata_id)
+  end
+
   # - - - - - - - - - - - - - - -
 
   get '/completed' do
@@ -28,16 +32,18 @@ class MicroService < Sinatra::Base
 
   # - - - - - - - - - - - - - - -
 
-  get '/kata_manifest' do
-    getter(__method__, kata_id)
-  end
-
   post '/kata_start_avatar' do
     poster(__method__, kata_id, avatar_names)
   end
 
   get '/kata_started_avatars' do
     getter(__method__, kata_id)
+  end
+
+  # - - - - - - - - - - - - - - -
+
+  post '/avatar_ran_tests' do
+    poster(__method__, kata_id, avatar_name, files, now, output, colour)
   end
 
   # - - - - - - - - - - - - - - -
@@ -50,9 +56,7 @@ class MicroService < Sinatra::Base
     getter(__method__, kata_id, avatar_name)
   end
 
-  post '/avatar_ran_tests' do
-    poster(__method__, kata_id, avatar_name, files, now, output, colour)
-  end
+  # - - - - - - - - - - - - - - -
 
   get '/tag_visible_files' do
     getter(__method__, kata_id, avatar_name, tag)
