@@ -204,7 +204,7 @@ class HostDiskStorer
   end
 
   def error(s)
-    StandardError.new("Storer.invalid #{s}")
+    ArgumentError.new("Storer:invalid #{s}")
   end
 
   # - - - - - - - - - - -

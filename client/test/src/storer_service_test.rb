@@ -12,6 +12,14 @@ class StorerServiceTest < ClientTestBase
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+  test '966',
+  'bad kata-id on any method raises' do
+    error = assert_raises { kata_manifest(kata_id) }
+    assert error.message.include? 'invalid id'
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
   test '5F9',
   'after create_kata() then',
   'kata_exists?() is true',

@@ -77,7 +77,7 @@ class MicroService < Sinatra::Base
     { name => HostDiskStorer.new(self).send(name, *args) }.to_json
   rescue Exception => e
     log << "EXCEPTION: #{e.class.name} #{e.to_s}"
-    { 'exception' => e.class.name }.to_json
+    { 'exception' => e.message }.to_json
   end
 
   # - - - - - - - - - - - - - - - -
