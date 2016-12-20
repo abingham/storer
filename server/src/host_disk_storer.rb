@@ -58,13 +58,7 @@ class HostDiskStorer
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  # avatar
-
-  def kata_started_avatars(id)
-    assert_kata_exists(id)
-    started = kata_dir(id).each_dir.collect { |name| name }
-    started & all_avatar_names
-  end
+  # avatar-start
 
   def kata_start_avatar(id, avatar_names)
     assert_kata_exists(id)
@@ -78,6 +72,30 @@ class HostDiskStorer
     write_avatar_increments(id, name, [])
     name
   end
+
+  def kata_started_avatars(id)
+    assert_kata_exists(id)
+    started = kata_dir(id).each_dir.collect { |name| name }
+    started & all_avatar_names
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # avatar action!
+
+  def avatar_ran_tests(id, name, files, now, output, colour)
+    assert_avatar_exists(id, name)
+    rags = increments(id, name)
+    tag = rags.length + 1
+    rags << { 'colour' => colour, 'time' => now, 'number' => tag }
+    write_avatar_increments(id, name, rags)
+
+    files = files.clone # don't alter caller's files argument
+    files['output'] = output
+    write_tag_manifest(id, name, tag, files)
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # avatar info
 
   def avatar_increments(id, name)
     assert_avatar_exists(id, name)
@@ -97,18 +115,6 @@ class HostDiskStorer
     rags = increments(id, name)
     tag = rags == [] ? 0 : rags[-1]['number']
     tag_visible_files(id, name, tag)
-  end
-
-  def avatar_ran_tests(id, name, files, now, output, colour)
-    assert_avatar_exists(id, name)
-    rags = increments(id, name)
-    tag = rags.length + 1
-    rags << { 'colour' => colour, 'time' => now, 'number' => tag }
-    write_avatar_increments(id, name, rags)
-
-    files = files.clone # don't alter caller's files argument
-    files['output'] = output
-    write_tag_manifest(id, name, tag, files)
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -131,17 +137,16 @@ class HostDiskStorer
 
   private
 
+  def kata_dir(id); disk[kata_path(id)]; end
   def kata_path(id); dir_join(path, outer(id), inner(id)); end
+
+  def avatar_dir(id, name); disk[avatar_path(id, name)]; end
   def avatar_path(id, name); dir_join(kata_path(id), name); end
+
+  def tag_dir(id, name, tag); disk[tag_path(id, name, tag)]; end
   def tag_path(id, name, tag); dir_join(avatar_path(id, name), tag.to_s); end
 
   def dir_join(*args); File.join(*args); end
-
-  # - - - - - - - - - - -
-
-  def kata_dir(id); disk[kata_path(id)]; end
-  def avatar_dir(id, name); disk[avatar_path(id, name)]; end
-  def tag_dir(id, name, tag); disk[tag_path(id, name, tag)]; end
 
   # - - - - - - - - - - -
 
@@ -149,13 +154,13 @@ class HostDiskStorer
   def inner(id); id.upcase[2..-1]; end # eg '6A3327FE' 8-chars long
 
   # - - - - - - - - - - -
-  # Each avatar's increments stores a cache of colours and time-stamps
-  # for all the avatar's [test]s.
-  # Helps optimize dashboard traffic-lights views.
 
   def increments(id, name)
-    # maintain compatibility with old git-format
-    # do _not_ save tag0 in increments.json
+    # Each avatar's increments stores a cache of colours and time-stamps
+    # for all the avatar's [test]s.
+    # Helps optimize dashboard traffic-lights views.
+    # Do _not_ save tag0 in increments.json
+    # to maintain compatibility with old git-format
     JSON.parse(avatar_dir(id, name).read(increments_filename))
   end
 
@@ -167,10 +172,12 @@ class HostDiskStorer
 
   # - - - - - - - - - - -
 
-  # A kata's manifest stores the kata's meta information
-  # such as the chosen language, tests, exercise.
-  # An avatar's manifest stores avatar's visible-files.
-  def manifest_filename; 'manifest.json'; end
+  def manifest_filename
+    # A kata's manifest stores the kata's meta information
+    # such as the chosen language, tests, exercise.
+    # An avatar's manifest stores avatar's visible-files.
+    'manifest.json'
+  end
 
   def write_tag_manifest(id, name, tag, files)
     dir = tag_dir(id, name, tag)
@@ -179,12 +186,6 @@ class HostDiskStorer
   end
 
   # - - - - - - - - - - -
-
-  include AllAvatarNames
-
-  include NearestExternal
-  def disk; nearest_external(:disk); end
-  def git; nearest_external(:git); end
 
   def assert_valid_id(id)
     raise StandardError.new('Storer:invalid id') unless valid_id?(id)
@@ -226,6 +227,14 @@ class HostDiskStorer
   def avatar_exists?(id, name)
     avatar_dir(id, name).exists?
   end
+
+  # - - - - - - - - - - -
+
+  include AllAvatarNames
+
+  include NearestExternal
+  def disk; nearest_external(:disk); end
+  def git; nearest_external(:git); end
 
 end
 
