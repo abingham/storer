@@ -185,22 +185,26 @@ class HostDiskStorer
   # - - - - - - - - - - -
 
   def assert_valid_id(id)
-    raise StandardError.new('Storer:invalid id') unless valid_id?(id)
+    raise error('id') unless valid_id?(id)
   end
 
   def assert_valid_avatar(name)
-    raise StandardError.new('Storer:invalid name') unless valid_avatar?(name)
+    raise error('name') unless valid_avatar?(name)
   end
 
   def assert_kata_exists(id)
     assert_valid_id(id)
-    raise StandardError.new('Storer.invalid id') unless kata_exists?(id)
+    raise error('id') unless kata_exists?(id)
   end
 
   def assert_avatar_exists(id, name)
     assert_kata_exists(id)
     assert_valid_avatar(name)
-    raise StandardError.new('Storer.invalid name') unless avatar_exists?(id, name)
+    raise error('name') unless avatar_exists?(id, name)
+  end
+
+  def error(s)
+    StandardError.new("Storer.invalid #{s}")
   end
 
   # - - - - - - - - - - -
