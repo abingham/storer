@@ -3,6 +3,8 @@ require_relative '../../src/all_avatar_names'
 
 # storer.kata_start_avatar() relies on mkdir being
 # atomic on a (non NFS) POSIX file system.
+# Otherwise two laptops in the same practice session
+# could start as the same animal.
 
 class HostDiskStorerPosixFsTest < StorerTestBase
 

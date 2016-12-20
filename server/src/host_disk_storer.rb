@@ -62,10 +62,7 @@ class HostDiskStorer
 
   def kata_start_avatar(id, avatar_names)
     assert_kata_exists(id)
-    # Needs to be atomic otherwise two laptops in the same practice session
-    # could start as the same animal. Relies on mkdir being atomic on
-    # a (non NFS) POSIX file system.
-    # Note: Don't do the & with operands swapped - you lose randomness
+    # NB: Doing the & with operands swapped loses randomness
     valid_names = avatar_names & all_avatar_names
     name = valid_names.detect { |name| avatar_dir(id, name).make }
     return nil if name.nil? # full!
@@ -214,7 +211,9 @@ class HostDiskStorer
         id.chars.all? { |char| hex?(char) }
   end
 
-  def hex?(char); '0123456789ABCDEF'.include?(char); end
+  def hex?(char)
+    '0123456789ABCDEF'.include?(char)
+  end
 
   def valid_avatar?(name)
     all_avatar_names.include?(name)
