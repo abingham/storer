@@ -39,6 +39,13 @@ class HostDiskStorerTest < StorerTestBase
     end
   end
 
+  test 'AC2',
+  'kata_manifest(id) with invalid id raises' do
+    assert_invalid_kata_id_raises { |invalid_id|
+      storer.kata_manifest(invalid_id)
+    }
+  end
+
   test '965',
   'started_avatars(id) with invalid id raises' do
     assert_invalid_kata_id_raises { |invalid_id|
@@ -219,17 +226,6 @@ class HostDiskStorerTest < StorerTestBase
     kata_ids.each { |id| create_kata(id) }
     expected = kata_ids.collect { |id| inner(id) }
     assert_equal expected.sort, storer.completions('7F').sort
-  end
-
-  #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  # kata_manifest
-  #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-  test 'AC2',
-  'kata_manifest(id) with invalid id raises' do
-    assert_invalid_kata_id_raises { |invalid_id|
-      storer.kata_manifest(invalid_id)
-    }
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
