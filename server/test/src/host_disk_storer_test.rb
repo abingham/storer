@@ -496,7 +496,7 @@ class HostDiskStorerTest < StorerTestBase
   # - - - - - - - - - - - - - - - - - - - - - - - -
 
   def bad_avatar_names
-    [ nil, [], '', 'chub' ]  # ADD nil?
+    [ nil, [], '', 'chub' ]
   end
 
   def assert_bad_avatar_raises
