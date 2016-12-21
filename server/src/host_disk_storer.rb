@@ -46,14 +46,17 @@ class HostDiskStorer
   def create_kata(manifest)
     id = manifest['id']
     refute_kata_exists(id)
+    json = JSON.unparse(manifest)
     dir = kata_dir(id)
     dir.make
-    dir.write(manifest_filename, JSON.unparse(manifest))
+    dir.write(manifest_filename, json)
   end
 
   def kata_manifest(id)
     assert_kata_exists(id)
-    JSON.parse(kata_dir(id).read(manifest_filename))
+    dir = kata_dir(id)
+    json = dir.read(manifest_filename)
+    JSON.parse(json)
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -135,8 +138,9 @@ class HostDiskStorer
   private
 
   def write_avatar_increments(id, name, increments)
+    json = JSON.unparse(increments)
     dir = avatar_dir(id, name)
-    dir.write(increments_filename, JSON.unparse(increments))
+    dir.write(increments_filename, json)
   end
 
   def read_avatar_increments(id, name)
@@ -146,7 +150,8 @@ class HostDiskStorer
     # Not saving tag0 in increments.json
     # to maintain compatibility with old git-format
     dir = avatar_dir(id, name)
-    JSON.parse(dir.read(increments_filename))
+    json = dir.read(increments_filename)
+    JSON.parse(json)
   end
 
   def increments_filename
@@ -156,14 +161,16 @@ class HostDiskStorer
   # - - - - - - - - - - -
 
   def write_tag_files(id, name, tag, files)
+    json = JSON.unparse(files)
     dir = tag_dir(id, name, tag)
     dir.make
-    dir.write(manifest_filename, JSON.unparse(files))
+    dir.write(manifest_filename, json)
   end
 
   def read_tag_files(id, name, tag)
     dir = tag_dir(id, name, tag)
-    JSON.parse(dir.read(manifest_filename))
+    json = dir.read(manifest_filename)
+    JSON.parse(json)
   end
 
   def manifest_filename
