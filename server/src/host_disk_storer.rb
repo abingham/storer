@@ -45,10 +45,7 @@ class HostDiskStorer
 
   def create_kata(manifest)
     id = manifest['id']
-    assert_valid_id(id)
-    # a kata's id has 10 hex chars. This gives 16^10 possibilities
-    # which is 1,099,511,627,776 which is big enough to not
-    # need to check that a kata with the id already exists.
+    refute_kata_exists(id)
     dir = kata_dir(id)
     dir.make
     dir.write(manifest_filename, JSON.unparse(manifest))
@@ -178,6 +175,11 @@ class HostDiskStorer
   end
 
   # - - - - - - - - - - -
+
+  def refute_kata_exists(id)
+    assert_valid_id(id)
+    fail error('id') if kata_exists?(id)
+  end
 
   def assert_kata_exists(id)
     assert_valid_id(id)

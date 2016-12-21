@@ -39,6 +39,14 @@ class HostDiskStorerTest < StorerTestBase
     end
   end
 
+  test 'ABC',
+  'create_kata with duplicate id raises' do
+    manifest = create_manifest
+    storer.create_kata(manifest)
+    error = assert_raises(StandardError) { storer.create_kata(manifest) }
+    assert error.message.start_with?('Storer'), error.message
+  end
+
   test 'AC2',
   'kata_manifest(id) with invalid id raises' do
     assert_invalid_kata_id_raises { |invalid_id|
@@ -101,7 +109,6 @@ class HostDiskStorerTest < StorerTestBase
 
   test 'B5F',
   'avatar_increments(id, name) with bad name raises' do
-    manifest = create_kata
     assert_bad_avatar_raises { |valid_id, bad_name|
       storer.avatar_increments(valid_id, bad_name)
     }
@@ -109,7 +116,6 @@ class HostDiskStorerTest < StorerTestBase
 
   test '679',
   'avatar_visible_files(id, name) with bad name raises' do
-    manifest = create_kata
     assert_bad_avatar_raises { |valid_id, bad_name|
       storer.avatar_visible_files(valid_id, bad_name)
     }
@@ -117,7 +123,6 @@ class HostDiskStorerTest < StorerTestBase
 
   test '941',
   'avatar_ran_tests(id, name) with bad name raises' do
-    manifest = create_kata
     assert_bad_avatar_raises { |valid_id, bad_name|
       args = []
       args << valid_id
