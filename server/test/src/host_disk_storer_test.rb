@@ -32,7 +32,7 @@ class HostDiskStorerTest < StorerTestBase
   'create_kata with invalid or missing manifest[id] raises' do
     manifest = create_manifest
     manifest.delete('id')
-    error = assert_raises(StandardError) { storer.create_kata(manifest) }
+    error = assert_raises(ArgumentError) { storer.create_kata(manifest) }
     assert_invalid_kata_id_raises do |invalid_id|
       manifest['id'] = invalid_id
       storer.create_kata(manifest)
@@ -43,7 +43,7 @@ class HostDiskStorerTest < StorerTestBase
   'create_kata with duplicate id raises' do
     manifest = create_manifest
     storer.create_kata(manifest)
-    error = assert_raises(StandardError) { storer.create_kata(manifest) }
+    error = assert_raises(ArgumentError) { storer.create_kata(manifest) }
     assert error.message.start_with?('Storer'), error.message
   end
 
@@ -480,7 +480,7 @@ class HostDiskStorerTest < StorerTestBase
 
   def assert_invalid_kata_id_raises
     invalid_kata_ids.each do |id|
-      error = assert_raises(StandardError) { yield id }
+      error = assert_raises(ArgumentError) { yield id }
       assert error.message.start_with?('Storer'), error.message
     end
   end
@@ -488,7 +488,7 @@ class HostDiskStorerTest < StorerTestBase
   def assert_bad_kata_id_raises
     valid_but_no_kata = 'F6316A5C7C'
     (invalid_kata_ids + [ valid_but_no_kata ]).each do |id|
-      error = assert_raises(StandardError) { yield id }
+      error = assert_raises(ArgumentError) { yield id }
       assert error.message.start_with?('Storer'), error.message
     end
   end
@@ -502,7 +502,7 @@ class HostDiskStorerTest < StorerTestBase
   def assert_bad_avatar_raises
     manifest = create_kata
     bad_avatar_names.each do |avatar_name|
-      error = assert_raises(StandardError) { yield manifest['id'], avatar_name }
+      error = assert_raises(ArgumentError) { yield manifest['id'], avatar_name }
       assert error.message.start_with?('Storer'), error.message
     end
   end
@@ -517,8 +517,7 @@ class HostDiskStorerTest < StorerTestBase
     create_kata
     storer.start_avatar(kata_id, [lion])
     bad_tags.each do |bad_tag|
-      # ArgumentError?
-      error = assert_raises(StandardError) { yield kata_id, lion, bad_tag }
+      error = assert_raises(ArgumentError) { yield kata_id, lion, bad_tag }
       assert error.message.start_with?('Storer'), error.message
     end
   end
