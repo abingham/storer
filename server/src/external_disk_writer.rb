@@ -37,7 +37,7 @@ class ExternalDirWriter
 
   def exists?(filename = nil)
     return File.directory?(name) if filename.nil?
-    return File.exists?(pathed(filename))
+    return File.exist?(pathed(filename))
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - -
