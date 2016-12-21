@@ -74,7 +74,8 @@ class MicroService < Sinatra::Base
 
   def storer_json(prefix, caller, *args)
     name = caller.to_s[prefix.length .. -1]
-    { name => HostDiskStorer.new(self).send(name, *args) }.to_json
+    storer = HostDiskStorer.new(self)
+    { name => storer.send(name, *args) }.to_json
   rescue Exception => e
     log << "EXCEPTION: #{e.class.name} #{e.to_s}"
     { 'exception' => e.message }.to_json
@@ -85,13 +86,18 @@ class MicroService < Sinatra::Base
   include Externals
 
   def self.request_args(*names)
-    names.each { |name|  define_method name, &lambda { args[name.to_s] } }
+    names.each { |name|
+      define_method name, &lambda { args[name.to_s] }
+    }
   end
 
-  request_args :kata_id, :manifest, :id, :avatar_names, :avatar_name
+  request_args :manifest, :id
+  request_args :kata_id, :avatar_names, :avatar_name
   request_args :files, :now, :output, :colour, :tag
 
-  def args; @args ||= request_body_args; end
+  def args
+    @args ||= request_body_args
+  end
 
   def request_body_args
     request.body.rewind
