@@ -1,5 +1,5 @@
 require_relative 'nearest_external'
-require_relative 'all_avatar_names'
+require_relative 'all_avatars_names'
 require 'json'
 
 class HostDiskStorer
@@ -65,7 +65,7 @@ class HostDiskStorer
   def start_avatar(id, avatar_names)
     assert_kata_exists(id)
     # NB: Doing the & with operands swapped loses randomness
-    valid_names = avatar_names & all_avatar_names
+    valid_names = avatar_names & all_avatars_names
     name = valid_names.detect { |name| avatar_dir(id, name).make }
     return nil if name.nil? # full!
     write_avatar_increments(id, name, [])
@@ -75,7 +75,7 @@ class HostDiskStorer
   def started_avatars(id)
     assert_kata_exists(id)
     started = kata_dir(id).each_dir.collect { |name| name }
-    started & all_avatar_names
+    started & all_avatars_names
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -240,7 +240,7 @@ class HostDiskStorer
   end
 
   def valid_avatar?(name)
-    all_avatar_names.include?(name)
+    all_avatars_names.include?(name)
   end
 
   def avatar_exists?(id, name)
@@ -297,7 +297,7 @@ class HostDiskStorer
 
   # - - - - - - - - - - -
 
-  include AllAvatarNames
+  include AllAvatarsNames
 
   include NearestExternal
   def disk; nearest_external(:disk); end

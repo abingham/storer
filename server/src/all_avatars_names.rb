@@ -1,7 +1,7 @@
 
-module AllAvatarNames # mix-in
+module AllAvatarsNames # mix-in
 
-  def all_avatar_names
+  def all_avatars_names
     %w(alligator antelope   bat     bear     bee      beetle       buffalo   butterfly
        cheetah   crab       deer    dolphin  eagle    elephant     flamingo  fox
        frog      gopher     gorilla heron    hippo    hummingbird  hyena     jellyfish

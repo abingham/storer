@@ -1,6 +1,6 @@
 require_relative './storer_test_base'
 require_relative './spy_logger'
-require_relative './../../src/all_avatar_names'
+require_relative './../../src/all_avatars_names'
 
 class HostDiskStorerTest < StorerTestBase
 
@@ -278,9 +278,9 @@ class HostDiskStorerTest < StorerTestBase
   test 'B1C',
   'avatar_start succeeds 64 times then kata is full' do
     create_kata
-    all_avatar_names.each { |name| disk[avatar_path(name)].make }
-    assert_equal all_avatar_names.sort, storer.started_avatars(kata_id).sort
-    assert_nil storer.start_avatar(kata_id, all_avatar_names)
+    all_avatars_names.each { |name| disk[avatar_path(name)].make }
+    assert_equal all_avatars_names.sort, storer.started_avatars(kata_id).sort
+    assert_nil storer.start_avatar(kata_id, all_avatars_names)
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -435,7 +435,7 @@ class HostDiskStorerTest < StorerTestBase
 
   private
 
-  include AllAvatarNames
+  include AllAvatarsNames
 
   def kata_id
     test_id.reverse # reversed so I don't get common outer(id)s

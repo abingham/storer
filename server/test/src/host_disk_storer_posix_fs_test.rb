@@ -1,5 +1,5 @@
 require_relative 'storer_test_base'
-require_relative '../../src/all_avatar_names'
+require_relative '../../src/all_avatars_names'
 
 # storer.kata_start_avatar() relies on mkdir being
 # atomic on a (non NFS) POSIX file system.
@@ -17,7 +17,7 @@ class HostDiskStorerPosixFsTest < StorerTestBase
       create_kata(kata_id)
       started = []
       size = 4
-      animals = all_avatar_names.shuffle[0...size]
+      animals = all_avatars_names.shuffle[0...size]
       threads = Array.new(size * 2)
       names = []
       threads.size.times { |i|
@@ -41,7 +41,7 @@ class HostDiskStorerPosixFsTest < StorerTestBase
       create_kata(kata_id)
       started = []
       size = 4
-      animals = all_avatar_names.shuffle[0...size]
+      animals = all_avatars_names.shuffle[0...size]
       pids = Array.new(size * 2)
       read_pipe, write_pipe = IO.pipe
       pids.size.times { |i|
@@ -61,7 +61,7 @@ class HostDiskStorerPosixFsTest < StorerTestBase
 
   private
 
-  include AllAvatarNames
+  include AllAvatarsNames
 
   def create_kata(id = kata_id)
     manifest = {}
