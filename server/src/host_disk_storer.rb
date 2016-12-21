@@ -83,14 +83,14 @@ class HostDiskStorer
 
   def avatar_ran_tests(id, name, files, now, output, colour)
     assert_avatar_exists(id, name)
-    rags = increments(id, name)
-    tag = rags.length + 1
-    rags << { 'colour' => colour, 'time' => now, 'number' => tag }
-    write_avatar_increments(id, name, rags)
+    increments = read_avatar_increments(id, name)
+    tag = increments.length + 1
+    increments << { 'colour' => colour, 'time' => now, 'number' => tag }
+    write_avatar_increments(id, name, increments)
 
     files = files.clone # don't alter caller's files argument
     files['output'] = output
-    write_tag_manifest(id, name, tag, files)
+    write_tag_files(id, name, tag, files)
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -106,12 +106,12 @@ class HostDiskStorer
         'time'   => kata_manifest(id)['created'],
         'number' => 0
       }
-    [tag0] + increments(id, name)
+    [tag0] + read_avatar_increments(id, name)
   end
 
   def avatar_visible_files(id, name)
     assert_avatar_exists(id, name)
-    rags = increments(id, name)
+    rags = read_avatar_increments(id, name)
     tag = rags == [] ? 0 : rags[-1]['number']
     tag_visible_files(id, name, tag)
   end
@@ -124,11 +124,12 @@ class HostDiskStorer
     return kata_manifest(id)['visible_files'] if tag == 0
     dir = tag_dir(id, name, tag)
     if dir.exists? # new non-git-format
-      src = tag_dir(id, name, tag).read(manifest_filename)
+      read_tag_files(id, name, tag)
     else # old git-format
-      src = git.show(avatar_path(id, name), "#{tag}:#{manifest_filename}")
+      path = avatar_path(id, name)
+      src = git.show(path, "#{tag}:#{manifest_filename}")
+      JSON.parse(src)
     end
-    JSON.parse(src)
   end
 
   #def tags_visible_files(id, name, was_tag, now_tag)
@@ -136,25 +137,37 @@ class HostDiskStorer
 
   private
 
-  def increments(id, name)
+  def write_avatar_increments(id, name, increments)
+    dir = avatar_dir(id, name)
+    dir.write(increments_filename, JSON.unparse(increments))
+  end
+
+  def read_avatar_increments(id, name)
     # Each avatar's increments stores a cache of colours
     # and time-stamps for all the avatar's [test]s.
     # Helps optimize dashboard traffic-lights views.
-    # Do _not_ save tag0 in increments.json
+    # Not saving tag0 in increments.json
     # to maintain compatibility with old git-format
-    JSON.parse(avatar_dir(id, name).read(increments_filename))
+    dir = avatar_dir(id, name)
+    JSON.parse(dir.read(increments_filename))
   end
 
   def increments_filename
     'increments.json'
   end
 
-  def write_avatar_increments(id, name, increments)
-    dir = avatar_dir(id, name)
-    dir.write(increments_filename, JSON.unparse(increments))
+  # - - - - - - - - - - -
+
+  def write_tag_files(id, name, tag, files)
+    dir = tag_dir(id, name, tag)
+    dir.make
+    dir.write(manifest_filename, JSON.unparse(files))
   end
 
-  # - - - - - - - - - - -
+  def read_tag_files(id, name, tag)
+    dir = tag_dir(id, name, tag)
+    JSON.parse(dir.read(manifest_filename))
+  end
 
   def manifest_filename
     # A kata's manifest stores the kata's meta information
@@ -162,12 +175,6 @@ class HostDiskStorer
     # chosen exercise.
     # An avatar's manifest stores avatar's visible-files.
     'manifest.json'
-  end
-
-  def write_tag_manifest(id, name, tag, files)
-    dir = tag_dir(id, name, tag)
-    dir.make
-    dir.write(manifest_filename, JSON.unparse(files))
   end
 
   # - - - - - - - - - - -
@@ -258,7 +265,7 @@ class HostDiskStorer
   def tag_exists?(id, name, tag)
     # Has to work with old git-format
     # and new non-git format
-    tag <= increments(id, name).size
+    tag <= read_avatar_increments(id, name).size
   end
 
   def tag_dir(id, name, tag)
