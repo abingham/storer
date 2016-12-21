@@ -479,16 +479,16 @@ class HostDiskStorerTest < StorerTestBase
   end
 
   def assert_invalid_kata_id_raises
-    invalid_kata_ids.each do |id|
-      error = assert_raises(ArgumentError) { yield id }
+    invalid_kata_ids.each do |invalid_id|
+      error = assert_raises(ArgumentError) { yield invalid_id }
       assert error.message.start_with?('Storer'), error.message
     end
   end
 
   def assert_bad_kata_id_raises
     valid_but_no_kata = 'F6316A5C7C'
-    (invalid_kata_ids + [ valid_but_no_kata ]).each do |id|
-      error = assert_raises(ArgumentError) { yield id }
+    (invalid_kata_ids + [ valid_but_no_kata ]).each do |bad_id|
+      error = assert_raises(ArgumentError) { yield bad_id }
       assert error.message.start_with?('Storer'), error.message
     end
   end
@@ -500,9 +500,9 @@ class HostDiskStorerTest < StorerTestBase
   end
 
   def assert_bad_avatar_raises
-    manifest = create_kata
-    bad_avatar_names.each do |avatar_name|
-      error = assert_raises(ArgumentError) { yield manifest['id'], avatar_name }
+    create_kata
+    bad_avatar_names.each do |bad_name|
+      error = assert_raises(ArgumentError) { yield kata_id, bad_name }
       assert error.message.start_with?('Storer'), error.message
     end
   end
