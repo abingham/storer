@@ -33,6 +33,7 @@ class HostDiskStorerTest < StorerTestBase
     manifest = create_manifest
     manifest.delete('id')
     error = assert_raises(ArgumentError) { storer.create_kata(manifest) }
+    assert error.message.start_with?('Storer'), error.message
     assert_invalid_kata_id_raises do |invalid_id|
       manifest['id'] = invalid_id
       storer.create_kata(manifest)
