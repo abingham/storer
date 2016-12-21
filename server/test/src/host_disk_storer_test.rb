@@ -394,12 +394,12 @@ class HostDiskStorerTest < StorerTestBase
   include AllAvatarNames
 
   def create_manifest(id = kata_id)
-    manifest = {}
-    manifest['image_name'] = 'cyberdojofoundation/gcc_assert'
-    manifest['visible_files'] = starting_files
-    manifest['created'] = creation_time
-    manifest['id'] = id
-    manifest
+    {
+      'image_name'    => 'cyberdojofoundation/gcc_assert',
+      'visible_files' => starting_files,
+      'created'       => creation_time,
+      'id'            => id
+    }
   end
 
   def create_kata(id = kata_id)
@@ -410,8 +410,8 @@ class HostDiskStorerTest < StorerTestBase
 
   def starting_files
     { 'cyber-dojo.sh' => 'gcc',
-      'hiker.c' => '#include "hiker.h"',
-      'hiker.h' => '#include <stdio.h>'
+      'hiker.c'       => '#include "hiker.h"',
+      'hiker.h'       => '#include <stdio.h>'
     }
   end
 
@@ -438,11 +438,15 @@ class HostDiskStorerTest < StorerTestBase
   # - - - - - - - - - - - - - - - - - - - - - - - -
 
   def avatar_path(name)
-    kata_path + '/' + name
+    path_join(kata_path, name)
   end
 
   def kata_path
-    storer.path + '/' + outer(kata_id) + '/' + inner(kata_id)
+    path_join(storer.path, outer(kata_id), inner(kata_id))
+  end
+
+  def path_join(*args)
+    File.join(*args)
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - -
