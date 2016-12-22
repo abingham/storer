@@ -132,8 +132,12 @@ class HostDiskStorer
     end
   end
 
-  #def tags_visible_files(id, name, was_tag, now_tag)
-  #end
+  def tags_visible_files(id, name, was_tag, now_tag)
+    {
+      'was_tag' => tag_visible_files(id, name, was_tag),
+      'now_tag' => tag_visible_files(id, name, now_tag)
+    }
+  end
 
   private
 

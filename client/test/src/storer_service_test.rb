@@ -114,6 +114,9 @@ class StorerServiceTest < ClientTestBase
     tag2_files['output'] = output
     assert_equal tag1_files, tag_visible_files(kata_id, lion, tag=1)
     assert_equal tag2_files, tag_visible_files(kata_id, lion, tag=2)
+    hash = tags_visible_files(kata_id, lion, was_tag=1, now_tag=2)
+    assert_equal tag1_files, hash['was_tag']
+    assert_equal tag2_files, hash['now_tag']
   end
 
   private

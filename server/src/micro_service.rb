@@ -62,6 +62,10 @@ class MicroService < Sinatra::Base
     getter(__method__, kata_id, avatar_name, tag)
   end
 
+  get '/tags_visible_files' do
+    getter(__method__, kata_id, avatar_name, was_tag, now_tag)
+  end
+
   private
 
   def getter(name, *args)
@@ -94,6 +98,7 @@ class MicroService < Sinatra::Base
   request_args :manifest, :id
   request_args :kata_id, :avatar_names, :avatar_name
   request_args :files, :now, :output, :colour, :tag
+  request_args :was_tag, :now_tag
 
   def args
     @args ||= request_body_args

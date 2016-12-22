@@ -21,6 +21,10 @@ class StorerTestBase < HexMiniTest
     storer.tag_visible_files(kata_id, name, tag)
   end
 
+  def tags_visible_files(name, was_tag, now_tag)
+    storer.tags_visible_files(kata_id, name, was_tag, now_tag)
+  end
+
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   include Externals

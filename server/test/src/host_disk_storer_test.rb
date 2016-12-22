@@ -147,6 +147,13 @@ class HostDiskStorerTest < StorerTestBase
     }
   end
 
+  test '9E7',
+  'tags_visible_files() with bad tag raises' do
+    assert_bad_tag_pair_raises { |valid_id, valid_name, was_tag, now_tag|
+      storer.tags_visible_files(valid_id, valid_name, was_tag, now_tag)
+    }
+  end
+
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # create_kata
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -295,35 +302,45 @@ class HostDiskStorerTest < StorerTestBase
   'visible_files do not contain output' do
     create_kata
     storer.start_avatar(kata_id, [lion])
-    tag = 0
+    was_tag = 0
 
-    storer.avatar_ran_tests(*make_args(starting_files))
-    tag = 1
+    storer.avatar_ran_tests(*make_args(edited_files))
+    now_tag = 1
 
     # traffic-lights
     expected = [
       { 'event'  => 'created',
         'time'   => creation_time,
-        'number' => 0
+        'number' => was_tag
       },
       { 'colour' => red,
         'time'   => time_now,
-        'number' => tag
+        'number' => now_tag
       }
     ]
     assert_equal expected, avatar_increments(lion)
     # current tag
     visible_files = avatar_visible_files(lion)
     assert_equal output, visible_files['output'], 'output'
-    starting_files.each do |filename,content|
+    edited_files.each do |filename,content|
       assert_equal content, visible_files[filename], filename
     end
-    # by tag
-    visible_files = tag_visible_files(lion, tag)
-    assert_equal output, visible_files['output'], 'output'
+    # was_tag
+    was_tag_visible_files = tag_visible_files(lion, was_tag)
+    refute was_tag_visible_files.keys.include? 'output'
     starting_files.each do |filename,content|
-      assert_equal content, visible_files[filename], filename
+      assert_equal content, was_tag_visible_files[filename], filename
     end
+    # now_tag
+    now_tag_visible_files = tag_visible_files(lion, now_tag)
+    assert_equal output, now_tag_visible_files['output'], 'output'
+    edited_files.each do |filename,content|
+      assert_equal content, now_tag_visible_files[filename], filename
+    end
+    # both tags at once
+    hash = tags_visible_files(lion, was_tag, now_tag)
+    assert_hash_equal was_tag_visible_files, hash['was_tag']
+    assert_hash_equal now_tag_visible_files, hash['now_tag']
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - -
@@ -468,6 +485,14 @@ class HostDiskStorerTest < StorerTestBase
     }
   end
 
+  def edited_files
+    { 'cyber-dojo.sh' => 'gcc',
+      'hiker.c'       => '#include "hiker.h"',
+      'hiker.h'       => '#ifndef HIKER_INCLUDED',
+      'hiker.tests.c' => '#include <assert.h>'
+    }
+  end
+
   def make_args(files)
     [ kata_id, lion, files, time_now, output, red ]
   end
@@ -559,7 +584,9 @@ class HostDiskStorerTest < StorerTestBase
   def assert_bad_avatar_raises
     create_kata
     bad_avatar_names.each do |bad_name|
-      error = assert_raises(ArgumentError) { yield kata_id, bad_name }
+      error = assert_raises(ArgumentError) {
+        yield kata_id, bad_name
+      }
       assert error.message.start_with?('Storer'), error.message
     end
   end
@@ -574,7 +601,35 @@ class HostDiskStorerTest < StorerTestBase
     create_kata
     storer.start_avatar(kata_id, [lion])
     bad_tags.each do |bad_tag|
-      error = assert_raises(ArgumentError) { yield kata_id, lion, bad_tag }
+      error = assert_raises(ArgumentError) {
+        yield kata_id, lion, bad_tag
+      }
+      assert error.message.start_with?('Storer'), error.message
+    end
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - -
+
+  def bad_tag_pairs
+    [
+      [nil,nil],
+      [nil,[]],
+      [nil,'sunglasses'],
+      [nil,999],
+      [0,nil],
+      [0,[]],
+      [0,'pen'],
+      [0,999]
+    ]
+  end
+
+  def assert_bad_tag_pair_raises
+    create_kata
+    storer.start_avatar(kata_id, [lion])
+    bad_tag_pairs.each do |was_tag, now_tag|
+      error = assert_raises(ArgumentError) {
+        yield kata_id, lion, was_tag, now_tag
+      }
       assert error.message.start_with?('Storer'), error.message
     end
   end
