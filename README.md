@@ -13,46 +13,6 @@ A **cyberdojo/storer** docker container runs sinatra on port 4577.
 
 It's API is as follows:
 
-# modifiers
-
-## create_kata
-Creates a kata from the given manifest.
-- parameters
-  * manifest, eg  {
-      "kata_id": "A551C528C3",
-      "image_name" : "cyberdojofoundation/gcc_assert",
-      ...
-    }
-
-- - - -
-
-## start_avatar
-Attempts to starts an avatar in the kata with the given kata_id.
-If successful, returns the name of the started avatar, otherwise nil.
-- parameters
-  * kata_id, eg "A551C528C3"
-  * avatar_names, eg [ "lion", "salmon", "rhino" ]
-- returns
-  * { "kata_start_avatar": "lion" }
-
-- - - -
-
-## avatar_ran_tests
-Tells the storer that the given avatar, in the kata with the given kata_id,
-submitted the given visible files, at the given time, which produced the given
-output, with the given colour.
-- parameters
-  * kata_id, eg "A551C528C3"
-  * avatar_name, eg "rhino"
-  * files, eg { "hiker.h" => "int answer()...", ... }
-  * now, eg [2016,12,6,12,31,15]
-  * output, eg "Assert failed: answer() == 42"
-  * colour, eg "red"
-
-- - - -
-
-# queries
-
 ## path
 Returns the storer's root path.
 - returns eg
@@ -78,17 +38,39 @@ Returns all the kata_id's starting with the given 2-digit long id.
 
 - - - -
 
+## create_kata
+Creates a kata from the given manifest.
+- parameters
+  * manifest, eg  {
+      "kata_id"    => "A551C528C3",
+      "image_name" => "cyberdojofoundation/gcc_assert",
+      ...
+    }
+
+- - - -
+
 ## kata_manifest
 Returns the manifest used to create the kata with the given kata_id.
 - parameters
   * kata_id, eg "A551C528C3"
 - returns eg
   * { "kata_manifest": {
-        "kata_id": "a551c528c3",
-        "image_name": "cyberdojofoundation/gcc_assert_",
+        "kata_id"    => "a551c528c3",
+        "image_name" => "cyberdojofoundation/gcc_assert_",
         ...
       }
     }
+
+- - - -
+
+## start_avatar
+Attempts to starts an avatar in the kata with the given kata_id.
+If successful, returns the name of the started avatar, otherwise nil.
+- parameters
+  * kata_id, eg "A551C528C3"
+  * avatar_names, eg [ "lion", "salmon", "rhino" ]
+- returns
+  * { "kata_start_avatar": "lion" }
 
 - - - -
 
@@ -98,6 +80,20 @@ Returns the names of all avatars who have started in the kata with the given kat
   * kata_id, eg "A551C528C3"
 - returns eg
   * { "kata_started_avatars": [ "rhino", "cheetah", "starfish" ] }
+
+- - - -
+
+## avatar_ran_tests
+Tells the storer that the given avatar, in the kata with the given kata_id,
+submitted the given visible files, at the given time, which produced the given
+output, with the given colour.
+- parameters
+  * kata_id, eg "A551C528C3"
+  * avatar_name, eg "rhino"
+  * files, eg { "hiker.h" => "int answer()...", ... }
+  * now, eg [2016,12,6,12,31,15]
+  * output, eg "Assert failed: answer() == 42"
+  * colour, eg "red"
 
 - - - -
 
@@ -124,8 +120,8 @@ Returns the latest set of visible files for the given avatar in the kata with th
   * avatar_name, eg "rhino"
 - returns eg
   * { "avatar_visible_files": {
-         "hiker.h" => "int answer()...",
-         "hiker.c" => "#include \"hiker.h\"...",
+         "hiker.h"       => "int answer()...",
+         "hiker.c"       => "#include \"hiker.h\"...",
          "hiker.tests.c" => "#include <assert.h>...",
          "cyber-dojo.sh" => "make --always-make"
       }
@@ -142,10 +138,43 @@ with the given tag number.
   * tag, eg "2"
 - returns eg
   * { "tag_visible_files": {
-         "hiker.h" => "int answer()...",
-         "hiker.c" => "#include \"hiker.h\"...",
+         "hiker.h"       => "int answer()...",
+         "hiker.c"       => "#include \"hiker.h\"...",
          "hiker.tests.c" => "#include <assert.h>...",
          "cyber-dojo.sh" => "make --always-make"
       }
     }
 
+- - - -
+
+## tags_visible_files
+Returns the paired set of visible files for the given avatar, in the kata with the given kata_id,
+with the given tag numbers.
+- parameters
+  * kata_id, eg "A551C528C3"
+  * avatar_name, eg "rhino"
+  * was_tag, eg "2"
+  * now_tag, eg "3"
+- returns eg
+  * { "tags_visible_files": {
+        "was_files" => {
+           "hiker.h"       => "int answer()...",
+           "hiker.c"       => "#include \"hiker.h\"...",
+           "hiker.tests.c" => "#include <assert.h>...",
+           "cyber-dojo.sh" => "make --always-make"
+        },
+        "now_files" => {
+           "fizzbuzz.h"       => "#ifndef FIZZBUZZ_INCLUDED...",
+           "fizzbuzz.c"       => "#include \"fizzbuzz.h\"...",
+           "fizzbuzz.tests.c" => "#include <assert.h>...",
+           "cyber-dojo.sh"    => "make --always-make"
+        }
+      }
+    }
+
+- - - -
+- - - -
+
+If any method cannot complete (eg invalid arguments)...
+- returns eg
+  * { "exception": "diagnostic" }
