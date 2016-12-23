@@ -41,11 +41,13 @@ Returns all the kata_id's starting with the given 2-digit long id.
 ## create_kata
 Creates a kata from the given manifest.
 - parameters
-  * manifest, eg  {
+```
+    manifest, eg  {
       "kata_id"    => "A551C528C3",
       "image_name" => "cyberdojofoundation/gcc_assert",
       ...
     }
+```
 - returns eg
   * { "create_kata": unspecified }
 
@@ -56,12 +58,14 @@ Returns the manifest used to create the kata with the given kata_id.
 - parameters
   * kata_id, eg "A551C528C3"
 - returns eg
-  * { "kata_manifest": {
+```
+    { "kata_manifest": {
         "kata_id"    => "a551c528c3",
         "image_name" => "cyberdojofoundation/gcc_assert_",
         ...
       }
     }
+```
 
 - - - -
 
@@ -107,13 +111,15 @@ Returns details of all the traffic-lights of the given avatar in the kata with t
   * kata_id, eg "A551C528C3"
   * avatar_name, eg "rhino"
 - returns eg
-  * { "avatar_increments": [
+```
+    { "avatar_increments": [
         { "event"  => "created", "time" => [2016,12,5,11,15,18], "number" => 0 },
         { "colour" => "red,      "time" => [2016,12,6,12,31,15], "number" => 1 },
         { "colour" => "green",   "time" => [2016,12,6,12,32,56], "number" => 2 },
         { "colour" => "amber",   "time" => [2016,12,6,12,43,19], "number" => 3 }
       ]
     }
+```
 
 - - - -
 
@@ -123,13 +129,15 @@ Returns the latest set of visible files for the given avatar in the kata with th
   * kata_id, eg "A551C528C3"
   * avatar_name, eg "rhino"
 - returns eg
-  * { "avatar_visible_files": {
+```
+    { "avatar_visible_files": {
          "hiker.h"       => "int answer()...",
          "hiker.c"       => "#include \"hiker.h\"...",
          "hiker.tests.c" => "#include <assert.h>...",
          "cyber-dojo.sh" => "make --always-make"
       }
     }
+```
 
 - - - -
 
@@ -141,13 +149,15 @@ with the given tag number.
   * avatar_name, eg "rhino"
   * tag, eg "2"
 - returns eg
-  * { "tag_visible_files": {
+```
+    { "tag_visible_files": {
          "hiker.h"       => "int answer()...",
          "hiker.c"       => "#include \"hiker.h\"...",
          "hiker.tests.c" => "#include <assert.h>...",
          "cyber-dojo.sh" => "make --always-make"
       }
     }
+```
 
 - - - -
 
@@ -161,7 +171,7 @@ with the given tag numbers.
   * now_tag, eg "3"
 - returns eg
 ```
-  * { "tags_visible_files": {
+    { "tags_visible_files": {
         "was_files" => {
            "hiker.h"       => "int answer()...",
            "hiker.c"       => "#include \"hiker.h\"...",
