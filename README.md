@@ -46,6 +46,8 @@ Creates a kata from the given manifest.
       "image_name" => "cyberdojofoundation/gcc_assert",
       ...
     }
+- returns eg
+  * { "create_kata": unspecified }
 
 - - - -
 
@@ -70,7 +72,7 @@ If successful, returns the name of the started avatar, otherwise nil.
   * kata_id, eg "A551C528C3"
   * avatar_names, eg [ "lion", "salmon", "rhino" ]
 - returns
-  * { "kata_start_avatar": "lion" }
+  * { "start_avatar": "lion" }
 
 - - - -
 
@@ -79,7 +81,7 @@ Returns the names of all avatars who have started in the kata with the given kat
 - parameters
   * kata_id, eg "A551C528C3"
 - returns eg
-  * { "kata_started_avatars": [ "rhino", "cheetah", "starfish" ] }
+  * { "started_avatars": [ "rhino", "cheetah", "starfish" ] }
 
 - - - -
 
@@ -94,6 +96,8 @@ output, with the given colour.
   * now, eg [2016,12,6,12,31,15]
   * output, eg "Assert failed: answer() == 42"
   * colour, eg "red"
+- returns eg
+  * { "avatar_ran_tests": unspecified }
 
 - - - -
 
@@ -156,6 +160,7 @@ with the given tag numbers.
   * was_tag, eg "2"
   * now_tag, eg "3"
 - returns eg
+```
   * { "tags_visible_files": {
         "was_files" => {
            "hiker.h"       => "int answer()...",
@@ -171,10 +176,11 @@ with the given tag numbers.
         }
       }
     }
+```
 
 - - - -
 - - - -
 
-If any method cannot complete (eg invalid arguments)...
-- returns eg
-  * { "exception": "diagnostic" }
+- If successful, all methods return a json object with a single key equal to the
+name of the method.
+- If unsuccessful, all methods return a json object with a single 'exception' key.
