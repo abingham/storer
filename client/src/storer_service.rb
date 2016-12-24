@@ -99,15 +99,15 @@ module StorerService # mix-in
   end
 
   def result(json, name)
-    fail error('json.nil?')       if     json.nil?
-    fail error('bad json')        unless json.class.name == 'Hash'
-    fail error(json['exception']) unless json['exception'].nil?
-    fail error('no key')          if     json[name].nil?
+    fail error(name, 'bad json') unless json.class.name == 'Hash'
+    exception = json['exception']
+    fail error(name, exception)  unless exception.nil?
+    fail error(name, 'no key')   unless json.key? name
     json[name]
   end
 
-  def error(message)
-    ArgumentError.new(message)
+  def error(name, message)
+    StandardError.new("StorerService:#{name}:#{message}")
   end
 
 end
