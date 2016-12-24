@@ -21,8 +21,3 @@ services:
     environment: [ CYBER_DOJO_KATAS_ROOT=/tmp/katas ]
     volumes_from:
       - container:cyber-dojo-git-kata-DATA-CONTAINER:rw
-
-    #With these set docker fails to [docker cp] /tmp/coverage
-    #out of the container in test.sh ?!?
-    #read_only: true
-    #tmpfs: /tmp
