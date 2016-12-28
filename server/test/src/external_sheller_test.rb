@@ -1,5 +1,5 @@
-require_relative './storer_test_base'
-require_relative './spy_logger'
+require_relative 'storer_test_base'
+require_relative 'spy_logger'
 
 class ExternalShellerTest < StorerTestBase
 

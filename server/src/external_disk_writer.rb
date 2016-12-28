@@ -1,5 +1,4 @@
-
-require_relative './nearest_external'
+require_relative 'nearest_external'
 
 class ExternalDiskWriter
 

@@ -1,6 +1,6 @@
 require 'sinatra/base'
 
-require_relative './storer_service'
+require_relative 'storer_service'
 
 class Demo < Sinatra::Base
 

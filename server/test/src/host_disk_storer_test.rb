@@ -1,6 +1,6 @@
-require_relative './storer_test_base'
-require_relative './spy_logger'
-require_relative './../../src/all_avatars_names'
+require_relative 'storer_test_base'
+require_relative 'spy_logger'
+require_relative '../../src/all_avatars_names'
 
 class HostDiskStorerTest < StorerTestBase
 

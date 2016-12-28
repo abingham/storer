@@ -1,7 +1,7 @@
 require 'json'
 require_relative '../hex_mini_test'
-require_relative './../../src/host_disk_storer'
-require_relative './../../src/externals'
+require_relative '../../src/host_disk_storer'
+require_relative '../../src/externals'
 
 class StorerTestBase < HexMiniTest
 

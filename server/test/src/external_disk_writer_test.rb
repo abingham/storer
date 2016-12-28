@@ -1,4 +1,4 @@
-require_relative './storer_test_base'
+require_relative 'storer_test_base'
 
 class ExternalDiskWriterTest < StorerTestBase
 

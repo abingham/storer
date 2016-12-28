@@ -1,5 +1,5 @@
 require 'json'
-require_relative './client_test_base'
+require_relative 'client_test_base'
 
 class StorerServiceTest < ClientTestBase
 

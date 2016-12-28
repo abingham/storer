@@ -1,13 +1,10 @@
-
-require_relative './nearest_external'
+require_relative 'nearest_external'
 
 class ExternalGitter
 
   def initialize(parent)
     @parent = parent
   end
-
-  # queries
 
   attr_reader :parent
 
