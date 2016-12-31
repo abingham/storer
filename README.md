@@ -7,10 +7,10 @@ alt="cyber-dojo yin/yang logo" width="50px" height="50px"/>
 
 # cyberdojo/storer docker image
 
-- A micro-service for [cyber-dojo](http://cyber-dojo.org).
-- Stores the visible files associated with every avatar test event.
+- A micro-service for [cyber-dojo](http://cyber-dojo.org)
 - A **cyberdojo/storer** docker container runs on port **4577**.
-- It's API is as follows:
+- Stores the visible files associated with every avatar test event.
+- API:
   * All methods return a json object with a single key
   * If successful, the key equals the method's name.
   * If unsuccessful, the key equals "exception".
@@ -50,6 +50,9 @@ Creates a kata from the given json manifest.
     {
       "kata_id"   : "A551C528C3",
       "image_name": "cyberdojofoundation/gcc_assert",
+      "visible_files": { "hiker.h": "int answer()...", ... },
+      "filename_extension": ".c",
+      "tab_size": 4,
       ...
     }
 ```
@@ -64,7 +67,10 @@ Returns the manifest used to create the kata with the given kata_id.
 ```
     { "kata_manifest": {
         "kata_id"   : "a551c528c3",
-        "image_name": "cyberdojofoundation/gcc_assert_",
+        "image_name": "cyberdojofoundation/gcc_assert",
+        "visible_files": { "hiker.h": "int answer()...", ... },
+        "filename_extension": ".c",
+        "tab_size": 4,
         ...
       }
     }
@@ -78,8 +84,12 @@ If successful, returns the name of the started avatar, otherwise nil.
 - parameters
   * kata_id,      eg "A551C528C3"
   * avatar_names, eg [ "lion", "salmon", "rhino" ]
-- returns
-  * { "start_avatar": "lion" }
+- returns the name of the started avatar if successful, eg
+```
+  { "start_avatar": "lion" }
+```
+- returns nil if unsuccessful, eg
+  { "start_avatar": nil }
 
 - - - -
 
@@ -109,7 +119,8 @@ output, with the given colour.
 - - - -
 
 ## avatar_increments
-Returns details of all the traffic-lights of the given avatar in the kata with the given kata_id.
+Returns details of all traffic-lights, for the given avatar,
+in the kata with the given kata_id.
 - parameters
   * kata_id,     eg "A551C528C3"
   * avatar_name, eg "rhino"
@@ -146,7 +157,7 @@ in the kata with the given kata_id.
 - - - -
 
 ## tag_visible_files
-Returns the set of visible files for the given avatar,
+Returns the set of visible files, for the given avatar,
 in the kata with the given kata_id, with the given tag number.
 - parameters
   * kata_id,     eg "A551C528C3"
