@@ -8,7 +8,6 @@ alt="cyber-dojo yin/yang logo" width="50px" height="50px"/>
 # cyberdojo/storer docker image
 
 - A micro-service for [cyber-dojo](http://cyber-dojo.org)
-- A **cyberdojo/storer** docker container runs on port **4577**.
 - Stores the visible files associated with every avatar test event.
 - API:
   * All methods return a json object with a single key
