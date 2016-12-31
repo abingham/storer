@@ -113,8 +113,6 @@ output, with the given colour.
   * now,         eg [2016,12,6,12,31,15]
   * output,      eg "Assert failed: answer() == 42"
   * colour,      eg "red"
-- returns eg
-  * { "avatar_ran_tests": unspecified }
 
 - - - -
 
