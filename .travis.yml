@@ -9,4 +9,5 @@ before_script:
 script:
     - ./pipe_build_up_test.sh
     - status=$?
+    - echo "status=${status}"
     - ./push_and_trigger.sh ${status} cyber-dojo/web
