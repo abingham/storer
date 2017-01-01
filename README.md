@@ -95,13 +95,10 @@ If successful, returns the name of the started avatar, otherwise nil.
   kata_id       eg "A551C528C3"
   avatar_names  eg [ "lion", "salmon", "rhino" ]
 ```
-- returns the name of the started avatar if successful, eg
+- returns the name of the started avatar if successful, otherwise nil.
 ```
   { "start_avatar": "lion" }
-```
-- returns nil if unsuccessful
-```
-  { "start_avatar": nil }
+  { "start_avatar": nil    }
 ```
 
 - - - -
