@@ -10,7 +10,7 @@ alt="cyber-dojo yin/yang logo" width="50px" height="50px"/>
 - A micro-service for [cyber-dojo](http://cyber-dojo.org)
 - Stores the visible files associated with every avatar test event.
 - API:
-  * All methods return a json object with a single key
+  * All methods return a json object with a single key.
   * If successful, the key equals the method's name.
   * If unsuccessful, the key equals "exception".
 
@@ -57,7 +57,10 @@ Creates a kata from the given json manifest.
     {
       "kata_id"   : "A551C528C3",
       "image_name": "cyberdojofoundation/gcc_assert",
-      "visible_files": { "hiker.h": "int answer()...", ... },
+      "visible_files": { "hiker.h": "#ifndef HIKER_INCLUDED...",
+                         "hiker.c": "int answer()...",
+                         ...
+                       },
       "filename_extension": ".c",
       "tab_size": 4,
       ...
@@ -95,7 +98,7 @@ If successful, returns the name of the started avatar, otherwise nil.
   kata_id       eg "A551C528C3"
   avatar_names  eg [ "lion", "salmon", "rhino" ]
 ```
-- returns the name of the started avatar if successful, otherwise nil.
+- returns the name of the started avatar if successful, otherwise nil, eg
 ```
   { "start_avatar": "lion" }
   { "start_avatar": nil    }
