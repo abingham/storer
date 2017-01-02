@@ -1,6 +1,6 @@
-require_relative 'storer_test_base'
+require_relative 'test_base'
 
-class NearestExternalTest < StorerTestBase
+class NearestExternalTest < TestBase
 
   def self.hex_prefix; '9D4'; end
 

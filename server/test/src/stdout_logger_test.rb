@@ -1,6 +1,6 @@
-require_relative 'storer_test_base'
+require_relative 'test_base'
 
-class StdoutLoggerTest < StorerTestBase
+class StdoutLoggerTest < TestBase
 
   def self.hex_prefix; '1B6'; end
 

@@ -1,6 +1,6 @@
-require_relative 'storer_test_base'
+require_relative 'test_base'
 
-class DiskWriterTest < StorerTestBase
+class DiskWriterTest < TestBase
 
   def self.hex_prefix; 'FDF13'; end
 

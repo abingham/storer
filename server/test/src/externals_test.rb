@@ -1,6 +1,6 @@
-require_relative 'storer_test_base'
+require_relative 'test_base'
 
-class ExternalsTest < StorerTestBase
+class ExternalsTest < TestBase
 
   include Externals
 

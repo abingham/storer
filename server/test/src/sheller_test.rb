@@ -1,7 +1,7 @@
-require_relative 'storer_test_base'
+require_relative 'test_base'
 require_relative 'spy_logger'
 
-class ShellerTest < StorerTestBase
+class ShellerTest < TestBase
 
   def self.hex_prefix; 'C89'; end
 

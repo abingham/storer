@@ -1,4 +1,4 @@
-require_relative 'storer_test_base'
+require_relative 'test_base'
 require_relative '../../src/all_avatars_names'
 
 # storer.kata_start_avatar() relies on mkdir being
@@ -6,7 +6,7 @@ require_relative '../../src/all_avatars_names'
 # Otherwise two laptops in the same practice session
 # could start as the same animal.
 
-class HostDiskStorerPosixFsTest < StorerTestBase
+class HostDiskStorerPosixFsTest < TestBase
 
   def self.hex_prefix; '701B5'; end
 

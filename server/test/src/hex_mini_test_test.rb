@@ -1,6 +1,6 @@
-require_relative 'storer_test_base'
+require_relative 'test_base'
 
-class HexMiniTestTest < StorerTestBase
+class HexMiniTestTest < TestBase
 
   def self.hex_prefix; '898'; end
 

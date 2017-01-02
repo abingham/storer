@@ -3,7 +3,7 @@ require_relative '../../src/host_disk_storer'
 require_relative '../../src/externals'
 require 'json'
 
-class StorerTestBase < HexMiniTest
+class TestBase < HexMiniTest
 
   def kata_manifest
     storer.kata_manifest(kata_id)

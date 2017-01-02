@@ -1,8 +1,8 @@
-require_relative 'storer_test_base'
+require_relative 'test_base'
 require_relative 'spy_logger'
 require_relative '../../src/all_avatars_names'
 
-class HostDiskStorerTest < StorerTestBase
+class HostDiskStorerTest < TestBase
 
   def self.hex_prefix; 'E4FDA20'; end
 
