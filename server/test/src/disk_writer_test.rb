@@ -1,6 +1,6 @@
 require_relative 'storer_test_base'
 
-class ExternalDiskWriterTest < StorerTestBase
+class DiskWriterTest < StorerTestBase
 
   def self.hex_prefix; 'FDF13'; end
 

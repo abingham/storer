@@ -1,6 +1,6 @@
 require_relative 'nearest_external'
 
-class ExternalDiskWriter
+class DiskWriter
 
   def initialize(parent)
     @parent = parent
@@ -68,8 +68,7 @@ class ExternalDirWriter
     name.end_with?('/.') || name.end_with?('/..')
   end
 
-  def shell; nearest_external(:shell); end
-
   include NearestExternal
+  def shell; nearest_external(:shell); end
 
 end

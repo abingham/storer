@@ -9,29 +9,29 @@ class ExternalsTest < StorerTestBase
   # - - - - - - - - - - - - - - - - -
 
   test '920',
-  'default disk is ExternalDiskWriter' do
-    assert_equal 'ExternalDiskWriter', disk.class.name
+  'default disk is DiskWriter' do
+    assert_equal 'DiskWriter', disk.class.name
   end
 
   # - - - - - - - - - - - - - - - - -
 
   test '3EC',
-  'default log is ExternalStdoutLogger' do
-    assert_equal 'ExternalStdoutLogger', log.class.name
+  'default log is StdoutLogger' do
+    assert_equal 'StdoutLogger', log.class.name
   end
 
   # - - - - - - - - - - - - - - - - -
 
   test '1B1',
-  'default shell is ExternalSheller' do
-    assert_equal 'ExternalSheller', shell.class.name
+  'default shell is Sheller' do
+    assert_equal 'Sheller', shell.class.name
   end
 
   # - - - - - - - - - - - - - - - - -
 
   test 'DAA',
-  'default gitter is ExternalGitter' do
-    assert_equal 'ExternalGitter', git.class.name
+  'default gitter is Gitter' do
+    assert_equal 'Gitter', git.class.name
   end
 
 end

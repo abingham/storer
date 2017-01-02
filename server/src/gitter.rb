@@ -1,6 +1,6 @@
 require_relative 'nearest_external'
 
-class ExternalGitter
+class Gitter
 
   def initialize(parent)
     @parent = parent

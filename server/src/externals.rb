@@ -1,14 +1,14 @@
-require_relative 'external_disk_writer'
-require_relative 'external_sheller'
-require_relative 'external_gitter'
-require_relative 'external_stdout_logger'
+require_relative 'disk_writer'
+require_relative 'sheller'
+require_relative 'gitter'
+require_relative 'stdout_logger'
 
 module Externals
 
-  def shell; @shell ||= ExternalSheller.new(self); end
-  def  disk;  @disk ||= ExternalDiskWriter.new(self); end
-  def   git;   @git ||= ExternalGitter.new(self); end
-  def   log;   @log ||= ExternalStdoutLogger.new(self); end
+  def shell; @shell ||=      Sheller.new(self); end
+  def  disk;  @disk ||=   DiskWriter.new(self); end
+  def   git;   @git ||=       Gitter.new(self); end
+  def   log;   @log ||= StdoutLogger.new(self); end
 
 end
 
@@ -22,7 +22,7 @@ end
 #      ...
 #      private
 #      include Externals
-#      def storer; HostDiskStorer.new(self); end
+#      def storer; DiskWriter.new(self); end
 #      ...
 #    end
 #
@@ -30,7 +30,7 @@ end
 #    and gain access to the externals via nearest_external()
 #
 #    require_relative './nearest_external'
-#    class HostDiskStorer
+#    class DiskWriter
 #      def initialize(parent)
 #        @parent = parent
 #      end
@@ -44,10 +44,10 @@ end
 # 3. tests simply set the external directly.
 #    Note that Externals.log uses @log ||= ...
 #
-#    class HostDiskStorerTest < MiniTest::Test
+#    class DiskWriterTest < MiniTest::Test
 #      def test_something
 #        @log = SpyLogger.new(...)
-#        storer = HostDiskStorer.new(self)
+#        storer = DiskWriter.new(self)
 #        storer.do_something
 #        assert_equal 'expected', log.spied
 #      end

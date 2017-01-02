@@ -1,6 +1,6 @@
 require_relative 'storer_test_base'
 
-class ExternalGitterTest < StorerTestBase
+class GitterTest < StorerTestBase
 
   def self.hex_prefix; 'C89'; end
 
