@@ -1,4 +1,8 @@
 
+def all_tests?
+  ARGV[2..-1] == []
+end
+
 def number
   '[\.|\d]+'
 end
@@ -18,8 +22,6 @@ end
 def get_index_stats(flat, name)
   html = `cat #{ARGV[1]}`
   html = cleaned(html)
-  # It would be nice if simplecov saved the raw data to a json file
-  # and created the html from that, but alas it does not.
   pattern = /<div class=\"file_list_container\" id=\"#{flat}\">
   \s*<h2>\s*<span class=\"group_name\">#{name}<\/span>
   \s*\(<span class=\"covered_percent\"><span class=\"\w+\">([\d\.]*)\%<\/span><\/span>
@@ -76,6 +78,26 @@ def get_test_log_stats
 end
 
 # - - - - - - - - - - - - - - - - - - - - - - -
+
+def done(options, *table)
+  results = []
+  table.each do |name, value, op, limit|
+    result = eval("#{value} #{op} #{limit}")
+    if options[:show_fails] && !result
+      puts "%s | %s %s %s | %s" % [
+        name.rjust(25),
+        value.to_s.rjust(7),
+        op,
+        limit.to_s.rjust(3),
+        result.to_s
+      ]
+    end
+    results << result
+  end
+  results
+end
+
+# - - - - - - - - - - - - - - - - - - - - - - -
 # - - - - - - - - - - - - - - - - - - - - - - -
 
  log_stats = get_test_log_stats
@@ -101,39 +123,30 @@ line_ratio = (test_stats[:line_count].to_f / src_stats[:line_count].to_f)
 
 # - - - - - - - - - - - - - - - - - - - - - - -
 
-table =
-  [
-    [ 'failures',               failure_count,      '==',   0 ],
-    [ 'errors',                   error_count,      '==',   0 ],
-    [ 'skips',                     skip_count,      '==',   0 ],
+critical = done({show_fails:true},
+    [ 'failures',                failure_count, '==',   0 ],
+    [ 'errors',                    error_count, '==',   0 ],
+)
 
-    [ 'assertions/sec',         assertions_per_sec, '>=',  25 ],
-    [ 'duration[sec]',                    duration, '<=',  10 ],
+metrics = done({show_fails:all_tests?},
+    [ 'skips',                      skip_count, '==',   0 ],
 
-    [ ' (src)coverage[%]',       src_coverage,      '==', 100 ],
-    [ '(test)coverage[%]',      test_coverage,      '==', 100 ],
+    [ 'assertions/sec',     assertions_per_sec, '>=',  25 ],
+    [ 'duration[sec]',                duration, '<=',  10 ],
 
-    [ ' (src)hits/line',         src_hits_per_line, '<=', 250 ],
-    [ '(test)hits/line',        test_hits_per_line, '<=',  10 ],
+    [ ' (src)coverage[%]',        src_coverage, '==', 100 ],
+    [ '(test)coverage[%]',       test_coverage, '==', 100 ],
 
-    [ 'lines(test)/lines(src)', f2(line_ratio),     '>=', 1.9 ],
-  ]
+    [ ' (src)hits/line',     src_hits_per_line, '<=', 250 ],
+    [ '(test)hits/line',    test_hits_per_line, '<=',  10 ],
+
+    [ 'lines(test)/lines(src)', f2(line_ratio), '>=', 1.9 ],
+)
 
 # - - - - - - - - - - - - - - - - - - - - - - -
 
-done = []
-puts
-table.each do |name, value, op, limit|
-  result = eval("#{value} #{op} #{limit}")
-  puts "%s | %s %s %s | %s" % [
-    name.rjust(25),
-    value.to_s.rjust(7),
-    op,
-    limit.to_s.rjust(3),
-    result.to_s
-  ]
-  done << result
+if all_tests?
+  exit critical.all? && metrics.all?
+else
+  exit critical.all?
 end
-
-puts
-exit done.all?
