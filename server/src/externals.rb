@@ -1,11 +1,11 @@
+require_relative 'bash_sheller'
 require_relative 'disk_writer'
-require_relative 'sheller'
 require_relative 'gitter'
 require_relative 'stdout_logger'
 
 module Externals
 
-  def shell; @shell ||=      Sheller.new(self); end
+  def shell; @shell ||=  BashSheller.new(self); end
   def  disk;  @disk ||=   DiskWriter.new(self); end
   def   git;   @git ||=       Gitter.new(self); end
   def   log;   @log ||= StdoutLogger.new(self); end
