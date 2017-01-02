@@ -10,6 +10,7 @@ alt="cyber-dojo yin/yang logo" width="50px" height="50px"/>
 - A micro-service for [cyber-dojo](http://cyber-dojo.org)
 - Stores the visible files associated with every avatar test event.
 - API:
+  * All methods receive their arguments in a json object.
   * All methods return a json object with a single key.
   * If successful, the key equals the method's name.
   * If unsuccessful, the key equals "exception".
@@ -18,7 +19,7 @@ alt="cyber-dojo yin/yang logo" width="50px" height="50px"/>
 
 ## path
 Returns the storer's root path.
-- returns eg
+- returns, eg
 ```
   { "path": "/usr/src/cyber-dojo/katas"  }
 ```
@@ -28,22 +29,22 @@ Returns the storer's root path.
 ## completed
 If it exists, returns the 10-digit kata_id which uniquely completes
 the given id, otherwise nil.
-- parameter
+- parameter, eg
 ```
-  id   eg "A551C5", must be at least 6 characters long.
+  { "id": "A551C5" } # must be at least 6 characters long.
 ```
-- returns eg
+- returns, eg
 ```
   { "completed": "A551C528C3"  }
 ```
 
 ## completions
 Returns all the kata_id's starting with the given 2-digit long id.
-- parameter
+- parameter, eg
 ```
-  id  eg "A5"
+  { "id": "A5" }
 ```
-- returns eg
+- returns, eg
 ```
   { "completions": [ "A551C528C3", "A5DA2CDC58", "A5EAFE6E53" ]  }
 ```
@@ -71,16 +72,20 @@ Creates a kata from the given json manifest.
 
 ## kata_manifest
 Returns the manifest used to create the kata with the given kata_id.
-- parameter
+- parameter, eg
 ```
-  kata_id  eg "A551C528C3"
+  { "kata_id": "A551C528C3" }
 ```
-- returns eg
+- returns, eg
 ```
     { "kata_manifest": {
         "kata_id"   : "a551c528c3",
         "image_name": "cyberdojofoundation/gcc_assert",
-        "visible_files": { "hiker.h": "int answer()...", ... },
+        "visible_files": {        "hiker.h": "ifndef HIKER_INCLUDED\n...",
+                                  "hiker.c": "#include \"hiker.h\"...",
+                           "hiker.tests.c" : "#include <assert.h>\n...",
+                           "cyber-dojo.sh" : "make --always-make"
+                         },
         "filename_extension": ".c",
         "tab_size": 4,
         ...
@@ -93,10 +98,11 @@ Returns the manifest used to create the kata with the given kata_id.
 ## start_avatar
 Attempts to starts an avatar in the kata with the given kata_id.
 If successful, returns the name of the started avatar, otherwise nil.
-- parameters
+- parameters, eg
 ```
-  kata_id       eg "A551C528C3"
-  avatar_names  eg [ "lion", "salmon", "rhino" ]
+  {      "kata_id": "A551C528C3",
+    "avatar_names": [ "lion", "salmon", "rhino" ]
+  }
 ```
 - returns the name of the started avatar if successful, otherwise nil, eg
 ```
@@ -108,11 +114,11 @@ If successful, returns the name of the started avatar, otherwise nil.
 
 ## started_avatars
 Returns the names of all avatars who have started in the kata with the given kata_id.
-- parameter
+- parameter, eg
 ```
-  kata_id  eg "A551C528C3"
+  { "kata_id": "A551C528C3" }
 ```
-- returns eg
+- returns, eg
 ```
   { "started_avatars": [ "rhino", "cheetah", "starfish" ] }
 ```
@@ -123,14 +129,19 @@ Returns the names of all avatars who have started in the kata with the given kat
 Tells the storer that the given avatar, in the kata with the given kata_id,
 submitted the given visible files, at the given time, which produced the given
 output, with the given colour.
-- parameters
+- parameters, eg
 ```
-  kata_id     eg "A551C528C3"
-  avatar_name eg "rhino"
-  files       eg { "hiker.h": "int answer()...", ... }
-  now         eg [2016,12,6,12,31,15]
-  output      eg "Assert failed: answer() == 42"
-  colour      eg "red"
+  {     "kata_id": "A551C528C3",
+    "avatar_name": "rhino",
+          "files": {        "hiker.h": "ifndef HIKER_INCLUDED...",
+                            "hiker.c": "#include \"hiker.h\"...",
+                     "hiker.tests.c" : "#include <assert.h>\n...",
+                     "cyber-dojo.sh" : "make --always-make"
+                   }
+            "now": [2016,12,6,12,31,15],
+         "output": "Assert failed: answer() == 42",
+         "colour": "red"
+  }
 ```
 
 - - - -
@@ -138,12 +149,13 @@ output, with the given colour.
 ## avatar_increments
 Returns details of all traffic-lights, for the given avatar,
 in the kata with the given kata_id.
-- parameters
+- parameters, eg
 ```
-  kata_id     eg "A551C528C3"
-  avatar_name eg "rhino"
+  {     "kata_id": "A551C528C3",
+    "avatar_name": "rhino"
+  }
 ```
-- returns eg
+- returns, eg
 ```
   { "avatar_increments": [
       {  "event": "created", "time": [2016,12,5,11,15,18], "number": 0 },
@@ -159,15 +171,16 @@ in the kata with the given kata_id.
 ## avatar_visible_files
 Returns the most recent set of visible files, for the given avatar,
 in the kata with the given kata_id.
-- parameters
+- parameters, eg
 ```
-  kata_id     eg "A551C528C3"
-  avatar_name eg "rhino"
+  {     "kata_id": "A551C528C3",
+    "avatar_name": "rhino"
+  }
 ```
-- returns eg
+- returns, eg
 ```
   { "avatar_visible_files": {
-      "hiker.h"       : "int answer()...",
+      "hiker.h"       : "ifndef HIKER_INCLUDED\n...",
       "hiker.c"       : "#include \"hiker.h\"...",
       "hiker.tests.c" : "#include <assert.h>...",
       "cyber-dojo.sh" : "make --always-make"
@@ -180,18 +193,19 @@ in the kata with the given kata_id.
 ## tag_visible_files
 Returns the set of visible files, for the given avatar,
 in the kata with the given kata_id, with the given tag number.
-- parameters
+- parameters, eg
 ```
-  kata_id     eg "A551C528C3"
-  avatar_name eg "rhino"
-  tag         eg "2"
+  {     "kata_id": "A551C528C3",
+    "avatar_name": "rhino",
+            "tag": 2
+  }
 ```
-- returns eg
+- returns, eg
 ```
   { "tag_visible_files": {
-       "hiker.h"       : "int answer()...",
-       "hiker.c"       : "#include \"hiker.h\"...",
-       "hiker.tests.c" : "#include <assert.h>...",
+       "hiker.h"       : "#ifndef HIKER_INCLUDED\n...",
+       "hiker.c"       : "#include \"hiker.h\"\n...",
+       "hiker.tests.c" : "#include <assert.h>\n...",
        "cyber-dojo.sh" : "make --always-make"
     }
   }
@@ -202,26 +216,27 @@ in the kata with the given kata_id, with the given tag number.
 ## tags_visible_files
 Returns the paired set of visible files for the given avatar,
 in the kata with the given kata_id, with the given tag numbers.
-- parameters
+- parameters, eg
 ```
-  kata_id     eg "A551C528C3"
-  avatar_name eg "rhino"
-  was_tag     eg "2"
-  now_tag     eg "3"
+  {     "kata_id": "A551C528C3",
+    "avatar_name": "rhino",
+        "was_tag": 2,
+        "now_tag": 3
+  }
 ```
-- returns eg
+- returns, eg
 ```
   { "tags_visible_files": {
       "was_files": {
-         "hiker.h"       : "int answer()...",
-         "hiker.c"       : "#include \"hiker.h\"...",
-         "hiker.tests.c" : "#include <assert.h>...",
+         "hiker.h"       : "#ifndef HIKER_INCLUDED\n...",
+         "hiker.c"       : "#include \"hiker.h\"\n...",
+         "hiker.tests.c" : "#include <assert.h>\n...",
          "cyber-dojo.sh" : "make --always-make"
       },
       "now_files": {
-         "fizzbuzz.h"       : "#ifndef FIZZBUZZ_INCLUDED...",
-         "fizzbuzz.c"       : "#include \"fizzbuzz.h\"...",
-         "fizzbuzz.tests.c" : "#include <assert.h>...",
+         "fizzbuzz.h"       : "#ifndef FIZZBUZZ_INCLUDED\n...",
+         "fizzbuzz.c"       : "#include \"fizzbuzz.h\"\n...",
+         "fizzbuzz.tests.c" : "#include <assert.h>\n...",
          "cyber-dojo.sh"    : "make --always-make"
       }
     }
