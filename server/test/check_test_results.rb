@@ -134,5 +134,6 @@ table.each do |name, value, op, limit|
   ]
   done << result
 end
+
 puts
 exit done.all?

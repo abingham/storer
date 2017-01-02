@@ -27,4 +27,4 @@ ruby -e "([ '../coverage.rb' ] + %w(${files[*]}).shuffle).each{ |file| require '
 
 cd ${my_dir} \
   && ruby ./check_test_results.rb \
-    ${test_log} ${cov_dir}/index.html > ${cov_dir}/done.txt
+    ${test_log} ${cov_dir}/index.html ${args[@]} > ${cov_dir}/done.txt
