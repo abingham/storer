@@ -1,4 +1,4 @@
-require_relative 'nearest_external'
+require_relative 'nearest_ancestors'
 require_relative 'all_avatars_names'
 require 'json'
 
@@ -303,9 +303,9 @@ class HostDiskStorer
 
   include AllAvatarsNames
 
-  include NearestExternal
-  def disk; nearest_external(:disk); end
-  def git; nearest_external(:git); end
+  include NearestAncestors
+  def disk; nearest_ancestors(:disk); end
+  def git ; nearest_ancestors(:git ); end
 
 end
 

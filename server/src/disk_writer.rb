@@ -1,4 +1,4 @@
-require_relative 'nearest_external'
+require_relative 'nearest_ancestors'
 
 class DiskWriter
 
@@ -9,14 +9,14 @@ class DiskWriter
   attr_reader :parent
 
   def [](dir_name)
-    ExternalDirWriter.new(self, dir_name)
+    DirWriter.new(self, dir_name)
   end
 
 end
 
 # - - - - - - - - - - - - - - - - - - - - -
 
-class ExternalDirWriter
+class DirWriter
 
   def initialize(parent, name)
     @parent = parent
@@ -68,7 +68,7 @@ class ExternalDirWriter
     name.end_with?('/.') || name.end_with?('/..')
   end
 
-  include NearestExternal
-  def shell; nearest_external(:shell); end
+  include NearestAncestors
+  def shell; nearest_ancestors(:shell); end
 
 end

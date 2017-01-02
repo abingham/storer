@@ -13,11 +13,11 @@ module Externals
 end
 
 #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# Use with NearestExternal as follows:
+# Use with NearestAncestors as follows:
 #
 # 1. include Externals in your top-level scope.
 #
-#    require_relative './externals'
+#    require_relative 'externals'
 #    class MicroService < Sinatra::Base
 #      ...
 #      private
@@ -29,7 +29,7 @@ end
 # 2. ensure all child objects have access to their parent
 #    and gain access to the externals via nearest_external()
 #
-#    require_relative './nearest_external'
+#    require_relative 'nearest_ancestors'
 #    class DiskWriter
 #      def initialize(parent)
 #        @parent = parent
@@ -37,8 +37,8 @@ end
 #      attr_reader :parent
 #      ...
 #      private
-#      include NearestExternal
-#      def log; nearest_external(:log); end
+#      include NearestAncestors
+#      def log; nearest_ancestors(:log); end
 #    end
 #
 # 3. tests simply set the external directly.

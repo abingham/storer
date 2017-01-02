@@ -1,6 +1,6 @@
 require_relative 'test_base'
 
-class NearestExternalTest < TestBase
+class NearestAncestorsTest < TestBase
 
   def self.hex_prefix; '9D4'; end
 
@@ -11,7 +11,7 @@ class NearestExternalTest < TestBase
   end
 
   test 'BF1',
-  'finds_nearest_external_when_there_is_one' do
+  'finds_nearest_ancestors_when_there_is_one' do
     assert_equal 'hello world:anna', @ellie.uses_disk # 2 up
     assert_equal 'natalie:42', @ellie.uses_store # 1 up
   end
@@ -42,7 +42,7 @@ end
 # - - - - - - - - - - - - - - - - - - - - - - - -
 
 class Anna
-  def disk; @disk ||= DummyDisk.new('anna'); end
+  def disk;  @disk  ||=  DummyDisk.new('anna'); end
   def store; @store ||= DummyStore.new('anna'); end
 end
 
@@ -59,15 +59,14 @@ end
 class Ellie
   def initialize(natalie); @parent = natalie; end
   attr_reader :parent
-  def uses_disk; disk.read; end
-  def uses_store; store.save; end
-  def uses_log; log.write; end
+  def uses_disk ;  disk.read ; end
+  def uses_store; store.save ; end
+  def uses_log  ;   log.write; end
 
   private
 
-  include NearestExternal
-
-  def disk; nearest_external(:disk); end
-  def store; nearest_external(:store); end
-  def log; nearest_external(:log); end
+  include NearestAncestors
+  def disk ; nearest_ancestors(:disk ); end
+  def store; nearest_ancestors(:store); end
+  def log  ; nearest_ancestors(:log  ); end
 end

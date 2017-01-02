@@ -1,8 +1,7 @@
-require 'sinatra/base'
-require 'json'
-
 require_relative 'externals'
 require_relative 'host_disk_storer'
+require 'sinatra/base'
+require 'json'
 
 class MicroService < Sinatra::Base
 

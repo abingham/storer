@@ -1,4 +1,4 @@
-require_relative 'nearest_external'
+require_relative 'nearest_ancestors'
 
 class Gitter
 
@@ -19,7 +19,7 @@ class Gitter
     stdout
   end
 
-  def shell; nearest_external(:shell); end
-  include NearestExternal
+  include NearestAncestors
+  def shell; nearest_ancestors(:shell); end
 
 end
