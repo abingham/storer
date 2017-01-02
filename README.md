@@ -18,8 +18,7 @@ alt="cyber-dojo yin/yang logo" width="50px" height="50px"/>
 - - - -
 
 ## path
-Returns the storer's root path.
-- returns, eg
+Returns the storer's root path, eg
 ```
   { "path": "/usr/src/cyber-dojo/katas"  }
 ```
@@ -28,14 +27,15 @@ Returns the storer's root path.
 
 ## completed
 If it exists, returns the 10-digit kata_id which uniquely completes
-the given id, otherwise nil.
+the given id, otherwise leaves it unchanged.
 - parameter, eg
 ```
   { "id": "A551C5" } # must be at least 6 characters long.
 ```
-- returns, eg
+- returns, egs
 ```
-  { "completed": "A551C528C3"  }
+  { "completed": "A551C528C3"  } # completed
+  { "completed": "A551C5"      } # not completed
 ```
 
 ## completions
@@ -44,9 +44,10 @@ Returns all the kata_id's starting with the given 2-digit long id.
 ```
   { "id": "A5" }
 ```
-- returns, eg
+- returns, egs
 ```
   { "completions": [ "A551C528C3", "A5DA2CDC58", "A5EAFE6E53" ]  }
+  { "completions": [ ]  }
 ```
 
 - - - -
@@ -56,14 +57,15 @@ Creates a kata from the given json manifest.
 - parameter, eg
 ```
     {
-      "kata_id"   : "A551C528C3",
-      "image_name": "cyberdojofoundation/gcc_assert",
-      "visible_files": { "hiker.h": "#ifndef HIKER_INCLUDED...",
-                         "hiker.c": "int answer()...",
-                         ...
-                       },
+                 "kata_id": "A551C528C3",
+              "image_name": "cyberdojofoundation/gcc_assert",
+           "visible_files": {        "hiker.h": "#ifndef HIKER_INCLUDED...",
+                                     "hiker.c": "#include \"hiker.h\"...",
+                              "hiker.tests.c" : "#include <assert.h>\n...",
+                              "cyber-dojo.sh" : "make --always-make"
+                            },
       "filename_extension": ".c",
-      "tab_size": 4,
+                "tab_size": 4,
       ...
     }
 ```
@@ -79,15 +81,15 @@ Returns the manifest used to create the kata with the given kata_id.
 - returns, eg
 ```
     { "kata_manifest": {
-        "kata_id"   : "a551c528c3",
-        "image_name": "cyberdojofoundation/gcc_assert",
-        "visible_files": {        "hiker.h": "ifndef HIKER_INCLUDED\n...",
-                                  "hiker.c": "#include \"hiker.h\"...",
-                           "hiker.tests.c" : "#include <assert.h>\n...",
-                           "cyber-dojo.sh" : "make --always-make"
-                         },
+                   "kata_id": "a551c528c3",
+                "image_name": "cyberdojofoundation/gcc_assert",
+             "visible_files": {        "hiker.h": "ifndef HIKER_INCLUDED\n...",
+                                       "hiker.c": "#include \"hiker.h\"...",
+                                "hiker.tests.c" : "#include <assert.h>\n...",
+                                "cyber-dojo.sh" : "make --always-make"
+                              },
         "filename_extension": ".c",
-        "tab_size": 4,
+                  "tab_size": 4,
         ...
       }
     }
@@ -97,7 +99,7 @@ Returns the manifest used to create the kata with the given kata_id.
 
 ## start_avatar
 Attempts to starts an avatar in the kata with the given kata_id.
-If successful, returns the name of the started avatar, otherwise nil.
+If successful, returns the name of the started avatar, otherwise "nil".
 - parameters, eg
 ```
   {      "kata_id": "A551C528C3",
@@ -107,7 +109,7 @@ If successful, returns the name of the started avatar, otherwise nil.
 - returns the name of the started avatar if successful, otherwise nil, eg
 ```
   { "start_avatar": "lion" }
-  { "start_avatar": nil    }
+  { "start_avatar": "nil"  }
 ```
 
 - - - -
@@ -133,7 +135,7 @@ output, with the given colour.
 ```
   {     "kata_id": "A551C528C3",
     "avatar_name": "rhino",
-          "files": {        "hiker.h": "ifndef HIKER_INCLUDED...",
+          "files": {        "hiker.h": "ifndef HIKER_INCLUDED\n...",
                             "hiker.c": "#include \"hiker.h\"...",
                      "hiker.tests.c" : "#include <assert.h>\n...",
                      "cyber-dojo.sh" : "make --always-make"
