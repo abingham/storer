@@ -5,8 +5,8 @@ language: node_js
 before_script:
     - curl -O https://raw.githubusercontent.com/cyber-dojo/ruby/master/push_and_trigger.sh
     - chmod +x push_and_trigger.sh
-    - docker --version
-    - docker-engine --version
 
 script:
+    - docker --version
+    - docker-compose --version
     - ./pipe_build_up_test.sh && ./push_and_trigger.sh cyber-dojo/web
