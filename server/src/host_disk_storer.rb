@@ -192,16 +192,16 @@ class HostDiskStorer
 
   def refute_kata_exists(kata_id)
     assert_valid_id(kata_id)
-    fail error('id') if kata_exists?(kata_id)
+    fail error('kata_id') if kata_exists?(kata_id)
   end
 
   def assert_kata_exists(kata_id)
     assert_valid_id(kata_id)
-    fail error('id') unless kata_exists?(kata_id)
+    fail error('kata_id') unless kata_exists?(kata_id)
   end
 
   def assert_valid_id(kata_id)
-    fail error('id') unless valid_id?(kata_id)
+    fail error('kata_id') unless valid_id?(kata_id)
   end
 
   def valid_id?(kata_id)
@@ -210,12 +210,12 @@ class HostDiskStorer
         kata_id.chars.all? { |char| hex?(char) }
   end
 
-  def hex?(char)
-    '0123456789ABCDEF'.include?(char)
-  end
-
   def kata_exists?(kata_id)
     kata_dir(kata_id).exists?
+  end
+
+  def hex?(char)
+    '0123456789ABCDEF'.include?(char)
   end
 
   def kata_dir(kata_id)
