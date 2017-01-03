@@ -203,23 +203,31 @@ class HostDiskStorer
   # - - - - - - - - - - -
 
   def refute_kata_exists(kata_id)
-    fail error('kata_id') if kata_exists?(kata_id)
+    if kata_exists?(kata_id)
+      fail error('kata_id')
+    end
   end
 
   def assert_kata_exists(kata_id)
-    fail error('kata_id') unless kata_exists?(kata_id)
+    unless kata_exists?(kata_id)
+      fail error('kata_id')
+    end
   end
 
   def assert_valid_id(kata_id)
-    fail error('kata_id') unless valid_id?(kata_id)
+    unless valid_id?(kata_id)
+      fail error('kata_id')
+    end
   end
 
   def assert_partial_id(kata_id)
-    fail error('kata_id') unless partial_id?(kata_id)
+    unless partial_id?(kata_id)
+      fail error('kata_id')
+    end
   end
 
   def valid_id?(kata_id)
-    partial_id?(kata_id)&& kata_id.length == 10
+    partial_id?(kata_id) && kata_id.length == 10
   end
 
   def partial_id?(kata_id)
@@ -256,7 +264,9 @@ class HostDiskStorer
   end
 
   def assert_valid_name(avatar_name)
-    fail error('avatar_name') unless valid_avatar?(avatar_name)
+    unless valid_avatar?(avatar_name)
+      fail error('avatar_name')
+    end
   end
 
   def valid_avatar?(avatar_name)
@@ -276,11 +286,15 @@ class HostDiskStorer
   def assert_tag_exists(kata_id, avatar_name, tag)
     assert_avatar_exists(kata_id, avatar_name)
     assert_valid_tag(tag)
-    fail error('tag') unless tag_exists?(kata_id, avatar_name, tag)
+    unless tag_exists?(kata_id, avatar_name, tag)
+      fail error('tag')
+    end
   end
 
   def assert_valid_tag(tag)
-    fail error('tag') unless valid_tag?(tag)
+    unless valid_tag?(tag)
+      fail error('tag')
+    end
   end
 
   def valid_tag?(tag)
