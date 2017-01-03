@@ -15,6 +15,7 @@ class HostDiskStorer
   # kata-id completion(s)
 
   def completed(kata_id)
+    assert_partial_id(kata_id)
     # If at least 6 characters of the kata_id are provided
     # attempt to complete it into the full characters. Doing
     # completion with fewer characters would likely result in
@@ -23,7 +24,7 @@ class HostDiskStorer
     # characters) it would provide a way for anyone to find
     # the full id of a cyber-dojo and potentially interfere
     # with a live session.
-    if !kata_id.nil? && kata_id.length >= 6
+    if kata_id.length >= 6
       outer_dir = disk[dir_join(path, outer(kata_id))]
       if outer_dir.exists?
         dirs = outer_dir.each_dir.select { |inner_dir|
@@ -32,7 +33,7 @@ class HostDiskStorer
         kata_id = outer(kata_id) + dirs[0] if dirs.length == 1
       end
     end
-    kata_id || ''
+    kata_id
   end
 
   def completions(kata_id) # 2-chars long
@@ -204,10 +205,19 @@ class HostDiskStorer
     fail error('kata_id') unless valid_id?(kata_id)
   end
 
+  def assert_partial_id(kata_id)
+    fail error('kata_id') unless partial_id?(kata_id)
+  end
+
   def valid_id?(kata_id)
     kata_id.class.name == 'String' &&
       kata_id.length == 10 &&
         kata_id.chars.all? { |char| hex?(char) }
+  end
+
+  def partial_id?(kata_id)
+    kata_id.class.name == 'String' &&
+      kata_id.chars.all? { |char| hex?(char) }
   end
 
   def kata_exists?(kata_id)

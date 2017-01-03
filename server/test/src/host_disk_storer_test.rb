@@ -28,6 +28,20 @@ class HostDiskStorerTest < TestBase
   # invalid_id on any method raises
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+  test 'C1C',
+  'completed with invalid kata_id raises' do
+    invalid_partial_ids = [
+      nil,          # not an object
+      [],           # not a string
+      'X4',         # not hex chars
+    ].each do |invalid_partial_id|
+      error = assert_raises(ArgumentError) {
+        storer.completed(invalid_partial_id)
+      }
+      assert error.message.start_with?('Storer'), error.message
+    end
+  end
+
   test '933',
   'create_kata with invalid or missing manifest[id] raises' do
     manifest = create_manifest
@@ -41,7 +55,7 @@ class HostDiskStorerTest < TestBase
   end
 
   test 'ABC',
-  'create_kata with duplicate id raises' do
+  'create_kata with duplicate kata_id raises' do
     manifest = create_manifest
     storer.create_kata(manifest)
     error = assert_raises(ArgumentError) { storer.create_kata(manifest) }
@@ -49,42 +63,42 @@ class HostDiskStorerTest < TestBase
   end
 
   test 'AC2',
-  'kata_manifest(id) with invalid id raises' do
+  'kata_manifest(kata_id) with invalid kata_id raises' do
     assert_invalid_kata_id_raises { |invalid_id|
       storer.kata_manifest(invalid_id)
     }
   end
 
   test '965',
-  'started_avatars(id) with invalid id raises' do
+  'started_avatars(kata_id) with invalid kata_id raises' do
     assert_invalid_kata_id_raises { |invalid_id|
       storer.started_avatars(invalid_id)
     }
   end
 
   test '5DF',
-  'start_avatar(id) with bad id raises' do
+  'start_avatar(kata_id) with invalid kata_id raises' do
     assert_bad_kata_id_raises { |invalid_id|
       storer.start_avatar(invalid_id, [lion])
     }
   end
 
   test 'D9F',
-  'avatar_increments(id) with bad id raises' do
+  'avatar_increments(kata_id) with invalud kata_id raises' do
     assert_bad_kata_id_raises { |invalid_id|
       storer.avatar_increments(invalid_id, lion)
     }
   end
 
   test '160',
-  'avatar_visible_files(id) with bad id raises' do
+  'avatar_visible_files(kata_id) with invalid kata_id raises' do
     assert_bad_kata_id_raises { |invalid_id|
       storer.avatar_visible_files(invalid_id, lion)
     }
   end
 
   test 'D46',
-  'avatar_ran_tests(id) with bad id raises' do
+  'avatar_ran_tests(kata_id) with invalid kata_id raises' do
     assert_bad_kata_id_raises { |invalid_id|
       args = []
       args << invalid_id
@@ -98,7 +112,7 @@ class HostDiskStorerTest < TestBase
   end
 
   test '917',
-  'tag_visible_files(id) with bad id raises' do
+  'tag_visible_files(kata_id) with invalid kata_id raises' do
     assert_bad_kata_id_raises { |invalid_id|
       storer.tag_visible_files(invalid_id, lion, tag=3)
     }
@@ -168,16 +182,6 @@ class HostDiskStorerTest < TestBase
   # completed
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  test 'B65',
-  'completed(id=nil) is empty string' do
-    assert_equal '', storer.completed(nil)
-  end
-
-  test 'D39',
-  'completed(id="") is empty string' do
-    assert_equal '', storer.completed('')
-  end
-
   test '42E',
   'completed(id) does not complete when id is less than 6 chars in length',
   'because trying to complete from a short id will waste time going through',
@@ -205,7 +209,7 @@ class HostDiskStorerTest < TestBase
   'completed(id) completes when 6+ chars and 1 match' do
     completed_id = kata_id
     create_kata(completed_id)
-    uncompleted_id = completed_id.downcase[0..5]
+    uncompleted_id = completed_id[0..5]
     assert_equal completed_id, storer.completed(uncompleted_id)
   end
 
