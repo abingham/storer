@@ -239,11 +239,11 @@ class HostDiskStorer
   def assert_avatar_exists(kata_id, avatar_name)
     assert_kata_exists(kata_id)
     assert_valid_name(avatar_name)
-    fail error('name') unless avatar_exists?(kata_id, avatar_name)
+    fail error('avatar_name') unless avatar_exists?(kata_id, avatar_name)
   end
 
   def assert_valid_name(avatar_name)
-    fail error('name') unless valid_avatar?(avatar_name)
+    fail error('avatar_name') unless valid_avatar?(avatar_name)
   end
 
   def valid_avatar?(avatar_name)
