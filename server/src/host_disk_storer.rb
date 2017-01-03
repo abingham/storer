@@ -12,7 +12,7 @@ class HostDiskStorer
   attr_reader :parent, :path
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  # katas
+  # kata-id completion(s)
 
   def completed(kata_id)
     # If at least 6 characters of the kata_id are provided
