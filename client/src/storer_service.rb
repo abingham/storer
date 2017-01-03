@@ -33,6 +33,10 @@ module StorerService # mix-in
 
   # - - - - - - - - - - - -
 
+  def avatar_exists?(kata_id, avatar_name)
+    get(__method__, kata_id, avatar_name)
+  end
+
   def start_avatar(kata_id, avatar_names)
     post(__method__, kata_id, avatar_names)
   end

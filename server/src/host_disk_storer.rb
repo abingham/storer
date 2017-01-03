@@ -68,6 +68,10 @@ class HostDiskStorer
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # avatar start
 
+  def avatar_exists?(kata_id, avatar_name)
+    avatar_dir(kata_id, avatar_name).exists?
+  end
+
   def start_avatar(kata_id, avatar_names)
     assert_kata_exists(kata_id)
     # NB: Doing & with swapped args loses randomness
@@ -256,10 +260,6 @@ class HostDiskStorer
 
   def valid_avatar?(avatar_name)
     all_avatars_names.include?(avatar_name)
-  end
-
-  def avatar_exists?(kata_id, avatar_name)
-    avatar_dir(kata_id, avatar_name).exists?
   end
 
   def avatar_dir(kata_id, avatar_name)
