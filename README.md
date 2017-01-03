@@ -92,7 +92,7 @@ If it exists, returns the 10-digit kata_id which uniquely completes
 the given kata_id, otherwise leaves it unchanged.
 - parameter, eg
 ```
-  { "id": "A551C5" } # must be at least 6 characters long.
+  { "kata_id": "A551C5" } # must be at least 6 characters long.
 ```
 - returns, egs
 ```
