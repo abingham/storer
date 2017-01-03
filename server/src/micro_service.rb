@@ -22,11 +22,11 @@ class MicroService < Sinatra::Base
   # - - - - - - - - - - - - - - -
 
   get '/completed' do
-    getter(__method__, id)
+    getter(__method__, kata_id)
   end
 
   get '/completions' do
-    getter(__method__, id)
+    getter(__method__, kata_id)
   end
 
   # - - - - - - - - - - - - - - -
@@ -94,8 +94,8 @@ class MicroService < Sinatra::Base
     }
   end
 
-  request_args :manifest, :id
-  request_args :kata_id, :avatar_names, :avatar_name
+  request_args :manifest
+  request_args :kata_id, :avatar_name, :avatar_names
   request_args :files, :now, :output, :colour, :tag
   request_args :was_tag, :now_tag
 

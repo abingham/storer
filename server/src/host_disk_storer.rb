@@ -14,30 +14,31 @@ class HostDiskStorer
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # katas
 
-  def completed(id)
-    # If at least 6 characters of the id are provided attempt to
-    # complete it into the full 10 character id. Doing completion
-    # with fewer characters would likely result in a lot of disk
-    # activity and no unique outcome. Also, if completion was
-    # attempted for a very short id (say 3 characters) it would
-    # provide a way for anyone to find the full id of a cyber-dojo
-    # and potentially interfere with a live session.
-    if !id.nil? && id.length >= 6
-      outer_dir = disk[dir_join(path, outer(id))]
+  def completed(kata_id)
+    # If at least 6 characters of the kata_id are provided
+    # attempt to complete it into the full characters. Doing
+    # completion with fewer characters would likely result in
+    # a lot of disk activity and no unique outcome. Also, if
+    # completion was attempted for a very short id (say 3
+    # characters) it would provide a way for anyone to find
+    # the full id of a cyber-dojo and potentially interfere
+    # with a live session.
+    if !kata_id.nil? && kata_id.length >= 6
+      outer_dir = disk[dir_join(path, outer(kata_id))]
       if outer_dir.exists?
         dirs = outer_dir.each_dir.select { |inner_dir|
-          inner_dir.start_with?(inner(id))
+          inner_dir.start_with?(inner(kata_id))
         }
-        id = outer(id) + dirs[0] if dirs.length == 1
+        kata_id = outer(kata_id) + dirs[0] if dirs.length == 1
       end
     end
-    id || ''
+    kata_id || ''
   end
 
-  def completions(outer_dir)
+  def completions(kata_id) # 2-chars long
     # for Batch-Method iteration over large number of katas...
-    return [] unless disk[dir_join(path, outer_dir)].exists?
-    disk[dir_join(path, outer_dir)].each_dir.collect { |dir| dir }
+    return [] unless disk[dir_join(path, kata_id)].exists?
+    disk[dir_join(path, kata_id)].each_dir.collect { |dir| dir }
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

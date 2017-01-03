@@ -19,12 +19,12 @@ module StorerService # mix-in
 
   # - - - - - - - - - - - -
 
-  def completed(id)
-    get(__method__, id)
+  def completed(kata_id)
+    get(__method__, kata_id)
   end
 
-  def completions(id)
-    get(__method__, id)
+  def completions(kata_id)
+    get(__method__, kata_id)
   end
 
   # - - - - - - - - - - - -
