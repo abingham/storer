@@ -143,17 +143,31 @@ class HostDiskStorerTest < TestBase
 
   test '679',
   'avatar_visible_files() with invalid avatar_name raises' do
-    assert_bad_avatar_raises { |valid_id, bad_name|
-      storer.avatar_visible_files(valid_id, bad_name)
+    assert_bad_avatar_raises { |kata_id, invalid_avatar_name|
+      storer.avatar_visible_files(kata_id, invalid_avatar_name)
     }
   end
 
   test '941',
   'avatar_ran_tests() with invalid avatar_name raises' do
-    assert_bad_avatar_raises { |valid_id, bad_name|
+    assert_bad_avatar_raises { |kata_id, invalid_avatar_name|
       args = []
-      args << valid_id
-      args << bad_name
+      args << kata_id
+      args << invalid_avatar_name
+      args << starting_files
+      args << time_now
+      args << output
+      args << red
+      storer.avatar_ran_tests(*args)
+    }
+  end
+
+  test '394',
+  'avatar_ran_test() with non-existent avatar_name raises' do
+    assert_bad_avatar_raises { |kata_id, invalid_avatar_name|
+      args = []
+      args << kata_id
+      args << 'lion'
       args << starting_files
       args << time_now
       args << output
