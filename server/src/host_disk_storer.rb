@@ -45,17 +45,17 @@ class HostDiskStorer
   # kata
 
   def create_kata(manifest)
-    id = manifest['id']
-    refute_kata_exists(id)
+    kata_id = manifest['id']
+    refute_kata_exists(kata_id)
     json = JSON.unparse(manifest)
-    dir = kata_dir(id)
+    dir = kata_dir(kata_id)
     dir.make
     dir.write(manifest_filename, json)
   end
 
-  def kata_manifest(id)
-    assert_kata_exists(id)
-    dir = kata_dir(id)
+  def kata_manifest(kata_id)
+    assert_kata_exists(kata_id)
+    dir = kata_dir(kata_id)
     json = dir.read(manifest_filename)
     JSON.parse(json)
   end
@@ -63,98 +63,100 @@ class HostDiskStorer
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # avatar start
 
-  def start_avatar(id, avatar_names)
-    assert_kata_exists(id)
-    # NB: Doing the & with operands swapped loses randomness
+  def start_avatar(kata_id, avatar_names)
+    assert_kata_exists(kata_id)
+    # NB: Doing & with swapped args loses randomness
     valid_names = avatar_names & all_avatars_names
-    name = valid_names.detect { |name| avatar_dir(id, name).make }
-    return nil if name.nil? # full!
-    write_avatar_increments(id, name, [])
-    name
+    avatar_name = valid_names.detect { |name|
+      avatar_dir(kata_id, name).make
+    }
+    return nil if avatar_name.nil? # full!
+    write_avatar_increments(kata_id, avatar_name, [])
+    avatar_name
   end
 
-  def started_avatars(id)
-    assert_kata_exists(id)
-    started = kata_dir(id).each_dir.collect { |name| name }
+  def started_avatars(kata_id)
+    assert_kata_exists(kata_id)
+    started = kata_dir(kata_id).each_dir.collect { |name| name }
     started & all_avatars_names
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # avatar action!
 
-  def avatar_ran_tests(id, name, files, now, output, colour)
-    assert_avatar_exists(id, name)
-    increments = read_avatar_increments(id, name)
+  def avatar_ran_tests(kata_id, avatar_name, files, now, output, colour)
+    assert_avatar_exists(kata_id, avatar_name)
+    increments = read_avatar_increments(kata_id, avatar_name)
     tag = increments.length + 1
     increments << { 'colour' => colour, 'time' => now, 'number' => tag }
-    write_avatar_increments(id, name, increments)
+    write_avatar_increments(kata_id, avatar_name, increments)
 
     files = files.clone # don't alter caller's files argument
     files['output'] = output
-    write_tag_files(id, name, tag, files)
+    write_tag_files(kata_id, avatar_name, tag, files)
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # avatar info
 
-  def avatar_increments(id, name)
-    assert_avatar_exists(id, name)
+  def avatar_increments(kata_id, avatar_name)
+    assert_avatar_exists(kata_id, avatar_name)
     # Return increments with tag0 to avoid client
     # having to make extra service call
     tag0 =
       {
-        'event'  => 'created',
-        'time'   => kata_manifest(id)['created'],
+         'event' => 'created',
+          'time' => kata_manifest(kata_id)['created'],
         'number' => 0
       }
-    [tag0] + read_avatar_increments(id, name)
+    [tag0] + read_avatar_increments(kata_id, avatar_name)
   end
 
-  def avatar_visible_files(id, name)
-    assert_avatar_exists(id, name)
-    rags = read_avatar_increments(id, name)
+  def avatar_visible_files(kata_id, avatar_name)
+    assert_avatar_exists(kata_id, avatar_name)
+    rags = read_avatar_increments(kata_id, avatar_name)
     tag = rags == [] ? 0 : rags[-1]['number']
-    tag_visible_files(id, name, tag)
+    tag_visible_files(kata_id, avatar_name, tag)
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # tag
 
-  def tag_visible_files(id, name, tag)
-    assert_tag_exists(id, name, tag)
-    return kata_manifest(id)['visible_files'] if tag == 0
-    dir = tag_dir(id, name, tag)
+  def tag_visible_files(kata_id, avatar_name, tag)
+    assert_tag_exists(kata_id, avatar_name, tag)
+    return kata_manifest(kata_id)['visible_files'] if tag == 0
+    dir = tag_dir(kata_id, avatar_name, tag)
     if dir.exists? # new non-git-format
-      read_tag_files(id, name, tag)
+      read_tag_files(kata_id, avatar_name, tag)
     else # old git-format
-      path = avatar_path(id, name)
+      path = avatar_path(kata_id, avatar_name)
       src = git.show(path, "#{tag}:#{manifest_filename}")
       JSON.parse(src)
     end
   end
 
-  def tags_visible_files(id, name, was_tag, now_tag)
+  def tags_visible_files(kata_id, avatar_name, was_tag, now_tag)
     {
-      'was_tag' => tag_visible_files(id, name, was_tag),
-      'now_tag' => tag_visible_files(id, name, now_tag)
+      'was_tag' => tag_visible_files(kata_id, avatar_name, was_tag),
+      'now_tag' => tag_visible_files(kata_id, avatar_name, now_tag)
     }
   end
 
   private
 
-  def write_avatar_increments(id, name, increments)
+  def write_avatar_increments(kata_id, avatar_name, increments)
     json = JSON.unparse(increments)
-    dir = avatar_dir(id, name)
+    dir = avatar_dir(kata_id, avatar_name)
     dir.write(increments_filename, json)
   end
 
-  def read_avatar_increments(id, name)
+  def read_avatar_increments(kata_id, avatar_name)
     # Each avatar's increments stores a cache of colours
     # and time-stamps for all the avatar's [test]s.
     # Helps optimize dashboard traffic-lights views.
     # Not saving tag0 in increments.json
     # to maintain compatibility with old git-format
-    dir = avatar_dir(id, name)
+    dir = avatar_dir(kata_id, avatar_name)
     json = dir.read(increments_filename)
     JSON.parse(json)
   end
@@ -165,15 +167,15 @@ class HostDiskStorer
 
   # - - - - - - - - - - -
 
-  def write_tag_files(id, name, tag, files)
+  def write_tag_files(kata_id, avatar_name, tag, files)
     json = JSON.unparse(files)
-    dir = tag_dir(id, name, tag)
+    dir = tag_dir(kata_id, avatar_name, tag)
     dir.make
     dir.write(manifest_filename, json)
   end
 
-  def read_tag_files(id, name, tag)
-    dir = tag_dir(id, name, tag)
+  def read_tag_files(kata_id, avatar_name, tag)
+    dir = tag_dir(kata_id, avatar_name, tag)
     json = dir.read(manifest_filename)
     JSON.parse(json)
   end
@@ -188,84 +190,84 @@ class HostDiskStorer
 
   # - - - - - - - - - - -
 
-  def refute_kata_exists(id)
-    assert_valid_id(id)
-    fail error('id') if kata_exists?(id)
+  def refute_kata_exists(kata_id)
+    assert_valid_id(kata_id)
+    fail error('id') if kata_exists?(kata_id)
   end
 
-  def assert_kata_exists(id)
-    assert_valid_id(id)
-    fail error('id') unless kata_exists?(id)
+  def assert_kata_exists(kata_id)
+    assert_valid_id(kata_id)
+    fail error('id') unless kata_exists?(kata_id)
   end
 
-  def assert_valid_id(id)
-    fail error('id') unless valid_id?(id)
+  def assert_valid_id(kata_id)
+    fail error('id') unless valid_id?(kata_id)
   end
 
-  def valid_id?(id)
-    id.class.name == 'String' &&
-      id.length == 10 &&
-        id.chars.all? { |char| hex?(char) }
+  def valid_id?(kata_id)
+    kata_id.class.name == 'String' &&
+      kata_id.length == 10 &&
+        kata_id.chars.all? { |char| hex?(char) }
   end
 
   def hex?(char)
     '0123456789ABCDEF'.include?(char)
   end
 
-  def kata_exists?(id)
-    kata_dir(id).exists?
+  def kata_exists?(kata_id)
+    kata_dir(kata_id).exists?
   end
 
-  def kata_dir(id)
-    disk[kata_path(id)]
+  def kata_dir(kata_id)
+    disk[kata_path(kata_id)]
   end
 
-  def kata_path(id)
-    dir_join(path, outer(id), inner(id))
+  def kata_path(kata_id)
+    dir_join(path, outer(kata_id), inner(kata_id))
   end
 
-  def outer(id)
-    id.upcase[0..1]  # eg 'E5' 2-chars long
+  def outer(kata_id)
+    kata_id.upcase[0..1]  # eg 'E5' 2-chars long
   end
 
-  def inner(id)
-    id.upcase[2..-1] # eg '6A3327FE' 8-chars long
-  end
-
-  # - - - - - - - - - - - - - - - - - - - - - - - -
-
-  def assert_avatar_exists(id, name)
-    assert_kata_exists(id)
-    assert_valid_name(name)
-    fail error('name') unless avatar_exists?(id, name)
-  end
-
-  def assert_valid_name(name)
-    fail error('name') unless valid_avatar?(name)
-  end
-
-  def valid_avatar?(name)
-    all_avatars_names.include?(name)
-  end
-
-  def avatar_exists?(id, name)
-    avatar_dir(id, name).exists?
-  end
-
-  def avatar_dir(id, name)
-    disk[avatar_path(id, name)]
-  end
-
-  def avatar_path(id, name)
-    dir_join(kata_path(id), name)
+  def inner(kata_id)
+    kata_id.upcase[2..-1] # eg '6A3327FE' 8-chars long
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - -
 
-  def assert_tag_exists(id, name, tag)
-    assert_avatar_exists(id, name)
+  def assert_avatar_exists(kata_id, avatar_name)
+    assert_kata_exists(kata_id)
+    assert_valid_name(avatar_name)
+    fail error('name') unless avatar_exists?(kata_id, avatar_name)
+  end
+
+  def assert_valid_name(avatar_name)
+    fail error('name') unless valid_avatar?(avatar_name)
+  end
+
+  def valid_avatar?(avatar_name)
+    all_avatars_names.include?(avatar_name)
+  end
+
+  def avatar_exists?(kata_id, avatar_name)
+    avatar_dir(kata_id, avatar_name).exists?
+  end
+
+  def avatar_dir(kata_id, avatar_name)
+    disk[avatar_path(kata_id, avatar_name)]
+  end
+
+  def avatar_path(kata_id, avatar_name)
+    dir_join(kata_path(kata_id), avatar_name)
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - -
+
+  def assert_tag_exists(kata_id, avatar_name, tag)
+    assert_avatar_exists(kata_id, avatar_name)
     assert_valid_tag(tag)
-    fail error('tag') unless tag_exists?(id, name, tag)
+    fail error('tag') unless tag_exists?(kata_id, avatar_name, tag)
   end
 
   def assert_valid_tag(tag)
@@ -276,18 +278,18 @@ class HostDiskStorer
     tag.class.name == 'Fixnum'
   end
 
-  def tag_exists?(id, name, tag)
+  def tag_exists?(kata_id, avatar_name, tag)
     # Has to work with old git-format
     # and new non-git format
-    tag <= read_avatar_increments(id, name).size
+    tag <= read_avatar_increments(kata_id, avatar_name).size
   end
 
-  def tag_dir(id, name, tag)
-    disk[tag_path(id, name, tag)]
+  def tag_dir(kata_id, avatar_name, tag)
+    disk[tag_path(kata_id, avatar_name, tag)]
   end
 
-  def tag_path(id, name, tag)
-    dir_join(avatar_path(id, name), tag.to_s)
+  def tag_path(kata_id, avatar_name, tag)
+    dir_join(avatar_path(kata_id, avatar_name), tag.to_s)
   end
 
   # - - - - - - - - - - -
