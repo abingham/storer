@@ -25,23 +25,42 @@ class HostDiskStorerTest < TestBase
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
-  # invalid_id on any method raises
+  # invalid kata_id on any method raises
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+  test '6B7',
+  'kata_exists? with invalid kata_id raises' do
+    assert_invalid_kata_id_raises { |invalid_id|
+      storer.kata_exists?(invalid_id)
+    }
+  end
+
+  test '78F',
+  'avatar_exists? with invalid kata_id raises' do
+    assert_invalid_kata_id_raises { |invalid_id|
+      storer.avatar_exists?(invalid_id, 'lion')
+    }
+  end
+
   test '933',
-  'create_kata with invalid or missing manifest[id] raises' do
+  'create_kata() with invalid manifest[id] raises' do
     manifest = create_manifest
-    manifest.delete('id')
-    error = assert_raises(ArgumentError) { storer.create_kata(manifest) }
-    assert error.message.start_with?('Storer'), error.message
     assert_invalid_kata_id_raises do |invalid_id|
       manifest['id'] = invalid_id
       storer.create_kata(manifest)
     end
   end
 
+  test '934',
+  'create_kata() with missing manifest[id] raises' do
+    manifest = create_manifest
+    manifest.delete('id')
+    error = assert_raises(ArgumentError) { storer.create_kata(manifest) }
+    assert error.message.start_with?('Storer'), error.message
+  end
+
   test 'ABC',
-  'create_kata with duplicate kata_id raises' do
+  'create_kata() with duplicate kata_id raises' do
     manifest = create_manifest
     storer.create_kata(manifest)
     error = assert_raises(ArgumentError) { storer.create_kata(manifest) }
@@ -49,42 +68,42 @@ class HostDiskStorerTest < TestBase
   end
 
   test 'AC2',
-  'kata_manifest(kata_id) with invalid kata_id raises' do
+  'kata_manifest() with invalid kata_id raises' do
     assert_invalid_kata_id_raises { |invalid_id|
       storer.kata_manifest(invalid_id)
     }
   end
 
   test '965',
-  'started_avatars(kata_id) with invalid kata_id raises' do
+  'started_avatars() with invalid kata_id raises' do
     assert_invalid_kata_id_raises { |invalid_id|
       storer.started_avatars(invalid_id)
     }
   end
 
   test '5DF',
-  'start_avatar(kata_id) with invalid kata_id raises' do
+  'start_avatar() with invalid kata_id raises' do
     assert_bad_kata_id_raises { |invalid_id|
       storer.start_avatar(invalid_id, [lion])
     }
   end
 
   test 'D9F',
-  'avatar_increments(kata_id) with invalud kata_id raises' do
+  'avatar_increments() with invalud kata_id raises' do
     assert_bad_kata_id_raises { |invalid_id|
       storer.avatar_increments(invalid_id, lion)
     }
   end
 
   test '160',
-  'avatar_visible_files(kata_id) with invalid kata_id raises' do
+  'avatar_visible_files() with invalid kata_id raises' do
     assert_bad_kata_id_raises { |invalid_id|
       storer.avatar_visible_files(invalid_id, lion)
     }
   end
 
   test 'D46',
-  'avatar_ran_tests(kata_id) with invalid kata_id raises' do
+  'avatar_ran_tests() with invalid kata_id raises' do
     assert_bad_kata_id_raises { |invalid_id|
       args = []
       args << invalid_id
@@ -98,32 +117,39 @@ class HostDiskStorerTest < TestBase
   end
 
   test '917',
-  'tag_visible_files(kata_id) with invalid kata_id raises' do
+  'tag_visible_files() with invalid kata_id raises' do
     assert_bad_kata_id_raises { |invalid_id|
       storer.tag_visible_files(invalid_id, lion, tag=3)
     }
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  # bad avatar-name on any method raises
+  # invalid avatar-name on any method raises
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+  test 'FF7',
+  'avatar_exists?() with invalid avatar_name raises' do
+    assert_bad_avatar_raises { |kata_id, invalid_avatar_name|
+      storer.avatar_exists?(kata_id, invalid_avatar_name)
+    }
+  end
+
   test 'B5F',
-  'avatar_increments(id, name) with bad name raises' do
-    assert_bad_avatar_raises { |valid_id, bad_name|
-      storer.avatar_increments(valid_id, bad_name)
+  'avatar_increments() with invalid avatar_name raises' do
+    assert_bad_avatar_raises { |kata_id, invalid_avatar_name|
+      storer.avatar_increments(kata_id, invalid_avatar_name)
     }
   end
 
   test '679',
-  'avatar_visible_files(id, name) with bad name raises' do
+  'avatar_visible_files() with invalid avatar_name raises' do
     assert_bad_avatar_raises { |valid_id, bad_name|
       storer.avatar_visible_files(valid_id, bad_name)
     }
   end
 
   test '941',
-  'avatar_ran_tests(id, name) with bad name raises' do
+  'avatar_ran_tests() with invalid avatar_name raises' do
     assert_bad_avatar_raises { |valid_id, bad_name|
       args = []
       args << valid_id
@@ -137,18 +163,18 @@ class HostDiskStorerTest < TestBase
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  # bad tag on any method raises
+  # invalid tag on any method raises
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '388',
-  'tag_visible_files() with bad tag raises' do
+  'tag_visible_files() with invalid tag raises' do
     assert_bad_tag_raises { |valid_id, valid_name, bad_tag|
       storer.tag_visible_files(valid_id, valid_name, bad_tag)
     }
   end
 
   test '9E7',
-  'tags_visible_files() with bad tag raises' do
+  'tags_visible_files() with invalid tag raises' do
     assert_bad_tag_pair_raises { |valid_id, valid_name, was_tag, now_tag|
       storer.tags_visible_files(valid_id, valid_name, was_tag, now_tag)
     }
