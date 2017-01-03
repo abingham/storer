@@ -210,9 +210,7 @@ class HostDiskStorer
   end
 
   def valid_id?(kata_id)
-    kata_id.class.name == 'String' &&
-      kata_id.length == 10 &&
-        kata_id.chars.all? { |char| hex?(char) }
+    partial_id?(kata_id)&& kata_id.length == 10
   end
 
   def partial_id?(kata_id)
