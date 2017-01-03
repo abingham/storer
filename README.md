@@ -119,7 +119,7 @@ Returns all the kata_id's starting with the given 2-digit long kata_id.
 
 ## avatar_exists?
 Asks whether the avatar with the given avatar_name
-has entered the kata with the given kata_id.
+has started in the kata with the given kata_id.
 - parameters, eg
 ```
   {     "kata_id": "15B9AD6C42",
