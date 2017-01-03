@@ -45,6 +45,10 @@ class HostDiskStorer
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # kata
 
+  def kata_exists?(kata_id)
+    kata_dir(kata_id).exists?
+  end
+
   def create_kata(manifest)
     kata_id = manifest['id']
     refute_kata_exists(kata_id)
@@ -216,10 +220,6 @@ class HostDiskStorer
   def partial_id?(kata_id)
     kata_id.class.name == 'String' &&
       kata_id.chars.all? { |char| hex?(char) }
-  end
-
-  def kata_exists?(kata_id)
-    kata_dir(kata_id).exists?
   end
 
   def hex?(char)

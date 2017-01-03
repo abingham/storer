@@ -9,6 +9,10 @@ module StorerService # mix-in
 
   # - - - - - - - - - - - -
 
+  def kata_exists?(kata_id)
+    get(__method__, kata_id)
+  end
+
   def create_kata(manifest)
     post(__method__, manifest)
   end

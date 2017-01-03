@@ -28,7 +28,9 @@ class StorerServiceTest < TestBase
   'and no avatars have yet started' do
     manifest = make_manifest
 
+    refute kata_exists? kata_id
     create_kata(manifest)
+    assert kata_exists? kata_id
     assert_equal manifest, kata_manifest(kata_id)
 
     no_match = kata_id.reverse[0..5]
