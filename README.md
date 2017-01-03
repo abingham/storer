@@ -89,7 +89,7 @@ Returns the manifest used to create the kata with the given kata_id.
 
 ## completed
 If it exists, returns the 10-digit kata_id which uniquely completes
-the given id, otherwise leaves it unchanged.
+the given kata_id, otherwise leaves it unchanged.
 - parameter, eg
 ```
   { "id": "A551C5" } # must be at least 6 characters long.
@@ -103,10 +103,10 @@ the given id, otherwise leaves it unchanged.
 - - - -
 
 ## completions
-Returns all the kata_id's starting with the given 2-digit long id.
+Returns all the kata_id's starting with the given 2-digit long kata_id.
 - parameter, eg
 ```
-  { "id": "A5" }
+  { "kata_id": "A5" }
 ```
 - returns, egs
 ```
