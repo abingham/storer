@@ -127,7 +127,7 @@ class HostDiskStorerTest < TestBase
   # invalid avatar-name on any method raises
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  test 'FF7',
+  test '8BA',
   'avatar_exists?() with invalid avatar_name raises' do
     assert_bad_avatar_raises { |kata_id, invalid_avatar_name|
       storer.avatar_exists?(kata_id, invalid_avatar_name)
