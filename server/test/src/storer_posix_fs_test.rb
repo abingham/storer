@@ -6,7 +6,7 @@ require_relative '../../src/all_avatars_names'
 # Otherwise two laptops in the same practice session
 # could start as the same animal.
 
-class HostDiskStorerPosixFsTest < TestBase
+class StorerPosixFsTest < TestBase
 
   def self.hex_prefix; '701B5'; end
 
