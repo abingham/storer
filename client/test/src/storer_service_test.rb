@@ -1,7 +1,7 @@
+require_relative 'test_base'
 require 'json'
-require_relative 'client_test_base'
 
-class StorerServiceTest < ClientTestBase
+class StorerServiceTest < TestBase
 
   def self.hex_prefix; '6AA1B'; end
 

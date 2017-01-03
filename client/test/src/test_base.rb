@@ -1,7 +1,7 @@
 require_relative '../hex_mini_test'
 require_relative '../../src/storer_service'
 
-class ClientTestBase < HexMiniTest
+class TestBase < HexMiniTest
 
   include StorerService
 
