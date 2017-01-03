@@ -24,30 +24,20 @@ Returns the storer's root path, eg
 ```
 
 - - - -
+- - - -
 
-## completed
-If it exists, returns the 10-digit kata_id which uniquely completes
-the given id, otherwise leaves it unchanged.
-- parameter, eg
+## kata_exists?
+Asks whether the kata with the given kata_id exists.
+- parameters, eg
 ```
-  { "id": "A551C5" } # must be at least 6 characters long.
+  { "image_name": "cyberdojofoundation/gcc_assert",
+       "kata_id": "15B9AD6C42"
+  }
 ```
-- returns, egs
+- returns true if it does, false if it doesn't.
 ```
-  { "completed": "A551C528C3"  } # completed
-  { "completed": "A551C5"      } # not completed
-```
-
-## completions
-Returns all the kata_id's starting with the given 2-digit long id.
-- parameter, eg
-```
-  { "id": "A5" }
-```
-- returns, egs
-```
-  { "completions": [ "A551C528C3", "A5DA2CDC58", "A5EAFE6E53" ]  }
-  { "completions": [ ]  }
+  { "kata_exists?": true   }
+  { "kata_exists?": false  }
 ```
 
 - - - -
@@ -97,6 +87,53 @@ Returns the manifest used to create the kata with the given kata_id.
 
 - - - -
 
+## completed
+If it exists, returns the 10-digit kata_id which uniquely completes
+the given id, otherwise leaves it unchanged.
+- parameter, eg
+```
+  { "id": "A551C5" } # must be at least 6 characters long.
+```
+- returns, egs
+```
+  { "completed": "A551C528C3"  } # completed
+  { "completed": "A551C5"      } # not completed
+```
+
+- - - -
+
+## completions
+Returns all the kata_id's starting with the given 2-digit long id.
+- parameter, eg
+```
+  { "id": "A5" }
+```
+- returns, egs
+```
+  { "completions": [ "A551C528C3", "A5DA2CDC58", "A5EAFE6E53" ]  }
+  { "completions": [ ]  }
+```
+
+- - - -
+- - - -
+
+## avatar_exists?
+Asks whether the avatar with the given avatar_name
+has entered the kata with the given kata_id.
+- parameters, eg
+```
+  {     "kata_id": "15B9AD6C42",
+    "avatar_name": "salmon"
+  }
+```
+- returns true if it does, false if it doesn't
+```
+  { "avatar_exists?": true   }
+  { "avatar_exists?": false  }
+```
+
+- - - -
+
 ## start_avatar
 Attempts to starts an avatar in the kata with the given kata_id.
 If successful, returns the name of the started avatar, otherwise "nil".
@@ -126,11 +163,12 @@ Returns the names of all avatars who have started in the kata with the given kat
 ```
 
 - - - -
+- - - -
 
 ## avatar_ran_tests
-Tells the storer that the given avatar, in the kata with the given kata_id,
-submitted the given visible files, at the given time, which produced the given
-output, with the given colour.
+Tells the storer that the avatar with the given avatar_name, in the kata
+with the given kata_id, submitted the given visible files, at the given time,
+which produced the given output, with the given colour.
 - parameters, eg
 ```
   {     "kata_id": "A551C528C3",
@@ -149,8 +187,8 @@ output, with the given colour.
 - - - -
 
 ## avatar_increments
-Returns details of all traffic-lights, for the given avatar,
-in the kata with the given kata_id.
+Returns details of all traffic-lights, for the avatar with the
+given avatar_name, in the kata with the given kata_id.
 - parameters, eg
 ```
   {     "kata_id": "A551C528C3",
@@ -171,8 +209,8 @@ in the kata with the given kata_id.
 - - - -
 
 ## avatar_visible_files
-Returns the most recent set of visible files, for the given avatar,
-in the kata with the given kata_id.
+Returns the most recent set of visible files, for the avatar with the
+given avatar_name_, in the kata with the given kata_id.
 - parameters, eg
 ```
   {     "kata_id": "A551C528C3",
@@ -193,8 +231,9 @@ in the kata with the given kata_id.
 - - - -
 
 ## tag_visible_files
-Returns the set of visible files, for the given avatar,
-in the kata with the given kata_id, with the given tag number.
+Returns the set of visible files, for the avatar with the
+given avatar_name, in the kata with the given kata_id,
+with the given tag number.
 - parameters, eg
 ```
   {     "kata_id": "A551C528C3",
@@ -216,8 +255,9 @@ in the kata with the given kata_id, with the given tag number.
 - - - -
 
 ## tags_visible_files
-Returns the paired set of visible files for the given avatar,
-in the kata with the given kata_id, with the given tag numbers.
+Returns the paired set of visible files for the avatar with the
+given avatar_name, in the kata with the given kata_id, with the
+given tag numbers.
 - parameters, eg
 ```
   {     "kata_id": "A551C528C3",
