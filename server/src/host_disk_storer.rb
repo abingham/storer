@@ -142,7 +142,8 @@ class HostDiskStorer
       read_tag_files(kata_id, avatar_name, tag)
     else # old git-format
       path = avatar_path(kata_id, avatar_name)
-      src = git.show(path, "#{tag}:#{manifest_filename}")
+      git = "git show #{tag}:#{manifest_filename}"
+      src = shell.cd_exec(path, git)[0]
       JSON.parse(src)
     end
   end
@@ -329,8 +330,8 @@ class HostDiskStorer
   include AllAvatarsNames
 
   include NearestAncestors
-  def disk; nearest_ancestors(:disk); end
-  def git ; nearest_ancestors(:git ); end
+  def shell; nearest_ancestors(:shell); end
+  def  disk; nearest_ancestors(:disk ); end
 
 end
 

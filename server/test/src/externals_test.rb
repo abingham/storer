@@ -8,6 +8,13 @@ class ExternalsTest < TestBase
 
   # - - - - - - - - - - - - - - - - -
 
+  test '543',
+  'default storer is HostDiskStorer' do
+    assert_equal 'HostDiskStorer', storer.class.name
+  end
+
+  # - - - - - - - - - - - - - - - - -
+
   test '920',
   'default disk is DiskWriter' do
     assert_equal 'DiskWriter', disk.class.name
@@ -25,13 +32,6 @@ class ExternalsTest < TestBase
   test '1B1',
   'default shell is BashSheller' do
     assert_equal 'BashSheller', shell.class.name
-  end
-
-  # - - - - - - - - - - - - - - - - -
-
-  test 'DAA',
-  'default gitter is Gitter' do
-    assert_equal 'Gitter', git.class.name
   end
 
 end
