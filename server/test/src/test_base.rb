@@ -1,5 +1,4 @@
 require_relative '../hex_mini_test'
-require_relative '../../src/host_disk_storer'
 require_relative '../../src/externals'
 require 'json'
 
@@ -68,7 +67,6 @@ class TestBase < HexMiniTest
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   include Externals
-  def storer; @storer ||= HostDiskStorer.new(self); end
 
   def success; runner.success; end
 

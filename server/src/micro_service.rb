@@ -1,5 +1,4 @@
 require_relative 'externals'
-require_relative 'host_disk_storer'
 require 'sinatra/base'
 require 'json'
 
@@ -85,7 +84,6 @@ class MicroService < Sinatra::Base
 
   def storer_json(prefix, caller, *args)
     name = caller.to_s[prefix.length .. -1]
-    storer = HostDiskStorer.new(self)
     { name => storer.send(name, *args) }.to_json
   rescue Exception => e
     log << "EXCEPTION: #{e.class.name} #{e.to_s}"
