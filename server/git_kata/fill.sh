@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 
+# called from pipe_build_up_test.sh
+
 MY_DIR="$( cd "$( dirname "${0}" )" && pwd )"
 CYBER_DOJO_GIT_KATA_ROOT=/tmp/katas
 CYBER_DOJO_GIT_KATA_DATA_CONTAINER=cyber-dojo-git-kata-DATA-CONTAINER

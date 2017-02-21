@@ -2,6 +2,7 @@
 version: '2'
 
 services:
+
   storer_client:
     user: nobody
     image: cyberdojo/storer_client

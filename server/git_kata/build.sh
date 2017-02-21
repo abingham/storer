@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 
+# called from pipe_build_up_test.sh
+
 MY_DIR="$( cd "$( dirname "${0}" )" && pwd )"
 CONTEXT_DIR=${MY_DIR}
 TAG=cyberdojo/git_kata
