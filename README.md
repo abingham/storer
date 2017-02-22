@@ -94,7 +94,7 @@ the given kata_id, otherwise leaves it unchanged.
 ```
   { "kata_id": "A551C5" } # must be at least 6 characters long.
 ```
-- returns, egs
+- returns, eg
 ```
   { "completed": "A551C528C3"  } # completed
   { "completed": "A551C5"      } # not completed
@@ -108,7 +108,7 @@ Returns all the kata_id's starting with the given 2-digit long kata_id.
 ```
   { "kata_id": "A5" }
 ```
-- returns, egs
+- returns, eg
 ```
   { "completions": [ "A551C528C3", "A5DA2CDC58", "A5EAFE6E53" ]  }
   { "completions": [ ]  }
