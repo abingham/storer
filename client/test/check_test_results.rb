@@ -140,7 +140,7 @@ metrics = done({show_fails:all_tests?},
     [ ' (src)hits_per_line',     src_hits_per_line, '<=',  15 ],
     [ '(test)hits_per_line',    test_hits_per_line, '<=',   5 ],
 
-    [ 'lines(test)/lines(src)', f2(line_ratio),     '>=', 1.4 ]
+    [ 'lines(test)/lines(src)', f2(line_ratio),     '>=', 1.3 ]
 )
 
 # - - - - - - - - - - - - - - - - - - - - - - -

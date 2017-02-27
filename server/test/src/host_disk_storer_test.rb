@@ -55,16 +55,20 @@ class HostDiskStorerTest < TestBase
   'create_kata() with missing manifest[id] raises' do
     manifest = create_manifest
     manifest.delete('id')
-    error = assert_raises(ArgumentError) { storer.create_kata(manifest) }
-    assert error.message.end_with?('invalid kata_id'), error.message
+    error = assert_raises(ArgumentError) {
+      storer.create_kata(manifest)
+    }
+    assert_invalid_kata_id(error)
   end
 
   test 'ABC',
   'create_kata() with duplicate kata_id raises' do
     manifest = create_manifest
     storer.create_kata(manifest)
-    error = assert_raises(ArgumentError) { storer.create_kata(manifest) }
-    assert error.message.end_with?('invalid kata_id'), error.message
+    error = assert_raises(ArgumentError) {
+      storer.create_kata(manifest)
+    }
+    assert_invalid_kata_id(error)
   end
 
   test 'AC2',
@@ -486,7 +490,7 @@ class HostDiskStorerTest < TestBase
   def assert_invalid_kata_id_raises
     invalid_kata_ids.each do |invalid_id|
       error = assert_raises(ArgumentError) { yield invalid_id }
-      assert error.message.end_with?('invalid kata_id'), error.message
+      assert_invalid_kata_id(error)
     end
   end
 
@@ -494,8 +498,12 @@ class HostDiskStorerTest < TestBase
     valid_but_no_kata = 'F6316A5C7C'
     (invalid_kata_ids + [ valid_but_no_kata ]).each do |bad_id|
       error = assert_raises(ArgumentError) { yield bad_id }
-      assert error.message.end_with?('invalid kata_id'), error.message
+      assert_invalid_kata_id(error)
     end
+  end
+
+  def assert_invalid_kata_id(error)
+    assert invalid?(error, 'kata_id'), error.message
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - -
@@ -510,7 +518,7 @@ class HostDiskStorerTest < TestBase
       error = assert_raises(ArgumentError) {
         yield kata_id, bad_name
       }
-      assert error.message.end_with?('invalid avatar_name'), error.message
+      assert invalid?(error, 'avatar_name'), error.message
     end
   end
 
@@ -527,7 +535,7 @@ class HostDiskStorerTest < TestBase
       error = assert_raises(ArgumentError) {
         yield kata_id, lion, bad_tag
       }
-      assert error.message.end_with?('invalid tag'), error.message
+      assert invalid?(error, 'tag'), error.message
     end
   end
 
@@ -553,8 +561,12 @@ class HostDiskStorerTest < TestBase
       error = assert_raises(ArgumentError) {
         yield kata_id, lion, was_tag, now_tag
       }
-      assert error.message.end_with?('invalid tag'), error.message
+      assert invalid?(error, 'tag'), error.message
     end
+  end
+
+  def invalid?(error, name)
+    error.message.end_with?("invalid #{name}")
   end
 
 end

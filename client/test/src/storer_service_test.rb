@@ -15,7 +15,7 @@ class StorerServiceTest < TestBase
   test '966',
   'bad kata-id on any method raises' do
     error = assert_raises { kata_manifest(kata_id) }
-    assert error.message.include? 'invalid kata_id'
+    assert error.message.end_with? 'invalid kata_id', error.message
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
