@@ -1,6 +1,6 @@
 require_relative 'http_service'
 
-module StorerService # mix-in
+class StorerService
 
   def path
     get(__method__)
