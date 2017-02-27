@@ -205,25 +205,25 @@ class HostDiskStorer
 
   def refute_kata_exists(kata_id)
     if kata_exists?(kata_id)
-      fail error('kata_id')
+      fail invalid('kata_id')
     end
   end
 
   def assert_kata_exists(kata_id)
     unless kata_exists?(kata_id)
-      fail error('kata_id')
+      fail invalid('kata_id')
     end
   end
 
   def assert_valid_id(kata_id)
     unless valid_id?(kata_id)
-      fail error('kata_id')
+      fail invalid('kata_id')
     end
   end
 
   def assert_partial_id(kata_id)
     unless partial_id?(kata_id)
-      fail error('kata_id')
+      fail invalid('kata_id')
     end
   end
 
@@ -260,13 +260,13 @@ class HostDiskStorer
 
   def assert_avatar_exists(kata_id, avatar_name)
     unless avatar_exists?(kata_id, avatar_name)
-      fail error('avatar_name')
+      fail invalid('avatar_name')
     end
   end
 
   def assert_valid_name(avatar_name)
     unless valid_avatar?(avatar_name)
-      fail error('avatar_name')
+      fail invalid('avatar_name')
     end
   end
 
@@ -288,13 +288,13 @@ class HostDiskStorer
     assert_avatar_exists(kata_id, avatar_name)
     assert_valid_tag(tag)
     unless tag_exists?(kata_id, avatar_name, tag)
-      fail error('tag')
+      fail invalid('tag')
     end
   end
 
   def assert_valid_tag(tag)
     unless valid_tag?(tag)
-      fail error('tag')
+      fail invalid('tag')
     end
   end
 
@@ -321,8 +321,8 @@ class HostDiskStorer
     File.join(*args)
   end
 
-  def error(message)
-    ArgumentError.new("Storer:invalid #{message}")
+  def invalid(message)
+    ArgumentError.new("invalid #{message}")
   end
 
   # - - - - - - - - - - -

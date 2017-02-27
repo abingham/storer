@@ -18,7 +18,7 @@ class StorerCompletionTest < TestBase
       error = assert_raises(ArgumentError) {
         storer.completed(invalid_partial_id)
       }
-      assert error.message.start_with?('Storer'), error.message
+      assert error.message.end_with?('invalid kata_id'), error.message
     end
   end
 

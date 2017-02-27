@@ -19,7 +19,7 @@ I got 5A/0F824303/spider out of a live katas data-container using...
 
    CONTAINER_NAME=cyber-dojo-katas-DATA-CONTAINER
    VOLUME_PATH=/usr/src/cyber-dojo/katas
-   docker run -rm \
+   docker run --rm \
      --volumes-from ${CONTAINER_NAME} \
      --volume $(pwd):/backup \
      cyberdojo/ruby \
