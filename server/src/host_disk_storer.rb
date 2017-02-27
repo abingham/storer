@@ -304,7 +304,7 @@ class HostDiskStorer
 
   def tag_exists?(kata_id, avatar_name, tag)
     # Has to work with old git-format and new non-git format
-    tag <= read_avatar_increments(kata_id, avatar_name).size
+    0 <= tag && tag <= read_avatar_increments(kata_id, avatar_name).size
   end
 
   def tag_dir(kata_id, avatar_name, tag)

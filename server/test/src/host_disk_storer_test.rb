@@ -525,7 +525,7 @@ class HostDiskStorerTest < TestBase
   # - - - - - - - - - - - - - - - - - - - - - - - -
 
   def bad_tags
-    [ nil, [], 'sunglasses', 999 ]
+    [ nil, [], 'sunglasses', 999, -1 ]
   end
 
   def assert_bad_tag_raises
