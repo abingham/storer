@@ -8,7 +8,7 @@ alt="cyber-dojo yin/yang logo" width="50px" height="50px"/>
 # cyberdojo/storer docker image
 
 - A micro-service for [cyber-dojo](http://cyber-dojo.org)
-- Stores the visible files associated with every avatar test event.
+- Stores the visible files, output, and traffic-light status of every avatar test event.
 - API:
   * All methods receive their arguments in a json object.
   * All methods return a json object with a single key.
