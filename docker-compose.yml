@@ -6,19 +6,24 @@ services:
   storer_client:
     user: nobody
     image: cyberdojo/storer_client
+    container_name: storer_client
     build:
       context: client
-      args: [ PORT=4578 ]
-    ports: [ "4578:4578" ]
-    container_name: storer_client
+      args:
+        - PORT=${CYBER_DOJO_STORER_CLIENT_PORT}
+    ports:
+      - ${CYBER_DOJO_STORER_CLIENT_PORT}:${CYBER_DOJO_STORER_CLIENT_PORT}
+
 
   storer:
     user: root
     image: cyberdojo/storer
+    container_name: storer_server
     build:
       context: server
-      args: [ PORT=4577 ]
-    container_name: storer_server
-    environment: [ CYBER_DOJO_KATAS_ROOT=/tmp/katas ]
+      args:
+        - PORT=${CYBER_DOJO_STORER_SERVER_PORT}
+    environment:
+      - CYBER_DOJO_KATAS_ROOT
     volumes_from:
       - container:cyber-dojo-git-kata-DATA-CONTAINER:rw
