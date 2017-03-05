@@ -1,4 +1,6 @@
 
+If you're a developer [start here](https://github.com/cyber-dojo/home/tree/master/dev)
+
 [![Build Status](https://travis-ci.org/cyber-dojo/storer.svg?branch=master)]
 (https://travis-ci.org/cyber-dojo/storer)
 
