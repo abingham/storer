@@ -16,13 +16,13 @@ alt="cyber-dojo yin/yang logo" width="50px" height="50px"/>
 - API:
   * All methods receive their arguments in a json hash.
   * All methods return a json hash with a single key.
-  * If successful, the key equals the method's name.
-  * If unsuccessful, the key equals "exception".
+  * If the method raises an exception, the key equals "exception".
+  * If the method completes, the key equals the method's name.
 
 - - - -
 
 ## path
-Returns the storer's root path, eg
+No parameters. Returns the storer's root path, eg
 ```
   { "path": "/usr/src/cyber-dojo/katas"  }
 ```
