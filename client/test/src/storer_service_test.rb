@@ -124,6 +124,21 @@ class StorerServiceTest < TestBase
     assert_equal tag2_files, hash['now_tag']
   end
 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  test '722',
+  'avatar_ran_tests() with very large file does not raise' do
+    create_kata(make_manifest)
+    assert_equal lion, start_avatar(kata_id, [lion])
+
+    files = starting_files
+    files['very_large'] = 'X'*1024*500
+    now = [2016, 12, 5, 21, 01, 34]
+    output = 'missing include'
+    colour = 'amber'
+    avatar_ran_tests(kata_id, lion, files, now, output, colour)
+  end
+
   private
 
   def make_manifest(id = kata_id)
