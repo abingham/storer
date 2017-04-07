@@ -1,7 +1,8 @@
 FROM cyberdojo/sinatra
 MAINTAINER Jon Jagger <jon@jaggersoft.com>
 
-RUN echo 'http://dl-cdn.alpinelinux.org/alpine/edge/main' >> /etc/apk/repositories \
+# install git 2.11 (it has --compaction-heuristic) from v3.5
+RUN echo 'http://dl-cdn.alpinelinux.org/alpine/v3.5/main' >> /etc/apk/repositories \
   && apk update \
   && apk add git==2.11.1-r0
 
