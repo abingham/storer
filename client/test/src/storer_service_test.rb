@@ -128,6 +128,9 @@ class StorerServiceTest < TestBase
 
   test '722',
   'avatar_ran_tests() with very large file does not raise' do
+    # This test fails if docker-compose.yml uses
+    # [read_only:true] without also using
+    # [tmpfs: /tmp]
     create_kata(make_manifest)
     assert_equal lion, start_avatar(kata_id, [lion])
 
