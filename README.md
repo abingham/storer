@@ -15,11 +15,12 @@ alt="cyber-dojo yin/yang logo" width="50px" height="50px"/>
 
 - A micro-service for [cyber-dojo](http://cyber-dojo.org)
 - Stores the visible files, output, and traffic-light status of every avatar test event.
-- API:
-  * All methods receive their arguments in a json hash.
+
+API:
+  * All methods receive their named arguments in a json hash.
   * All methods return a json hash with a single key.
-  * If the method raises an exception, the key equals "exception".
-  * If the method completes, the key equals the method's name.
+    * If the method completes, the key equals the method's name.
+    * If the method raises an exception, the key equals "exception".
 
 - - - -
 
@@ -141,7 +142,7 @@ has started in the kata with the given kata_id.
 - - - -
 
 ## start_avatar
-Attempts to starts an avatar in the kata with the given kata_id.
+Attempts to starts an avatar, with a name in the given list, in the kata with the given kata_id.
 If successful, returns the name of the started avatar, otherwise "nil".
 - parameters, eg
 ```
