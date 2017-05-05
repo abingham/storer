@@ -12,6 +12,14 @@ class TestBase < HexMiniTest
     storer.kata_increments(kata_id)
   end
 
+  def start_avatar(avatars)
+    storer.start_avatar(kata_id, avatars)
+  end
+
+  def started_avatars
+    storer.started_avatars(kata_id)
+  end
+
   def avatar_increments(name)
     storer.avatar_increments(kata_id, name)
   end

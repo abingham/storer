@@ -94,6 +94,30 @@ Returns the manifest used to create the kata with the given kata_id.
 
 - - - -
 
+### kata_increments
+Returns avatar_increments for each started avatar in the kata with the given kata_id.
+- parameter, eg
+```
+  { "kata_id": "A551C528C3" }
+```
+- returns, eg
+```
+  { "kata_increments": {
+    'lion': [
+        {  "event": "created", "time": [2016,12,5,11,15,18], "number": 0 },
+        { "colour": "red,      "time": [2016,12,6,12,31,15], "number": 1 },
+        { "colour": "green",   "time": [2016,12,6,12,32,56], "number": 2 },
+        { "colour": "amber",   "time": [2016,12,6,12,43,19], "number": 3 }
+    ],
+    'tiger': [
+        {  "event": "created", "time": [2016,12,5,11,15,18], "number": 0 },
+        { "colour": "amber",   "time": [2016,12,6,11,16, 2], "number": 1 },
+    ]
+  }
+```
+
+- - - -
+
 ## completed
 If it exists, returns the 10-digit kata_id which uniquely completes
 the given kata_id, otherwise leaves it unchanged.

@@ -7,19 +7,19 @@ class TestBase < HexMiniTest
     storer.path
   end
 
-  def kata_exists?(kata_id)
-    storer.kata_exists?(kata_id)
-  end
-
   def create_kata(manifest)
     storer.create_kata(manifest)
   end
 
-  def kata_manifest(kata_id)
+  def kata_exists?
+    storer.kata_exists?(kata_id)
+  end
+
+  def kata_manifest
     storer.kata_manifest(kata_id)
   end
 
-  def kata_increments(kata_id)
+  def kata_increments
     storer.kata_increments(kata_id)
   end
 
@@ -35,41 +35,41 @@ class TestBase < HexMiniTest
 
   # - - - - - - - - - - - - - - -
 
-  def avatar_exists?(kata_id, avatar_name)
+  def avatar_exists?(avatar_name)
     storer.avatar_exists?(kata_id, avatar_name)
   end
 
-  def start_avatar(kata_id, avatar_names)
+  def start_avatar(avatar_names)
     storer.start_avatar(kata_id, avatar_names)
   end
 
-  def started_avatars(kata_id)
+  def started_avatars
     storer.started_avatars(kata_id)
   end
 
   # - - - - - - - - - - - - - - -
 
-  def avatar_ran_tests(kata_id, avatar_name, files, now, output, colour)
+  def avatar_ran_tests(avatar_name, files, now, output, colour)
     storer.avatar_ran_tests(kata_id, avatar_name, files, now, output, colour)
   end
 
   # - - - - - - - - - - - - - - -
 
-  def avatar_increments(kata_id, avatar_name)
+  def avatar_increments(avatar_name)
     storer.avatar_increments(kata_id, avatar_name)
   end
 
-  def avatar_visible_files(kata_id, avatar_name)
+  def avatar_visible_files(avatar_name)
     storer.avatar_visible_files(kata_id, avatar_name)
   end
 
   # - - - - - - - - - - - - - - -
 
-  def tag_visible_files(kata_id, avatar_name, tag)
+  def tag_visible_files(avatar_name, tag)
     storer.tag_visible_files(kata_id, avatar_name, tag)
   end
 
-  def tags_visible_files(kata_id, avatar_name, was_tag, now_tag)
+  def tags_visible_files(avatar_name, was_tag, now_tag)
     storer.tags_visible_files(kata_id, avatar_name, was_tag, now_tag)
   end
 
@@ -77,6 +77,11 @@ class TestBase < HexMiniTest
 
   def storer
     StorerService.new
+  end
+
+  def kata_id
+    # reversed so I don't get common outer(id)s
+    test_id.reverse + ('0' * (10-test_id.length))
   end
 
 end

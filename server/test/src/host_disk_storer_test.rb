@@ -109,13 +109,14 @@ class HostDiskStorerTest < TestBase
   test 'D46',
   'avatar_ran_tests() with invalid kata_id raises' do
     assert_bad_kata_id_raises { |invalid_id|
-      args = []
-      args << invalid_id
-      args << lion
-      args << starting_files
-      args << time_now
-      args << output
-      args << red
+      args = [
+        invalid_id,
+        lion,
+        starting_files,
+        time_now,
+        output,
+        red
+      ]
       storer.avatar_ran_tests(*args)
     }
   end
@@ -155,13 +156,14 @@ class HostDiskStorerTest < TestBase
   test '941',
   'avatar_ran_tests() with invalid avatar_name raises' do
     assert_bad_avatar_raises { |kata_id, invalid_avatar_name|
-      args = []
-      args << kata_id
-      args << invalid_avatar_name
-      args << starting_files
-      args << time_now
-      args << output
-      args << red
+      args = [
+        kata_id,
+        invalid_avatar_name,
+        starting_files,
+        time_now,
+        output,
+        red
+      ]
       storer.avatar_ran_tests(*args)
     }
   end
@@ -169,13 +171,14 @@ class HostDiskStorerTest < TestBase
   test '394',
   'avatar_ran_test() with non-existent avatar_name raises' do
     assert_bad_avatar_raises { |kata_id, invalid_avatar_name|
-      args = []
-      args << kata_id
-      args << 'lion'
-      args << starting_files
-      args << time_now
-      args << output
-      args << red
+      args = [
+        kata_id,
+        lion,
+        starting_files,
+        time_now,
+        output,
+        red
+      ]
       storer.avatar_ran_tests(*args)
     }
   end
@@ -215,7 +218,7 @@ class HostDiskStorerTest < TestBase
   test 'A6B',
   'before starting an avatar none exist' do
     create_kata
-    assert_equal([], storer.started_avatars(kata_id))
+    assert_equal([], started_avatars)
     assert_equal({}, kata_increments)
   end
 
@@ -225,23 +228,24 @@ class HostDiskStorerTest < TestBase
     rogue = 'flintstone'
     disk[kata_path + '/' + rogue].make
     assert_equal [rogue], disk[kata_path].each_dir.collect { |name| name }
-    assert_equal [], storer.started_avatars(kata_id)
+    assert_equal [], started_avatars
   end
 
   test 'CBF',
-  'avatar_start(not-an-avatar-name) fails' do
+  'avatar_start(not-an-avatar-name) is nil' do
     create_kata
-    assert_nil storer.start_avatar(kata_id, ['pencil'])
+    assert_nil start_avatar(['pencil'])
   end
 
-  test 'E0C',
-  'after avatar_starts;',
-  'avatar has no traffic-lights;',
-  "avatar's visible_files are from the kata",
-  "avatar's increments already have tag zero" do
+  test 'E0C', %w(
+    after avatar_starts;
+    avatar has no traffic-lights,
+    avatar's visible_files are from the kata,
+    avatar's increments already have tag zero
+  ) do
     create_kata
-    assert_equal lion, storer.start_avatar(kata_id, [lion])
-    assert_equal [lion], storer.started_avatars(kata_id)
+    assert_equal lion, start_avatar([lion])
+    assert_equal [lion], started_avatars
     assert_hash_equal starting_files, avatar_visible_files(lion)
     assert_hash_equal starting_files, tag_visible_files(lion, tag=0)
     tag0 =
@@ -253,8 +257,8 @@ class HostDiskStorerTest < TestBase
     assert_equal [tag0], avatar_increments(lion)
     assert_equal( { lion => [tag0] }, kata_increments)
 
-    assert_equal tiger, storer.start_avatar(kata_id, [tiger])
-    assert_equal [lion,tiger].sort, storer.started_avatars(kata_id).sort
+    assert_equal tiger, start_avatar([tiger])
+    assert_equal [lion,tiger].sort, started_avatars.sort
     assert_equal [tag0], avatar_increments(tiger)
     assert_equal( { lion => [tag0], tiger => [tag0] }, kata_increments)
   end
@@ -263,21 +267,22 @@ class HostDiskStorerTest < TestBase
   'avatar_start succeeds 64 times then kata is full' do
     create_kata
     all_avatars_names.each { |name| disk[avatar_path(name)].make }
-    assert_equal all_avatars_names.sort, storer.started_avatars(kata_id).sort
-    assert_nil storer.start_avatar(kata_id, all_avatars_names)
+    assert_equal all_avatars_names.sort, started_avatars.sort
+    assert_nil start_avatar(all_avatars_names)
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # ran_tests
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  test '3CF',
-  'after ran_tests() there is one more tag, one more traffic-light;',
-  'visible_files are retrievable by implicit current-tag',
-  'visible_files are retrievable by explicit tag',
-  'visible_files do not contain output' do
+  test '3CF', %w(
+    after ran_tests() there is one more tag, one more traffic-light;
+    visible_files are retrievable by implicit current-tag,
+    visible_files are retrievable by explicit tag,
+    visible_files do not contain output
+  ) do
     create_kata
-    storer.start_avatar(kata_id, [lion])
+    start_avatar([lion])
     was_tag = 0
 
     storer.avatar_ran_tests(*make_args(edited_files))
