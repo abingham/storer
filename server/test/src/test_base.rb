@@ -8,6 +8,10 @@ class TestBase < HexMiniTest
     storer.kata_manifest(kata_id)
   end
 
+  def kata_increments
+    storer.kata_increments(kata_id)
+  end
+
   def avatar_increments(name)
     storer.avatar_increments(kata_id, name)
   end

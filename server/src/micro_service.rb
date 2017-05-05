@@ -22,6 +22,10 @@ class MicroService < Sinatra::Base
     getter(__method__, kata_id)
   end
 
+  get '/kata_increments' do
+    getter(__method__, kata_id)
+  end
+
   # - - - - - - - - - - - - - - -
 
   get '/completed' do

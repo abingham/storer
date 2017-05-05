@@ -47,6 +47,7 @@ class StorerServiceTest < TestBase
     assert_equal [kata_id[2..-1]], completions(outer)
 
     assert_equal [], started_avatars(kata_id)
+    assert_equal({}, kata_increments(kata_id))
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -74,13 +75,14 @@ class StorerServiceTest < TestBase
     assert_equal lion, start_avatar(kata_id, [lion])
     assert avatar_exists? kata_id, 'lion'
 
-    tag0 = { 'event' => 'created', 'time' => creation_time, 'number' => 0 }
     assert_equal [tag0], avatar_increments(kata_id, lion)
+    assert_equal({ lion => [tag0] }, kata_increments(kata_id))
     assert_equal starting_files, avatar_visible_files(kata_id, lion)
     assert_equal [lion], started_avatars(kata_id)
 
     assert_equal salmon, start_avatar(kata_id, [salmon])
     assert_equal [tag0], avatar_increments(kata_id, salmon)
+    assert_equal({ lion => [tag0], salmon => [tag0] }, kata_increments(kata_id))
     assert_equal starting_files, avatar_visible_files(kata_id, salmon)
     assert_equal [lion,salmon].sort, started_avatars(kata_id).sort
   end
@@ -104,6 +106,7 @@ class StorerServiceTest < TestBase
     expected << tag0
     expected << { 'colour' => colour, 'time' => now, 'number' => tag=1 }
     assert_equal expected, avatar_increments(kata_id, lion)
+    assert_equal({ lion => expected }, kata_increments(kata_id))
     tag1_files['output'] = output
     assert_equal tag1_files, tag_visible_files(kata_id, lion, tag=1)
 
@@ -116,6 +119,7 @@ class StorerServiceTest < TestBase
     avatar_ran_tests(kata_id, lion, tag2_files, now, output, colour)
     expected << { 'colour' => colour, 'time' => now, 'number' => tag=2 }
     assert_equal expected, avatar_increments(kata_id, lion)
+    assert_equal( { lion => expected }, kata_increments(kata_id))
     tag2_files['output'] = output
     assert_equal tag1_files, tag_visible_files(kata_id, lion, tag=1)
     assert_equal tag2_files, tag_visible_files(kata_id, lion, tag=2)

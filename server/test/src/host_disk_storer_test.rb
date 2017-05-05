@@ -215,7 +215,8 @@ class HostDiskStorerTest < TestBase
   test 'A6B',
   'before starting an avatar none exist' do
     create_kata
-    assert_equal [], storer.started_avatars(kata_id)
+    assert_equal([], storer.started_avatars(kata_id))
+    assert_equal({}, kata_increments)
   end
 
   test 'F6E',
@@ -243,11 +244,19 @@ class HostDiskStorerTest < TestBase
     assert_equal [lion], storer.started_avatars(kata_id)
     assert_hash_equal starting_files, avatar_visible_files(lion)
     assert_hash_equal starting_files, tag_visible_files(lion, tag=0)
-    assert_equal [{
+    tag0 =
+    {
       'event'  => 'created',
       'time'   => creation_time,
       'number' => 0
-    }], avatar_increments(lion)
+    }
+    assert_equal [tag0], avatar_increments(lion)
+    assert_equal( { lion => [tag0] }, kata_increments)
+
+    assert_equal tiger, storer.start_avatar(kata_id, [tiger])
+    assert_equal [lion,tiger].sort, storer.started_avatars(kata_id).sort
+    assert_equal [tag0], avatar_increments(tiger)
+    assert_equal( { lion => [tag0], tiger => [tag0] }, kata_increments)
   end
 
   test 'B1C',
@@ -286,6 +295,7 @@ class HostDiskStorerTest < TestBase
       }
     ]
     assert_equal expected, avatar_increments(lion)
+    assert_equal({ lion => expected }, kata_increments)
     # current tag
     visible_files = avatar_visible_files(lion)
     assert_equal output, visible_files['output'], 'output'
@@ -424,6 +434,10 @@ class HostDiskStorerTest < TestBase
 
   def lion
     'lion'
+  end
+
+  def tiger
+    'tiger'
   end
 
   def edited_files

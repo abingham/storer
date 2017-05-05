@@ -20,6 +20,10 @@ class StorerService
     get(__method__, kata_id)
   end
 
+  def kata_increments(kata_id)
+    get(__method__, kata_id)
+  end
+
   # - - - - - - - - - - - -
 
   def completed(kata_id)

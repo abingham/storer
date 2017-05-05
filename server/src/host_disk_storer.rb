@@ -66,6 +66,14 @@ class HostDiskStorer
     JSON.parse(json)
   end
 
+  def kata_increments(kata_id)
+    incs = {}
+    started_avatars(kata_id).each do |name|
+      incs[name] = avatar_increments(kata_id, name)
+    end
+    incs
+  end
+
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # avatar start
 

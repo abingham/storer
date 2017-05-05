@@ -19,6 +19,10 @@ class TestBase < HexMiniTest
     storer.kata_manifest(kata_id)
   end
 
+  def kata_increments(kata_id)
+    storer.kata_increments(kata_id)
+  end
+
   # - - - - - - - - - - - - - - -
 
   def completed(kata_id)
