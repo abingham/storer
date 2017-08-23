@@ -1,8 +1,8 @@
 
-<img width="707" alt="cyber-dojo-screen-shot" src="https://cloud.githubusercontent.com/assets/252118/25101292/9bdca322-23ab-11e7-9acb-0aa5f9c5e005.png">
-
 * [Take me to cyber-dojo's home github repo](https://github.com/cyber-dojo/cyber-dojo).
 * [Take me to http://cyber-dojo.org](http://cyber-dojo.org).
+
+<img width="707" alt="cyber-dojo-screen-shot" src="https://cloud.githubusercontent.com/assets/252118/25101292/9bdca322-23ab-11e7-9acb-0aa5f9c5e005.png">
 
 - - - -
 
@@ -24,7 +24,7 @@ API:
 
 - - - -
 
-## path
+## GET path
 No parameters. Returns the storer's root path, eg
 ```
   { "path": "/usr/src/cyber-dojo/katas"  }
@@ -33,7 +33,7 @@ No parameters. Returns the storer's root path, eg
 - - - -
 - - - -
 
-## kata_exists?
+## GET kata_exists?
 Asks whether the kata with the given kata_id exists.
 - parameters, eg
 ```
@@ -49,7 +49,7 @@ Asks whether the kata with the given kata_id exists.
 
 - - - -
 
-## create_kata
+## POST create_kata
 Creates a kata from the given json manifest.
 - parameter, eg
 ```
@@ -69,7 +69,7 @@ Creates a kata from the given json manifest.
 
 - - - -
 
-## kata_manifest
+## GET kata_manifest
 Returns the manifest used to create the kata with the given kata_id.
 - parameter, eg
 ```
@@ -94,7 +94,7 @@ Returns the manifest used to create the kata with the given kata_id.
 
 - - - -
 
-### kata_increments
+### GET kata_increments
 Returns avatar_increments for each started avatar in the kata with the given kata_id.
 - parameter, eg
 ```
@@ -118,7 +118,7 @@ Returns avatar_increments for each started avatar in the kata with the given kat
 
 - - - -
 
-## completed
+## GET completed
 If it exists, returns the 10-digit kata_id which uniquely completes
 the given kata_id, otherwise leaves it unchanged.
 - parameter, eg
@@ -133,7 +133,7 @@ the given kata_id, otherwise leaves it unchanged.
 
 - - - -
 
-## completions
+## GET completions
 Returns all the kata_id's starting with the given 2-digit long kata_id.
 - parameter, eg
 ```
@@ -148,7 +148,7 @@ Returns all the kata_id's starting with the given 2-digit long kata_id.
 - - - -
 - - - -
 
-## avatar_exists?
+## GET avatar_exists?
 Asks whether the avatar with the given avatar_name
 has started in the kata with the given kata_id.
 - parameters, eg
@@ -165,7 +165,7 @@ has started in the kata with the given kata_id.
 
 - - - -
 
-## start_avatar
+## POST start_avatar
 Attempts to starts an avatar, with a name in the given list, in the kata with the given kata_id.
 If successful, returns the name of the started avatar, otherwise "nil".
 - parameters, eg
@@ -182,7 +182,7 @@ If successful, returns the name of the started avatar, otherwise "nil".
 
 - - - -
 
-## started_avatars
+## GET started_avatars
 Returns the names of all avatars who have started in the kata with the given kata_id.
 - parameter, eg
 ```
@@ -196,7 +196,7 @@ Returns the names of all avatars who have started in the kata with the given kat
 - - - -
 - - - -
 
-## avatar_ran_tests
+## POST avatar_ran_tests
 Tells the storer that the avatar with the given avatar_name, in the kata
 with the given kata_id, submitted the given visible files, at the given time,
 which produced the given output, with the given colour.
@@ -217,7 +217,7 @@ which produced the given output, with the given colour.
 
 - - - -
 
-## avatar_increments
+## GET avatar_increments
 Returns details of all traffic-lights, for the avatar with the
 given avatar_name, in the kata with the given kata_id.
 - parameters, eg
@@ -239,7 +239,7 @@ given avatar_name, in the kata with the given kata_id.
 
 - - - -
 
-## avatar_visible_files
+## GET avatar_visible_files
 Returns the most recent set of visible files, for the avatar with the
 given avatar_name_, in the kata with the given kata_id.
 - parameters, eg
@@ -261,7 +261,7 @@ given avatar_name_, in the kata with the given kata_id.
 
 - - - -
 
-## tag_visible_files
+## GET tag_visible_files
 Returns the set of visible files, for the avatar with the
 given avatar_name, in the kata with the given kata_id,
 with the given tag number.
@@ -285,7 +285,7 @@ with the given tag number.
 
 - - - -
 
-## tags_visible_files
+## GET tags_visible_files
 Returns the paired set of visible files for the avatar with the
 given avatar_name, in the kata with the given kata_id, with the
 given tag numbers.
