@@ -157,8 +157,13 @@ class StorerServiceTest < TestBase
     }
   end
 
-  def lion; 'lion'; end
-  def salmon; 'salmon'; end
+  def lion
+    'lion'
+  end
+
+  def salmon
+    'salmon'
+  end
 
   def starting_files
     {

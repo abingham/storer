@@ -338,8 +338,14 @@ class HostDiskStorer
   include AllAvatarsNames
 
   include NearestAncestors
-  def shell; nearest_ancestors(:shell); end
-  def  disk; nearest_ancestors(:disk ); end
+
+  def shell
+    nearest_ancestors(:shell)
+  end
+
+  def disk
+    nearest_ancestors(:disk)
+  end
 
 end
 

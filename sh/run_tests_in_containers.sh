@@ -1,7 +1,7 @@
 #!/bin/bash
 
-my_dir="$( cd "$( dirname "${0}" )" && pwd )"
-my_name="${my_dir##*/}"
+root_dir="$( cd "$( dirname "${0}" )" && cd .. && pwd )"
+my_name="${root_dir##*/}"
 
 server_cid=`docker ps --all --quiet --filter "name=${my_name}_server"`
 server_status=0
@@ -15,18 +15,18 @@ run_server_tests()
 {
   docker exec ${server_cid} sh -c "cd /app/test && ./run.sh ${*}"
   server_status=$?
-  docker cp ${server_cid}:/tmp/coverage ${my_dir}/server
+  docker cp ${server_cid}:/tmp/coverage ${root_dir}/server
   echo "Coverage report copied to ${my_name}/server/coverage"
-  cat ${my_dir}/server/coverage/done.txt
+  cat ${root_dir}/server/coverage/done.txt
 }
 
 run_client_tests()
 {
   docker exec ${client_cid} sh -c "cd /app/test && ./run.sh ${*}"
   client_status=$?
-  docker cp ${client_cid}:/tmp/coverage ${my_dir}/client
+  docker cp ${client_cid}:/tmp/coverage ${root_dir}/client
   echo "Coverage report copied to ${my_name}/client/coverage"
-  cat ${my_dir}/client/coverage/done.txt
+  cat ${root_dir}/client/coverage/done.txt
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - -

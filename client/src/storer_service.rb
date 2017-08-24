@@ -1,4 +1,4 @@
-require_relative 'http_service'
+require_relative 'http_json_service'
 
 class StorerService
 
@@ -76,8 +76,14 @@ class StorerService
 
   private
 
-  include HttpService
-  def hostname; 'storer'; end
-  def port; '4577'; end
+  include HttpJsonService
+
+  def hostname
+    'storer'
+  end
+
+  def port
+    '4577'
+  end
 
 end

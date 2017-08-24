@@ -5,10 +5,21 @@ require_relative 'stdout_logger'
 
 module Externals
 
-  def storer; @storer ||= HostDiskStorer.new(self); end
-  def  shell;  @shell ||=    BashSheller.new(self); end
-  def   disk;   @disk ||=     DiskWriter.new(self); end
-  def    log;    @log ||=   StdoutLogger.new(self); end
+  def storer
+    @storer ||= HostDiskStorer.new(self)
+  end
+
+  def shell
+    @shell ||= BashSheller.new(self)
+  end
+
+  def disk
+    @disk ||= DiskWriter.new(self)
+  end
+
+  def log
+    @log ||= StdoutLogger.new(self)
+  end
 
 end
 

@@ -34,13 +34,20 @@ class BashSheller
     end
   end
 
-  def success; 0; end
+  def success
+    0
+  end
 
   private
 
   include NearestAncestors
-  def log; nearest_ancestors(:log); end
 
-  def line; '-' * 40; end
+  def log
+    nearest_ancestors(:log)
+  end
+
+  def line
+    '-' * 40
+  end
 
 end
