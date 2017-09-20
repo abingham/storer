@@ -55,6 +55,116 @@ class GoogleCloudDataStorerTest < TestBase
 
   # - - - - - - - - - - - - - - - - - - - - - - -
 
+  test '025',
+  'start a kata' do
+    s = storer
+    kata_id = '1993E04534'
+    kata = s.datastore.entity 'kata', kata_id do |k|
+      k['manifest'] = '{...json....here....}'
+      k['key_prefix'] = kata_id[0..5]
+    end
+
+    result = nil
+    s.datastore.transaction do |tx|
+      if tx.find(kata.key).nil?
+        tx.save kata
+        result = true # created and didn't exist before
+      else
+        result = false # already exists
+      end
+    end
+    #puts "result:#{result}:"
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - -
+
+  test '026',
+  'remove a datastore entity' do
+    s = storer
+    kata_id = '1993E04534'
+    kata_key = s.datastore.key 'kata', kata_id
+    r = s.datastore.delete kata_key
+    # r is always true
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - -
+
+  test '027',
+  'start an avatar' do
+    s = storer
+    kata_id = '1993E04534'
+    avatars = %w( lion tiger panda )
+    avatars.each do |name|
+      avatar = s.datastore.entity [['kata', kata_id], ['avatar', name]] do |k|
+        k['increments'] = '[]'
+      end
+      result = nil
+      s.datastore.transaction do |tx|
+        if tx.find(avatar.key).nil?
+          tx.save avatar
+          result = true
+        else
+          result = false
+        end
+      end
+      if result
+        puts "started:#{name}:"
+        break
+      end
+    end
+    #puts "result:#{result}:"
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - -
+
+  test '028',
+  'read based on key' do
+    s = storer
+    kata_id = '1993E04534'
+    key = s.datastore.key [['kata', kata_id], ['avatar', 'lion']]
+    avatar = s.datastore.find key
+    rags = JSON.parse(avatar['increments'])
+    assert_equal 'Array', rags.class.name
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - -
+
+  test '029',
+  'atomically update an avatars increments' do
+    s = storer
+    kata_id = '1993E04534'
+    key = s.datastore.key [['kata', kata_id], ['avatar', 'lion']]
+    s.datastore.transaction do |tx|
+      avatar = tx.find key
+      rags = JSON.parse(avatar['increments'])
+      rags << 'red'
+      avatar['increments'] = JSON.unparse(rags)
+      s.datastore.save avatar
+    end
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - -
+
+  test '02A',
+  'completing a 6-digit kata-id to 10-digits' do
+    s = storer
+    kata_id = '1993E04534'
+    key_prefix = kata_id[0..5]
+
+    query = s.datastore.query('kata').where('key_prefix','=',key_prefix)
+
+    all = storer.datastore.run query
+    if all.size == 1
+      puts all.to_a[0].key.name
+    else
+      #not found or not unique
+    end
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - -
+
+=begin
+
   test '020',
   'writing data - example from google.cloud web-page' do
     task = storer.datastore.entity 'Task' do |t|
@@ -69,34 +179,8 @@ class GoogleCloudDataStorerTest < TestBase
 
   # - - - - - - - - - - - - - - - - - - - - - - -
 
-  test '025',
-  'start a kata' do
-    s = storer
-    kata = nil
-    #kata_id = '345345345'  #1
-    #kata_id = 'AB53E04534' #2
-    kata_id = '9993E04534'
-
-    kata = s.datastore.entity 'kata', kata_id do |k|
-      k['manifest'] = '{...json....here....}'
-    end
-
-    s.datastore.transaction do |tx|
-      if tx.find(kata.key).nil?
-        r = tx.save kata
-        puts "created new kata"
-        puts r.class.name
-        puts r
-      else
-        puts "!kata.nil? --> kata already exists"
-      end
-    end
-  end
-
-  # - - - - - - - - - - - - - - - - - - - - - - -
-
   test '021',
-  'find data based on content' do
+  'read based on content' do
     e = storer.datastore.entity 'traffic-light' do |rag|
       rag['id1'] = '93'
       rag['id2'] = '63EF'
@@ -119,12 +203,8 @@ class GoogleCloudDataStorerTest < TestBase
     end
   end
 
-  test '022',
-  'deleting data' do
+  # - - - - - - - - - - - - - - - - - - - - - - -
 
-  end
-
-=begin
   test '838',
   'write-read round-trip' do
     filename = 'nuts.txt'
@@ -132,6 +212,8 @@ class GoogleCloudDataStorerTest < TestBase
     storer.write(filename, content)
     assert_equal content, storer.read(filename)
   end
+
+  # - - - - - - - - - - - - - - - - - - - - - -
 
   test '839',
   'write overwrites previous write' do
@@ -159,6 +241,8 @@ class GoogleCloudDataStorerTest < TestBase
     end
   end
 
+  # - - - - - - - - - - - - - - - - - - - - - -
+
   test '83B',
   'exists?(non-existant-file) is false' do
     refute storer.exists? 'does-not-exist.txt'
@@ -173,6 +257,8 @@ class GoogleCloudDataStorerTest < TestBase
     storer.delete(filename)
     refute storer.exists? filename
   end
+
+  # - - - - - - - - - - - - - - - - - - - - - -
 
   test '83D',
   'delete(never-existed-file) raises' do
@@ -194,6 +280,8 @@ class GoogleCloudDataStorerTest < TestBase
       storer.delete filename
     end
   end
+
+  # - - - - - - - - - - - - - - - - - - - - - -
 
   test '9EE',
   'files more than one simple completion' do
