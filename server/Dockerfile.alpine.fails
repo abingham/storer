@@ -1,0 +1,34 @@
+# https://github.com/GoogleCloudPlatform/google-cloud-ruby/issues/1351
+# status: acknolwedged, won't fix :-(
+
+FROM alpine:3.6
+LABEL maintainer=jon@jaggersoft.com
+
+RUN apk --update --no-cache add \
+    openssl ca-certificates \
+    ruby ruby-io-console ruby-dev ruby-irb ruby-bundler ruby-bigdecimal \
+    bash tzdata git
+
+RUN adduser -D -H -u 19661 cyber-dojo
+
+RUN echo 'gem: --no-document' > ~/.gemrc
+COPY Gemfile /app/
+WORKDIR /app
+
+RUN apk --update add --virtual build-dependencies build-base \
+  && bundle install && gem clean \
+  && apk del build-dependencies \
+  && rm -vrf /var/cache/apk/*
+
+RUN export RACK_ENV='production'
+
+RUN apk add --update --repository http://dl-cdn.alpinelinux.org/alpine/edge/community/ tini
+ENTRYPOINT ["/sbin/tini", "--"]
+
+COPY . /app
+
+ARG PORT
+EXPOSE ${PORT}
+
+ENV PORT=${PORT}
+CMD [ "./up.sh" ]

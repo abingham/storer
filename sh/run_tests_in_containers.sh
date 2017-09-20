@@ -14,7 +14,7 @@ run_server_tests()
   server_status=$?
   docker cp ${SERVER_CID}:/tmp/coverage ${ROOT_DIR}/server
   echo "Coverage report copied to ${MY_NAME}/server/coverage"
-  cat ${ROOT_DIR}/server/coverage/done.txt
+  #cat ${ROOT_DIR}/server/coverage/done.txt
 }
 
 run_client_tests()
@@ -23,7 +23,7 @@ run_client_tests()
   client_status=$?
   docker cp ${CLIENT_CID}:/tmp/coverage ${ROOT_DIR}/client
   echo "Coverage report copied to ${MY_NAME}/client/coverage"
-  cat ${ROOT_DIR}/client/coverage/done.txt
+  #cat ${ROOT_DIR}/client/coverage/done.txt
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -31,7 +31,7 @@ run_client_tests()
 server_status=0
 client_status=0
 run_server_tests ${*}
-run_client_tests ${*}
+#run_client_tests ${*}
 
 if [[ ( ${server_status} == 0 && ${client_status} == 0 ) ]]; then
   echo "------------------------------------------------------"

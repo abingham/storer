@@ -25,6 +25,6 @@ args=(${*})
 ruby -e "([ '../coverage.rb' ] + %w(${files[*]}).shuffle).each{ |file| require './'+file }" \
   -- ${args[@]} | tee ${test_log}
 
-cd ${my_dir} \
-  && ruby ./check_test_results.rb \
-    ${test_log} ${cov_dir}/index.html ${args[@]} > ${cov_dir}/done.txt
+#cd ${my_dir} \
+#  && ruby ./check_test_results.rb \
+#    ${test_log} ${cov_dir}/index.html ${args[@]} > ${cov_dir}/done.txt

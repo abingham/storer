@@ -132,7 +132,7 @@ metrics = done({show_fails:all_tests?},
     [ 'skips',                      skip_count, '==',   0 ],
 
     [ 'assertions/sec',     assertions_per_sec, '>=',  25 ],
-    [ 'duration[sec]',                duration, '<=',  10 ],
+    [ 'duration[sec]',                duration, '<=',  20 ],
 
     [ ' (src)coverage[%]',        src_coverage, '==', 100 ],
     [ '(test)coverage[%]',       test_coverage, '==', 100 ],

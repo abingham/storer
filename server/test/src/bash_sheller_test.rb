@@ -15,6 +15,8 @@ class BashShellerTest < TestBase
   # exec()
   # - - - - - - - - - - - - - - - - -
 
+=begin
+
   test 'DBB',
   'exec(cmd) succeeds with output' do
     exec('echo Hello')
@@ -155,5 +157,7 @@ class BashShellerTest < TestBase
     expected.unshift(line) unless expected == []
     assert_equal expected, log.spied
   end
+
+=end
 
 end

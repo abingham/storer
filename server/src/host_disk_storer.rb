@@ -47,7 +47,7 @@ class HostDiskStorer
 
   def kata_exists?(kata_id)
     assert_valid_id(kata_id)
-    kata_dir(kata_id).exists?
+    kata_dir(kata_id).exists?(manifest_filename)
   end
 
   def create_kata(manifest)
@@ -80,7 +80,7 @@ class HostDiskStorer
   def avatar_exists?(kata_id, avatar_name)
     assert_kata_exists(kata_id)
     assert_valid_name(avatar_name)
-    avatar_dir(kata_id, avatar_name).exists?
+    avatar_dir(kata_id, avatar_name).exists?(increments_filename)
   end
 
   def start_avatar(kata_id, avatar_names)
