@@ -25,6 +25,8 @@ class GoogleCloudDataStorerTest < TestBase
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - -
+  # kata
+  # - - - - - - - - - - - - - - - - - - - - - - -
 
   test '024',
   'you can create a kata with a new id which then exists' do
@@ -63,7 +65,125 @@ class GoogleCloudDataStorerTest < TestBase
 
   # - - - - - - - - - - - - - - - - - - - - - - -
 
-  def kata_create(id, manifest="{...json-for-#{kata_id}-here...}")
+  test '027',
+  'completing a 6-digit kata-id to one 10-digit id' do
+    id = '4B80741C3C'
+    kata_create id
+    begin
+      key_prefix = id[0..5]
+      query = datastore.query('kata').where('key_prefix', '=', key_prefix)
+      all = datastore.run(query).to_a
+      assert_equal 1, all.size
+      assert_equal id, all[0].key.name
+    ensure
+      kata_delete id
+    end
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - -
+
+  test '028',
+  'completing a 6-digit kata-id to two 10-digit ids' do
+    key_prefix = '7658BC'
+    id1 = key_prefix + '1C3C'
+    kata_create id1
+    id2 = key_prefix + '4DE5'
+    kata_create id2
+    begin
+      query = datastore.query('kata').where('key_prefix', '=', key_prefix)
+      all = datastore.run(query).to_a
+      assert_equal 2, all.size
+      assert_equal [id1,id2], all.map{ |e| e.key.name }
+    ensure
+      kata_delete id1
+      kata_delete id2
+    end
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - -
+  # avatar
+  # - - - - - - - - - - - - - - - - - - - - - - -
+
+  test '031',
+  'you can create an avatar with a new name which then exists' do
+    id = '3BB113678E'
+    refute avatar_exists? id, lion
+    assert avatar_create id, lion
+    begin
+      assert avatar_exists? id, lion
+    ensure
+      avatar_delete id, lion
+    end
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - -
+
+  test '032',
+  'you can delete an existing avatar which then does not exist' do
+    id = 'DDCEF1BE7B'
+    avatar_create id, lion
+    avatar_delete id, lion
+    refute avatar_exists? id, lion
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - -
+
+  test '033',
+  'you cant create an avatar with an existing name' do
+    id = 'DFFE91A2C8'
+    assert avatar_create id, lion
+    begin
+      refute avatar_create id, lion
+    ensure
+      avatar_delete id, lion
+    end
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - -
+
+  test '034',
+  'atomically update an avatars increments' do
+    id = 'B7FAA22CCB'
+    avatar_create id, lion
+    begin
+      key = datastore.key [['kata', id], ['avatar', lion]]
+      datastore.transaction do |tx|
+        avatar = tx.find key
+        rags = JSON.parse(avatar['increments'])
+        rags << 'red'
+        avatar['increments'] = JSON.unparse(rags)
+        datastore.save avatar
+      end
+      avatar = avatar_exists? id, lion
+      refute_nil avatar
+      rags = JSON.parse(avatar['increments'])
+      assert_equal ['red'], rags
+    ensure
+      avatar_delete id, lion
+    end
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - -
+  # - - - - - - - - - - - - - - - - - - - - - - -
+
+  test '040',
+  'read based on key' do
+    id = '65CFFFEC38'
+    avatar_create id, lion
+    begin
+      avatar = avatar_exists? id, lion
+      refute_nil avatar
+      rags = JSON.parse(avatar['increments'])
+      assert_equal [], rags
+    ensure
+      avatar_delete id, lion
+    end
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - -
+  # - - - - - - - - - - - - - - - - - - - - - - -
+
+  def kata_create(id, manifest='{...json-here...}')
     kata = datastore.entity 'kata', id do |e|
       e['manifest'] = manifest
       e['key_prefix'] = id[0..5] # for completion
@@ -77,6 +197,24 @@ class GoogleCloudDataStorerTest < TestBase
 
   def kata_exists?(id)
     key = datastore.key ['kata', id]
+    datastore.find key
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - -
+
+  def avatar_create(id, name)
+    avatar = datastore.entity [['kata', id], ['avatar', name]] do |e|
+      e['increments'] = '[]'
+    end
+    datastore_create(avatar)
+  end
+
+  def avatar_delete(id, name)
+    datastore_delete('kata', id, 'avatar', name)
+  end
+
+  def avatar_exists?(id, name)
+    key = datastore.key [['kata', id], ['avatar', name]]
     datastore.find key
   end
 
@@ -102,140 +240,9 @@ class GoogleCloudDataStorerTest < TestBase
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - -
-  # - - - - - - - - - - - - - - - - - - - - - - -
-
-  test '027',
-  'you can create an avatar with a new name which then exists' do
-    id = '3BB113678E'
-    refute avatar_exists? id, lion
-    assert avatar_create id, lion
-    begin
-      assert avatar_exists? id, lion
-    ensure
-      avatar_delete id, lion
-    end
-  end
-
-  # - - - - - - - - - - - - - - - - - - - - - - -
-
-  test '028',
-  'you can delete an existing avatar which then does not exist' do
-    id = 'DDCEF1BE7B'
-    avatar_create id, lion
-    avatar_delete id, lion
-    refute avatar_exists? id, lion
-  end
-
-  # - - - - - - - - - - - - - - - - - - - - - - -
-
-  test '029',
-  'you cant create an avatar with an existing name' do
-    id = 'DFFE91A2C8'
-    assert avatar_create id, lion
-    begin
-      refute avatar_create id, lion
-    ensure
-      avatar_delete id, lion
-    end
-  end
-
-  # - - - - - - - - - - - - - - - - - - - - - - -
-
-  test '02A',
-  'completing a 6-digit kata-id to one 10-digit id' do
-    id = '4B80741C3C'
-    kata_create id
-    begin
-      key_prefix = id[0..5]
-      query = datastore.query('kata').where('key_prefix', '=', key_prefix)
-      all = datastore.run(query).to_a
-      assert_equal 1, all.size
-      assert_equal id, all[0].key.name
-    ensure
-      kata_delete id
-    end
-  end
-
-  # - - - - - - - - - - - - - - - - - - - - - - -
-
-  test '02B',
-  'completing a 6-digit kata-id to two 10-digit ids' do
-    key_prefix = '7658BC'
-    id1 = key_prefix + '1C3C'
-    kata_create id1
-    id2 = key_prefix + '4DE5'
-    kata_create id2
-    begin
-      query = datastore.query('kata').where('key_prefix', '=', key_prefix)
-      all = datastore.run(query).to_a
-      assert_equal 2, all.size
-      assert_equal [id1,id2], all.map{ |e| e.key.name }
-    ensure
-      kata_delete id1
-      kata_delete id2
-    end
-  end
-
-  # - - - - - - - - - - - - - - - - - - - - - - -
-
-  def avatar_create(id, name)
-    avatar = datastore.entity [['kata', id], ['avatar', name]] do |e|
-      e['increments'] = '[]'
-    end
-    datastore_create(avatar)
-  end
-
-  def avatar_delete(id, name)
-    datastore_delete('kata', id, 'avatar', name)
-  end
-
-  def avatar_exists?(id, name)
-    key = datastore.key [['kata', id], ['avatar', name]]
-    datastore.find key
-  end
 
   def lion
     'lion'
-  end
-
-  # - - - - - - - - - - - - - - - - - - - - - - -
-
-  test '030',
-  'atomically update an avatars increments' do
-    id = 'B7FAA22CCB'
-    avatar_create id, lion
-    begin
-      key = datastore.key [['kata', id], ['avatar', lion]]
-      datastore.transaction do |tx|
-        avatar = tx.find key
-        rags = JSON.parse(avatar['increments'])
-        rags << 'red'
-        avatar['increments'] = JSON.unparse(rags)
-        datastore.save avatar
-      end
-      avatar = avatar_exists? id, lion
-      refute_nil avatar
-      rags = JSON.parse(avatar['increments'])
-      assert_equal ['red'], rags
-    ensure
-      avatar_delete id, lion
-    end
-  end
-
-  # - - - - - - - - - - - - - - - - - - - - - - -
-
-  test '031',
-  'read based on key' do
-    id = '65CFFFEC38'
-    avatar_create id, lion
-    begin
-      avatar = avatar_exists? id, lion
-      refute_nil avatar
-      rags = JSON.parse(avatar['increments'])
-      assert_equal [], rags
-    ensure
-      avatar_delete id, lion
-    end
   end
 
 end
