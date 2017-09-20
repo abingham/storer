@@ -46,15 +46,18 @@ class GoogleCloudDataStorerTest < TestBase
     GoogleCloudDataStorerSpike.new
   end
 
+  # - - - - - - - - - - - - - - - - - - - - - - -
 
   test '02D',
   'datastore creation' do
     storer
   end
 
+  # - - - - - - - - - - - - - - - - - - - - - - -
+
   test '020',
-  'writing data' do
-    task = storer.datastore.entity "Task" do |t|
+  'writing data - example from google.cloud web-page' do
+    task = storer.datastore.entity 'Task' do |t|
       t['description'] = 'hello world'
       t['created']     = Time.now
       t['done']        = false
@@ -64,7 +67,59 @@ class GoogleCloudDataStorerTest < TestBase
     assert_equal 'Fixnum', task.key.id.class.name
   end
 
+  # - - - - - - - - - - - - - - - - - - - - - - -
+
+  test '025',
+  'start a kata' do
+    s = storer
+    kata = nil
+    #kata_id = '345345345'  #1
+    #kata_id = 'AB53E04534' #2
+    kata_id = '9993E04534'
+
+    kata = s.datastore.entity 'kata', kata_id do |k|
+      k['manifest'] = '{...json....here....}'
+    end
+
+    s.datastore.transaction do |tx|
+      if tx.find(kata.key).nil?
+        r = tx.save kata
+        puts "created new kata"
+        puts r.class.name
+        puts r
+      else
+        puts "!kata.nil? --> kata already exists"
+      end
+    end
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - -
+
   test '021',
+  'find data based on content' do
+    e = storer.datastore.entity 'traffic-light' do |rag|
+      rag['id1'] = '93'
+      rag['id2'] = '63EF'
+      rag['id3'] = '9A5E'
+      rag['colour'] = 'red'
+      rag.exclude_from_indexes! 'colour', true
+    end
+    storer.datastore.save e
+
+    query = storer.datastore.query('traffic-light').
+              where('id1','==','93').
+              where('id2','==','63EF').
+              where('id3','==','9A5E')
+
+    rags = storer.datastore.run query
+    rags.each do |rag|
+      puts "~~~~~"
+      puts rag.properties.to_hash
+      puts "~~~~~"
+    end
+  end
+
+  test '022',
   'deleting data' do
 
   end
