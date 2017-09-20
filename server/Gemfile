@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'google-cloud'
+gem 'google-cloud-datastore'
 gem 'minitest'
 gem 'prometheus-client'
 gem 'sinatra'

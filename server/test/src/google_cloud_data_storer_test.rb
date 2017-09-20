@@ -36,10 +36,6 @@ class GoogleCloudDataStorerSpike
 
   private
 
-  #def keyfile
-  #  '../../src/cyber-dojo-524a1de0c866.json'
-  #end
-
 end
 
 class GoogleCloudDataStorerTest < TestBase
@@ -54,6 +50,23 @@ class GoogleCloudDataStorerTest < TestBase
   test '02D',
   'datastore creation' do
     storer
+  end
+
+  test '020',
+  'writing data' do
+    task = storer.datastore.entity "Task" do |t|
+      t['description'] = 'hello world'
+      t['created']     = Time.now
+      t['done']        = false
+      t.exclude_from_indexes! 'description', true
+    end
+    storer.datastore.save task
+    assert_equal 'Fixnum', task.key.id.class.name
+  end
+
+  test '021',
+  'deleting data' do
+
   end
 
 =begin
