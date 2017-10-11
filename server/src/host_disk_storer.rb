@@ -307,7 +307,7 @@ class HostDiskStorer
   end
 
   def valid_tag?(tag)
-    tag.class.name == 'Fixnum'
+    tag.class.name == 'Integer'
   end
 
   def tag_exists?(kata_id, avatar_name, tag)
