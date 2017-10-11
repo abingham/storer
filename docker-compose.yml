@@ -16,7 +16,7 @@ services:
 
 
   storer:
-    user: root
+    user: cyber-dojo
     image: cyberdojo/storer
     container_name: storer_server
     build:
