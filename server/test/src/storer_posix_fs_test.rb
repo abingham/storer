@@ -8,7 +8,9 @@ require_relative '../../src/all_avatars_names'
 
 class StorerPosixFsTest < TestBase
 
-  def self.hex_prefix; '701B5'; end
+  def self.hex_prefix
+    '701B5'
+  end
 
   test '4C0',
   'start_avatar on multiple threads doesnt start the same avatar twice' do

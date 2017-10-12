@@ -3,7 +3,9 @@ require_relative 'spy_logger'
 
 class SpyLoggerTest < TestBase
 
-  def self.hex_prefix; 'CD4'; end
+  def self.hex_prefix
+    'CD4'
+  end
 
   test '20C',
   'logged message is spied' do

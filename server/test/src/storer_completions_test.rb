@@ -4,7 +4,9 @@ require_relative '../../src/all_avatars_names'
 
 class StorerCompletionTest < TestBase
 
-  def self.hex_prefix; '36E4A16'; end
+  def self.hex_prefix
+    '36E4A16'
+  end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 

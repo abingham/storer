@@ -2,7 +2,9 @@ require_relative 'test_base'
 
 class NearestAncestorsTest < TestBase
 
-  def self.hex_prefix; '9D4'; end
+  def self.hex_prefix
+    '9D4'
+  end
 
   def hex_setup
     anna = Anna.new

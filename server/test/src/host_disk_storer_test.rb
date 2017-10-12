@@ -4,7 +4,9 @@ require_relative '../../src/all_avatars_names'
 
 class HostDiskStorerTest < TestBase
 
-  def self.hex_prefix; 'E4FDA20'; end
+  def self.hex_prefix
+    'E4FDA20'
+  end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
   # parent
