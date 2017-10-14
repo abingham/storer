@@ -4,6 +4,7 @@ LABEL maintainer=jon@jaggersoft.com
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # 1. install ruby
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
 RUN apk --update --no-cache add \
     openssl ca-certificates \
     ruby ruby-io-console ruby-dev ruby-irb ruby-bundler ruby-bigdecimal \
@@ -11,15 +12,17 @@ RUN apk --update --no-cache add \
 
 RUN adduser -D -H -u 19661 cyber-dojo
 
-# install tini (for pid 1 zombie reaping)
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# 2. install tini (for pid 1 zombie reaping)
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # https://github.com/krallin/tini
-# https://blog.phusion.nl/2015/01/20/docker-and-the-pid-1-zombie-reaping-problem/
+# https://blog.phusion.nl/2015/01/20/
+#    docker-and-the-pid-1-zombie-reaping-problem/
 
 RUN apk add --update --repository http://dl-cdn.alpinelinux.org/alpine/edge/community/ tini
-ENTRYPOINT ["/sbin/tini", "--"]
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# 2. install sinatra
+# 2. install ruby gems
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 RUN echo 'gem: --no-document' > ~/.gemrc
@@ -34,18 +37,15 @@ RUN apk --update add --virtual build-dependencies build-base \
 RUN export RACK_ENV='production'
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# 3. setup storer
+# 3. setup server
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-RUN apk update \
- && apk add git
-
+RUN apk update && apk add git
 COPY . /app
-
 ARG PORT
 EXPOSE ${PORT}
-
 ENV PORT=${PORT}
+ENTRYPOINT ["/sbin/tini", "--"]
 CMD [ "./up.sh" ]
 
 # Note that you cannot do this (call contents of up.sh directly in a CMD)
