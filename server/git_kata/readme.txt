@@ -22,5 +22,5 @@ I got 5A/0F824303/spider out of a live katas data-container using...
    docker run --rm \
      --volumes-from ${CONTAINER_NAME} \
      --volume $(pwd):/backup \
-     cyberdojo/ruby \
+     alpine:latest \
      tar cvf /backup/backup.tar ${VOLUME_PATH}
