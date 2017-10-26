@@ -3,9 +3,9 @@ set -e
 
 # called from pipe_build_up_test.sh
 
-MY_DIR="$( cd "$( dirname "${0}" )" && pwd )"
-CYBER_DOJO_GIT_KATA_ROOT=/tmp/katas
-CYBER_DOJO_GIT_KATA_DATA_CONTAINER=cyber-dojo-git-kata-DATA-CONTAINER
+readonly MY_DIR="$( cd "$( dirname "${0}" )" && pwd )"
+readonly CYBER_DOJO_GIT_KATA_ROOT=/tmp/katas
+readonly CYBER_DOJO_GIT_KATA_DATA_CONTAINER=cyber-dojo-git-kata-DATA-CONTAINER
 
 cd ${MY_DIR}
 tar -xf 5A0F824303.tgz
@@ -20,5 +20,5 @@ docker run \
   --rm \
   --tty \
   --volumes-from ${CYBER_DOJO_GIT_KATA_DATA_CONTAINER} \
-  cyberdojo/ruby:latest \
+  cyberdojo/storer:latest \
   sh -c "chown -R cyber-dojo:cyber-dojo /tmp/katas"

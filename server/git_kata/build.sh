@@ -3,10 +3,10 @@ set -e
 
 # called from pipe_build_up_test.sh
 
-MY_DIR="$( cd "$( dirname "${0}" )" && pwd )"
-CONTEXT_DIR=${MY_DIR}
-TAG=cyberdojo/git_kata
-CYBER_DOJO_GIT_KATA_DATA_CONTAINER=cyber-dojo-git-kata-DATA-CONTAINER
+readonly MY_DIR="$( cd "$( dirname "${0}" )" && pwd )"
+readonly CONTEXT_DIR=${MY_DIR}
+readonly TAG=cyberdojo/git_kata
+readonly CYBER_DOJO_GIT_KATA_DATA_CONTAINER=cyber-dojo-git-kata-DATA-CONTAINER
 
 (docker rm --force --volumes ${CYBER_DOJO_GIT_KATA_DATA_CONTAINER}) || true
 

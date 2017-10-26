@@ -1,5 +1,5 @@
-FROM alpine:3.4
-MAINTAINER Jon Jagger <jon@jaggersoft.com>
+FROM  alpine:latest
+LABEL maintainer=jon@jaggersoft.com
 
 RUN adduser -D -H -u 19661 cyber-dojo
 
