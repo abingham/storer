@@ -1,97 +1,54 @@
 require_relative 'externals'
-require 'sinatra/base'
 require 'json'
 
-class MicroService < Sinatra::Base
+class MicroService
 
-  get '/path' do
-    getter(__method__)
-  end
-
-  # - - - - - - - - - - - - - - -
-
-  get '/kata_exists?' do
-    getter(__method__, kata_id)
-  end
-
-  post '/create_kata' do
-    poster(__method__, manifest)
-  end
-
-  get '/kata_manifest' do
-    getter(__method__, kata_id)
-  end
-
-  get '/kata_increments' do
-    getter(__method__, kata_id)
-  end
-
-  # - - - - - - - - - - - - - - -
-
-  get '/completed' do
-    getter(__method__, kata_id)
-  end
-
-  get '/completions' do
-    getter(__method__, kata_id)
-  end
-
-  # - - - - - - - - - - - - - - -
-
-  get '/avatar_exists?' do
-    getter(__method__, kata_id, avatar_name)
-  end
-
-  post '/start_avatar' do
-    poster(__method__, kata_id, avatar_names)
-  end
-
-  get '/started_avatars' do
-    getter(__method__, kata_id)
-  end
-
-  # - - - - - - - - - - - - - - -
-
-  post '/avatar_ran_tests' do
-    poster(__method__, kata_id, avatar_name, files, now, output, colour)
-  end
-
-  # - - - - - - - - - - - - - - -
-
-  get '/avatar_increments' do
-    getter(__method__, kata_id, avatar_name)
-  end
-
-  get '/avatar_visible_files' do
-    getter(__method__, kata_id, avatar_name)
-  end
-
-  # - - - - - - - - - - - - - - -
-
-  get '/tag_visible_files' do
-    getter(__method__, kata_id, avatar_name, tag)
-  end
-
-  get '/tags_visible_files' do
-    getter(__method__, kata_id, avatar_name, was_tag, now_tag)
+  def call(env)
+    request = Rack::Request.new(env)
+    @args = JSON.parse(request.body.read)
+    case request.path_info
+      when /path/
+        body = invoke('path')
+      when /kata_exists?/
+        body = invoke('kata_exists?', kata_id)
+      when /create_kata/
+        body = invoke('create_kata', manifest)
+      when /kata_manifest/
+        body = invoke('kata_manifest', kata_id)
+      when /kata_increments/
+        body = invoke('kata_increments', kata_id)
+      when /completed/
+        body = invoke('completed', kata_id)
+      when /completions/
+        body = invoke('completions', kata_id)
+      when /avatar_exists?/
+        body = invoke('avatar_exists?', kata_id, avatar_name)
+      when /start_avatar/
+        body = invoke('start_avatar', kata_id, avatar_names)
+      when /started_avatars/
+        body = invoke('started_avatars', kata_id)
+      when /avatar_ran_tests/
+        body = invoke('avatar_ran_tests', kata_id, avatar_name, files, now, output, colour)
+      when /avatar_increments/
+        body = invoke('avatar_increments', kata_id, avatar_name)
+      when /avatar_visible_files/
+        body = invoke('avatar_visible_files', kata_id, avatar_name)
+      when /tag_visible_files/
+        body = invoke('tag_visible_files', kata_id, avatar_name, tag)
+      when /tags_visible_files/
+        body = invoke('tags_visible_files', kata_id, avatar_name, was_tag, now_tag)
+    end
+    [ 200, { 'Content-Type' => 'application/json' }, [ body.to_json ] ]
   end
 
   private
 
-  def getter(name, *args)
-    storer_json('GET /', name, *args)
-  end
-
-  def poster(name, *args)
-    storer_json('POST /', name, *args)
-  end
-
-  def storer_json(prefix, caller, *args)
-    name = caller.to_s[prefix.length .. -1]
-    { name => storer.send(name, *args) }.to_json
+  def invoke(name, *args)
+    storer = HostDiskStorer.new(self)
+    { name => storer.send(name, *args) }
   rescue Exception => e
     log << "EXCEPTION: #{e.class.name}.#{caller} #{e.message}"
-    { 'exception' => e.message }.to_json
+    { 'exception' => e.message }
   end
 
   # - - - - - - - - - - - - - - - -
@@ -100,7 +57,7 @@ class MicroService < Sinatra::Base
 
   def self.request_args(*names)
     names.each { |name|
-      define_method name, &lambda { args[name.to_s] }
+      define_method name, &lambda { @args[name.to_s] }
     }
   end
 
@@ -108,14 +65,5 @@ class MicroService < Sinatra::Base
   request_args :kata_id, :avatar_name, :avatar_names
   request_args :files, :now, :output, :colour, :tag
   request_args :was_tag, :now_tag
-
-  def args
-    @args ||= JSON.parse(request_body_args)
-  end
-
-  def request_body_args
-    request.body.rewind
-    request.body.read
-  end
 
 end
