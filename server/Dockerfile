@@ -2,7 +2,7 @@ FROM  alpine:latest
 LABEL maintainer=jon@jaggersoft.com
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# 1. install ruby
+# install ruby
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 RUN apk --update --no-cache add \
@@ -10,19 +10,8 @@ RUN apk --update --no-cache add \
     ruby ruby-io-console ruby-dev ruby-irb ruby-bundler ruby-bigdecimal \
     bash tzdata
 
-RUN adduser -D -H -u 19661 cyber-dojo
-
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# 2. install tini (for pid 1 zombie reaping)
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# https://github.com/krallin/tini
-# https://blog.phusion.nl/2015/01/20/
-#    docker-and-the-pid-1-zombie-reaping-problem/
-
-RUN apk add --update --repository http://dl-cdn.alpinelinux.org/alpine/edge/community/ tini
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# 2. install ruby gems
+# install ruby gems
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 RUN echo 'gem: --no-document' > ~/.gemrc
@@ -31,15 +20,27 @@ WORKDIR /app
 
 RUN apk --update add --virtual build-dependencies build-base \
   && bundle config --global silence_root_warning 1 \
-  && bundle install && gem clean \
+  && bundle install \
+  && gem clean \
   && apk del build-dependencies \
   && rm -vrf /var/cache/apk/*
 
 RUN export RACK_ENV='production'
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# 3. setup server
+# install tini (for pid 1 zombie reaping)
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# https://github.com/krallin/tini
+# https://blog.phusion.nl/2015/01/20/
+#    docker-and-the-pid-1-zombie-reaping-problem/
+
+RUN apk add --update --repository http://dl-cdn.alpinelinux.org/alpine/edge/community/ tini
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# setup server
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+RUN adduser -D -H -u 19661 cyber-dojo
 
 RUN apk update && apk add git
 COPY . /app
