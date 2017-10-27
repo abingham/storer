@@ -1,8 +1,13 @@
 require_relative '../hex_mini_test'
 require_relative '../../src/externals'
+require_relative '../../src/storer'
 require 'json'
 
 class TestBase < HexMiniTest
+
+  def storer
+    Storer.new(self)
+  end
 
   def kata_manifest
     storer.kata_manifest(kata_id)
@@ -76,12 +81,6 @@ class TestBase < HexMiniTest
     id[2..-1]
   end
 
-  # - - - - - - - - - - - - - - - - - - - - - - - - - -
-
   include Externals
-
-  def success; runner.success; end
-
-  def avatar_name; 'salmon'; end
 
 end

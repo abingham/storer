@@ -1,13 +1,8 @@
 require_relative 'bash_sheller'
 require_relative 'disk_writer'
-require_relative 'host_disk_storer'
 require_relative 'stdout_logger'
 
 module Externals
-
-  def storer
-    @storer ||= HostDiskStorer.new(self)
-  end
 
   def shell
     @shell ||= BashSheller.new(self)

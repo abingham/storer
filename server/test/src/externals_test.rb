@@ -11,8 +11,8 @@ class ExternalsTest < TestBase
   # - - - - - - - - - - - - - - - - -
 
   test '543',
-  'default storer is HostDiskStorer' do
-    assert_equal 'HostDiskStorer', storer.class.name
+  'default storer is Storer' do
+    assert_equal 'Storer', storer.class.name
   end
 
   # - - - - - - - - - - - - - - - - -

@@ -2,7 +2,7 @@ require_relative 'nearest_ancestors'
 require_relative 'all_avatars_names'
 require 'json'
 
-class HostDiskStorer
+class Storer
 
   def initialize(parent)
     @parent = parent

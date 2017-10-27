@@ -1,4 +1,5 @@
 require_relative 'externals'
+require_relative 'storer'
 require 'json'
 
 class MicroService
@@ -44,7 +45,7 @@ class MicroService
   private
 
   def invoke(name, *args)
-    storer = HostDiskStorer.new(self)
+    storer = Storer.new(self)
     { name => storer.send(name, *args) }
   rescue Exception => e
     log << "EXCEPTION: #{e.class.name}.#{caller} #{e.message}"
