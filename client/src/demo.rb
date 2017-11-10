@@ -1,9 +1,9 @@
 require_relative 'storer_service'
-require 'sinatra/base'
 
-class Demo < Sinatra::Base
+class Demo
 
-  get '/' do
+  def call(_env)
+    [ 200, { 'Content-Type' => 'text/html' }, [ 'TODO' ] ]
   end
 
   private
