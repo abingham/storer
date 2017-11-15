@@ -40,8 +40,8 @@ RUN apk add --update --repository http://dl-cdn.alpinelinux.org/alpine/edge/comm
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 RUN adduser -D -H -u 19661 cyber-dojo
+RUN apk add git
 
-RUN apk update && apk add git
 COPY . /app
 ARG PORT
 EXPOSE ${PORT}
