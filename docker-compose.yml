@@ -1,11 +1,12 @@
 
-version: '2'
+version: '2.2'
 
 services:
 
   storer_client:
     user: nobody
     image: cyberdojo/storer_client
+    init: true
     container_name: storer_client
     build:
       context: client
@@ -18,6 +19,7 @@ services:
   storer:
     user: cyber-dojo
     image: cyberdojo/storer
+    init: true
     container_name: storer_server
     build:
       context: server
