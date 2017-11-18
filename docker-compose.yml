@@ -21,6 +21,8 @@ services:
     image: cyberdojo/storer
     init: true
     container_name: storer_server
+    read_only: true
+    tmpfs: /tmp
     build:
       context: server
       args:
@@ -28,4 +30,4 @@ services:
     environment:
       - CYBER_DOJO_KATAS_ROOT
     volumes_from:
-      - container:cyber-dojo-git-kata-DATA-CONTAINER:rw
+      - container:${CYBER_DOJO_GIT_KATA_DATA_CONTAINER}:rw

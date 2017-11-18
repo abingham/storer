@@ -22,8 +22,8 @@ class HostDiskStorerTest < TestBase
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '218',
-  'path is set to /tmp/katas in docker-compose.yml' do
-    assert_equal '/tmp/katas', storer.path
+  'path is set to /usr/src/cyber-dojo/katas in docker-compose.yml' do
+    assert_equal '/usr/src/cyber-dojo/katas', storer.path
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -333,7 +333,7 @@ class HostDiskStorerTest < TestBase
 
   test 'C33',
   'katas/5A/0F824303/spider already exists and is in old git format' do
-    avatar_path = '/tmp/katas/5A/0F824303/spider'
+    avatar_path = '/usr/src/cyber-dojo/katas/5A/0F824303/spider'
     avatar_dir = disk[avatar_path]
     assert avatar_dir.exists?
     git_path = avatar_path + '/.git'

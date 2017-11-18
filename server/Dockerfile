@@ -28,10 +28,12 @@ RUN export RACK_ENV='production'
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # setup server
+# git is needed for reading katas in old git-format
+# tar is needed to tar-pipe old git-kata in tests
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 RUN adduser -D -H -u 19661 cyber-dojo
-RUN apk --update --no-cache add git
+RUN apk --update --no-cache add git tar
 
 COPY . /app
 ARG PORT

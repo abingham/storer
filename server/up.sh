@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Note that the --host is needed for IPv4 and IPv6 addresses
+# The --host is needed for IPv4 and IPv6 addresses
 
 bundle exec rackup \
   --warn \

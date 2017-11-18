@@ -6,8 +6,8 @@ class StorerServiceTest < TestBase
   def self.hex_prefix; '6AA1B'; end
 
   test 'D43',
-  'path is set to /tmp/katas from docker-compose.yml' do
-    assert_equal '/tmp/katas', path
+  'path is set to /usr/src/cyber-dojo/katas from docker-compose.yml' do
+    assert_equal '/usr/src/cyber-dojo/katas', path
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
