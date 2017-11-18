@@ -7,15 +7,13 @@ readonly MY_DIR="$( cd "$( dirname "${0}" )" && pwd )"
 readonly CONTEXT_DIR=${MY_DIR}
 readonly TAG=cyberdojo/git_kata
 
-# TODO: get this from top-level .env file
-readonly CYBER_DOJO_GIT_KATA_DATA_CONTAINER=cyber-dojo-git-kata-DATA-CONTAINER
+. ${MY_DIR}/../../.env
 
 # TODO: only remove it if its there
 (docker rm --force --volumes ${CYBER_DOJO_GIT_KATA_DATA_CONTAINER}) || true
 
-# TODO: get CYBER_DOJO_GIT_KATA_ROOT from top-level .env file
 docker build \
-  --build-arg=CYBER_DOJO_GIT_KATA_ROOT=/usr/src/cyber-dojo/katas \
+  --build-arg=CYBER_DOJO_GIT_KATA_ROOT=${CYBER_DOJO_KATAS_ROOT} \
   --tag=${TAG} \
   --file=${MY_DIR}/Dockerfile \
   ${CONTEXT_DIR}

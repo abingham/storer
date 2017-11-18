@@ -3,8 +3,7 @@ set -e
 
 readonly MY_DIR="$( cd "$( dirname "${0}" )" && pwd )"
 
-# TODO: this need to come from top-level .env file
-CYBER_DOJO_KATAS_ROOT=/usr/src/cyber-dojo/katas
+. ${MY_DIR}/../../.env
 
 cd ${MY_DIR} && \
   tar -zcf - 5A \
