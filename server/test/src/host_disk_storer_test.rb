@@ -22,8 +22,8 @@ class HostDiskStorerTest < TestBase
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '218',
-  'path is set to /usr/src/cyber-dojo/katas in docker-compose.yml' do
-    assert_equal '/usr/src/cyber-dojo/katas', storer.path
+  'path is set to ENV[CYBER_DOJO_KATAS_ROOT] in docker-compose.yml' do
+    assert_equal cyber_dojo_katas_root, storer.path
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -333,7 +333,7 @@ class HostDiskStorerTest < TestBase
 
   test 'C33',
   'katas/5A/0F824303/spider already exists and is in old git format' do
-    avatar_path = '/usr/src/cyber-dojo/katas/5A/0F824303/spider'
+    avatar_path = "#{cyber_dojo_katas_root}/5A/0F824303/spider"
     avatar_dir = disk[avatar_path]
     assert avatar_dir.exists?
     git_path = avatar_path + '/.git'
@@ -588,6 +588,12 @@ class HostDiskStorerTest < TestBase
 
   def invalid?(error, name)
     error.message.end_with?("invalid #{name}")
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - -
+
+  def cyber_dojo_katas_root
+    ENV['CYBER_DOJO_KATAS_ROOT']
   end
 
 end
