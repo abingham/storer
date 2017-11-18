@@ -9,7 +9,6 @@ readonly TAG=cyberdojo/git_kata
 
 . ${MY_DIR}/../../.env
 
-# TODO: only remove it if its there
 (docker rm --force --volumes ${CYBER_DOJO_GIT_KATA_DATA_CONTAINER}) || true
 
 docker build \
