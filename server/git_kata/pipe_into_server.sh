@@ -10,4 +10,4 @@ cd ${MY_DIR} && \
     | docker exec \
        --interactive \
          storer_server \
-           sh -c 'tar -zxf - -C /usr/src/cyber-dojo/katas'
+           sh -c "tar -zxf - -C ${CYBER_DOJO_KATAS_ROOT}"
