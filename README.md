@@ -13,7 +13,7 @@ alt="cyber-dojo yin/yang logo" width="50px" height="50px"/>
 
 # cyberdojo/storer docker image
 
-- A micro-service for [cyber-dojo](http://cyber-dojo.org)
+- A docker-containerized micro-service for [cyber-dojo](http://cyber-dojo.org)
 - Stores the visible files, output, and traffic-light status of every avatar test event.
 - Stores data inside a docker-volume in a docker data-container.
 
