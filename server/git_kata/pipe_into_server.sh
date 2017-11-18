@@ -11,3 +11,8 @@ cd ${MY_DIR} && \
        --interactive \
          storer_server \
            sh -c "tar -zxf - -C ${CYBER_DOJO_KATAS_ROOT}"
+
+docker exec \
+  --interactive \
+    storer_server \
+      sh -c "cd ${CYBER_DOJO_KATAS_ROOT} && ls -al"

@@ -9,4 +9,5 @@ before_script:
 script:
     - docker --version
     - docker-compose --version
+    - tar --version
     - ./pipe_build_up_test.sh && ./push_and_trigger.sh cyber-dojo/web
