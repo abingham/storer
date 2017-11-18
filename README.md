@@ -15,6 +15,7 @@ alt="cyber-dojo yin/yang logo" width="50px" height="50px"/>
 
 - A micro-service for [cyber-dojo](http://cyber-dojo.org)
 - Stores the visible files, output, and traffic-light status of every avatar test event.
+- Stores data inside a docker-volume in a docker data-container.
 
 API:
   * All methods receive their named arguments in a json hash.
