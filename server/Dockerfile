@@ -1,4 +1,4 @@
-FROM  docker:latest
+FROM  alpine:latest
 LABEL maintainer=jon@jaggersoft.com
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -29,13 +29,13 @@ RUN export RACK_ENV='production'
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # setup server
 #   o) cyber-dojo user owns the katas/ dir
-#   o) users group has rights to /var/run/docker.sock
 #   o) git is needed for reading katas in old git-format
-#   o) tar is needed to tar-pipe old git-kata in tests
+#   o) tar is needed to tar-pipe old git-kata in tests. This allows
+#      docker-compose.yml to set read_only:true which is what
+#      commander does in its docker-compose.yml file.
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 RUN adduser -D -H -u 19661 cyber-dojo
-RUN addgroup cyber-dojo users
 RUN apk --update --no-cache add git tar
 
 COPY . /app
