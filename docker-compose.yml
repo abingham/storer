@@ -12,6 +12,8 @@ services:
       context: client
       args:
         - PORT=${CYBER_DOJO_STORER_CLIENT_PORT}
+    environment:
+      - CYBER_DOJO_KATAS_ROOT
     ports:
       - ${CYBER_DOJO_STORER_CLIENT_PORT}:${CYBER_DOJO_STORER_CLIENT_PORT}
 

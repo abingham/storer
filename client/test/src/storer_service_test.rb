@@ -6,8 +6,8 @@ class StorerServiceTest < TestBase
   def self.hex_prefix; '6AA1B'; end
 
   test 'D43',
-  'path is set to /usr/src/cyber-dojo/katas from docker-compose.yml' do
-    assert_equal '/usr/src/cyber-dojo/katas', path
+  'path is set to ENV[CYBER_DOJO_KATAS_ROOT] from docker-compose.yml' do
+    assert_equal ENV['CYBER_DOJO_KATAS_ROOT'], path
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
