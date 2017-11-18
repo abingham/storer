@@ -81,6 +81,17 @@ class TestBase < HexMiniTest
     id[2..-1]
   end
 
+  def cyber_dojo_katas_root
+    ENV['CYBER_DOJO_KATAS_ROOT']
+  end
+
+  def assert_hash_equal(expected, actual)
+    assert_equal expected.size, actual.size
+    expected.each do |symbol,value|
+      assert_equal value, actual[symbol.to_s], symbol.to_s
+    end
+  end
+
   include Externals
 
 end

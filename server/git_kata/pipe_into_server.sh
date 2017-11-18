@@ -15,4 +15,4 @@ cd ${MY_DIR} && \
 docker exec \
   --interactive \
     storer_server \
-      sh -c "cd ${CYBER_DOJO_KATAS_ROOT} && ls -al"
+      sh -c "cd ${CYBER_DOJO_KATAS_ROOT}/5A/0F824303/spider && ls -al"
