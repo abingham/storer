@@ -33,3 +33,5 @@ services:
         - PORT=${CYBER_DOJO_STORER_SERVER_PORT}
     environment:
       - CYBER_DOJO_KATAS_ROOT
+    volumes_from:
+      - container:${CYBER_DOJO_KATA_DATA_CONTAINER_NAME}:rw

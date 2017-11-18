@@ -6,13 +6,14 @@ set -e
 readonly MY_DIR="$( cd "$( dirname "${0}" )" && pwd )"
 readonly CONTEXT_DIR=${MY_DIR}
 readonly TAG=cyberdojo/git_kata
+readonly PARM=${1:-test}
 
-. ${MY_DIR}/../../env.test
+. ${MY_DIR}/../../env.${PARM}
 
 docker rm \
   --force \
   --volumes \
-    ${CYBER_DOJO_GIT_KATA_DATA_CONTAINER} || true
+    ${CYBER_DOJO_KATA_DATA_CONTAINER_NAME} || true
 
 docker build \
   --build-arg=CYBER_DOJO_GIT_KATA_ROOT=${CYBER_DOJO_KATAS_ROOT} \
@@ -21,7 +22,7 @@ docker build \
   ${CONTEXT_DIR}
 
 docker create \
-  --name ${CYBER_DOJO_GIT_KATA_DATA_CONTAINER} \
+  --name ${CYBER_DOJO_KATA_DATA_CONTAINER_NAME} \
   ${TAG} \
   echo 'cdfGitKataDC' > /dev/null
 

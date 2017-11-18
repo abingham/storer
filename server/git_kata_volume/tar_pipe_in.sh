@@ -1,9 +1,12 @@
 #!/bin/bash
 set -e
 
-readonly MY_DIR="$( cd "$( dirname "${0}" )" && pwd )"
+# called from pipe_build_up_test.sh
 
-. ${MY_DIR}/../../env.test
+readonly MY_DIR="$( cd "$( dirname "${0}" )" && pwd )"
+readonly PARM=${1:-test}
+
+. ${MY_DIR}/../../env.${PARM}
 
 cat ${MY_DIR}/5A0F824303.tgz \
     | docker exec \
