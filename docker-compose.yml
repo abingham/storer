@@ -33,5 +33,7 @@ services:
         - PORT=${CYBER_DOJO_STORER_SERVER_PORT}
     environment:
       - CYBER_DOJO_KATAS_ROOT
+    volumes:
+      - '/var/run/docker.sock:/var/run/docker.sock'
     volumes_from:
       - container:${CYBER_DOJO_GIT_KATA_DATA_CONTAINER}:rw

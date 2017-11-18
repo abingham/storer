@@ -28,11 +28,14 @@ RUN export RACK_ENV='production'
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # setup server
-# git is needed for reading katas in old git-format
-# tar is needed to tar-pipe old git-kata in tests
+#   o) cyber-dojo user owns the katas/ dir
+#   o) users group has rights to /var/run/docker.sock
+#   o) git is needed for reading katas in old git-format
+#   o) tar is needed to tar-pipe old git-kata in tests
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 RUN adduser -D -H -u 19661 cyber-dojo
+RUN addgroup cyber-dojo users
 RUN apk --update --no-cache add git tar
 
 COPY . /app
