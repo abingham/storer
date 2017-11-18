@@ -16,7 +16,10 @@ check_up()
   fi
 }
 
-docker-compose --file ${ROOT_DIR}/docker-compose.yml up -d
+docker-compose \
+  --file ${ROOT_DIR}/docker-compose.yml \
+  --file ${ROOT_DIR}/docker-compose.test.yml \
+    up -d
 
 # crude wait for services
 sleep 5

@@ -1,0 +1,8 @@
+
+version: '2.2'
+
+services:
+
+  storer:
+    volumes_from:
+      - container:${CYBER_DOJO_GIT_KATA_DATA_CONTAINER}:rw
