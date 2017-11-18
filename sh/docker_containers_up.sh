@@ -22,3 +22,10 @@ docker-compose --file ${ROOT_DIR}/docker-compose.yml up -d
 sleep 5
 check_up 'storer_server'
 check_up 'storer_client'
+
+echo '~~~~~~~~~/var/run/docker.sock inside the storer...'
+docker exec -it storer_server sh -c 'ls -al /var/run/docker.sock'
+echo '~~~~~~~~~/var/run/docker/sock on the host...'
+#docker-machine ssh default ls -al /var/run/docker.sock
+ls -al /var/run/docker.sock
+echo '~~~~~~~~~'
