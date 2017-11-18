@@ -7,9 +7,12 @@ readonly MY_DIR="$( cd "$( dirname "${0}" )" && pwd )"
 readonly CONTEXT_DIR=${MY_DIR}
 readonly TAG=cyberdojo/git_kata
 
-. ${MY_DIR}/../../.env
+. ${MY_DIR}/../../env.test
 
-(docker rm --force --volumes ${CYBER_DOJO_GIT_KATA_DATA_CONTAINER}) || true
+docker rm \
+  --force \
+  --volumes \
+    ${CYBER_DOJO_GIT_KATA_DATA_CONTAINER} || true
 
 docker build \
   --build-arg=CYBER_DOJO_GIT_KATA_ROOT=${CYBER_DOJO_KATAS_ROOT} \

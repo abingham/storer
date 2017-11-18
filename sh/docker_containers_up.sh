@@ -5,16 +5,15 @@ readonly ROOT_DIR="$( cd "$( dirname "${0}" )" && cd .. && pwd )"
 
 check_up()
 {
-  set +e
-  local s=$(docker ps --filter status=running --format '{{.Names}}' | grep ^${1}$)
-  set -e
-  if [ "${s}" != "${1}" ]; then
+  if ! docker ps --filter status=running --format '{{.Names}}' | grep ^${1}$ ; then
     echo
     echo "${1} not up"
     docker logs ${1}
     exit 1
   fi
 }
+
+. ${ROOT_DIR}/env.test
 
 docker-compose \
   --file ${ROOT_DIR}/docker-compose.yml \
