@@ -5,36 +5,8 @@ readonly MY_DIR="$( cd "$( dirname "${0}" )" && pwd )"
 
 . ${MY_DIR}/../../.env
 
-cd ${MY_DIR} && \
-  tar -zcf - 5A \
+cat ${MY_DIR}/5A0F824303.tgz \
     | docker exec \
        --interactive \
          storer_server \
            sh -c "tar -zxf - -C ${CYBER_DOJO_KATAS_ROOT}"
-
-printenv
-
-docker exec \
-  --interactive \
-    storer_server \
-      sh -c 'printenv'
-
-docker exec \
-  --interactive \
-    storer_server \
-      sh -c "cd ${CYBER_DOJO_KATAS_ROOT} && ls -al"
-
-docker exec \
-  --interactive \
-    storer_server \
-      sh -c "cd ${CYBER_DOJO_KATAS_ROOT}/5A && ls -al"
-
-docker exec \
-  --interactive \
-    storer_server \
-      sh -c "cd ${CYBER_DOJO_KATAS_ROOT}/5A/0F824303 && ls -al"
-
-docker exec \
-  --interactive \
-    storer_server \
-      sh -c "cd ${CYBER_DOJO_KATAS_ROOT}/5A/0F824303/spider && ls -al"
