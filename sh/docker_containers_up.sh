@@ -23,6 +23,6 @@ docker-compose \
     up -d
 
 # crude wait for services
-sleep 5
+sleep 2
 check_up 'storer_server'
 check_up 'storer_client'
