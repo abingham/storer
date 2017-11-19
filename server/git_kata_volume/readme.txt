@@ -13,6 +13,9 @@ In order to test that the new storer correctly retrieves data stored
 in the old git-format I need a kata with a known kata-id created in the
 old git-format. This dir provides that. Specifically, 5A0F824303.tgz
 untars to provide /5A/0F824303/spider/.git
+Note that I provide the tgz file and untar it into the container.
+I do not provide (in the git repo) the already untarred 5A/... dir
+as having source with a .git dir in a git repo is problematic.
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 I got 5A/0F824303/spider out of a live katas data-container using...
