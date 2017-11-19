@@ -65,12 +65,20 @@ class HexMiniTest < MiniTest::Test
 
   # - - - - - - - - - - - - - - - - - - - - - -
 
-  def hex_setup; end
-  def hex_teardown; end
+  def hex_setup
+  end
+
+  def hex_teardown
+  end
 
   # - - - - - - - - - - - - - - - - - - - - - -
 
-  def test_id; @_hex_test_id; end
-  def test_name; @_hex_test_name; end
+  def test_id
+    @_hex_test_id
+  end
+
+  def test_name
+    @_hex_test_name
+  end
 
 end
