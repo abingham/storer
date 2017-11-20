@@ -28,7 +28,7 @@ RUN export RACK_ENV='production'
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # setup client
-# tar is needed to tar-pipe files out of tmpfs.
+# tar is needed to tar-pipe test coverage out of tmpfs.
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 RUN apk --update --no-cache add tar

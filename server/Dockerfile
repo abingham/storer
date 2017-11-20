@@ -33,7 +33,7 @@ RUN export RACK_ENV='production'
 #   o) tar is needed to tar-pipe old git-kata in tests. This allows
 #      docker-compose.yml to set read_only:true which is what
 #      commander does in its docker-compose.yml file.
-#      Also needed to tar-pipe files out of tmpfs.
+#      Also needed to tar-pipe test coverage out of tmpfs.
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 RUN adduser -D -H -u 19661 cyber-dojo
