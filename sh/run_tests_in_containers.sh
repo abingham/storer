@@ -13,7 +13,7 @@ run_server_tests()
   docker exec ${SERVER_CID} sh -c "cd /app/test && ./run.sh ${*}"
   server_status=$?
 
-  # You can't [docker cp] from a tmpfs, you have to tar-pipe out
+  # You can't [docker cp] from a tmpfs, you have to tar-pipe out.
   docker exec ${SERVER_CID} \
     tar Ccf \
       $(dirname ${CYBER_DOJO_COVERAGE_ROOT}) \
@@ -24,12 +24,14 @@ run_server_tests()
   cat ${ROOT_DIR}/server/coverage/done.txt
 }
 
+# - - - - - - - - - - - - - - - - - - - - - - - - - -
+
 run_client_tests()
 {
   docker exec ${CLIENT_CID} sh -c "cd /app/test && ./run.sh ${*}"
   client_status=$?
 
-  # You can't [docker cp] from a tmpfs, you have to tar-pipe out
+  # You can't [docker cp] from a tmpfs, you have to tar-pipe out.
   docker exec ${CLIENT_CID} \
     tar Ccf \
       $(dirname ${CYBER_DOJO_COVERAGE_ROOT}) \
@@ -48,8 +50,8 @@ run_server_tests ${*}
 run_client_tests ${*}
 
 if [[ ( ${server_status} == 0 && ${client_status} == 0 ) ]]; then
-  echo "------------------------------------------------------"
-  echo "All passed"
+  echo '------------------------------------------------------'
+  echo 'All passed'
   exit 0
 else
   echo
