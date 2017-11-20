@@ -10,3 +10,5 @@ readonly PARM=prod
 ${MY_DIR}/server/katas_volume/build_data_container.sh ${PARM}
 ${MY_DIR}/sh/build_docker_images.sh ${PARM}
 ${MY_DIR}/sh/docker_containers_up.sh ${PARM}
+
+echo "Don't forget to open port ${CYBER_DOJO_STORER_SERVER_PORT}"
