@@ -28,7 +28,10 @@ RUN export RACK_ENV='production'
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # setup client
+# tar is needed to tar-pipe files out of tmpfs.
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+RUN apk --update --no-cache add tar
 
 COPY . /app
 ARG PORT

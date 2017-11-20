@@ -4,38 +4,12 @@ version: '2.2'
 services:
 
   storer_client:
-    depends_on:
-      - storer-client-coverage-container
-    volumes_from:
-      - storer-client-coverage-container:rw
     environment:
       - CYBER_DOJO_COVERAGE_ROOT
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   storer:
-    depends_on:
-      - storer-server-coverage-container
-    volumes_from:
-      - storer-server-coverage-container:rw
     environment:
       - CYBER_DOJO_COVERAGE_ROOT
-
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-  storer-client-coverage-container:
-    image: cyberdojo/storer_client
-    container_name: storer-client-coverage-container
-    volumes:
-      - /${CYBER_DOJO_COVERAGE_ROOT}
-    command: "chown nobody:nobody ${CYBER_DOJO_COVERAGE_ROOT}"
-
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-  storer-server-coverage-container:
-    image: cyberdojo/storer
-    container_name: storer-server-coverage-container
-    volumes:
-      - /${CYBER_DOJO_COVERAGE_ROOT}
-    command: "chown cyber-dojo:cyber-dojo ${CYBER_DOJO_COVERAGE_ROOT}"
 
