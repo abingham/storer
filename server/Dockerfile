@@ -24,8 +24,6 @@ RUN apk --update add --virtual build-dependencies build-base \
   && apk del build-dependencies \
   && rm -vrf /var/cache/apk/*
 
-RUN export RACK_ENV='production'
-
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # setup server
 #   o) cyber-dojo user owns the katas/ dir
