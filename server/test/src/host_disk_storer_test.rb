@@ -28,15 +28,19 @@ class HostDiskStorerTest < TestBase
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
-  # invalid kata_id on any method raises
+  # invalid kata_id on kata_exists? is false
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '6B7',
   'kata_exists? with invalid kata_id raises' do
-    assert_invalid_kata_id_raises { |invalid_id|
-      storer.kata_exists?(invalid_id)
-    }
+    invalid_kata_ids.each do |invalid_id|
+      refute storer.kata_exists?(invalid_id), invalid_id
+    end
   end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # invalid kata_id on any method raises
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '78F',
   'avatar_exists? with invalid kata_id raises' do

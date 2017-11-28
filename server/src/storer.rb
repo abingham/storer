@@ -46,12 +46,13 @@ class Storer
   # kata
 
   def kata_exists?(kata_id)
-    assert_valid_id(kata_id)
+    return false unless valid_id?(kata_id)
     kata_dir(kata_id).exists?
   end
 
   def create_kata(manifest)
     kata_id = manifest['id']
+    assert_valid_id(kata_id)
     refute_kata_exists(kata_id)
     json = JSON.unparse(manifest)
     dir = kata_dir(kata_id)
