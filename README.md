@@ -38,9 +38,7 @@ No parameters. Returns the storer's root path, eg
 Asks whether the kata with the given kata_id exists.
 - parameters, eg
 ```
-  { "image_name": "cyberdojofoundation/gcc_assert",
-       "kata_id": "15B9AD6C42"
-  }
+  { "kata_id": "15B9AD6C42" }
 ```
 - returns true if it does, false if it doesn't.
 ```
