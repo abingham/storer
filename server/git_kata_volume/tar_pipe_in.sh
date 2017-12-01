@@ -4,9 +4,9 @@ set -e
 # called from pipe_build_up_test.sh
 
 readonly MY_DIR="$( cd "$( dirname "${0}" )" && pwd )"
-readonly PARM=${1:-test}
+readonly PARAM=${1:-test}
 
-. ${MY_DIR}/../../env.${PARM}
+. ${MY_DIR}/../../env.${PARAM}
 
 cat ${MY_DIR}/5A0F824303.tgz \
     | docker exec \

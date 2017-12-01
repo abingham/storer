@@ -2,9 +2,9 @@
 set -e
 
 readonly MY_DIR="$( cd "$( dirname "${0}" )" && pwd )"
-readonly PARM=${1:-prod}
+readonly PARAM=${1:-prod}
 
-. ${MY_DIR}/../../env.${PARM}
+. ${MY_DIR}/../../env.${PARAM}
 
 one_time_creation_of_katas_data_container()
 {

@@ -2,9 +2,9 @@
 set -e
 
 readonly ROOT_DIR="$( cd "$( dirname "${0}" )" && cd .. && pwd )"
-readonly PARM=${1:-test}
+readonly PARAM=${1:-test}
 
-. ${ROOT_DIR}/env.${PARM}
+. ${ROOT_DIR}/env.${PARAM}
 . ${ROOT_DIR}/env.port
 
 wait_till_up()
@@ -25,7 +25,7 @@ wait_till_up()
 
 docker-compose \
   --file ${ROOT_DIR}/docker-compose.yml \
-  --file ${ROOT_DIR}/docker-compose.${PARM}.yml \
+  --file ${ROOT_DIR}/docker-compose.${PARAM}.yml \
     up -d
 
 wait_till_up 'storer_server'
