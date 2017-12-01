@@ -2,12 +2,6 @@ require_relative 'http_json_service'
 
 class StorerService
 
-  def path
-    get(__method__)
-  end
-
-  # - - - - - - - - - - - -
-
   def kata_exists?(kata_id)
     get(__method__, kata_id)
   end

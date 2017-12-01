@@ -8,8 +8,6 @@ class MicroService
     request = Rack::Request.new(env)
     @args = JSON.parse(request.body.read)
     case request.path_info
-      when /path/
-        body = invoke('path')
       when /kata_exists?/
         body = invoke('kata_exists?', kata_id)
       when /create_kata/

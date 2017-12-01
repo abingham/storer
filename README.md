@@ -24,14 +24,6 @@ API:
     * If the method raises an exception, the key equals "exception".
 
 - - - -
-
-## GET path
-No parameters. Returns the storer's root path, eg
-```
-  { "path": "/usr/src/cyber-dojo/katas"  }
-```
-
-- - - -
 - - - -
 
 ## GET kata_exists?

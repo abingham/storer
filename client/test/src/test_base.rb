@@ -3,10 +3,6 @@ require_relative '../../src/storer_service'
 
 class TestBase < HexMiniTest
 
-  def path
-    storer.path
-  end
-
   def create_kata(manifest)
     storer.create_kata(manifest)
   end
@@ -80,7 +76,7 @@ class TestBase < HexMiniTest
   end
 
   def kata_id
-    # reversed so I don't get common outer(id)s
+    # reversed so I don't get common outer(id)s which affects completions.
     test_id.reverse + ('0' * (10-test_id.length))
   end
 
