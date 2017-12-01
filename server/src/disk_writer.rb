@@ -1,15 +1,12 @@
-require_relative 'nearest_ancestors'
 
 class DiskWriter
 
-  def initialize(parent)
-    @parent = parent
+  def initialize(external)
+    @shell = external.shell
   end
 
-  attr_reader :parent
-
   def [](dir_name)
-    DirWriter.new(self, dir_name)
+    DirWriter.new(self, @shell, dir_name)
   end
 
 end
@@ -18,12 +15,13 @@ end
 
 class DirWriter
 
-  def initialize(parent, name)
+  def initialize(parent, shell, name)
     @parent = parent
+    @shell = shell
     @name = name
   end
 
-  attr_reader :parent, :name
+  attr_reader :name
 
   def make
     # Can't find a Ruby library method allowing you to do a
@@ -54,11 +52,13 @@ class DirWriter
   def each_dir
     return enum_for(:each_dir) unless block_given?
     Dir.entries(name).each do |entry|
-      yield entry if parent[pathed(entry)].exists? && !dot?(pathed(entry))
+      yield entry if @parent[pathed(entry)].exists? && !dot?(pathed(entry))
     end
   end
 
   private
+
+  attr_reader :shell
 
   def pathed(entry)
     name + '/' + entry
@@ -66,12 +66,6 @@ class DirWriter
 
   def dot?(name)
     name.end_with?('/.') || name.end_with?('/..')
-  end
-
-  include NearestAncestors
-
-  def shell
-    nearest_ancestors(:shell)
   end
 
 end

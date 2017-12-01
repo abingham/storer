@@ -1,15 +1,15 @@
-require_relative 'nearest_ancestors'
 require_relative 'all_avatars_names'
 require 'json'
 
 class Storer
 
-  def initialize(parent)
-    @parent = parent
+  def initialize(external)
+    @disk = external.disk
+    @shell = external.shell
     @path = ENV['CYBER_DOJO_KATAS_ROOT']
   end
 
-  attr_reader :parent, :path
+  attr_reader :path
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # kata-id completion(s)
@@ -165,6 +165,8 @@ class Storer
   end
 
   private
+
+  attr_reader :disk, :shell
 
   def write_avatar_increments(kata_id, avatar_name, increments)
     json = JSON.unparse(increments)
@@ -337,16 +339,6 @@ class Storer
   # - - - - - - - - - - -
 
   include AllAvatarsNames
-
-  include NearestAncestors
-
-  def shell
-    nearest_ancestors(:shell)
-  end
-
-  def disk
-    nearest_ancestors(:disk)
-  end
 
 end
 

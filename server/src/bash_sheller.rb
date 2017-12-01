@@ -1,10 +1,9 @@
-require_relative 'nearest_ancestors'
 require 'open3'
 
 class BashSheller
 
-  def initialize(parent)
-    @parent = parent
+  def initialize(external)
+    @log = external.log
   end
 
   attr_reader :parent
@@ -40,11 +39,7 @@ class BashSheller
 
   private
 
-  include NearestAncestors
-
-  def log
-    nearest_ancestors(:log)
-  end
+  attr_reader :log
 
   def line
     '-' * 40
