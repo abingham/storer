@@ -85,7 +85,7 @@ Returns the manifest used to create the kata with the given kata_id.
 
 - - - -
 
-### GET kata_increments
+## GET kata_increments
 Returns avatar_increments for each started avatar in the kata with the given kata_id.
 - parameter, eg
 ```
