@@ -69,7 +69,7 @@ Returns the manifest used to create the kata with the given kata_id.
 - returns, eg
 ```
     { "kata_manifest": {
-                   "kata_id": "a551c528c3",
+                   "kata_id": "A551C528C3",
                 "image_name": "cyberdojofoundation/gcc_assert",
              "visible_files": {        "hiker.h": "ifndef HIKER_INCLUDED\n...",
                                        "hiker.c": "#include \"hiker.h\"...",
