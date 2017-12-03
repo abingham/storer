@@ -12,12 +12,7 @@ class OldGitFormatTest < TestBase
 
   test 'C33',
   'katas/5A/0F824303/spider already exists and is in old git format' do
-    avatar_path = "#{cyber_dojo_katas_root}/5A/0F824303/spider"
-    avatar_dir = disk[avatar_path]
-    assert avatar_dir.exists?
-    git_path = avatar_path + '/.git'
-    git_dir = disk[git_path]
-    assert git_dir.exists?
+    assert disk["#{cyber_dojo_katas_root}/5A/0F824303/spider/.git"].exists?
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - -
