@@ -70,12 +70,17 @@ Returns the manifest used to create the kata with the given kata_id.
 ```
     { "kata_manifest": {
                    "kata_id": "A551C528C3",
+                   "created": [ 2017,12,15,11,13,38 ],
                 "image_name": "cyberdojofoundation/gcc_assert",
              "visible_files": {        "hiker.h": "ifndef HIKER_INCLUDED\n...",
                                        "hiker.c": "#include \"hiker.h\"...",
                                 "hiker.tests.c" : "#include <assert.h>\n...",
                                 "cyber-dojo.sh" : "make --always-make"
                               },
+             "runner_choice": "stateless",
+              "display_name": "C (gcc), assert",
+                  "exercise": "Fizz_Buzz",
+               "max_seconds": 10,
         "filename_extension": ".c",
                   "tab_size": 4,
         ...
