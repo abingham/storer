@@ -31,6 +31,6 @@ I got 5A/0F824303/spider out of a live katas data-container using...
      --volumes-from ${CONTAINER_NAME}:ro \
      --volume $(pwd):/backup:rw \
      alpine:latest \
-     tar -zcf /backup/backup_5A0F824303.tar -C ${VOLUME_PATH}/5A 0F824303
+     tar -zcf /backup/backup_5A0F824303.tgz -C ${VOLUME_PATH}/5A 0F824303
 
 
