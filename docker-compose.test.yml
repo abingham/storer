@@ -13,3 +13,18 @@ services:
     environment:
       - CYBER_DOJO_COVERAGE_ROOT
 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  starter_server:
+    user: nobody
+    image: cyberdojo/starter
+    init: true
+    container_name: storer_test_starter_server
+    read_only: true
+    tmpfs: /tmp
+    environment:
+      - CYBER_DOJO_START_POINTS_ROOT
+    volumes:
+      - ./server/start_points:${CYBER_DOJO_START_POINTS_ROOT}:ro
+
+
