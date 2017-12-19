@@ -11,11 +11,11 @@ class StarterService
   include HttpJsonService
 
   def hostname
-    #ENV['CYBER_DOJO_STARTER_SERVER_NAME']
+    'starter'
   end
 
   def port
-    #ENV['CYBER_DOJO_STARTER_SERVER_PORT']
+    4527
   end
 
 end

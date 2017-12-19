@@ -9,7 +9,7 @@ services:
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  storer_server:
+  storer:
     environment:
       - CYBER_DOJO_COVERAGE_ROOT
     volumes:
@@ -22,7 +22,7 @@ services:
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  starter_server:
+  starter:
     user: nobody
     image: cyberdojo/starter
     init: true

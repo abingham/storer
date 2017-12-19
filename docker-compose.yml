@@ -19,8 +19,9 @@ services:
     ports:
       - ${CYBER_DOJO_STORER_CLIENT_PORT}:${CYBER_DOJO_STORER_CLIENT_PORT}
 
+  # - - - - - - - - - - - - - - - - - - -
 
-  storer_server:
+  storer:
     user: cyber-dojo
     image: cyberdojo/storer
     init: true
