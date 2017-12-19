@@ -30,7 +30,9 @@ class Storer
         dirs = outer_dir.each_dir.select { |inner_dir|
           inner_dir.start_with?(inner(kata_id))
         }
-        kata_id = outer(kata_id) + dirs[0] if dirs.length == 1
+        if dirs.length == 1
+          kata_id = outer(kata_id) + dirs[0]
+        end
       end
     end
     kata_id
@@ -38,7 +40,9 @@ class Storer
 
   def completions(kata_id) # 2-chars long
     # for Batch-Method iteration over large number of katas...
-    return [] unless disk[dir_join(path, kata_id)].exists?
+    unless disk[dir_join(path, kata_id)].exists?
+      return []
+    end
     disk[dir_join(path, kata_id)].each_dir.collect { |dir| dir }
   end
 
@@ -46,7 +50,9 @@ class Storer
   # kata
 
   def kata_exists?(kata_id)
-    return false unless valid_id?(kata_id)
+    unless valid_id?(kata_id)
+      return false
+    end
     kata_dir(kata_id).exists?
   end
 
@@ -86,12 +92,14 @@ class Storer
 
   def start_avatar(kata_id, avatar_names)
     assert_kata_exists(kata_id)
-    # NB: Doing & with swapped args loses randomness
+    # NB: Doing & with swapped args loses randomness!
     valid_names = avatar_names & all_avatars_names
     avatar_name = valid_names.detect { |name|
       avatar_dir(kata_id, name).make
     }
-    return nil if avatar_name.nil? # full!
+    if avatar_name.nil? # full!
+      return nil
+    end
     write_avatar_increments(kata_id, avatar_name, [])
     avatar_name
   end
@@ -136,7 +144,7 @@ class Storer
   def avatar_visible_files(kata_id, avatar_name)
     assert_avatar_exists(kata_id, avatar_name)
     rags = read_avatar_increments(kata_id, avatar_name)
-    tag = rags == [] ? 0 : rags[-1]['number']
+    tag = (rags == []) ? 0 : rags[-1]['number']
     tag_visible_files(kata_id, avatar_name, tag)
   end
 
@@ -145,7 +153,9 @@ class Storer
 
   def tag_visible_files(kata_id, avatar_name, tag)
     assert_tag_exists(kata_id, avatar_name, tag)
-    return kata_manifest(kata_id)['visible_files'] if tag == 0
+    if tag == 0 # tag zero is a special case
+      return kata_manifest(kata_id)['visible_files']
+    end
     dir = tag_dir(kata_id, avatar_name, tag)
     if dir.exists? # new non-git-format
       read_tag_files(kata_id, avatar_name, tag)
@@ -163,6 +173,9 @@ class Storer
       'now_tag' => tag_visible_files(kata_id, avatar_name, now_tag)
     }
   end
+
+  #def tag_fork(kata_id, avatar_name, tag)
+  #end
 
   private
 
