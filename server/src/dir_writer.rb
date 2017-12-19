@@ -12,7 +12,7 @@ class DirWriter
   def make
     # Can't find a Ruby library method allowing you to do a
     # mkdir_p and-know-if-a-dir-was-created-or-not.
-    # Note: FileUtils.mkdir_p() does not tell you anything.
+    # Note: FileUtils.mkdir_p() does not tell.
     # So using shell.
     # -p creates intermediate dirs as required.
     # -v verbose mode, output each dir actually made
@@ -21,8 +21,11 @@ class DirWriter
   end
 
   def exists?(filename = nil)
-    return File.directory?(name) if filename.nil?
-    return File.exist?(pathed(filename))
+    if filename.nil?
+      File.directory?(name)
+    else
+      File.exist?(pathed(filename))
+    end
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - -
@@ -40,7 +43,9 @@ class DirWriter
   def each_dir
     return enum_for(:each_dir) unless block_given?
     Dir.entries(name).each do |entry|
-      yield entry if @parent[pathed(entry)].exists? && !dot?(pathed(entry))
+      if @parent[pathed(entry)].exists? && !dot?(pathed(entry))
+        yield entry
+      end
     end
   end
 
