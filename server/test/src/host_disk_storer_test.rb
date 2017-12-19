@@ -40,6 +40,8 @@ class HostDiskStorerTest < TestBase
     }
   end
 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
   test '933',
   'create_kata() with invalid manifest[id] raises' do
     manifest = create_manifest
@@ -48,6 +50,8 @@ class HostDiskStorerTest < TestBase
       storer.create_kata(manifest)
     end
   end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '934',
   'create_kata() with missing manifest[id] raises' do
@@ -59,6 +63,8 @@ class HostDiskStorerTest < TestBase
     assert_invalid_kata_id(error)
   end
 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
   test 'ABC',
   'create_kata() with duplicate kata_id raises' do
     manifest = create_manifest
@@ -69,12 +75,16 @@ class HostDiskStorerTest < TestBase
     assert_invalid_kata_id(error)
   end
 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
   test 'AC2',
   'kata_manifest() with invalid kata_id raises' do
     assert_invalid_kata_id_raises { |invalid_id|
       storer.kata_manifest(invalid_id)
     }
   end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '965',
   'started_avatars() with invalid kata_id raises' do
@@ -83,12 +93,16 @@ class HostDiskStorerTest < TestBase
     }
   end
 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
   test '5DF',
   'start_avatar() with invalid kata_id raises' do
     assert_bad_kata_id_raises { |invalid_id|
       storer.start_avatar(invalid_id, [lion])
     }
   end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'D9F',
   'avatar_increments() with invalud kata_id raises' do
@@ -97,12 +111,16 @@ class HostDiskStorerTest < TestBase
     }
   end
 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
   test '160',
   'avatar_visible_files() with invalid kata_id raises' do
     assert_bad_kata_id_raises { |invalid_id|
       storer.avatar_visible_files(invalid_id, lion)
     }
   end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'D46',
   'avatar_ran_tests() with invalid kata_id raises' do
@@ -119,6 +137,8 @@ class HostDiskStorerTest < TestBase
     }
   end
 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
   test '917',
   'tag_visible_files() with invalid kata_id raises' do
     assert_bad_kata_id_raises { |invalid_id|
@@ -126,12 +146,16 @@ class HostDiskStorerTest < TestBase
     }
   end
 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
   test '918',
   'tags_visible_files() with invalid kata_id raises' do
     assert_bad_kata_id_raises { |invalid_id|
       storer.tags_visible_files(invalid_id, lion, was_tag=2, now_tag=3)
     }
   end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '919',
   'tag_fork() with invalid kata_id raises' do
@@ -151,6 +175,8 @@ class HostDiskStorerTest < TestBase
     }
   end
 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
   test 'B5F',
   'avatar_increments() with invalid avatar_name raises' do
     assert_bad_avatar_raises { |kata_id, invalid_avatar_name|
@@ -158,12 +184,16 @@ class HostDiskStorerTest < TestBase
     }
   end
 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
   test '679',
   'avatar_visible_files() with invalid avatar_name raises' do
     assert_bad_avatar_raises { |kata_id, invalid_avatar_name|
       storer.avatar_visible_files(kata_id, invalid_avatar_name)
     }
   end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '941',
   'avatar_ran_tests() with invalid avatar_name raises' do
@@ -180,6 +210,8 @@ class HostDiskStorerTest < TestBase
     }
   end
 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
   test '394',
   'avatar_ran_test() with non-existent avatar_name raises' do
     assert_bad_avatar_raises { |kata_id, invalid_avatar_name|
@@ -195,7 +227,11 @@ class HostDiskStorerTest < TestBase
     }
   end
 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
   #TODO other methods...
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '395',
   'tag_fork() with invalid avatar_name raises' do
@@ -215,12 +251,16 @@ class HostDiskStorerTest < TestBase
     }
   end
 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
   test '382',
   'tags_visible_files() with invalid tag raises' do
     assert_bad_tag_pair_raises { |valid_id, valid_name, was_tag, now_tag|
       storer.tags_visible_files(valid_id, valid_name, was_tag, now_tag)
     }
   end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '383',
   'tag_fork() with invalid tag raises' do
@@ -250,6 +290,8 @@ class HostDiskStorerTest < TestBase
     assert_equal({}, kata_increments)
   end
 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
   test 'F6E',
   'rogue sub-dirs in kata-dir are not reported as avatars' do
     create_kata
@@ -259,11 +301,15 @@ class HostDiskStorerTest < TestBase
     assert_equal [], started_avatars
   end
 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
   test 'CBF',
   'avatar_start(not-an-avatar-name) is nil' do
     create_kata
     assert_nil start_avatar(['pencil'])
   end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'E0C', %w(
     after avatar_starts;
@@ -290,6 +336,8 @@ class HostDiskStorerTest < TestBase
     assert_equal [tag0], avatar_increments(tiger)
     assert_equal( { lion => [tag0], tiger => [tag0] }, kata_increments)
   end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'B1C',
   'avatar_start succeeds 64 times then kata is full' do
