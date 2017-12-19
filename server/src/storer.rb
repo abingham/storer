@@ -24,18 +24,20 @@ class Storer
     # characters) it would provide a way for anyone to find
     # the full id of a cyber-dojo and potentially interfere
     # with a live session.
-    if kata_id.length >= 6
-      outer_dir = disk[dir_join(path, outer(kata_id))]
-      if outer_dir.exists?
-        dirs = outer_dir.each_dir.select { |inner_dir|
-          inner_dir.start_with?(inner(kata_id))
-        }
-        if dirs.length == 1
-          kata_id = outer(kata_id) + dirs[0]
-        end
-      end
+    unless kata_id.length >= 6
+      return kata_id
     end
-    kata_id
+    outer_dir = disk[dir_join(path, outer(kata_id))]
+    unless outer_dir.exists?
+      return kata_id
+    end
+    dirs = outer_dir.each_dir.select { |inner_dir|
+      inner_dir.start_with?(inner(kata_id))
+    }
+    unless dirs.length == 1
+      return kata_id
+    end
+    outer(kata_id) + dirs[0] # success!
   end
 
   def completions(kata_id) # 2-chars long

@@ -17,6 +17,8 @@ class TestBase < HexMiniTest
     storer.kata_increments(kata_id)
   end
 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
   def start_avatar(avatars)
     storer.start_avatar(kata_id, avatars)
   end
@@ -32,6 +34,8 @@ class TestBase < HexMiniTest
   def avatar_visible_files(name)
     storer.avatar_visible_files(kata_id, name)
   end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   def tag_visible_files(name, tag)
     storer.tag_visible_files(kata_id, name, tag)
