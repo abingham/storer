@@ -13,7 +13,7 @@ class HostDiskStorerTest < TestBase
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '218',
-  'path is set to ENV[CYBER_DOJO_KATAS_ROOT] in docker-compose.yml' do
+  'path is set to ENV[CYBER_DOJO_KATAS_ROOT] from docker-compose.yml' do
     assert_equal cyber_dojo_katas_root, storer.path
     assert_equal '/tmp/katas', storer.path
   end
@@ -30,7 +30,7 @@ class HostDiskStorerTest < TestBase
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
-  # invalid kata_id on any method raises
+  # invalid kata_id on any other method raises
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '78F',
@@ -126,6 +126,20 @@ class HostDiskStorerTest < TestBase
     }
   end
 
+  test '918',
+  'tags_visible_files() with invalid kata_id raises' do
+    assert_bad_kata_id_raises { |invalid_id|
+      storer.tags_visible_files(invalid_id, lion, was_tag=2, now_tag=3)
+    }
+  end
+
+  test '919',
+  'tag_fork() with invalid kata_id raises' do
+    assert_bad_kata_id_raises { |invalid_id|
+      storer.tag_fork(invalid_id, lion, tag=2)
+    }
+  end
+
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # invalid avatar-name on any method raises
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -181,21 +195,37 @@ class HostDiskStorerTest < TestBase
     }
   end
 
+  #TODO other methods...
+
+  test '395',
+  'tag_fork() with invalid avatar_name raises' do
+    assert_bad_avatar_raises { |kata_id, invalid_avatar_name|
+      storer.tag_fork(kata_id, invalid_avatar_name, tag=0)
+    }
+  end
+
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # invalid tag on any method raises
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  test '388',
+  test '381',
   'tag_visible_files() with invalid tag raises' do
     assert_bad_tag_raises { |valid_id, valid_name, bad_tag|
       storer.tag_visible_files(valid_id, valid_name, bad_tag)
     }
   end
 
-  test '9E7',
+  test '382',
   'tags_visible_files() with invalid tag raises' do
     assert_bad_tag_pair_raises { |valid_id, valid_name, was_tag, now_tag|
       storer.tags_visible_files(valid_id, valid_name, was_tag, now_tag)
+    }
+  end
+
+  test '383',
+  'tag_fork() with invalid tag raises' do
+    assert_bad_tag_raises { |valid_id, valid_name, bad_tag|
+      storer.tag_fork(valid_id, valid_name, bad_tag)
     }
   end
 
