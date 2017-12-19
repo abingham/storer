@@ -12,6 +12,8 @@ services:
   storer_server:
     environment:
       - CYBER_DOJO_COVERAGE_ROOT
+    volumes:
+      - ./server/old_kata_manifest_volume/42/0BD5D5BE/manifest.json:${CYBER_DOJO_KATAS_ROOT}/42/0BD5D5BE/manifest.json:ro
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
