@@ -9,4 +9,5 @@ readonly PARAM=${1:-test}
 docker-compose \
   --file ${ROOT_DIR}/docker-compose.yml \
   --file ${ROOT_DIR}/docker-compose.${PARAM}.yml \
-    down
+  down \
+  --remove-orphans
