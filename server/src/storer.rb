@@ -76,11 +76,9 @@ class Storer
   end
 
   def kata_increments(kata_id)
-    incs = {}
-    started_avatars(kata_id).each do |name|
-      incs[name] = avatar_increments(kata_id, name)
-    end
-    incs
+    Hash[started_avatars(kata_id).map { |name|
+      [name, avatar_increments(kata_id, name)]
+    }]
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
