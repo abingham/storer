@@ -3,6 +3,6 @@ version: '2.2'
 
 services:
 
-  storer:
+  storer_server:
     ports:
       - ${CYBER_DOJO_STORER_SERVER_PORT}:${CYBER_DOJO_STORER_SERVER_PORT}

@@ -7,7 +7,7 @@ services:
     user: nobody
     image: cyberdojo/storer_client
     init: true
-    container_name: storer_client
+    container_name: test_storer_client
     read_only: true
     tmpfs: /tmp
     build:
@@ -20,11 +20,11 @@ services:
       - ${CYBER_DOJO_STORER_CLIENT_PORT}:${CYBER_DOJO_STORER_CLIENT_PORT}
 
 
-  storer:
+  storer_server:
     user: cyber-dojo
     image: cyberdojo/storer
     init: true
-    container_name: storer_server
+    container_name: test_storer_server
     read_only: true
     tmpfs: /tmp
     build:

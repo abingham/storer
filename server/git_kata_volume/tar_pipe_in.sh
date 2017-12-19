@@ -11,5 +11,5 @@ readonly PARAM=${1:-test}
 cat ${MY_DIR}/5A0F824303.tgz \
     | docker exec \
        --interactive \
-         storer_server \
+         test_storer_server \
            sh -c "tar -zxf - -C ${CYBER_DOJO_KATAS_ROOT}"

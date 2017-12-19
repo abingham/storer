@@ -73,7 +73,7 @@ class StorerService
   include HttpJsonService
 
   def hostname
-    'storer'
+    'storer_server'
   end
 
   def port

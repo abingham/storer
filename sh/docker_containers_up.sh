@@ -28,5 +28,5 @@ docker-compose \
   --file ${ROOT_DIR}/docker-compose.${PARAM}.yml \
     up -d
 
-wait_till_up 'storer_server'
-wait_till_up 'storer_client'
+wait_till_up 'test_storer_server'
+wait_till_up 'test_storer_client'

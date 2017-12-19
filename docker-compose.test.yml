@@ -9,7 +9,7 @@ services:
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  storer:
+  storer_server:
     environment:
       - CYBER_DOJO_COVERAGE_ROOT
 
