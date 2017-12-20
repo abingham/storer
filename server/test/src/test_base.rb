@@ -62,7 +62,8 @@ class TestBase < HexMiniTest
       'image_name'    => 'cyberdojofoundation/gcc_assert',
       'visible_files' => starting_files,
       'created'       => creation_time,
-      'id'            => id
+      'id'            => id,
+      'max_seconds'   => 5
     }
   end
 

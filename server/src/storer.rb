@@ -6,6 +6,7 @@ class Storer
   def initialize(external)
     @disk = external.disk
     @shell = external.shell
+    @starter = external.starter
     @path = ENV['CYBER_DOJO_KATAS_ROOT']
   end
 
@@ -13,6 +14,7 @@ class Storer
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # kata-id completion(s)
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   def completed(kata_id)
     assert_partial_id(kata_id)
@@ -40,6 +42,8 @@ class Storer
     outer(kata_id) + dirs[0] # success!
   end
 
+  # - - - - - - - - - - - - - - - - - - -
+
   def completions(kata_id) # 2-chars long
     # for Batch-Method iteration over large number of katas...
     unless disk[dir_join(path, kata_id)].exists?
@@ -50,6 +54,7 @@ class Storer
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # kata
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   def kata_exists?(kata_id)
     unless valid_id?(kata_id)
@@ -57,6 +62,8 @@ class Storer
     end
     kata_dir(kata_id).exists?
   end
+
+  # - - - - - - - - - - - - - - - - - - -
 
   def create_kata(manifest)
     kata_id = manifest['id']
@@ -68,12 +75,31 @@ class Storer
     dir.write(manifest_filename, json)
   end
 
+  # - - - - - - - - - - - - - - - - - - -
+
   def kata_manifest(kata_id)
+    # It is tempting to _always_ call
+    #   starter.manifest(json['language'])
+    # and let starter handle the start-point defaults.
+    # such as max_seconds = 10.
+    # However, the duplication is better than
+    # the coupling this introduces.
     assert_kata_exists(kata_id)
     dir = kata_dir(kata_id)
-    json = dir.read(manifest_filename)
-    JSON.parse(json)
+    json = JSON.parse(dir.read(manifest_filename))
+    if old?(json)
+      xlated = starter.manifest(json['language'])
+      xlated['id'] = json['id']
+      xlated['created'] = json['created']
+      xlated['exercise'] = json['exercise']
+      xlated
+    else
+      json['max_seconds'] ||= 10
+      json
+    end
   end
+
+  # - - - - - - - - - - - - - - - - - - -
 
   def kata_increments(kata_id)
     Hash[started_avatars(kata_id).map { |name|
@@ -83,12 +109,15 @@ class Storer
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # avatar start
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   def avatar_exists?(kata_id, avatar_name)
     assert_kata_exists(kata_id)
     assert_valid_name(avatar_name)
     avatar_dir(kata_id, avatar_name).exists?
   end
+
+  # - - - - - - - - - - - - - - - - - - -
 
   def start_avatar(kata_id, avatar_names)
     assert_kata_exists(kata_id)
@@ -104,6 +133,8 @@ class Storer
     avatar_name
   end
 
+  # - - - - - - - - - - - - - - - - - - -
+
   def started_avatars(kata_id)
     assert_kata_exists(kata_id)
     started = kata_dir(kata_id).each_dir.collect { |name| name }
@@ -112,6 +143,7 @@ class Storer
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # avatar action!
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   def avatar_ran_tests(kata_id, avatar_name, files, now, output, colour)
     assert_avatar_exists(kata_id, avatar_name)
@@ -127,6 +159,7 @@ class Storer
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # avatar info
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   def avatar_increments(kata_id, avatar_name)
     assert_avatar_exists(kata_id, avatar_name)
@@ -141,6 +174,8 @@ class Storer
     [tag0] + read_avatar_increments(kata_id, avatar_name)
   end
 
+  # - - - - - - - - - - - - - - - - - - -
+
   def avatar_visible_files(kata_id, avatar_name)
     assert_avatar_exists(kata_id, avatar_name)
     rags = read_avatar_increments(kata_id, avatar_name)
@@ -150,6 +185,7 @@ class Storer
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # tag
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   def tag_visible_files(kata_id, avatar_name, tag)
     assert_tag_exists(kata_id, avatar_name, tag)
@@ -167,12 +203,16 @@ class Storer
     end
   end
 
+  # - - - - - - - - - - - - - - - - - - -
+
   def tags_visible_files(kata_id, avatar_name, was_tag, now_tag)
     {
       'was_tag' => tag_visible_files(kata_id, avatar_name, was_tag),
       'now_tag' => tag_visible_files(kata_id, avatar_name, now_tag)
     }
   end
+
+  # - - - - - - - - - - - - - - - - - - -
 
   def tag_fork(kata_id, avatar_name, tag)
     assert_tag_exists(kata_id, avatar_name, tag)
@@ -181,7 +221,11 @@ class Storer
 
   private
 
-  attr_reader :disk, :shell
+  attr_reader :disk, :shell, :starter
+
+  def old?(manifest)
+    manifest['unit_test_framework']
+  end
 
   def write_avatar_increments(kata_id, avatar_name, increments)
     json = JSON.unparse(increments)
