@@ -1,4 +1,5 @@
-FROM alpine:latest
+FROM  alpine:latest
+LABEL maintainer=jon@jaggersoft.com
 
 RUN adduser -D -H -u 19661 cyber-dojo
 
@@ -7,4 +8,3 @@ USER root
 RUN  mkdir -p ${CYBER_DOJO_KATAS_ROOT}
 RUN  chown -R cyber-dojo ${CYBER_DOJO_KATAS_ROOT}
 VOLUME [ "${CYBER_DOJO_KATAS_ROOT}" ]
-CMD [ "katas-data-container" ]
