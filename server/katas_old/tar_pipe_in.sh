@@ -5,53 +5,18 @@ set -e
 
 readonly MY_DIR="$( cd "$( dirname "${0}" )" && pwd )"
 readonly PARAM=${1:-test}
+readonly KATA_IDS=(5A0F824303 420B05BA0A 420F2A2979 421F303E80 420BD5D5BE 421AFD7EC5 )
 
 . ${MY_DIR}/../../env.${PARAM}
 
-cat ${MY_DIR}/5A0F824303.tgz \
-  | docker run \
-      --rm \
-      --interactive \
-      --volumes-from ${CYBER_DOJO_KATA_DATA_CONTAINER_NAME}:rw \
-      alpine:latest \
-        sh -c "tar -zxf - -C ${CYBER_DOJO_KATAS_ROOT}"
-
-cat ${MY_DIR}/420B05BA0A.tgz \
-  | docker run \
-      --rm \
-      --interactive \
-      --volumes-from ${CYBER_DOJO_KATA_DATA_CONTAINER_NAME}:rw \
-      alpine:latest \
-        sh -c "tar -zxf - -C ${CYBER_DOJO_KATAS_ROOT}"
-
-cat ${MY_DIR}/420F2A2979.tgz \
+for KATA_ID in "${KATA_IDS[@]}"
+do
+  cat ${MY_DIR}/${KATA_ID}.tgz \
     | docker run \
-       --rm \
-       --interactive \
-       --volumes-from ${CYBER_DOJO_KATA_DATA_CONTAINER_NAME}:rw \
-       alpine:latest \
-         sh -c "tar -zxf - -C ${CYBER_DOJO_KATAS_ROOT}"
+        --rm \
+        --interactive \
+        --volumes-from ${CYBER_DOJO_KATA_DATA_CONTAINER_NAME}:rw \
+        alpine:latest \
+          sh -c "tar -zxf - -C ${CYBER_DOJO_KATAS_ROOT}"
+done
 
-cat ${MY_DIR}/421F303E80.tgz \
-    | docker run \
-       --rm \
-       --interactive \
-       --volumes-from ${CYBER_DOJO_KATA_DATA_CONTAINER_NAME}:rw \
-       alpine:latest \
-         sh -c "tar -zxf - -C ${CYBER_DOJO_KATAS_ROOT}"
-
-cat ${MY_DIR}/420BD5D5BE.tgz \
-    | docker run \
-       --rm \
-       --interactive \
-       --volumes-from ${CYBER_DOJO_KATA_DATA_CONTAINER_NAME}:rw \
-       alpine:latest \
-         sh -c "tar -zxf - -C ${CYBER_DOJO_KATAS_ROOT}"
-
-cat ${MY_DIR}/421AFD7EC5.tgz \
-    | docker run \
-       --rm \
-       --interactive \
-       --volumes-from ${CYBER_DOJO_KATA_DATA_CONTAINER_NAME}:rw \
-       alpine:latest \
-         sh -c "tar -zxf - -C ${CYBER_DOJO_KATAS_ROOT}"
