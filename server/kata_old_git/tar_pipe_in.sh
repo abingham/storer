@@ -9,7 +9,9 @@ readonly PARAM=${1:-test}
 . ${MY_DIR}/../../env.${PARAM}
 
 cat ${MY_DIR}/5A0F824303.tgz \
-    | docker exec \
-       --interactive \
-         test_storer_server \
-           sh -c "tar -zxf - -C ${CYBER_DOJO_KATAS_ROOT}"
+  | docker run \
+      --rm \
+      --interactive \
+      --volumes-from ${CYBER_DOJO_KATA_DATA_CONTAINER_NAME}:rw \
+      alpine:latest \
+        sh -c "tar -zxf - -C ${CYBER_DOJO_KATAS_ROOT}"

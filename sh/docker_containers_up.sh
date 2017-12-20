@@ -26,7 +26,8 @@ wait_till_up()
 docker-compose \
   --file ${ROOT_DIR}/docker-compose.yml \
   --file ${ROOT_DIR}/docker-compose.${PARAM}.yml \
-    up -d
+  up -d \
+  --force-recreate
 
 wait_till_up 'test_storer_server'
 wait_till_up 'test_storer_client'
