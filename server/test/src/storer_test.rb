@@ -15,7 +15,7 @@ class StorerTest < TestBase
   test '218',
   'path is set to ENV[CYBER_DOJO_KATAS_ROOT] from docker-compose.yml' do
     assert_equal cyber_dojo_katas_root, storer.path
-    assert_equal '/tmp/katas', storer.path
+    assert_equal '/tmp/cyber-dojo/katas', storer.path
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
