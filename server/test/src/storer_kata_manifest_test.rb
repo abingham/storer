@@ -54,6 +54,7 @@ class StorerKataManifestTest < TestBase
     assert dir(kata_id).exists?
     old = raw_manifest(kata_id)
     assert_equal 'C', old['language']
+    assert_equal 'cassert', old['unit_test_framework']
     @manifest = storer.kata_manifest(kata_id)
     assert_equal expected_keys.sort, @manifest.keys.sort
     assert_id kata_id
@@ -61,7 +62,7 @@ class StorerKataManifestTest < TestBase
     assert_display_name 'C (gcc), assert'
     assert_exercise 'Calc_Stats'
     assert_filename_extension('.c')
-    assert_image_name 'cyberdojofoundation/gcc_assert' # ?
+    assert_image_name 'cyberdojofoundation/gcc_assert'
     assert_language 'C (gcc)-assert'
     assert_max_seconds 10
     assert_runner_choice 'stateful'
@@ -70,7 +71,71 @@ class StorerKataManifestTest < TestBase
 
   #- - - - - - - - - - - - - - - - - - - - - - - -
 
-  #puts JSON.pretty_generate(@manifest)
+  test 'E2D',
+  'old-style kata involving renaming (wolf, 1 light)' do
+    kata_id = '421AFD7EC5'
+    assert dir(kata_id).exists?
+    old = raw_manifest(kata_id)
+    assert_equal 'Ruby-Rspec', old['language']
+    assert_equal 'ruby_rspec', old['unit_test_framework']
+    @manifest = storer.kata_manifest(kata_id)
+    assert_equal expected_keys.sort, @manifest.keys.sort
+    assert_id kata_id
+    assert_created [2014,11,20,9,55,58]
+    assert_display_name 'Ruby, RSpec'
+    assert_exercise 'Poker_Hands'
+    assert_filename_extension('.rb')
+    assert_image_name 'cyberdojofoundation/ruby_rspec'
+    assert_language 'Ruby-RSpec' # capital S
+    assert_max_seconds 10
+    assert_runner_choice 'stateless'
+    assert_tab_size 2
+  end
+
+  #- - - - - - - - - - - - - - - - - - - - - - - -
+
+  test 'E2E',
+  'old-style kata not involving renaming (hummingbird, 0 lights)' do
+    kata_id = '420BD5D5BE'
+    assert dir(kata_id).exists?
+    old = raw_manifest(kata_id)
+    assert_equal 'python_pytest', old['unit_test_framework']
+    @manifest = storer.kata_manifest(kata_id)
+    assert_equal expected_keys.sort, @manifest.keys.sort
+    assert_id kata_id
+    assert_created [2016,8,1,22,54,33]
+    assert_display_name 'Python, py.test'
+    assert_exercise 'Fizz_Buzz'
+    assert_filename_extension('.py')
+    assert_image_name 'cyberdojofoundation/python_pytest'
+    assert_language 'Python-py.test'
+    assert_max_seconds 10
+    assert_runner_choice 'stateless'
+    assert_tab_size 4
+  end
+
+  #- - - - - - - - - - - - - - - - - - - - - - - -
+
+  test 'E2F',
+  'old-style kata not involving renaming (spider, 8 lights)' do
+    kata_id = '5A0F824303'
+    assert dir(kata_id).exists?
+    old = raw_manifest(kata_id)
+    refute old.key?('unit_test_framework')
+    assert old.key?('red_amber_green')
+    @manifest = storer.kata_manifest(kata_id)
+    assert_equal expected_keys.sort, @manifest.keys.sort
+    assert_id kata_id
+    assert_created [2016,11,23,8,34,28]
+    assert_display_name 'Python, behave'
+    assert_exercise 'Reversi'
+    assert_filename_extension('.py')
+    assert_image_name 'cyberdojofoundation/python_behave'
+    assert_language 'Python-behave'
+    assert_max_seconds 10
+    assert_runner_choice 'stateless'
+    assert_tab_size 4
+  end
 
   private # = = = = = = = = = = = = = = =
 

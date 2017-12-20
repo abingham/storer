@@ -149,7 +149,8 @@ class StorerServiceTest < TestBase
       'visible_files' => starting_files,
       'created' => creation_time,
       'id' => id,
-      'max_seconds' => 10
+      'max_seconds' => 10,
+      'runner_choice' => 'stateless'
     }
   end
 

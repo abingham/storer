@@ -94,6 +94,8 @@ class Storer
       xlated['exercise'] = json['exercise']
       xlated
     else
+      json.delete('red_amber_green')
+      json['runner_choice'] ||= 'stateless'
       json['max_seconds'] ||= 10
       json
     end

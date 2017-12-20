@@ -63,7 +63,8 @@ class TestBase < HexMiniTest
       'visible_files' => starting_files,
       'created'       => creation_time,
       'id'            => id,
-      'max_seconds'   => 5
+      'max_seconds'   => 10,
+      'runner_choice' => 'stateless'
     }
   end
 
@@ -91,7 +92,10 @@ class TestBase < HexMiniTest
   end
 
   def assert_hash_equal(expected, actual)
-    assert_equal expected.size, actual.size
+    diagnostic = ''
+    diagnostic += "expected[#{expected.keys.sort}]\n"
+    diagnostic += "actual[#{actual.keys.sort}]\n"
+    assert_equal expected.size, actual.size, diagnostic
     expected.each do |symbol,value|
       assert_equal value, actual[symbol.to_s], symbol.to_s
     end
