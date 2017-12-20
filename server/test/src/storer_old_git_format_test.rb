@@ -2,7 +2,7 @@ require_relative 'test_base'
 require_relative 'spy_logger'
 require_relative '../../src/all_avatars_names'
 
-class OldGitFormatTest < TestBase
+class StorerOldGitFormatTest < TestBase
 
   def self.hex_prefix
     'BBDB345'
@@ -20,7 +20,6 @@ class OldGitFormatTest < TestBase
   test 'D21',
   'old git-format increments can be retrieved' do
     kata_id = '5A0F824303'
-    spider = 'spider'
     rags = storer.avatar_increments(kata_id, spider)
     assert 8, rags.size
     tag0 = {
@@ -42,7 +41,6 @@ class OldGitFormatTest < TestBase
   test '694',
   'old git-format tag-zero visible-files can be retrieved' do
     kata_id = '5A0F824303'
-    spider = 'spider'
     files = storer.tag_visible_files(kata_id, spider, tag=0)
     expected_filenames = [
       'cyber-dojo.sh',
@@ -70,7 +68,6 @@ class OldGitFormatTest < TestBase
   test '765',
   'old git-format tag-non-zero visible-files can be retrieved' do
     kata_id = '5A0F824303'
-    spider = 'spider'
     files1 = storer.tag_visible_files(kata_id, spider, tag=1)
     expected_filenames = [
       'cyber-dojo.sh',
@@ -107,6 +104,12 @@ class OldGitFormatTest < TestBase
       ''
     ].join("\n")
     assert_equal expected2, files2['hiker.feature']
+  end
+
+  private
+
+  def spider
+    'spider'
   end
 
 end
