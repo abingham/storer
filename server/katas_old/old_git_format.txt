@@ -21,16 +21,3 @@ Specifically, 5A0F824303.tgz untars to provide /5A/0F824303/spider/.git
 Note that I provide the tgz file and untar it into the container.
 I do not provide (in the git repo) the already untarred 5A/... dir.
 This is because having source with a .git dir in a git repo is problematic.
-
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-I got 5A/0F824303/spider out of a live katas data-container using...
-
-   CONTAINER_NAME=cyber-dojo-katas-DATA-CONTAINER
-   VOLUME_PATH=/usr/src/cyber-dojo/katas
-   docker run --rm \
-     --volumes-from ${CONTAINER_NAME}:ro \
-     --volume $(pwd):/backup:rw \
-     alpine:latest \
-     tar -zcf /backup/backup_5A0F824303.tgz -C ${VOLUME_PATH}/5A 0F824303
-
-
