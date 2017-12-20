@@ -14,11 +14,11 @@ services:
       - CYBER_DOJO_COVERAGE_ROOT
     volumes:
       # language:Python-py.test
-      - ./server/old_katas_manifest_volume/42/0BD5D5BE/manifest.json:${CYBER_DOJO_KATAS_ROOT}/42/0BD5D5BE/manifest.json:ro
+      - ./server/katas_old/42/0BD5D5BE/manifest.json:${CYBER_DOJO_KATAS_ROOT}/42/0BD5D5BE/manifest.json:ro
       # language:Ruby-Rspec
-      - ./server/old_katas_manifest_volume/42/1AFD7EC5/manifest.json:${CYBER_DOJO_KATAS_ROOT}/42/1AFD7EC5/manifest.json:ro
+      - ./server/katas_old/42/1AFD7EC5/manifest.json:${CYBER_DOJO_KATAS_ROOT}/42/1AFD7EC5/manifest.json:ro
       # language:C
-      - ./server/old_katas_manifest_volume/42/1F303E80/manifest.json:${CYBER_DOJO_KATAS_ROOT}/42/1F303E80/manifest.json:ro
+      - ./server/katas_old/42/1F303E80/manifest.json:${CYBER_DOJO_KATAS_ROOT}/42/1F303E80/manifest.json:ro
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
