@@ -20,7 +20,6 @@ class StorerKataManifestTest < TestBase
     assert_exercise '(Verbal)'
     assert_filename_extension('.java')
     assert_image_name 'cyberdojofoundation/java_junit'
-    assert_language 'Java-JUnit'
     assert_max_seconds 10
     assert_runner_choice 'stateless'
     assert_tab_size 4
@@ -40,7 +39,6 @@ class StorerKataManifestTest < TestBase
     assert_exercise 'Anagrams'
     assert_filename_extension('.php')
     assert_image_name 'cyberdojofoundation/php_phpunit'
-    assert_language 'PHP-PHPUnit'
     assert_max_seconds 10
     assert_runner_choice 'stateful'
     assert_tab_size 4
@@ -63,7 +61,6 @@ class StorerKataManifestTest < TestBase
     assert_exercise 'Calc_Stats'
     assert_filename_extension('.c')
     assert_image_name 'cyberdojofoundation/gcc_assert'
-    assert_language 'C (gcc)-assert'
     assert_max_seconds 10
     assert_runner_choice 'stateful'
     assert_tab_size 4
@@ -82,11 +79,10 @@ class StorerKataManifestTest < TestBase
     assert_equal expected_keys.sort, @manifest.keys.sort
     assert_id kata_id
     assert_created [2014,11,20,9,55,58]
-    assert_display_name 'Ruby, RSpec'
+    assert_display_name 'Ruby, RSpec' # capital S
     assert_exercise 'Poker_Hands'
     assert_filename_extension('.rb')
     assert_image_name 'cyberdojofoundation/ruby_rspec'
-    assert_language 'Ruby-RSpec' # capital S
     assert_max_seconds 10
     assert_runner_choice 'stateless'
     assert_tab_size 2
@@ -108,7 +104,6 @@ class StorerKataManifestTest < TestBase
     assert_exercise 'Fizz_Buzz'
     assert_filename_extension('.py')
     assert_image_name 'cyberdojofoundation/python_pytest'
-    assert_language 'Python-py.test'
     assert_max_seconds 10
     assert_runner_choice 'stateless'
     assert_tab_size 4
@@ -131,7 +126,6 @@ class StorerKataManifestTest < TestBase
     assert_exercise 'Reversi'
     assert_filename_extension('.py')
     assert_image_name 'cyberdojofoundation/python_behave'
-    assert_language 'Python-behave'
     assert_max_seconds 10
     assert_runner_choice 'stateless'
     assert_tab_size 4
@@ -175,10 +169,6 @@ class StorerKataManifestTest < TestBase
     assert_equal expected, image_name, 'image_name'
   end
 
-  def assert_language(expected)
-    assert_equal expected, language, 'language'
-  end
-
   def assert_max_seconds(expected)
     assert_equal expected, max_seconds, 'max_seconds'
   end
@@ -217,10 +207,6 @@ class StorerKataManifestTest < TestBase
     @manifest[__method__.to_s]
   end
 
-  def language
-    @manifest[__method__.to_s]
-  end
-
   def max_seconds
     @manifest[__method__.to_s]
   end
@@ -244,7 +230,6 @@ class StorerKataManifestTest < TestBase
       filename_extension
       highlight_filenames
       image_name
-      language
       lowlight_filenames
       max_seconds
       progress_regexs
