@@ -78,28 +78,13 @@ class Storer
   # - - - - - - - - - - - - - - - - - - -
 
   def kata_manifest(kata_id)
-    # It is tempting to _always_ call
-    #   starter.manifest(json['language'])
-    # and let starter handle the start-point defaults.
-    # such as max_seconds = 10.
-    # However, the duplication is better than
-    # the coupling this introduces.
     assert_kata_exists(kata_id)
     dir = kata_dir(kata_id)
-    json = JSON.parse(dir.read(manifest_filename))
-    if old?(json)
-      xlated = starter.manifest(json['language'])
-      xlated['id'] = json['id']
-      xlated['created'] = json['created']
-      xlated['exercise'] = json['exercise']
-      xlated
-    else
-      json.delete('language')
-      json.delete('red_amber_green')
-      json['runner_choice'] ||= 'stateless'
-      json['max_seconds'] ||= 10
-      json
-    end
+    manifest = JSON.parse(dir.read(manifest_filename))
+    manifest = updated_if_old(manifest)
+    delete_obsolete_keys_from(manifest)
+    apply_defaults_to(manifest)
+    manifest
   end
 
   # - - - - - - - - - - - - - - - - - - -
@@ -222,13 +207,52 @@ class Storer
     #TODO
   end
 
-  private
+  private # = = = = = = = = = = = = = = = = = = = = =
 
   attr_reader :disk, :shell, :starter
+
+  def updated_if_old(manifest)
+    if old?(manifest)
+      xlated = starter.manifest(manifest['language'])
+      xlated['id'] = manifest['id']
+      xlated['created'] = manifest['created']
+      xlated['exercise'] = manifest['exercise']
+      xlated
+    else
+      manifest
+    end
+  end
 
   def old?(manifest)
     manifest['unit_test_framework']
   end
+
+  def delete_obsolete_keys_from(manifest)
+    manifest.delete('language')
+    manifest.delete('red_amber_green')
+    manifest.delete('browser')
+  end
+
+  def apply_defaults_to(manifest)
+    # [1] Issue: [] is not a valid progress_regex.
+    # It needs two regexs.
+    # This affects zipper.zip_tag()
+    manifest['runner_choice'] ||= 'stateless'
+    manifest['max_seconds'] ||= 10
+    manifest['highlight_filenames'] ||= []
+    manifest['lowlight_filenames'] =
+      if manifest['highlight_filenames'].empty?
+        ['cyber-dojo.sh', 'makefile', 'Makefile', 'unity.license.txt']
+      else
+        manifest['visible_files'].keys - manifest['highlight_filenames']
+      end
+    manifest['filename_extension'] ||= ''
+    manifest['progress_regexs'] ||= [] # [1]
+    manifest['highlight_filenames'] ||= []
+    manifest['tab_size'] ||= 4
+  end
+
+  # - - - - - - - - - - -
 
   def write_avatar_increments(kata_id, avatar_name, increments)
     json = JSON.unparse(increments)

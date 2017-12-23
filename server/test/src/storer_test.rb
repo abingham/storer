@@ -274,9 +274,24 @@ class StorerTest < TestBase
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'B99',
-  'after create_kata(manifest) manifest can be retrieved' do
+  'after create_kata(manifest) manifest has all properties' do
     manifest = create_kata
-    assert_hash_equal manifest, kata_manifest
+    expected = %w(
+      id
+      created
+      display_name
+      exercise
+      filename_extension
+      highlight_filenames
+      image_name
+      lowlight_filenames
+      max_seconds
+      progress_regexs
+      runner_choice
+      tab_size
+      visible_files
+    )
+    assert_equal expected.sort, kata_manifest.keys.sort
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -320,8 +335,17 @@ class StorerTest < TestBase
     create_kata
     assert_equal lion, start_avatar([lion])
     assert_equal [lion], started_avatars
-    assert_hash_equal starting_files, avatar_visible_files(lion)
-    assert_hash_equal starting_files, tag_visible_files(lion, tag=0)
+    expected_filenames = %w(
+      cyber-dojo.sh
+      hiker.h
+      hiker.c
+      hiker.tests.c
+      instructions
+      makefile
+      output
+    ).sort
+    assert_equal expected_filenames, avatar_visible_files(lion).keys.sort
+    assert_equal expected_filenames, tag_visible_files(lion, tag=0).keys.sort
     tag0 =
     {
       'event'  => 'created',
@@ -354,10 +378,9 @@ class StorerTest < TestBase
   test '3CF', %w(
     after ran_tests() there is one more tag, one more traffic-light;
     visible_files are retrievable by implicit current-tag,
-    visible_files are retrievable by explicit tag,
-    visible_files do not contain output
+    visible_files are retrievable by explicit tag
   ) do
-    create_kata
+    create_kata(kata_id, starting_files)
     start_avatar([lion])
     was_tag = 0
 
@@ -385,7 +408,7 @@ class StorerTest < TestBase
     end
     # was_tag
     was_tag_visible_files = tag_visible_files(lion, was_tag)
-    refute was_tag_visible_files.keys.include? 'output'
+    refute was_tag_visible_files.keys.include?('output')
     starting_files.each do |filename,content|
       assert_equal content, was_tag_visible_files[filename], filename
     end
@@ -401,7 +424,7 @@ class StorerTest < TestBase
     assert_hash_equal now_tag_visible_files, hash['now_tag']
   end
 
-  private
+  private # = = = = = = = = = = = = = = = = = = = = = = =
 
   include AllAvatarsNames
 

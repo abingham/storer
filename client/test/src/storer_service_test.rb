@@ -150,7 +150,12 @@ class StorerServiceTest < TestBase
       'created' => creation_time,
       'id' => id,
       'max_seconds' => 10,
-      'runner_choice' => 'stateless'
+      'runner_choice' => 'stateless',
+      'highlight_filenames' => [],
+      'lowlight_filenames' => [ 'cyber-dojo.sh', 'makefile', 'Makefile', 'unity.license.txt' ],
+      'filename_extension' => '',
+      'progress_regexs' => [],
+      'tab_size' => 4
     }
   end
 

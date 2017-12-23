@@ -25,6 +25,6 @@ services:
     environment:
       - CYBER_DOJO_START_POINTS_ROOT
     volumes:
-      - ./server/start_points:${CYBER_DOJO_START_POINTS_ROOT}/languages:ro
+      - ./server/start_points:${CYBER_DOJO_START_POINTS_ROOT}:ro
 
 

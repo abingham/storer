@@ -1,2 +1,2 @@
-This dir will contain start-point dirs/files
+This dir contains start-point dirs/files
 to mount (readonly) into the starter service.

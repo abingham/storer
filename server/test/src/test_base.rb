@@ -51,21 +51,22 @@ class TestBase < HexMiniTest
     test_id.reverse # reversed so I don't get common outer(id)s
   end
 
-  def create_kata(id = kata_id)
-    manifest = create_manifest(id)
+  def create_kata(id = kata_id, visible_files = nil)
+    #TODO: poorly named method
+    # storer.create_kata() takes a manifest
+    manifest = create_manifest(id, visible_files)
     storer.create_kata(manifest)
     manifest
   end
 
-  def create_manifest(id = kata_id)
-    {
-      'image_name'    => 'cyberdojofoundation/gcc_assert',
-      'visible_files' => starting_files,
-      'created'       => creation_time,
-      'id'            => id,
-      'max_seconds'   => 10,
-      'runner_choice' => 'stateless'
-    }
+  def create_manifest(id = kata_id, visible_files = nil)
+    manifest = starter.language_manifest('C (gcc)', 'assert', 'Fizz_Buzz')
+    unless visible_files.nil?
+      manifest['visible_files'] = visible_files
+    end
+    manifest['created'] = creation_time
+    manifest['id'] = id
+    manifest
   end
 
   def starting_files

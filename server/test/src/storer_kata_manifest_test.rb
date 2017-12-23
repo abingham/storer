@@ -15,7 +15,7 @@ class StorerKataManifestTest < TestBase
     @manifest = storer.kata_manifest(kata_id)
     assert_equal expected_keys.sort, @manifest.keys.sort
     assert_id kata_id
-    assert_created [2017,10,25,13,31,50]
+    assert_created [2017,10,25, 13,31,50]
     assert_display_name 'Java, JUnit'
     assert_exercise '(Verbal)'
     assert_filename_extension('.java')
@@ -34,7 +34,7 @@ class StorerKataManifestTest < TestBase
     @manifest = storer.kata_manifest(kata_id)
     assert_equal expected_keys.sort, @manifest.keys.sort
     assert_id kata_id
-    assert_created [2017,8,2,20,46,48]
+    assert_created [2017,8,2, 20,46,48]
     assert_display_name 'PHP, PHPUnit'
     assert_exercise 'Anagrams'
     assert_filename_extension('.php')
@@ -56,7 +56,7 @@ class StorerKataManifestTest < TestBase
     @manifest = storer.kata_manifest(kata_id)
     assert_equal expected_keys.sort, @manifest.keys.sort
     assert_id kata_id
-    assert_created [2013,2,18,13,22,10]
+    assert_created [2013,2,18, 13,22,10]
     assert_display_name 'C (gcc), assert'
     assert_exercise 'Calc_Stats'
     assert_filename_extension('.c')
@@ -78,7 +78,7 @@ class StorerKataManifestTest < TestBase
     @manifest = storer.kata_manifest(kata_id)
     assert_equal expected_keys.sort, @manifest.keys.sort
     assert_id kata_id
-    assert_created [2014,11,20,9,55,58]
+    assert_created [2014,11,20, 9,55,58]
     assert_display_name 'Ruby, RSpec' # capital S
     assert_exercise 'Poker_Hands'
     assert_filename_extension('.rb')
@@ -99,7 +99,7 @@ class StorerKataManifestTest < TestBase
     @manifest = storer.kata_manifest(kata_id)
     assert_equal expected_keys.sort, @manifest.keys.sort
     assert_id kata_id
-    assert_created [2016,8,1,22,54,33]
+    assert_created [2016,8,1, 22,54,33]
     assert_display_name 'Python, py.test'
     assert_exercise 'Fizz_Buzz'
     assert_filename_extension('.py')
@@ -121,7 +121,7 @@ class StorerKataManifestTest < TestBase
     @manifest = storer.kata_manifest(kata_id)
     assert_equal expected_keys.sort, @manifest.keys.sort
     assert_id kata_id
-    assert_created [2016,11,23,8,34,28]
+    assert_created [2016,11,23, 8,34,28]
     assert_display_name 'Python, behave'
     assert_exercise 'Reversi'
     assert_filename_extension('.py')
