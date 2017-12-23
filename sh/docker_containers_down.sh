@@ -10,4 +10,5 @@ docker-compose \
   --file ${ROOT_DIR}/docker-compose.yml \
   --file ${ROOT_DIR}/docker-compose.${PARAM}.yml \
   down \
-  --remove-orphans
+  --remove-orphans \
+  --volumes

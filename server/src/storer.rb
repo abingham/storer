@@ -242,13 +242,12 @@ class Storer
     manifest['highlight_filenames'] ||= []
     manifest['lowlight_filenames'] =
       if manifest['highlight_filenames'].empty?
-        ['cyber-dojo.sh', 'makefile', 'Makefile', 'unity.license.txt']
+        %w( cyber-dojo.sh makefile Makefile unity.license.txt )
       else
         manifest['visible_files'].keys - manifest['highlight_filenames']
       end
     manifest['filename_extension'] ||= ''
     manifest['progress_regexs'] ||= [] # [1]
-    manifest['highlight_filenames'] ||= []
     manifest['tab_size'] ||= 4
   end
 

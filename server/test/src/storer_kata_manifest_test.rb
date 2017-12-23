@@ -53,6 +53,7 @@ class StorerKataManifestTest < TestBase
     old = raw_manifest(kata_id)
     assert_equal 'C', old['language']
     assert_equal 'cassert', old['unit_test_framework']
+    refute old.key?('display_name')
     @manifest = storer.kata_manifest(kata_id)
     assert_equal expected_keys.sort, @manifest.keys.sort
     assert_id kata_id
@@ -73,6 +74,7 @@ class StorerKataManifestTest < TestBase
     kata_id = '421AFD7EC5'
     assert dir(kata_id).exists?
     old = raw_manifest(kata_id)
+    refute old.key?('display_name')
     assert_equal 'Ruby-Rspec', old['language']
     assert_equal 'ruby_rspec', old['unit_test_framework']
     @manifest = storer.kata_manifest(kata_id)
@@ -95,6 +97,7 @@ class StorerKataManifestTest < TestBase
     kata_id = '420BD5D5BE'
     assert dir(kata_id).exists?
     old = raw_manifest(kata_id)
+    refute old.key?('display_name')
     assert_equal 'python_pytest', old['unit_test_framework']
     @manifest = storer.kata_manifest(kata_id)
     assert_equal expected_keys.sort, @manifest.keys.sort
@@ -112,7 +115,8 @@ class StorerKataManifestTest < TestBase
   #- - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'E2F',
-  'old-style kata not involving renaming (spider, 8 lights)' do
+  %w( new-style kata not involving renaming (spider, 8 lights)
+      with red_amber_green property ) do
     kata_id = '5A0F824303'
     assert dir(kata_id).exists?
     old = raw_manifest(kata_id)
