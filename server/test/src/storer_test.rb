@@ -274,7 +274,7 @@ class StorerTest < TestBase
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'B99',
-  'after create_kata(manifest) manifest has all properties' do
+  'after create_kata(manifest) manifest has only stored properties' do
     manifest = create_kata
     expected = %w(
       id
@@ -282,13 +282,8 @@ class StorerTest < TestBase
       display_name
       exercise
       filename_extension
-      highlight_filenames
       image_name
-      lowlight_filenames
-      max_seconds
-      progress_regexs
       runner_choice
-      tab_size
       visible_files
     )
     assert_equal expected.sort, kata_manifest.keys.sort

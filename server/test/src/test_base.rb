@@ -1,6 +1,7 @@
 require_relative 'hex_mini_test'
 require_relative '../../src/externals'
 require_relative '../../src/storer'
+require_relative 'starter_service'
 require 'json'
 
 class TestBase < HexMiniTest
@@ -67,6 +68,10 @@ class TestBase < HexMiniTest
     manifest['created'] = creation_time
     manifest['id'] = id
     manifest
+  end
+
+  def starter
+    StarterService.new
   end
 
   def starting_files

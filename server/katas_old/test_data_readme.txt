@@ -64,7 +64,7 @@ The source is the cyber-dojo/converter github repo
 which contains the file katas_42.tgz which I untarred to 42/... dirs
   $ cd cyberdojo/storer
   $ tar -xf katas_42.tgz
-I then extracted the five katas as follows
+I then extracted the five katas as follows (tar_1_kata.sh is in converter repo)
   $ ./tar_1_kata.sh 42 0BD5D5BE
   $ ./tar_1_kata.sh 42 1AFD7EC5
   $ ./tar_1_kata.sh 42 1F303E80

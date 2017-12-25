@@ -6,7 +6,6 @@ class Storer
   def initialize(external)
     @disk = external.disk
     @shell = external.shell
-    @starter = external.starter
     @path = ENV['CYBER_DOJO_KATAS_ROOT']
   end
 
@@ -80,11 +79,7 @@ class Storer
   def kata_manifest(kata_id)
     assert_kata_exists(kata_id)
     dir = kata_dir(kata_id)
-    manifest = JSON.parse(dir.read(manifest_filename))
-    manifest = updated_if_old(manifest)
-    delete_obsolete_keys_from(manifest)
-    apply_defaults_to(manifest)
-    manifest
+    JSON.parse(dir.read(manifest_filename))
   end
 
   # - - - - - - - - - - - - - - - - - - -
@@ -209,47 +204,7 @@ class Storer
 
   private # = = = = = = = = = = = = = = = = = = = = =
 
-  attr_reader :disk, :shell, :starter
-
-  def updated_if_old(manifest)
-    if old?(manifest)
-      xlated = starter.manifest(manifest['language'])
-      xlated['id'] = manifest['id']
-      xlated['created'] = manifest['created']
-      xlated['exercise'] = manifest['exercise']
-      xlated
-    else
-      manifest
-    end
-  end
-
-  def old?(manifest)
-    manifest['unit_test_framework']
-  end
-
-  def delete_obsolete_keys_from(manifest)
-    manifest.delete('language')
-    manifest.delete('red_amber_green')
-    manifest.delete('browser')
-  end
-
-  def apply_defaults_to(manifest)
-    # [1] Issue: [] is not a valid progress_regex.
-    # It needs two regexs.
-    # This affects zipper.zip_tag()
-    manifest['runner_choice'] ||= 'stateless'
-    manifest['max_seconds'] ||= 10
-    manifest['highlight_filenames'] ||= []
-    manifest['lowlight_filenames'] =
-      if manifest['highlight_filenames'].empty?
-        %w( cyber-dojo.sh makefile Makefile unity.license.txt )
-      else
-        manifest['visible_files'].keys - manifest['highlight_filenames']
-      end
-    manifest['filename_extension'] ||= ''
-    manifest['progress_regexs'] ||= [] # [1]
-    manifest['tab_size'] ||= 4
-  end
+  attr_reader :disk, :shell
 
   # - - - - - - - - - - -
 

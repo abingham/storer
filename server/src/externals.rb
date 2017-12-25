@@ -1,6 +1,5 @@
 require_relative 'bash_sheller'
 require_relative 'disk_writer'
-require_relative 'starter_service'
 require_relative 'stdout_logger'
 
 module Externals
@@ -15,10 +14,6 @@ module Externals
 
   def shell
     @shell ||= BashSheller.new(self)
-  end
-
-  def starter
-    @starter ||= StarterService.new(self)
   end
 
 end
