@@ -44,15 +44,15 @@ class StorerCompletionTest < TestBase
   test '23B',
   'completed(id) does not complete when 6+ chars and more than one match' do
     uncompleted_id = kata_id[0..5]
-    create_kata(uncompleted_id + '234' + '5')
-    create_kata(uncompleted_id + '234' + '6')
+    make_kata(uncompleted_id + '234' + '5')
+    make_kata(uncompleted_id + '234' + '6')
     assert_equal uncompleted_id, storer.completed(uncompleted_id)
   end
 
   test '093',
   'completed(id) completes when 6+ chars and 1 match' do
     completed_id = kata_id
-    create_kata(completed_id)
+    make_kata(completed_id)
     uncompleted_id = completed_id[0..5]
     assert_equal completed_id, storer.completed(uncompleted_id)
   end
@@ -67,14 +67,14 @@ class StorerCompletionTest < TestBase
   test '0D6',
   'ids_for(outer) returns inner-dirs, one match' do
     kata_id = '0D6E4FDA26'
-    create_kata(kata_id)
+    make_kata(kata_id)
     assert_equal [inner(kata_id)], storer.completions('0D')
   end
 
   test 'A03',
   'ids_for(outer) returns inner-dirs, two close matches' do
     kata_ids = [ 'A03E4FDA20', 'A03E4FDA21' ]
-    kata_ids.each { |id| create_kata(id) }
+    kata_ids.each { |id| make_kata(id) }
     expected = kata_ids.collect { |id| inner(id) }
     assert_equal expected.sort, storer.completions('A0').sort
   end
@@ -82,7 +82,7 @@ class StorerCompletionTest < TestBase
   test '7FC',
   'ids_for(outer) returns inner-dirs, three far matches' do
     kata_ids = [ '7FC2034534', '7FD92F11B0', '7F13E86582' ]
-    kata_ids.each { |id| create_kata(id) }
+    kata_ids.each { |id| make_kata(id) }
     expected = kata_ids.collect { |id| inner(id) }
     assert_equal expected.sort, storer.completions('7F').sort
   end

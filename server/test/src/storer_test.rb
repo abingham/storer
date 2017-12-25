@@ -275,7 +275,7 @@ class StorerTest < TestBase
 
   test 'B99',
   'after create_kata(manifest) manifest has only stored properties' do
-    manifest = create_kata
+    manifest = make_kata
     expected = %w(
       id
       created
@@ -295,7 +295,7 @@ class StorerTest < TestBase
 
   test 'A6B',
   'before starting an avatar none exist' do
-    create_kata
+    make_kata
     assert_equal([], started_avatars)
     assert_equal({}, kata_increments)
   end
@@ -304,7 +304,7 @@ class StorerTest < TestBase
 
   test 'F6E',
   'rogue sub-dirs in kata-dir are not reported as avatars' do
-    create_kata
+    make_kata
     rogue = 'flintstone'
     disk[kata_path + '/' + rogue].make
     assert_equal [rogue], disk[kata_path].each_dir.collect { |name| name }
@@ -315,7 +315,7 @@ class StorerTest < TestBase
 
   test 'CBF',
   'avatar_start(not-an-avatar-name) is nil' do
-    create_kata
+    make_kata
     assert_nil start_avatar(['pencil'])
   end
 
@@ -327,7 +327,7 @@ class StorerTest < TestBase
     avatar's visible_files are from the kata,
     avatar's increments already have tag zero
   ) do
-    create_kata
+    make_kata
     assert_equal lion, start_avatar([lion])
     assert_equal [lion], started_avatars
     expected_filenames = %w(
@@ -360,7 +360,7 @@ class StorerTest < TestBase
 
   test 'B1C',
   'avatar_start succeeds 64 times then kata is full' do
-    create_kata
+    make_kata
     all_avatars_names.each { |name| disk[avatar_path(name)].make }
     assert_equal all_avatars_names.sort, started_avatars.sort
     assert_nil start_avatar(all_avatars_names)
@@ -375,7 +375,7 @@ class StorerTest < TestBase
     visible_files are retrievable by implicit current-tag,
     visible_files are retrievable by explicit tag
   ) do
-    create_kata(kata_id, starting_files)
+    make_kata(kata_id, starting_files)
     start_avatar([lion])
     was_tag = 0
 
@@ -509,7 +509,7 @@ class StorerTest < TestBase
   end
 
   def assert_bad_avatar_raises
-    create_kata
+    make_kata
     bad_avatar_names.each do |bad_name|
       error = assert_raises(ArgumentError) {
         yield kata_id, bad_name
@@ -525,7 +525,7 @@ class StorerTest < TestBase
   end
 
   def assert_bad_tag_raises
-    create_kata
+    make_kata
     storer.start_avatar(kata_id, [lion])
     bad_tags.each do |bad_tag|
       error = assert_raises(ArgumentError) {
@@ -551,7 +551,7 @@ class StorerTest < TestBase
   end
 
   def assert_bad_tag_pair_raises
-    create_kata
+    make_kata
     storer.start_avatar(kata_id, [lion])
     bad_tag_pairs.each do |was_tag, now_tag|
       error = assert_raises(ArgumentError) {

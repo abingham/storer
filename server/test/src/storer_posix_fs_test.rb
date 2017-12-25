@@ -16,7 +16,7 @@ class StorerPosixFsTest < TestBase
   'start_avatar on multiple threads doesnt start the same avatar twice' do
     20.times do |n|
       kata_id = '4C012345' + (n+10).to_s
-      create_kata(kata_id)
+      make_kata(kata_id)
       started = []
       size = 4
       animals = all_avatars_names.shuffle[0...size]
@@ -40,7 +40,7 @@ class StorerPosixFsTest < TestBase
   'start_avatar on multiple processes doesnt start the same avatar twice' do
     20.times do |n|
       kata_id = 'A3112345' + (n+10).to_s
-      create_kata(kata_id)
+      make_kata(kata_id)
       started = []
       size = 4
       animals = all_avatars_names.shuffle[0...size]
@@ -65,7 +65,7 @@ class StorerPosixFsTest < TestBase
 
   include AllAvatarsNames
 
-  def create_kata(id = kata_id)
+  def make_kata(id = kata_id)
     manifest = {}
     manifest['image_name'] = 'cyberdojofoundation/gcc_assert'
     manifest['visible_files'] = starting_files
