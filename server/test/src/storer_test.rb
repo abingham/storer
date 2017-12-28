@@ -23,7 +23,7 @@ class StorerTest < TestBase
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '6B7',
-  'kata_exists? with invalid kata_id is false' do
+  'kata_exists? is false when kata_id is invalid' do
     invalid_kata_ids.each do |invalid_id|
       refute storer.kata_exists?(invalid_id), invalid_id
     end
@@ -34,14 +34,14 @@ class StorerTest < TestBase
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '78E',
-  'avatar_exists? with invalid kata_id is false' do
+  'avatar_exists? is false when kata_id is invalid kata_id' do
     invalid_kata_ids.each do |invalid_id|
       refute storer.avatar_exists?(invalid_id, 'dolphin'), invalid_id
     end
   end
 
   test '78F',
-  'avatar_exists? with invalid avatar_name is false' do
+  'avatar_exists? is false when avatar_name is invalid' do
     manifest = create_manifest
     kata_id = manifest['id']
     invalid_avatar_names.each do |invalid_name|
@@ -426,7 +426,7 @@ class StorerTest < TestBase
   end
 
   test '172',
-  %w( tag_visible_files with bad kata_id raises ) do
+  %w( tag_visible_files raises when kata_id is invalid ) do
     error = assert_raises(ArgumentError) {
       storer.tag_visible_files('xxx', 'dolphin', 20)
     }
@@ -434,7 +434,7 @@ class StorerTest < TestBase
   end
 
   test '173',
-  %w( tag_visible_files with bad avatar_name raises ) do
+  %w( tag_visible_files raises when avatar_name is invalid ) do
     error = assert_raises(ArgumentError) {
       storer.tag_visible_files('420B05BA0A', 'xxx', 20)
     }
@@ -442,7 +442,7 @@ class StorerTest < TestBase
   end
 
   test '174',
-  %w( tag_visible_files with bad tag raises ) do
+  %w( tag_visible_files raises when tag is invalid ) do
     error = assert_raises(ArgumentError) {
       storer.tag_visible_files('420B05BA0A', 'dolphin', 21)
     }

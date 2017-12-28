@@ -132,8 +132,8 @@ class Storer
     tag = increments.length + 1
     increments << { 'colour' => colour, 'time' => now, 'number' => tag }
     write_avatar_increments(kata_id, avatar_name, increments)
-
-    files = files.clone # don't alter caller's files argument
+    # don't alter caller's files argument
+    files = files.clone
     files['output'] = output
     write_tag_files(kata_id, avatar_name, tag, files)
   end
@@ -307,12 +307,6 @@ class Storer
 
   def assert_avatar_exists(kata_id, avatar_name)
     unless avatar_exists?(kata_id, avatar_name)
-      fail invalid('avatar_name')
-    end
-  end
-
-  def assert_valid_name(avatar_name)
-    unless valid_avatar?(avatar_name)
       fail invalid('avatar_name')
     end
   end
