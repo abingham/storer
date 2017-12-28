@@ -62,10 +62,10 @@ class Storer
   # - - - - - - - - - - - - - - - - - - -
 
   def create_kata(manifest)
+    json = JSON.unparse(manifest)
     kata_id = manifest['id']
     assert_valid_id(kata_id)
     refute_kata_exists(kata_id)
-    json = JSON.unparse(manifest)
     dir = kata_dir(kata_id)
     dir.make
     dir.write(manifest_filename, json)
