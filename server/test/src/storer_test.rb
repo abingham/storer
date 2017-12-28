@@ -392,6 +392,48 @@ class StorerTest < TestBase
     assert_hash_equal now_tag_visible_files, hash['now_tag']
   end
 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # tag_visible_files
+  # test-data: 420B05BA0A, dolphin, 20 rags
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  test '171',
+  %w( tag_visible_files with valid arguments ) do
+    visible_files = storer.tag_visible_files('420B05BA0A', 'dolphin', 20)
+    expected = %w(
+      Calcolatrice.java
+      HikerTest.java
+      cyber-dojo.sh
+      instructions
+      output
+    )
+    assert_equal expected.sort, visible_files.keys.sort
+  end
+
+  test '172',
+  %w( tag_visible_files with bad kata_id raises ) do
+    error = assert_raises(ArgumentError) {
+      storer.tag_visible_files('xxx', 'dolphin', 20)
+    }
+    assert_equal 'invalid kata_id', error.message
+  end
+
+  test '173',
+  %w( tag_visible_files with bad avatar_name raises ) do
+    error = assert_raises(ArgumentError) {
+      storer.tag_visible_files('420B05BA0A', 'xxx', 20)
+    }
+    assert_equal 'invalid avatar_name', error.message
+  end
+
+  test '174',
+  %w( tag_visible_files with bad tag raises ) do
+    error = assert_raises(ArgumentError) {
+      storer.tag_visible_files('420B05BA0A', 'dolphin', 21)
+    }
+    assert_equal 'invalid tag', error.message
+  end
+
   private # = = = = = = = = = = = = = = = = = = = = = = =
 
   include AllAvatarsNames
