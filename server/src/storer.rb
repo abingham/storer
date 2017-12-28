@@ -11,9 +11,9 @@ class Storer
 
   attr_reader :path
 
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # - - - - - - - - - - - - - - - - - - -
   # kata-id completion(s)
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # - - - - - - - - - - - - - - - - - - -
 
   def completed(kata_id)
     assert_partial_id(kata_id)
@@ -51,9 +51,9 @@ class Storer
     disk[dir_join(path, kata_id)].each_dir.collect { |dir| dir }
   end
 
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # - - - - - - - - - - - - - - - - - - -
   # kata
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # - - - - - - - - - - - - - - - - - - -
 
   def kata_exists?(kata_id)
     valid_id?(kata_id) && kata_dir(kata_id).exists?
@@ -87,14 +87,14 @@ class Storer
     }]
   end
 
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # - - - - - - - - - - - - - - - - - - -
   # avatar start
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # - - - - - - - - - - - - - - - - - - -
 
   def avatar_exists?(kata_id, avatar_name)
-    assert_kata_exists(kata_id)
-    assert_valid_name(avatar_name)
-    avatar_dir(kata_id, avatar_name).exists?
+    valid_id?(kata_id) &&
+      valid_avatar?(avatar_name) &&
+        avatar_dir(kata_id, avatar_name).exists?
   end
 
   # - - - - - - - - - - - - - - - - - - -
@@ -121,11 +121,12 @@ class Storer
     started & all_avatars_names
   end
 
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # - - - - - - - - - - - - - - - - - - -
   # avatar action!
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # - - - - - - - - - - - - - - - - - - -
 
   def avatar_ran_tests(kata_id, avatar_name, files, now, output, colour)
+    assert_kata_exists(kata_id)
     assert_avatar_exists(kata_id, avatar_name)
     increments = read_avatar_increments(kata_id, avatar_name)
     tag = increments.length + 1
@@ -137,11 +138,12 @@ class Storer
     write_tag_files(kata_id, avatar_name, tag, files)
   end
 
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # - - - - - - - - - - - - - - - - - - -
   # avatar info
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # - - - - - - - - - - - - - - - - - - -
 
   def avatar_increments(kata_id, avatar_name)
+    assert_kata_exists(kata_id)
     assert_avatar_exists(kata_id, avatar_name)
     # Return increments with tag0 to avoid client
     # having to make extra service call
@@ -157,17 +159,20 @@ class Storer
   # - - - - - - - - - - - - - - - - - - -
 
   def avatar_visible_files(kata_id, avatar_name)
+    assert_kata_exists(kata_id)
     assert_avatar_exists(kata_id, avatar_name)
     rags = read_avatar_increments(kata_id, avatar_name)
     tag = (rags == []) ? 0 : rags[-1]['number']
     tag_visible_files(kata_id, avatar_name, tag)
   end
 
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # - - - - - - - - - - - - - - - - - - -
   # tag
-  # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # - - - - - - - - - - - - - - - - - - -
 
   def tag_visible_files(kata_id, avatar_name, tag)
+    assert_kata_exists(kata_id)
+    assert_avatar_exists(kata_id, avatar_name)
     assert_tag_exists(kata_id, avatar_name, tag)
     if tag == 0 # tag zero is a special case
       return kata_manifest(kata_id)['visible_files']
@@ -192,7 +197,7 @@ class Storer
     }
   end
 
-  private # = = = = = = = = = = = = = = = = = = = = =
+  private # = = = = = = = = = = = = = = =
 
   attr_reader :disk, :shell
 
@@ -324,7 +329,6 @@ class Storer
   # - - - - - - - - - - - - - - - - - - - - - - - -
 
   def assert_tag_exists(kata_id, avatar_name, tag)
-    assert_avatar_exists(kata_id, avatar_name)
     assert_valid_tag(tag)
     unless tag_exists?(kata_id, avatar_name, tag)
       fail invalid('tag')

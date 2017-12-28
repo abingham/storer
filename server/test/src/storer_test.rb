@@ -19,27 +19,38 @@ class StorerTest < TestBase
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
-  # invalid kata_id on kata_exists? is false
+  # kata_exists? never raises
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '6B7',
-  'kata_exists? with invalid kata_id raises' do
+  'kata_exists? with invalid kata_id is false' do
     invalid_kata_ids.each do |invalid_id|
       refute storer.kata_exists?(invalid_id), invalid_id
     end
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
-  # invalid kata_id on any other method raises
+  # avatar_exists? never raises
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  test '78F',
-  'avatar_exists? with invalid kata_id raises' do
-    assert_invalid_kata_id_raises { |invalid_id|
-      storer.avatar_exists?(invalid_id, 'lion')
-    }
+  test '78E',
+  'avatar_exists? with invalid kata_id is false' do
+    invalid_kata_ids.each do |invalid_id|
+      refute storer.avatar_exists?(invalid_id, 'dolphin'), invalid_id
+    end
   end
 
+  test '78F',
+  'avatar_exists? with invalid avatar_name is false' do
+    manifest = create_manifest
+    kata_id = manifest['id']
+    invalid_avatar_names.each do |invalid_name|
+      refute storer.avatar_exists?(kata_id, invalid_name), invalid_name
+    end
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # invalid kata_id on any other method raises
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '933',
@@ -105,7 +116,7 @@ class StorerTest < TestBase
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'D9F',
-  'avatar_increments() with invalud kata_id raises' do
+  'avatar_increments() with invalid kata_id raises' do
     assert_bad_kata_id_raises { |invalid_id|
       storer.avatar_increments(invalid_id, lion)
     }
@@ -156,17 +167,8 @@ class StorerTest < TestBase
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  # invalid avatar-name on any method raises
+  # invalid avatar-name on any other method raises
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-  test '8BA',
-  'avatar_exists?() with invalid avatar_name raises' do
-    assert_bad_avatar_raises { |kata_id, invalid_avatar_name|
-      storer.avatar_exists?(kata_id, invalid_avatar_name)
-    }
-  end
-
-  # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'B5F',
   'avatar_increments() with invalid avatar_name raises' do
@@ -495,6 +497,15 @@ class StorerTest < TestBase
       '345',        # not 10 chars
       '123456789',  # not 10 chars
       'ABCDEF123X'  # not 10 hex chars
+    ]
+  end
+
+  def invalid_avatar_names
+    [
+      nil,     # not an object
+      [],      # not a string
+      '',      # not a name
+      'dolpin' # not a name (no h)
     ]
   end
 
