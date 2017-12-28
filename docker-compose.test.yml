@@ -14,7 +14,7 @@ services:
       - CYBER_DOJO_COVERAGE_ROOT
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  # starter is handy for creating kata-manifests
+  # starter is handy in tests for creating kata-manifests
 
   starter:
     user: nobody

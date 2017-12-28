@@ -195,13 +195,6 @@ class Storer
     }
   end
 
-  # - - - - - - - - - - - - - - - - - - -
-
-  def tag_fork(kata_id, avatar_name, tag)
-    assert_tag_exists(kata_id, avatar_name, tag)
-    #TODO
-  end
-
   private # = = = = = = = = = = = = = = = = = = = = =
 
   attr_reader :disk, :shell
