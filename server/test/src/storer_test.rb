@@ -399,9 +399,22 @@ class StorerTest < TestBase
   # test-data: 420B05BA0A, dolphin, 20 rags
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  test '171',
-  %w( tag_visible_files with valid arguments ) do
+  test '170',
+  %w( tag_visible_files with valid +ve tag ) do
     visible_files = storer.tag_visible_files('420B05BA0A', 'dolphin', 20)
+    expected = %w(
+      Calcolatrice.java
+      HikerTest.java
+      cyber-dojo.sh
+      instructions
+      output
+    )
+    assert_equal expected.sort, visible_files.keys.sort
+  end
+
+  test '171',
+  %w( tag_visible_files with -1 tag is last tag ) do
+    visible_files = storer.tag_visible_files('420B05BA0A', 'dolphin', -1)
     expected = %w(
       Calcolatrice.java
       HikerTest.java
@@ -547,7 +560,7 @@ class StorerTest < TestBase
   # - - - - - - - - - - - - - - - - - - - - - - - -
 
   def bad_tags
-    [ nil, [], 'sunglasses', 999, -1 ]
+    [ nil, [], 'sunglasses', 999 ]
   end
 
   def assert_bad_tag_raises

@@ -173,6 +173,9 @@ class Storer
   def tag_visible_files(kata_id, avatar_name, tag)
     assert_kata_exists(kata_id)
     assert_avatar_exists(kata_id, avatar_name)
+    if tag == -1
+      tag = avatar_increments(kata_id, avatar_name).size - 1
+    end
     assert_tag_exists(kata_id, avatar_name, tag)
     if tag == 0 # tag zero is a special case
       return kata_manifest(kata_id)['visible_files']
