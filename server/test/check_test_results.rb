@@ -81,14 +81,15 @@ error_count   = log_stats[:error_count]
 skip_count    = log_stats[:skip_count]
 
 test_duration = log_stats[:time].to_f
-assertions_per_sec = log_stats[:assertions_per_sec].to_i
+#assertions_per_sec = log_stats[:assertions_per_sec].to_i
 
 src_coverage = src_stats[:coverage].to_f
 test_coverage = test_stats[:coverage].to_f
 
-hits_per_line_src = src_stats[:hits_per_line].to_f
-hits_per_line_test = test_stats[:hits_per_line].to_f
+#hits_per_line_src = src_stats[:hits_per_line].to_f
+#hits_per_line_test = test_stats[:hits_per_line].to_f
 line_ratio = (test_stats[:line_count].to_f / src_stats[:line_count].to_f)
+hits_ratio = (src_stats[:hits_per_line].to_f / test_stats[:hits_per_line].to_f)
 
 # - - - - - - - - - - - - - - - - - - - - - - -
 # It is useful to keep these tolerances quite close
@@ -100,13 +101,14 @@ table =
     [ 'failures',               failure_count,      '==',   0 ],
     [ 'errors',                 error_count,        '==',   0 ],
     [ 'skips',                  skip_count,         '==',   0 ],
-    [ 'assertions/s',           assertions_per_sec, '>=',  50 ],
+    #[ 'assertions/s',           assertions_per_sec, '>=',  50 ],
     [ 'duration(test)[s]',      test_duration,      '<=',  10 ],
     [ 'coverage(src)[%]',       src_coverage,       '>=',  99 ],
     [ 'coverage(test)[%]',      test_coverage,      '==', 100 ],
-    [ 'hits_per_line(src)',     hits_per_line_src,  '<=', 185 ],
-    [ 'hits_per_line(test)',    hits_per_line_test, '<=',  11 ],
+    #[ 'hits_per_line(src)',     hits_per_line_src,  '<=', 185 ],
+    #[ 'hits_per_line(test)',    hits_per_line_test, '<=',  11 ],
     [ 'lines(test)/lines(src)', f2(line_ratio),     '>=', 2.5 ],
+    [ 'hits(src)/hits(test)',   f2(hits_ratio),     '>=',  15 ],
   ]
 
 # - - - - - - - - - - - - - - - - - - - - - - -
