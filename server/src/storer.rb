@@ -56,10 +56,7 @@ class Storer
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   def kata_exists?(kata_id)
-    unless valid_id?(kata_id)
-      return false
-    end
-    kata_dir(kata_id).exists?
+    valid_id?(kata_id) && kata_dir(kata_id).exists?
   end
 
   # - - - - - - - - - - - - - - - - - - -
@@ -198,8 +195,6 @@ class Storer
   private # = = = = = = = = = = = = = = = = = = = = =
 
   attr_reader :disk, :shell
-
-  # - - - - - - - - - - -
 
   def write_avatar_increments(kata_id, avatar_name, increments)
     json = JSON.unparse(increments)
