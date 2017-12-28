@@ -281,7 +281,7 @@ class Storer
   end
 
   def partial_id?(kata_id)
-    kata_id.class.name == 'String' &&
+    kata_id.is_a?(String) &&
       kata_id.chars.all? { |char| hex?(char) }
   end
 
@@ -340,7 +340,7 @@ class Storer
   end
 
   def valid_tag?(tag)
-    tag.class.name == 'Integer' ||
+    tag.is_a?(Integer) ||
       tag.to_s =~ /^-1/ ||
         tag.to_s =~ /^[0-9+]$/
   end
