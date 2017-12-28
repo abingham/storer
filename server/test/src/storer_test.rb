@@ -155,15 +155,6 @@ class StorerTest < TestBase
     }
   end
 
-  # - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-  test '919',
-  'tag_fork() with invalid kata_id raises' do
-    assert_bad_kata_id_raises { |invalid_id|
-      storer.tag_fork(invalid_id, lion, tag=2)
-    }
-  end
-
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # invalid avatar-name on any method raises
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -228,17 +219,8 @@ class StorerTest < TestBase
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
-
   #TODO other methods...
-
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-  test '395',
-  'tag_fork() with invalid avatar_name raises' do
-    assert_bad_avatar_raises { |kata_id, invalid_avatar_name|
-      storer.tag_fork(kata_id, invalid_avatar_name, tag=0)
-    }
-  end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # invalid tag on any method raises
@@ -257,15 +239,6 @@ class StorerTest < TestBase
   'tags_visible_files() with invalid tag raises' do
     assert_bad_tag_pair_raises { |valid_id, valid_name, was_tag, now_tag|
       storer.tags_visible_files(valid_id, valid_name, was_tag, now_tag)
-    }
-  end
-
-  # - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-  test '383',
-  'tag_fork() with invalid tag raises' do
-    assert_bad_tag_raises { |valid_id, valid_name, bad_tag|
-      storer.tag_fork(valid_id, valid_name, bad_tag)
     }
   end
 
