@@ -1,8 +1,9 @@
 require_relative 'externals'
 require_relative 'storer'
 require 'json'
+require 'rack'
 
-class MicroService
+class RackDispatcher
 
   def call(env)
     request = Rack::Request.new(env)
