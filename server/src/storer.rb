@@ -173,6 +173,8 @@ class Storer
   def tag_visible_files(kata_id, avatar_name, tag)
     assert_kata_exists(kata_id)
     assert_avatar_exists(kata_id, avatar_name)
+    assert_valid_tag(tag)
+    tag = tag.to_i
     if tag == -1
       tag = avatar_increments(kata_id, avatar_name).size - 1
     end
@@ -326,7 +328,6 @@ class Storer
   # - - - - - - - - - - - - - - - - - - - - - - - -
 
   def assert_tag_exists(kata_id, avatar_name, tag)
-    assert_valid_tag(tag)
     unless tag_exists?(kata_id, avatar_name, tag)
       fail invalid('tag')
     end
@@ -339,7 +340,10 @@ class Storer
   end
 
   def valid_tag?(tag)
-    tag.class.name == 'Integer'
+    tag.class.name == 'Fixnum' ||
+      tag.class.name == 'Integer' ||
+        tag.to_s =~ /^-1/ ||
+          tag.to_s =~ /^[0-9+]$/
   end
 
   def tag_exists?(kata_id, avatar_name, tag)
