@@ -1,19 +1,20 @@
 FROM  alpine:latest
 LABEL maintainer=jon@jaggersoft.com
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# install ruby
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - -
+# install ruby+
+# - - - - - - - - - - - - - -
 
 RUN apk --update --no-cache add \
-    ruby ruby-dev ruby-bundler \
-    bash
+    bash \
+    ruby-bundler \
+    ruby-dev \
+    tar
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - -
 # install ruby gems
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - -
 
-RUN echo 'gem: --no-document' > ~/.gemrc
 COPY Gemfile /app/
 WORKDIR /app
 
@@ -24,15 +25,14 @@ RUN apk --update add --virtual build-dependencies build-base \
   && apk del build-dependencies \
   && rm -vrf /var/cache/apk/*
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# - - - - - - - - - - - - - -
 # setup client
-# tar is needed to tar-pipe test coverage out of tmpfs.
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-RUN apk --update --no-cache add tar
+# - - - - - - - - - - - - - -
 
 COPY . /app
+
 ARG PORT
 EXPOSE ${PORT}
 ENV PORT=${PORT}
+
 CMD [ "./up.sh" ]
