@@ -5,6 +5,10 @@ services:
 
   storer:
     container_name: cyber-dojo-storer
+    cpu_shares: 1024
+    mem_limit: 2G
+    memswap_limit: 2G
+    restart: on-failure
     ports:
       - ${CYBER_DOJO_STORER_SERVER_PORT}:${CYBER_DOJO_STORER_SERVER_PORT}
     volumes_from:
