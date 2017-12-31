@@ -27,4 +27,4 @@ docker run \
   --rm \
   --volumes-from ${CYBER_DOJO_KATA_DATA_CONTAINER_NAME} \
     cyberdojo/storer \
-      sh -c "chown -R cyber-dojo:cyber-dojo ${CYBER_DOJO_KATAS_ROOT}"
+      sh -c "chown -R storer:storer ${CYBER_DOJO_KATAS_ROOT}"

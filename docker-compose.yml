@@ -22,7 +22,7 @@ services:
   # - - - - - - - - - - - - - - - - - - -
 
   storer:
-    user: cyber-dojo
+    user: storer
     image: cyberdojo/storer
     init: true
     container_name: test_storer_server

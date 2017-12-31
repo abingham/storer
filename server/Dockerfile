@@ -36,7 +36,7 @@ RUN apk --update add --virtual build-dependencies build-base \
 #   o) cyber-dojo user owns the katas/ dir
 # - - - - - - - - - - - - - -
 
-RUN adduser -D -H -u 19661 cyber-dojo
+RUN adduser -D -H -u 19661 storer
 
 COPY . /app
 
