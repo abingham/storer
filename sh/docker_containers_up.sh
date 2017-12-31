@@ -31,4 +31,4 @@ docker-compose \
 
 wait_till_up 'test_storer_server'
 wait_till_up 'test_storer_client'
-wait_till_up 'storer_test_starter_server'
+wait_till_up 'test_storer_starter_server'

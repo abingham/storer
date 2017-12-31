@@ -20,7 +20,7 @@ services:
     user: nobody
     image: cyberdojo/starter
     init: true
-    container_name: storer_test_starter_server
+    container_name: test_storer_starter_server
     read_only: true
     tmpfs: /tmp
     environment:
