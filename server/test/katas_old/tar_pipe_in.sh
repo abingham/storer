@@ -7,7 +7,7 @@ readonly MY_DIR="$( cd "$( dirname "${0}" )" && pwd )"
 readonly PARAM=${1:-test}
 readonly KATA_IDS=(5A0F824303 420B05BA0A 420F2A2979 421F303E80 420BD5D5BE 421AFD7EC5 )
 
-. ${MY_DIR}/../../env.${PARAM}
+. ${MY_DIR}/../../../env.${PARAM}
 
 # tar-pipe test data into storer's katas data-container
 # assumes the dir ${CYBER_DOJO_KATAS_ROOT} already exists.

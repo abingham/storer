@@ -8,7 +8,7 @@ readonly CONTEXT_DIR=${MY_DIR}
 readonly TAG=cyberdojo/test_storer_kata
 readonly PARAM=${1:-test}
 
-. ${MY_DIR}/../../env.${PARAM}
+. ${MY_DIR}/../../../env.${PARAM}
 
 docker rm \
   --force \
