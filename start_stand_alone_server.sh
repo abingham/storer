@@ -12,7 +12,6 @@ ${MY_DIR}/server/katas_volume/build_data_container.sh
 docker-compose \
   --file ${MY_DIR}/docker-compose.yml \
   --file ${MY_DIR}/docker-compose.${PARAM}.yml \
-  up -d \
-  storer
+  up -d
 
 echo "Don't forget to open port ${CYBER_DOJO_STORER_SERVER_PORT}"
