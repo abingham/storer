@@ -10,6 +10,7 @@ services:
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   storer:
+    container_name: test_storer_server
     environment:
       - CYBER_DOJO_COVERAGE_ROOT
 

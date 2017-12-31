@@ -25,7 +25,6 @@ services:
     user: storer
     image: cyberdojo/storer
     init: true
-    container_name: test_storer_server
     read_only: true
     tmpfs: /tmp
     build:
@@ -34,5 +33,3 @@ services:
         - PORT=${CYBER_DOJO_STORER_SERVER_PORT}
     environment:
       - CYBER_DOJO_KATAS_ROOT
-    volumes_from:
-      - container:${CYBER_DOJO_KATA_DATA_CONTAINER_NAME}:rw

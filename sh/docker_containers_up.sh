@@ -2,10 +2,18 @@
 set -e
 
 readonly ROOT_DIR="$( cd "$( dirname "${0}" )" && cd .. && pwd )"
-readonly PARAM=${1:-test}
+readonly PARAM=test
 
 . ${ROOT_DIR}/env.${PARAM}
 . ${ROOT_DIR}/env.port
+
+docker-compose \
+  --file ${ROOT_DIR}/docker-compose.yml \
+  --file ${ROOT_DIR}/docker-compose.${PARAM}.yml \
+  up -d \
+  --force-recreate
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 wait_till_up()
 {
@@ -22,12 +30,6 @@ wait_till_up()
   docker logs ${1}
   exit 1
 }
-
-docker-compose \
-  --file ${ROOT_DIR}/docker-compose.yml \
-  --file ${ROOT_DIR}/docker-compose.${PARAM}.yml \
-  up -d \
-  --force-recreate
 
 wait_till_up 'test_storer_server'
 wait_till_up 'test_storer_client'

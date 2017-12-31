@@ -4,5 +4,8 @@ version: '2.2'
 services:
 
   storer:
+    container_name: cyber-dojo-storer
     ports:
       - ${CYBER_DOJO_STORER_SERVER_PORT}:${CYBER_DOJO_STORER_SERVER_PORT}
+    volumes_from:
+      - container:${CYBER_DOJO_KATA_DATA_CONTAINER_NAME}:rw

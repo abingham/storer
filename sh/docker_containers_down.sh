@@ -1,7 +1,7 @@
 #!/bin/bash
 
 readonly ROOT_DIR="$( cd "$( dirname "${0}" )" && cd .. && pwd )"
-readonly PARAM=${1:-test}
+readonly PARAM=test
 
 . ${ROOT_DIR}/env.${PARAM}
 . ${ROOT_DIR}/env.port

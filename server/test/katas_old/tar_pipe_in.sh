@@ -4,27 +4,34 @@ set -e
 # called from pipe_build_up_test.sh
 
 readonly MY_DIR="$( cd "$( dirname "${0}" )" && pwd )"
-readonly PARAM=${1:-test}
+readonly PARAM=test
 readonly KATA_IDS=(5A0F824303 420B05BA0A 420F2A2979 421F303E80 420BD5D5BE 421AFD7EC5 )
+readonly STORER_CONTAINER='test_storer_server'
 
 . ${MY_DIR}/../../../env.${PARAM}
 
-# tar-pipe test data into storer's katas data-container
-# assumes the dir ${CYBER_DOJO_KATAS_ROOT} already exists.
+# - - - - - - - - - - - - - - - - - - - - - - - -
+# make sure ${CYBER_DOJO_KATAS_ROOT} dir exists
+
+docker exec \
+  ${STORER_CONTAINER} \
+    sh -c "mkdir -p ${CYBER_DOJO_KATAS_ROOT}"
+
+# - - - - - - - - - - - - - - - - - - - - - - - -
+# tar-pipe test data into storer-container
+
 for KATA_ID in "${KATA_IDS[@]}"
 do
   cat ${MY_DIR}/${KATA_ID}.tgz \
-    | docker run \
-        --rm \
+    | docker exec \
         --interactive \
-        --volumes-from ${CYBER_DOJO_KATA_DATA_CONTAINER_NAME}:rw \
-          alpine:latest \
+        ${STORER_CONTAINER} \
             sh -c "tar -zxf - -C ${CYBER_DOJO_KATAS_ROOT}"
 done
 
-# set ownership of test-data in storer's katas data-container
-docker run \
-  --rm \
-  --volumes-from ${CYBER_DOJO_KATA_DATA_CONTAINER_NAME} \
-    cyberdojo/storer \
+# - - - - - - - - - - - - - - - - - - - - - - - -
+# set ownership of test-data in storer-container
+
+docker exec \
+    ${STORER_CONTAINER} \
       sh -c "chown -R storer:storer ${CYBER_DOJO_KATAS_ROOT}"
