@@ -340,9 +340,7 @@ class Storer
   end
 
   def valid_tag?(tag)
-    tag.is_a?(Integer) ||
-      tag.to_s =~ /^-1/ ||
-        tag.to_s =~ /^[0-9+]$/
+    tag.is_a?(Integer)
   end
 
   def tag_exists?(kata_id, avatar_name, tag)
