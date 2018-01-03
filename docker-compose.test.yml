@@ -18,6 +18,8 @@ services:
     depends_on:
       - storer
     restart: 'no'
+    volumes:
+      - ./client/test:${CYBER_DOJO_STORER_HOME}/test:ro
     environment:
       - CYBER_DOJO_STORER_SERVICE_NAME
       - CYBER_DOJO_STORER_SERVICE_PORT
@@ -33,6 +35,8 @@ services:
     environment:
       - CYBER_DOJO_COVERAGE_ROOT
     restart: 'no'
+    volumes:
+      - ./server/test:${CYBER_DOJO_STORER_HOME}/test:ro
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # starter is handy in tests for creating kata-manifests
