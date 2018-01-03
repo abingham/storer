@@ -4,6 +4,11 @@ version: '2.2'
 services:
 
   storer_client:
+    build:
+      context: client
+      args:
+        - CYBER_DOJO_STORER_HOME=${CYBER_DOJO_STORER_HOME}
+        - PORT=${CYBER_DOJO_STORER_CLIENT_PORT}
     user: nobody
     image: cyberdojo/storer_client
     init: true
@@ -12,10 +17,7 @@ services:
     tmpfs: /tmp
     depends_on:
       - storer
-    build:
-      context: client
-      args:
-        - PORT=${CYBER_DOJO_STORER_CLIENT_PORT}
+    restart: 'no'
     environment:
       - CYBER_DOJO_STORER_SERVICE_NAME
       - CYBER_DOJO_STORER_SERVICE_PORT
@@ -30,6 +32,7 @@ services:
     container_name: test_storer_server
     environment:
       - CYBER_DOJO_COVERAGE_ROOT
+    restart: 'no'
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # starter is handy in tests for creating kata-manifests

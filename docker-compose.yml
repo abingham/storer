@@ -4,14 +4,15 @@ version: '2.2'
 services:
 
   storer:
+    build:
+      context: server
+      args:
+        - CYBER_DOJO_STORER_HOME=${CYBER_DOJO_STORER_HOME}
+        - PORT=${CYBER_DOJO_STORER_SERVICE_PORT}
     user: storer
     image: cyberdojo/storer
     init: true
     read_only: true
     tmpfs: /tmp
-    build:
-      context: server
-      args:
-        - PORT=${CYBER_DOJO_STORER_SERVICE_PORT}
     environment:
       - CYBER_DOJO_KATAS_ROOT

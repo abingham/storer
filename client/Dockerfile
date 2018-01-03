@@ -3,10 +3,16 @@ LABEL maintainer=jon@jaggersoft.com
 
 # - - - - - - - - - - - - - -
 # install ruby+
+#   o) git is needed for reading katas in old git-format
+#   o) tar is needed to tar-pipe old git-kata in tests. This allows
+#      docker-compose.yml to set read_only:true which is what
+#      commander does in its docker-compose.yml file.
+#      Also needed to tar-pipe test coverage out of tmpfs.
 # - - - - - - - - - - - - - -
 
 RUN apk --update --no-cache add \
     bash \
+    git \
     ruby-bundler \
     ruby-dev \
     tar
@@ -15,21 +21,24 @@ RUN apk --update --no-cache add \
 # install ruby gems
 # - - - - - - - - - - - - - -
 
-COPY Gemfile /app/
-WORKDIR /app
+ARG             CYBER_DOJO_STORER_HOME
+COPY Gemfile  ${CYBER_DOJO_STORER_HOME}/
+WORKDIR       ${CYBER_DOJO_STORER_HOME}
 
 RUN apk --update add --virtual build-dependencies build-base \
   && bundle config --global silence_root_warning 1 \
   && bundle install \
   && gem clean \
-  && apk del build-dependencies \
+  && apk del build-dependencies build-base \
   && rm -vrf /var/cache/apk/*
 
 # - - - - - - - - - - - - - -
 # setup client
 # - - - - - - - - - - - - - -
 
-COPY . /app
+COPY . ${CYBER_DOJO_STORER_HOME}
+RUN  chown -R nobody:nogroup ${CYBER_DOJO_STORER_HOME}
+USER nobody
 
 ARG PORT
 EXPOSE ${PORT}
