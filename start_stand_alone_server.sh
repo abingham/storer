@@ -4,9 +4,9 @@ set -e
 readonly MY_DIR="$( cd "$( dirname "${0}" )" && pwd )"
 
 . ${MY_DIR}/env.prod
-. ${MY_DIR}/env.port
+. ${MY_DIR}/env.common
 
-${MY_DIR}/server/katas_volume/build_data_container.sh
+${MY_DIR}/katas_volume/build_data_container.sh
 
 docker-compose \
   --file ${MY_DIR}/docker-compose.yml \

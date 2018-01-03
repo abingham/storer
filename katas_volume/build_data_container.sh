@@ -6,9 +6,8 @@ set -e
 readonly MY_DIR="$( cd "$( dirname "${0}" )" && pwd )"
 readonly CONTEXT_DIR=${MY_DIR}
 readonly TAG=cyberdojo/storer_kata
-readonly PARAM=prod
 
-. ${MY_DIR}/../../env.${PARAM}
+. ${MY_DIR}/../env.prod
 
 docker rm \
   --force \
