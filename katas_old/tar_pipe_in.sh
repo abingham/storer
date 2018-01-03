@@ -4,11 +4,10 @@ set -e
 # called from pipe_build_up_test.sh
 
 readonly MY_DIR="$( cd "$( dirname "${0}" )" && pwd )"
-readonly PARAM=test
 readonly KATA_IDS=(5A0F824303 420B05BA0A 420F2A2979 421F303E80 420BD5D5BE 421AFD7EC5 )
 readonly STORER_CONTAINER='test_storer_server'
 
-. ${MY_DIR}/../../../env.${PARAM}
+. ${MY_DIR}/../env.test
 
 # - - - - - - - - - - - - - - - - - - - - - - - -
 # make sure ${CYBER_DOJO_KATAS_ROOT} dir exists
