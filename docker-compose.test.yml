@@ -10,11 +10,15 @@ services:
     container_name: test_storer_client
     read_only: true
     tmpfs: /tmp
+    depends_on:
+      - storer
     build:
       context: client
       args:
         - PORT=${CYBER_DOJO_STORER_CLIENT_PORT}
     environment:
+      - CYBER_DOJO_STORER_SERVICE_NAME
+      - CYBER_DOJO_STORER_SERVICE_PORT
       - CYBER_DOJO_KATAS_ROOT
       - CYBER_DOJO_COVERAGE_ROOT
     ports:

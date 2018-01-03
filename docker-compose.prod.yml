@@ -10,6 +10,6 @@ services:
     memswap_limit: 2G
     restart: on-failure
     ports:
-      - ${CYBER_DOJO_STORER_SERVER_PORT}:${CYBER_DOJO_STORER_SERVER_PORT}
+      - ${CYBER_DOJO_STORER_SERVICE_PORT}:${CYBER_DOJO_STORER_SERVICE_PORT}
     volumes_from:
       - container:${CYBER_DOJO_KATA_DATA_CONTAINER_NAME}:rw

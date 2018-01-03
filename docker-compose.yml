@@ -12,6 +12,6 @@ services:
     build:
       context: server
       args:
-        - PORT=${CYBER_DOJO_STORER_SERVER_PORT}
+        - PORT=${CYBER_DOJO_STORER_SERVICE_PORT}
     environment:
       - CYBER_DOJO_KATAS_ROOT
