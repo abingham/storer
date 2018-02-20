@@ -6,7 +6,7 @@ alt="cyber-dojo yin/yang logo" width="50px" height="50px"/>
 
 # cyberdojo/storer docker image
 
-- A docker-containerized micro-service for [cyber-dojo](http://cyber-dojo.org)
+- A docker-containerized micro-service for [cyber-dojo](http://cyber-dojo.org).
 - Stores the visible files, output, and traffic-light status of every avatar test event.
 - Stores data inside a docker-volume in a docker data-container.
 
@@ -16,7 +16,6 @@ API:
     * If the method completes, a key equals the method's name.
     * If the method raises an exception, a key equals "exception".
 
-- - - -
 - - - -
 
 ## GET kata_exists?
