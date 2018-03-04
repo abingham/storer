@@ -59,7 +59,7 @@ class TestBase < HexMiniTest
   end
 
   def create_manifest(id = kata_id, visible_files = nil)
-    manifest = starter.language_manifest('C (gcc)', 'assert', 'Fizz_Buzz')
+    manifest = starter.language_manifest('C (gcc), assert', 'Fizz_Buzz')
     unless visible_files.nil?
       manifest['visible_files'] = visible_files
     end
