@@ -16,9 +16,6 @@ RUN apk --update --no-cache add \
     ruby-dev \
     tar
 
-RUN apk --update --no-cache add \
-    git
-
 # - - - - - - - - - - - - - -
 # install ruby gems
 # - - - - - - - - - - - - - -
@@ -27,6 +24,25 @@ ARG             CYBER_DOJO_HOME
 COPY Gemfile  ${CYBER_DOJO_HOME}/
 WORKDIR       ${CYBER_DOJO_HOME}
 
+RUN apk --update add --virtual build-dependencies build-base \
+  && bundle config --global silence_root_warning 1 \
+  && bundle install \
+  && gem clean \
+  && apk del build-dependencies build-base \
+  && rm -vrf /var/cache/apk/*
+
+# - - - - - - - - - - - - - -
+# install non-commons
+# - - - - - - - - - - - - - -
+
+RUN apk --update --no-cache add \
+    git
+
+#RUN pwd
+#RUN ls
+#RUN cat Gemfile
+RUN echo "gem 'prometheus-client'" >> Gemfile
+#RUN cat Gemfile
 RUN apk --update add --virtual build-dependencies build-base \
   && bundle config --global silence_root_warning 1 \
   && bundle install \
