@@ -370,6 +370,7 @@ class Storer
   # - - - - - - - - - - -
 
   include AllAvatarsNames
+  include UniqueId
 
 end
 

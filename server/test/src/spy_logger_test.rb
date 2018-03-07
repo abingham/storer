@@ -4,7 +4,7 @@ require_relative 'spy_logger'
 class SpyLoggerTest < TestBase
 
   def self.hex_prefix
-    'CD4'
+    'CD476'
   end
 
   test '20C',

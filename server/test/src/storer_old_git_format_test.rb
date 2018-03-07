@@ -5,7 +5,7 @@ require_relative '../../src/all_avatars_names'
 class StorerOldGitFormatTest < TestBase
 
   def self.hex_prefix
-    'BBDB345'
+    'BBDB3'
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - -

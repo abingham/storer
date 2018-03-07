@@ -4,7 +4,7 @@ require_relative 'spy_logger'
 class BashShellerTest < TestBase
 
   def self.hex_prefix
-    'C89'
+    'C89D2'
   end
 
   def hex_setup

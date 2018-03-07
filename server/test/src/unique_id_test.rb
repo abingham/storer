@@ -3,7 +3,7 @@ require_relative 'test_base'
 class UniqueIdTest < TestBase
 
   def self.hex_prefix
-    'ED2BFB'
+    'ED2BF'
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - -

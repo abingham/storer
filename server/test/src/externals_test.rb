@@ -5,7 +5,7 @@ class ExternalsTest < TestBase
   include Externals
 
   def self.hex_prefix
-    '7A9'
+    '7A9B4'
   end
 
   # - - - - - - - - - - - - - - - - -

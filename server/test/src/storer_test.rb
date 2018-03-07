@@ -5,7 +5,7 @@ require_relative '../../src/all_avatars_names'
 class StorerTest < TestBase
 
   def self.hex_prefix
-    'E4FDA20'
+    'E4FDA'
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
