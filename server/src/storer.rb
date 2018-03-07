@@ -1,4 +1,5 @@
 require_relative 'all_avatars_names'
+require_relative 'unique_id'
 require 'json'
 
 class Storer
