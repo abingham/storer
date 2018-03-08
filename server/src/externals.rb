@@ -1,6 +1,7 @@
 require_relative 'bash_sheller'
 require_relative 'disk_writer'
 require_relative 'stdout_logger'
+require_relative 'kata_id_factory'
 
 module Externals
 
@@ -14,6 +15,10 @@ module Externals
 
   def shell
     @shell ||= BashSheller.new(self)
+  end
+
+  def id_factory
+    @id_factory ||= KataIdFactory.new(self)
   end
 
 end
