@@ -455,10 +455,6 @@ class StorerTest < TestBase
 
   # - - - - - - - - - - - - - - - - - - - - - - - -
 
-  def avatar_path(name)
-    path_join(kata_path, name)
-  end
-
   def kata_path(kata_id)
     path_join(storer.path, outer(kata_id), inner(kata_id))
   end
