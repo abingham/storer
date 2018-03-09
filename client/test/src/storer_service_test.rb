@@ -21,41 +21,19 @@ class StorerServiceTest < TestBase
   "and the kata's manifest can be retrieved",
   "and the kata's id can be completed",
   'and no avatars have yet started' do
-    manifest = make_manifest
-
-    refute kata_exists?
-    create_kata(manifest)
-    assert kata_exists?
-    assert_equal manifest, kata_manifest
-
-    no_match = kata_id.reverse[0..5]
-    assert_equal no_match, completed(no_match)
+    kata_id = create_kata(make_manifest)
+    assert kata_exists?(kata_id)
 
     too_short = kata_id[0..4]
     assert_equal too_short, completed(too_short)
 
-    six = kata_id[0..5]
-    assert_equal 6, six.size
-    assert_equal kata_id, completed(six)
+    assert_equal kata_id, completed(kata_id[0..5])
 
     outer = kata_id[0..1]
     assert_equal [kata_id[2..-1]], completions(outer)
 
-    assert_equal [], started_avatars
-    assert_equal({}, kata_increments)
-  end
-
-  # - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-  test 'C18',
-  'multiple katas with common first 2 digits can be completed' do
-    id1 = kata_id[0..-2] + '4'
-    create_kata(make_manifest(id1))
-    assert_equal [id1[2..-1]], completions(kata_id[0..1])
-
-    id2 = kata_id[0..-2] + '9'
-    create_kata(make_manifest(id2))
-    assert_equal [id1[2..-1],id2[2..-1]].sort, completions(kata_id[0..1]).sort
+    assert_equal [], started_avatars(kata_id)
+    assert_equal({}, kata_increments(kata_id))
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -64,22 +42,22 @@ class StorerServiceTest < TestBase
   'after kata_start_avatar() succeeds',
   'then another avatar has started',
   'and has no traffic-lights yet' do
-    create_kata(make_manifest)
+    kata_id = create_kata(make_manifest)
 
-    refute avatar_exists? 'lion'
-    assert_equal lion, start_avatar([lion])
-    assert avatar_exists? 'lion'
+    refute avatar_exists?(kata_id, lion)
+    assert_equal lion, start_avatar(kata_id, [lion])
+    assert avatar_exists?(kata_id, lion)
 
-    assert_equal [tag0], avatar_increments(lion)
-    assert_equal({ lion => [tag0] }, kata_increments)
-    assert_equal starting_files, avatar_visible_files(lion)
-    assert_equal [lion], started_avatars
+    assert_equal [tag0], avatar_increments(kata_id, lion)
+    assert_equal({ lion => [tag0] }, kata_increments(kata_id))
+    assert_equal starting_files, avatar_visible_files(kata_id, lion)
+    assert_equal [lion], started_avatars(kata_id)
 
-    assert_equal salmon, start_avatar([salmon])
-    assert_equal [tag0], avatar_increments(salmon)
-    assert_equal({ lion => [tag0], salmon => [tag0] }, kata_increments)
-    assert_equal starting_files, avatar_visible_files(salmon)
-    assert_equal [lion,salmon].sort, started_avatars.sort
+    assert_equal salmon, start_avatar(kata_id, [salmon])
+    assert_equal [tag0], avatar_increments(kata_id, salmon)
+    assert_equal({ lion => [tag0], salmon => [tag0] }, kata_increments(kata_id))
+    assert_equal starting_files, avatar_visible_files(kata_id, salmon)
+    assert_equal [lion,salmon].sort, started_avatars(kata_id).sort
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -88,22 +66,22 @@ class StorerServiceTest < TestBase
   'after avatar_ran_tests()',
   'then there is one more traffic-light',
   'and visible_files can be retrieved for any tag' do
-    create_kata(make_manifest)
-    assert_equal lion, start_avatar([lion])
+    kata_id = create_kata(make_manifest)
+    assert_equal lion, start_avatar(kata_id, [lion])
 
     tag1_files = starting_files
     tag1_files.delete('hiker.h')
     now = [2016, 12, 5, 21, 01, 34]
     output = 'missing include'
     colour = 'amber'
-    avatar_ran_tests(lion, tag1_files, now, output, colour)
+    avatar_ran_tests(kata_id, lion, tag1_files, now, output, colour)
     expected = []
     expected << tag0
     expected << { 'colour' => colour, 'time' => now, 'number' => tag=1 }
-    assert_equal expected, avatar_increments(lion)
-    assert_equal({ lion => expected }, kata_increments)
+    assert_equal expected, avatar_increments(kata_id, lion)
+    assert_equal({ lion => expected }, kata_increments(kata_id))
     tag1_files['output'] = output
-    assert_equal tag1_files, tag_visible_files(lion, tag=1)
+    assert_equal tag1_files, tag_visible_files(kata_id, lion, tag=1)
 
     tag2_files = tag1_files.clone
     tag2_files.delete('output')
@@ -111,14 +89,14 @@ class StorerServiceTest < TestBase
     now = [2016, 12, 6, 9, 31, 56]
     output = 'All tests passed'
     colour = 'green'
-    avatar_ran_tests(lion, tag2_files, now, output, colour)
+    avatar_ran_tests(kata_id, lion, tag2_files, now, output, colour)
     expected << { 'colour' => colour, 'time' => now, 'number' => tag=2 }
-    assert_equal expected, avatar_increments(lion)
-    assert_equal( { lion => expected }, kata_increments)
+    assert_equal expected, avatar_increments(kata_id, lion)
+    assert_equal( { lion => expected }, kata_increments(kata_id))
     tag2_files['output'] = output
-    assert_equal tag1_files, tag_visible_files(lion, tag=1)
-    assert_equal tag2_files, tag_visible_files(lion, tag=2)
-    hash = tags_visible_files(lion, was_tag=1, now_tag=2)
+    assert_equal tag1_files, tag_visible_files(kata_id, lion, tag=1)
+    assert_equal tag2_files, tag_visible_files(kata_id, lion, tag=2)
+    hash = tags_visible_files(kata_id, lion, was_tag=1, now_tag=2)
     assert_equal tag1_files, hash['was_tag']
     assert_equal tag2_files, hash['now_tag']
   end
@@ -130,25 +108,24 @@ class StorerServiceTest < TestBase
     # This test fails if docker-compose.yml uses
     # [read_only:true] without also using
     # [tmpfs: /tmp]
-    create_kata(make_manifest)
-    assert_equal lion, start_avatar([lion])
+    kata_id = create_kata(make_manifest)
+    assert_equal lion, start_avatar(kata_id, [lion])
 
     files = starting_files
     files['very_large'] = 'X'*1024*500
     now = [2016, 12, 5, 21, 01, 34]
     output = 'missing include'
     colour = 'amber'
-    avatar_ran_tests(lion, files, now, output, colour)
+    avatar_ran_tests(kata_id, lion, files, now, output, colour)
   end
 
   private
 
-  def make_manifest(id = kata_id)
+  def make_manifest
     {
       'image_name' => 'cyberdojofoundation/gcc_assert',
       'visible_files' => starting_files,
       'created' => creation_time,
-      'id' => id,
       'max_seconds' => 10,
       'runner_choice' => 'stateless',
       'highlight_filenames' => [],
