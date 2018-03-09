@@ -1,6 +1,6 @@
 require_relative 'hex_mini_test'
+require_relative '../../src/all_avatars_names'
 require_relative '../../src/externals'
-require_relative '../../src/storer'
 require_relative 'starter_service'
 require 'json'
 
@@ -68,21 +68,23 @@ class TestBase < HexMiniTest
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  def make_kata(id = nil, visible_files = nil)
-    manifest = create_manifest(id, visible_files)
-    id = storer.create_kata(manifest)
-    id
+  def make_kata(visible_files = nil)
+    manifest = create_manifest(visible_files)
+    storer.create_kata(manifest)
   end
 
-  def create_manifest(id = nil, visible_files = nil)
+  def create_manifest(visible_files = nil)
     manifest = starter.language_manifest('C (gcc), assert', 'Fizz_Buzz')
     unless visible_files.nil?
       manifest['visible_files'] = visible_files
     end
     manifest['created'] = creation_time
-    #manifest['id'] = id
     manifest
   end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  include AllAvatarsNames
 
   def starter
     StarterService.new

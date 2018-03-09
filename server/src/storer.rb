@@ -117,6 +117,10 @@ class Storer
   # - - - - - - - - - - - - - - - - - - -
 
   def start_avatar(kata_id, avatar_names)
+    # storer.kata_start_avatar() relies on mkdir being
+    # atomic on a (non NFS) POSIX file system.
+    # Otherwise two laptops in the same practice session
+    # could start as the same animal.
     assert_kata_exists(kata_id)
     # NB: Doing & with swapped args loses randomness!
     valid_names = avatar_names & all_avatars_names

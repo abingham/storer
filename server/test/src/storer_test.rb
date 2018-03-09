@@ -318,11 +318,11 @@ class StorerTest < TestBase
     visible_files are retrievable by implicit current-tag,
     visible_files are retrievable by explicit tag
   ) do
-    id = make_kata(nil, starting_files)
-    start_avatar(id, [lion])
+    kata_id = make_kata(starting_files)
+    start_avatar(kata_id, [lion])
     was_tag = 0
 
-    storer.avatar_ran_tests(*make_args(id, edited_files))
+    storer.avatar_ran_tests(*make_args(kata_id, edited_files))
     now_tag = 1
 
     # traffic-lights
@@ -336,28 +336,28 @@ class StorerTest < TestBase
         'number' => now_tag
       }
     ]
-    assert_equal expected, avatar_increments(id, lion)
-    assert_equal({ lion => expected }, kata_increments(id))
+    assert_equal expected, avatar_increments(kata_id, lion)
+    assert_equal({ lion => expected }, kata_increments(kata_id))
     # current tag
-    visible_files = avatar_visible_files(id, lion)
+    visible_files = avatar_visible_files(kata_id, lion)
     assert_equal output, visible_files['output'], 'output'
     edited_files.each do |filename,content|
       assert_equal content, visible_files[filename], filename
     end
     # was_tag
-    was_tag_visible_files = tag_visible_files(id, lion, was_tag)
+    was_tag_visible_files = tag_visible_files(kata_id, lion, was_tag)
     refute was_tag_visible_files.keys.include?('output')
     starting_files.each do |filename,content|
       assert_equal content, was_tag_visible_files[filename], filename
     end
     # now_tag
-    now_tag_visible_files = tag_visible_files(id, lion, now_tag)
+    now_tag_visible_files = tag_visible_files(kata_id, lion, now_tag)
     assert_equal output, now_tag_visible_files['output'], 'output'
     edited_files.each do |filename,content|
       assert_equal content, now_tag_visible_files[filename], filename
     end
     # both tags at once
-    hash = tags_visible_files(id, lion, was_tag, now_tag)
+    hash = tags_visible_files(kata_id, lion, was_tag, now_tag)
     assert_hash_equal was_tag_visible_files, hash['was_tag']
     assert_hash_equal now_tag_visible_files, hash['now_tag']
   end

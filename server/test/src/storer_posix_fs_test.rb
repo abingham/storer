@@ -1,10 +1,4 @@
 require_relative 'test_base'
-require_relative '../../src/all_avatars_names'
-
-# storer.kata_start_avatar() relies on mkdir being
-# atomic on a (non NFS) POSIX file system.
-# Otherwise two laptops in the same practice session
-# could start as the same animal.
 
 class StorerPosixFsTest < TestBase
 
@@ -15,8 +9,7 @@ class StorerPosixFsTest < TestBase
   test '4C0',
   'start_avatar on multiple threads doesnt start the same avatar twice' do
     20.times do |n|
-      kata_id = '4C012345' + (n+10).to_s
-      make_kata(kata_id)
+      kata_id = make_kata
       started = []
       size = 4
       animals = all_avatars_names.shuffle[0...size]
@@ -39,8 +32,7 @@ class StorerPosixFsTest < TestBase
   test 'A31',
   'start_avatar on multiple processes doesnt start the same avatar twice' do
     20.times do |n|
-      kata_id = 'A3112345' + (n+10).to_s
-      make_kata(kata_id)
+      kata_id = make_kata
       started = []
       size = 4
       animals = all_avatars_names.shuffle[0...size]
@@ -59,27 +51,6 @@ class StorerPosixFsTest < TestBase
       assert_equal animals.sort, names.sort
       assert_equal names.sort, storer.started_avatars(kata_id).sort
     end
-  end
-
-  private
-
-  include AllAvatarsNames
-
-  def make_kata(id = kata_id)
-    manifest = {}
-    manifest['image_name'] = 'cyberdojofoundation/gcc_assert'
-    manifest['visible_files'] = starting_files
-    manifest['id'] = id
-    storer.create_kata(manifest)
-    manifest
-  end
-
-  def starting_files
-    {
-      'cyber-dojo.sh' => 'gcc',
-      'hiker.c'       => '#include "hiker.h"',
-      'hiker.h'       => '#include <stdio.h>'
-    }
   end
 
 end

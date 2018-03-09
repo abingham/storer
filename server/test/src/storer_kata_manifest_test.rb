@@ -22,12 +22,9 @@ class StorerKataManifestTest < TestBase
   # - - - - - - - - - - - - - - - - - - - -
 
   def assert_no_default(name)
-    @count ||= 0
-    @count += 1
-    kata_id = "33DD934A0#{@count}"
-    manifest = create_manifest(kata_id)
+    manifest = create_manifest
     manifest.delete(name)
-    storer.create_kata(manifest)
+    kata_id = storer.create_kata(manifest)
     assert_nil storer.kata_manifest(kata_id)[name]
   end
 
@@ -35,7 +32,7 @@ class StorerKataManifestTest < TestBase
 
   test 'E2A',
   'new-style kata not involving renaming (dolphin, 20 lights)' do
-    kata_id = '420B05BA0A'
+    kata_id = stubbed('420B05BA0A')
     @manifest = storer.kata_manifest(kata_id)
     expected_keys = %w(
       id created
@@ -60,7 +57,7 @@ class StorerKataManifestTest < TestBase
 
   test 'E2B',
   'new-style kata not involving renaming (snake, 0 lights)' do
-    kata_id = '420F2A2979'
+    kata_id = stubbed('420F2A2979')
     @manifest = storer.kata_manifest(kata_id)
     expected_keys = %w(
       id created
@@ -84,7 +81,7 @@ class StorerKataManifestTest < TestBase
 
   test 'E2C',
   'old-style kata involving renaming (buffalo, 36 lights)' do
-    kata_id = '421F303E80'
+    kata_id = stubbed('421F303E80')
     @manifest = storer.kata_manifest(kata_id)
     expected_keys = %w(
       id created
@@ -105,7 +102,7 @@ class StorerKataManifestTest < TestBase
 
   test 'E2D',
   'old-style kata involving renaming (wolf, 1 light)' do
-    kata_id = '421AFD7EC5'
+    kata_id = stubbed('421AFD7EC5')
     @manifest = storer.kata_manifest(kata_id)
     expected_keys = %w(
       id created
@@ -126,7 +123,7 @@ class StorerKataManifestTest < TestBase
 
   test 'E2E',
   'old-style kata not involving renaming (hummingbird, 0 lights)' do
-    kata_id = '420BD5D5BE'
+    kata_id = stubbed('420BD5D5BE')
     @manifest = storer.kata_manifest(kata_id)
     expected_keys = %w(
       id created
@@ -147,7 +144,7 @@ class StorerKataManifestTest < TestBase
 
   test 'E2F',
   'new-style kata not involving renaming (spider, 8 lights) with red_amber_green property' do
-    kata_id = '5A0F824303'
+    kata_id = stubbed('5A0F824303')
     @manifest = storer.kata_manifest(kata_id)
     expected_keys = %w(
       id created
@@ -217,6 +214,15 @@ class StorerKataManifestTest < TestBase
   def assert_unit_test_framework(expected)
     key = 'unit_test_framework'
     assert_equal expected, @manifest[key], key
+  end
+
+  #- - - - - - - - - - - - - - - - - - - - - - - -
+
+  def stubbed(kata_id)
+    @id_generator = IdGeneratorStub.new
+    id_generator.stub(kata_id)
+    # DONT call storer.create_kata()
+    kata_id
   end
 
 end

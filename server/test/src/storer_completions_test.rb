@@ -1,6 +1,4 @@
 require_relative 'test_base'
-require_relative 'spy_logger'
-require_relative '../../src/all_avatars_names'
 
 class StorerCompletionTest < TestBase
 
@@ -31,9 +29,11 @@ class StorerCompletionTest < TestBase
   'because trying to complete from a short id will waste time going through',
   'lots of candidates (on disk) with the likely outcome of no unique result' do
     kata_id = make_kata
-    id = kata_id[0..4]
-    assert_equal 5, id.length
-    assert_equal id, storer.completed(id)
+    5.times do |n|n
+      partial_id = kata_id[0...n]
+      assert_equal n, partial_id.length
+      assert_equal partial_id, storer.completed(partial_id)
+    end
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -41,34 +41,39 @@ class StorerCompletionTest < TestBase
   test '071',
   'completed(id) unchanged when no matches' do
     id = test_id
-    (0..7).each { |size| assert_equal id[0..size], storer.completed(id[0..size]) }
+    (0..7).each do |size|
+      partial_id = id[0..size]
+      assert_equal partial_id, storer.completed(partial_id)
+    end
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '23B',
   'completed(id) does not complete when 6+ chars and more than one match' do
-    # NEEDS STUBBING
-    uncompleted_id = kata_id[0..5]
-    make_kata(uncompleted_id + '234' + '5')
-    make_kata(uncompleted_id + '234' + '6')
-    assert_equal uncompleted_id, storer.completed(uncompleted_id)
+    partial_id = 'B05DE4782'
+    assert_equal 9, partial_id.size
+    kata_ids = [ partial_id+'5', partial_id+'6' ]
+    stubbed_make_katas(kata_ids)
+    assert_equal partial_id, storer.completed(partial_id)
   end
+
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'A03',
   'ids_for(outer) returns inner-dirs, two close matches' do
-    # NEEDS STUBBING
-    kata_ids = [ 'A03E4FDA20', 'A03E4FDA21' ]
-    kata_ids.each { |id| make_kata(id) }
+    kata_ids = %w( A03E4FDA20 A03E4FDA21 )
+    stubbed_make_katas(kata_ids)
     expected = kata_ids.collect { |id| inner(id) }
     assert_equal expected.sort, storer.completions('A0').sort
   end
 
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
   test '7FC',
   'ids_for(outer) returns inner-dirs, three far matches' do
-    # NEEDS STUBBING
-    kata_ids = [ '7FC2034534', '7FD92F11B0', '7F13E86582' ]
-    kata_ids.each { |id| make_kata(id) }
+    kata_ids = %w( 7FC2034534 7FD92F11B0 7F13E86582 )
+    stubbed_make_katas(kata_ids)
     expected = kata_ids.collect { |id| inner(id) }
     assert_equal expected.sort, storer.completions('7F').sort
   end
@@ -77,9 +82,9 @@ class StorerCompletionTest < TestBase
 
   test '093',
   'completed(id) completes when 6+ chars and 1 match' do
-    id = make_kata
-    uncompleted_id = id[0..5]
-    assert_equal id, storer.completed(uncompleted_id)
+    kata_id = make_kata
+    partial_id = kata_id[0..5]
+    assert_equal kata_id, storer.completed(partial_id)
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -95,6 +100,14 @@ class StorerCompletionTest < TestBase
   'ids_for(outer) returns inner-dirs, one match' do
     id = make_kata
     assert_equal [inner(id)], storer.completions(id[0..1])
+  end
+
+  private
+
+  def stubbed_make_katas(kata_ids)
+    @id_generator = IdGeneratorStub.new
+    id_generator.stub(*kata_ids)
+    kata_ids.size.times { make_kata }
   end
 
 end

@@ -10,7 +10,7 @@ class IdGeneratorTest < TestBase
 
   test '926',
   'generates raw kata-ids' do
-    id = id_generator.id
+    id = id_generator.generate
     assert_equal 'String', id.class.name
     assert_equal 10, id.size
     42.times do
