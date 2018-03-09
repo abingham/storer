@@ -369,6 +369,7 @@ class StorerTest < TestBase
 
   test '170',
   %w( tag_visible_files with valid +ve tag ) do
+    #TODO: refactor to lose dependency on 420B05BA0A
     visible_files = storer.tag_visible_files('420B05BA0A', 'dolphin', 20)
     expected = %w(
       Calcolatrice.java
@@ -380,8 +381,11 @@ class StorerTest < TestBase
     assert_equal expected.sort, visible_files.keys.sort
   end
 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
   test '171',
   %w( tag_visible_files with -1 tag is last tag ) do
+    #TODO: refactor to lose dependency on 420B05BA0A
     visible_files = storer.tag_visible_files('420B05BA0A', 'dolphin', -1)
     expected = %w(
       Calcolatrice.java
@@ -393,6 +397,8 @@ class StorerTest < TestBase
     assert_equal expected.sort, visible_files.keys.sort
   end
 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
   test '172',
   %w( tag_visible_files raises when kata_id is invalid ) do
     error = assert_raises(ArgumentError) {
@@ -401,16 +407,22 @@ class StorerTest < TestBase
     assert_equal 'invalid kata_id', error.message
   end
 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
   test '173',
   %w( tag_visible_files raises when avatar_name is invalid ) do
+    kata_id = make_kata
     error = assert_raises(ArgumentError) {
-      storer.tag_visible_files('420B05BA0A', 'xxx', 20)
+      storer.tag_visible_files(kata_id, 'xxx', 20)
     }
     assert_equal 'invalid avatar_name', error.message
   end
 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
   test '174',
   %w( tag_visible_files raises when tag is invalid ) do
+    #TODO: refactor to lose dependency on 420B05BA0A
     error = assert_raises(ArgumentError) {
       storer.tag_visible_files('420B05BA0A', 'dolphin', 21)
     }
@@ -499,10 +511,10 @@ class StorerTest < TestBase
   # - - - - - - - - - - - - - - - - - - - - - - - -
 
   def assert_invalid_avatar_raises
-    id = make_kata
+    kata_id = make_kata
     invalid_avatar_names.each do |invalid_name|
       error = assert_raises(ArgumentError) {
-        yield id, invalid_name
+        yield kata_id, invalid_name
       }
       assert invalid?(error, 'avatar_name'), error.message
     end
@@ -521,11 +533,11 @@ class StorerTest < TestBase
   # - - - - - - - - - - - - - - - - - - - - - - - -
 
   def assert_bad_tag_raises
-    id = make_kata
-    storer.start_avatar(id, [lion])
+    kata_id = make_kata
+    storer.start_avatar(kata_id, [lion])
     bad_tags.each do |bad_tag|
       error = assert_raises(ArgumentError) {
-        yield id, lion, bad_tag
+        yield kata_id, lion, bad_tag
       }
       assert invalid?(error, 'tag'), error.message
     end
@@ -538,11 +550,11 @@ class StorerTest < TestBase
   # - - - - - - - - - - - - - - - - - - - - - - - -
 
   def assert_bad_tag_pair_raises
-    id = make_kata
-    storer.start_avatar(id, [lion])
+    kata_id = make_kata
+    storer.start_avatar(kata_id, [lion])
     bad_tag_pairs.each do |was_tag, now_tag|
       error = assert_raises(ArgumentError) {
-        yield id, lion, was_tag, now_tag
+        yield kata_id, lion, was_tag, now_tag
       }
       assert invalid?(error, 'tag'), error.message
     end

@@ -222,6 +222,7 @@ class StorerKataManifestTest < TestBase
     @id_generator = IdGeneratorStub.new
     id_generator.stub(kata_id)
     # DONT call storer.create_kata()
+    # The test rig is volume-mounting known katas
     kata_id
   end
 

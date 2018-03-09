@@ -6,6 +6,16 @@ class StorerCompletionTest < TestBase
     '36E4A'
   end
 
+  def hex_setup
+    @old_env_var = ENV['CYBER_DOJO_KATAS_ROOT']
+    # these tests must be completely isolated from each other
+    ENV['CYBER_DOJO_KATAS_ROOT'] = "/tmp/cyber-dojo/#{test_id}/katas"
+  end
+
+  def hex_teardown
+    ENV['CYBER_DOJO_KATAS_ROOT'] = @old_env_var
+  end
+
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'C1C',
