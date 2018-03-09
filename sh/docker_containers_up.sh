@@ -1,5 +1,4 @@
 #!/bin/bash
-set -e
 
 readonly ROOT_DIR="$( cd "$( dirname "${0}" )" && cd .. && pwd )"
 
@@ -19,7 +18,7 @@ wait_till_up()
   local n=10
   while [ $(( n -= 1 )) -ge 0 ]
   do
-    if docker ps --filter status=running --format '{{.Names}}' | grep -q ^${1}$ ; then
+    if docker ps --filter status=running --format '{{.Names}}' | grep -q "^${1}$" ; then
       return
     else
       sleep 0.5

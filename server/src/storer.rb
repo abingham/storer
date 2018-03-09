@@ -1,5 +1,4 @@
 require_relative 'all_avatars_names'
-require_relative 'unique_id'
 require 'json'
 
 class Storer
@@ -7,6 +6,7 @@ class Storer
   def initialize(external)
     @disk = external.disk
     @shell = external.shell
+    @id_factory = external.id_factory
     @path = ENV['CYBER_DOJO_KATAS_ROOT']
   end
 
@@ -63,13 +63,18 @@ class Storer
   # - - - - - - - - - - - - - - - - - - -
 
   def create_kata(manifest)
-    json = JSON.unparse(manifest)
-    kata_id = manifest['id']
-    assert_valid_id(kata_id)
-    refute_kata_exists(kata_id)
+    #json = JSON.unparse(manifest)
+
+    #kata_id = manifest['id']
+    kata_id = id_factory.id
+    manifest['id'] = kata_id
+
+    assert_valid_id(kata_id) # DROP
+    refute_kata_exists(kata_id) # DROP
     dir = kata_dir(kata_id)
     dir.make
-    dir.write(manifest_filename, json)
+    dir.write(manifest_filename, JSON.unparse(manifest))
+    kata_id
   end
 
   # - - - - - - - - - - - - - - - - - - -
@@ -205,7 +210,7 @@ class Storer
 
   private # = = = = = = = = = = = = = = =
 
-  attr_reader :disk, :shell
+  attr_reader :disk, :shell, :id_factory
 
   def write_avatar_increments(kata_id, avatar_name, increments)
     json = JSON.unparse(increments)
@@ -370,7 +375,6 @@ class Storer
   # - - - - - - - - - - -
 
   include AllAvatarsNames
-  include UniqueId
 
 end
 

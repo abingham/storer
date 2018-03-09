@@ -10,61 +10,82 @@ class TestBase < HexMiniTest
     Storer.new(self)
   end
 
-  def kata_manifest
+  def kata_manifest(kata_id)
     storer.kata_manifest(kata_id)
   end
 
-  def kata_increments
+  def kata_increments(kata_id)
     storer.kata_increments(kata_id)
+  end
+
+  def kata_exists?(kata_id)
+    storer.kata_exists?(kata_id)
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  def start_avatar(avatars)
+  def start_avatar(kata_id, avatars)
     storer.start_avatar(kata_id, avatars)
   end
 
-  def started_avatars
+  def started_avatars(kata_id)
     storer.started_avatars(kata_id)
   end
 
-  def avatar_increments(name)
+  def avatar_exists?(kata_id, name)
+    storer.avatar_exists?(kata_id, name)
+  end
+
+  def avatar_ran_tests(kata_id, name, files, now, output, colour)
+    args = [
+      kata_id,
+      name,
+      files,
+      now,
+      output,
+      colour
+    ]
+    storer.avatar_ran_tests(*args)
+  end
+
+  def avatar_increments(kata_id, name)
     storer.avatar_increments(kata_id, name)
   end
 
-  def avatar_visible_files(name)
+  def avatar_visible_files(kata_id, name)
     storer.avatar_visible_files(kata_id, name)
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  def tag_visible_files(name, tag)
+  def tag_visible_files(kata_id, name, tag)
     storer.tag_visible_files(kata_id, name, tag)
   end
 
-  def tags_visible_files(name, was_tag, now_tag)
+  def tags_visible_files(kata_id, name, was_tag, now_tag)
     storer.tags_visible_files(kata_id, name, was_tag, now_tag)
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  def kata_id
-    test_id.reverse # reversed so I don't get common outer(id)s
-  end
+  #def kata_id
+  #  test_id.reverse # reversed so I don't get common outer(id)s
+  #end
 
-  def make_kata(id = kata_id, visible_files = nil)
+  def make_kata(id = nil, visible_files = nil)
     manifest = create_manifest(id, visible_files)
-    storer.create_kata(manifest)
-    manifest
+    id = storer.create_kata(manifest)
+    #manifest
+    id
   end
 
-  def create_manifest(id = kata_id, visible_files = nil)
+  def create_manifest(id = nil, visible_files = nil)
     manifest = starter.language_manifest('C (gcc), assert', 'Fizz_Buzz')
     unless visible_files.nil?
       manifest['visible_files'] = visible_files
     end
     manifest['created'] = creation_time
-    manifest['id'] = id
+    #manifest['id'] = id
     manifest
   end
 
