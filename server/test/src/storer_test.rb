@@ -53,43 +53,6 @@ class StorerTest < TestBase
   # invalid kata_id raises on any other method
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-=begin
-  test '933',
-  'create_kata() with invalid manifest[id] raises' do
-    manifest = create_manifest
-    assert_invalid_kata_id_raises do |invalid_id|
-      manifest['id'] = invalid_id
-      storer.create_kata(manifest)
-    end
-  end
-
-  # - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-  test '934',
-  'create_kata() with missing manifest[id] raises' do
-    manifest = create_manifest
-    manifest.delete('id')
-    error = assert_raises(ArgumentError) {
-      storer.create_kata(manifest)
-    }
-    assert_invalid_kata_id(error)
-  end
-
-  # - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-  test 'ABC',
-  'create_kata() with duplicate kata_id raises' do
-    manifest = create_manifest
-    storer.create_kata(manifest)
-    error = assert_raises(ArgumentError) {
-      storer.create_kata(manifest)
-    }
-    assert_invalid_kata_id(error)
-  end
-=end
-
-  # - - - - - - - - - - - - - - - - - - - - - - - - - -
-
   test 'AC2',
   'kata_manifest() with invalid kata_id raises' do
     assert_invalid_kata_id_raises { |invalid_id|
@@ -174,7 +137,7 @@ class StorerTest < TestBase
 
   test 'B5F',
   'avatar_increments() with invalid avatar_name raises' do
-    assert_bad_avatar_raises { |kata_id, invalid_avatar_name|
+    assert_invalid_avatar_raises { |kata_id, invalid_avatar_name|
       avatar_increments(kata_id, invalid_avatar_name)
     }
   end
@@ -183,7 +146,7 @@ class StorerTest < TestBase
 
   test '679',
   'avatar_visible_files() with invalid avatar_name raises' do
-    assert_bad_avatar_raises { |kata_id, invalid_avatar_name|
+    assert_invalid_avatar_raises { |kata_id, invalid_avatar_name|
       avatar_visible_files(kata_id, invalid_avatar_name)
     }
   end
@@ -192,7 +155,7 @@ class StorerTest < TestBase
 
   test '941',
   'avatar_ran_tests() with invalid avatar_name raises' do
-    assert_bad_avatar_raises { |kata_id, invalid_avatar_name|
+    assert_invalid_avatar_raises { |kata_id, invalid_avatar_name|
       args = [
         kata_id,
         invalid_avatar_name,
@@ -209,10 +172,10 @@ class StorerTest < TestBase
 
   test '394',
   'avatar_ran_test() with non-existent avatar_name raises' do
-    assert_bad_avatar_raises { |kata_id, invalid_avatar_name|
+    assert_invalid_avatar_raises { |kata_id, _invalid_avatar_name|
       args = [
         kata_id,
-        lion,
+        lion, # valid but does not exist
         starting_files,
         time_now,
         output,
@@ -506,6 +469,21 @@ class StorerTest < TestBase
 
   # - - - - - - - - - - - - - - - - - - - - - - - -
 
+  def assert_bad_kata_id_raises
+    valid_but_no_kata = 'F6316A5C7C'
+    (invalid_kata_ids + [ valid_but_no_kata ]).each do |bad_id|
+      error = assert_raises(ArgumentError) { yield bad_id }
+      assert_invalid_kata_id(error)
+    end
+  end
+
+  def assert_invalid_kata_id_raises
+    invalid_kata_ids.each do |invalid_id|
+      error = assert_raises(ArgumentError) { yield invalid_id }
+      assert_invalid_kata_id(error)
+    end
+  end
+
   def invalid_kata_ids
     [
       nil,          # not an object
@@ -518,55 +496,33 @@ class StorerTest < TestBase
     ]
   end
 
-  def invalid_avatar_names
-    [
-      nil,     # not an object
-      [],      # not a string
-      '',      # not a name
-      'dolpin' # not a name (no h)
-    ]
-  end
-
-  def assert_invalid_kata_id_raises
-    invalid_kata_ids.each do |invalid_id|
-      error = assert_raises(ArgumentError) { yield invalid_id }
-      assert_invalid_kata_id(error)
-    end
-  end
-
-  def assert_bad_kata_id_raises
-    valid_but_no_kata = 'F6316A5C7C'
-    (invalid_kata_ids + [ valid_but_no_kata ]).each do |bad_id|
-      error = assert_raises(ArgumentError) { yield bad_id }
-      assert_invalid_kata_id(error)
-    end
-  end
-
   def assert_invalid_kata_id(error)
     assert invalid?(error, 'kata_id'), error.message
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - -
 
-  def bad_avatar_names
-    [ nil, [], '', 'chub' ]
-  end
-
-  def assert_bad_avatar_raises
-    kata_id = make_kata
-    bad_avatar_names.each do |bad_name|
+  def assert_invalid_avatar_raises
+    id = make_kata
+    invalid_avatar_names.each do |invalid_name|
       error = assert_raises(ArgumentError) {
-        yield kata_id, bad_name
+        yield id, invalid_name
       }
       assert invalid?(error, 'avatar_name'), error.message
     end
   end
 
-  # - - - - - - - - - - - - - - - - - - - - - - - -
-
-  def bad_tags
-    [ nil, [], 'sunglasses', 999 ]
+  def invalid_avatar_names
+    [
+      nil,     # not an object
+      [],      # not a string
+      '',      # not a name
+      'blurb', # not a name
+      'dolpin' # not a name (dolphin has an H)
+    ]
   end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - -
 
   def assert_bad_tag_raises
     id = make_kata
@@ -579,7 +535,22 @@ class StorerTest < TestBase
     end
   end
 
+  def bad_tags
+    [ nil, [], 'sunglasses', 999 ]
+  end
+
   # - - - - - - - - - - - - - - - - - - - - - - - -
+
+  def assert_bad_tag_pair_raises
+    id = make_kata
+    storer.start_avatar(id, [lion])
+    bad_tag_pairs.each do |was_tag, now_tag|
+      error = assert_raises(ArgumentError) {
+        yield id, lion, was_tag, now_tag
+      }
+      assert invalid?(error, 'tag'), error.message
+    end
+  end
 
   def bad_tag_pairs
     [
@@ -594,16 +565,7 @@ class StorerTest < TestBase
     ]
   end
 
-  def assert_bad_tag_pair_raises
-    id = make_kata
-    storer.start_avatar(id, [lion])
-    bad_tag_pairs.each do |was_tag, now_tag|
-      error = assert_raises(ArgumentError) {
-        yield id, lion, was_tag, now_tag
-      }
-      assert invalid?(error, 'tag'), error.message
-    end
-  end
+  # - - - - - - - - - - - - - - - - - - - - - - - -
 
   def invalid?(error, name)
     error.message.end_with?("invalid #{name}")

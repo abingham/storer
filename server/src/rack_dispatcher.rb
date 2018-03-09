@@ -1,5 +1,4 @@
 require_relative 'externals'
-require_relative 'storer'
 require 'json'
 require 'rack'
 
@@ -43,8 +42,9 @@ class RackDispatcher
 
   private
 
+  include Externals
+
   def invoke(name, *args)
-    storer = Storer.new(self)
     { name => storer.send(name, *args) }
   rescue Exception => e
     log << "EXCEPTION: #{e.class.name}.#{name} #{e.message}"
@@ -52,8 +52,6 @@ class RackDispatcher
   end
 
   # - - - - - - - - - - - - - - - -
-
-  include Externals
 
   def self.request_args(*names)
     names.each { |name|

@@ -1,6 +1,6 @@
 require_relative 'test_base'
 
-class KataIdFactoryTest < TestBase
+class IdGeneratorTest < TestBase
 
   def self.hex_prefix
     '9E748'
@@ -9,8 +9,8 @@ class KataIdFactoryTest < TestBase
   # - - - - - - - - - - - - - - - -
 
   test '926',
-  'id-factory produces kata-ids' do
-    id = id_factory.id
+  'generates raw kata-ids' do
+    id = id_generator.id
     assert_equal 'String', id.class.name
     assert_equal 10, id.size
     (0..25).each do
@@ -20,13 +20,5 @@ class KataIdFactoryTest < TestBase
       end
     end
   end
-
-  # - - - - - - - - - - - - - - - -
-
-  test '927',
-  '' do
-  end
-
-  private
 
 end

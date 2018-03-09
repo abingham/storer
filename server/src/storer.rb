@@ -4,19 +4,22 @@ require 'json'
 class Storer
 
   def initialize(external)
+    @path = ENV['CYBER_DOJO_KATAS_ROOT']
     @disk = external.disk
     @shell = external.shell
-    @id_factory = external.id_factory
-    @path = ENV['CYBER_DOJO_KATAS_ROOT']
+    @kata_id_generator = external.kata_id_generator
   end
 
   attr_reader :path
 
   # - - - - - - - - - - - - - - - - - - -
   # kata-id completion(s)
+  # 6 hex chars are all that need to be entered
+  # to enable id-auto-complete which is
+  # 16^6 == 16,777,216 possibilities.
   # - - - - - - - - - - - - - - - - - - -
 
-  def completed(kata_id)
+  def completed(kata_id) # 6 chars long
     assert_partial_id(kata_id)
     # If at least 6 characters of the kata_id are provided
     # attempt to complete it into the full characters. Doing
@@ -44,12 +47,13 @@ class Storer
 
   # - - - - - - - - - - - - - - - - - - -
 
-  def completions(kata_id) # 2-chars long
+  def completions(small_id) # 2-chars long
+    # TODO: assert small-id is valid
     # for Batch-Method iteration over large number of katas...
-    unless disk[dir_join(path, kata_id)].exists?
+    unless disk[dir_join(path, small_id)].exists?
       return []
     end
-    disk[dir_join(path, kata_id)].each_dir.collect { |dir| dir }
+    disk[dir_join(path, small_id)].each_dir.collect { |dir| dir }
   end
 
   # - - - - - - - - - - - - - - - - - - -
@@ -66,11 +70,11 @@ class Storer
     #json = JSON.unparse(manifest)
 
     #kata_id = manifest['id']
-    kata_id = id_factory.id
-    manifest['id'] = kata_id
-
+    kata_id = kata_id_generator.kata_id
     assert_valid_id(kata_id) # DROP
     refute_kata_exists(kata_id) # DROP
+
+    manifest['id'] = kata_id
     dir = kata_dir(kata_id)
     dir.make
     dir.write(manifest_filename, JSON.unparse(manifest))
