@@ -42,9 +42,17 @@ class StorerServiceTest < TestBase
     assert_equal too_short, completed(too_short)
 
     assert_equal kata_id, completed(kata_id[0..5])
+  end
 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  test '507',
+  'completions' do
+    manifest = make_manifest
+    kata_id = create_kata(manifest)
     outer = kata_id[0..1]
-    assert_equal [kata_id[2..-1]], completions(outer)
+    inner = kata_id[2..-1]
+    assert completions(outer).include?(inner)
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
