@@ -9,8 +9,18 @@ class StorerServiceTest < TestBase
 
   test '966',
   'bad kata-id on any method raises' do
-    error = assert_raises { kata_manifest }
-    assert error.message.end_with? 'invalid kata_id', error.message
+    error = assert_raises { kata_manifest(test_id) }
+    assert_equal 'StorerService:kata_manifest:invalid kata_id', error.message
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  test '6E7',
+  'retrieved manifest contains kata-id' do
+    manifest = make_manifest
+    kata_id = create_kata(manifest)
+    manifest['id'] = kata_id
+    assert_equal manifest, kata_manifest(kata_id)
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -21,8 +31,12 @@ class StorerServiceTest < TestBase
   "and the kata's manifest can be retrieved",
   "and the kata's id can be completed",
   'and no avatars have yet started' do
-    kata_id = create_kata(make_manifest)
+    manifest = make_manifest
+    kata_id = create_kata(manifest)
+
     assert kata_exists?(kata_id)
+    assert_equal [], started_avatars(kata_id)
+    assert_equal({}, kata_increments(kata_id))
 
     too_short = kata_id[0..4]
     assert_equal too_short, completed(too_short)
@@ -31,9 +45,6 @@ class StorerServiceTest < TestBase
 
     outer = kata_id[0..1]
     assert_equal [kata_id[2..-1]], completions(outer)
-
-    assert_equal [], started_avatars(kata_id)
-    assert_equal({}, kata_increments(kata_id))
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
