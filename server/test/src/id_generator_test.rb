@@ -13,7 +13,7 @@ class IdGeneratorTest < TestBase
     id = id_generator.id
     assert_equal 'String', id.class.name
     assert_equal 10, id.size
-    (0..25).each do
+    42.times do
       id.chars.each do |char|
         assert "0123456789ABCDEF".include?(char),
              "\"0123456789ABCDEF\".include?(#{char})" + id

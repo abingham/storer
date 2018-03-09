@@ -12,7 +12,7 @@ module Externals
   end
 
   def id_generator
-    @id ||= IdGenerator.new
+    @id_generator ||= IdGenerator.new
   end
 
   def kata_id_generator

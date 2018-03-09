@@ -2,13 +2,32 @@
 class KataIdGenerator
 
   def initialize(external)
-    @id_generator = external.id_generator
-    @storer = external.storer
+    @external = external
   end
 
-  def id
-    #TODO: only generate valid kata-ids
-    @id_generator.id
+  def generate
+    id = nil
+    loop do
+      id = id_generator.generate
+      break if valid?(id)
+    end
+    id
+  end
+
+  private
+
+  def valid?(id)
+    storer.valid_id?(id) &&
+      !storer.kata_exists?(id)
+      #&& storer.completable(id)
+  end
+
+  def id_generator
+    @external.id_generator
+  end
+
+  def storer
+    @external.storer
   end
 
 end

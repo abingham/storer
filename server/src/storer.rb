@@ -60,23 +60,30 @@ class Storer
   # kata
   # - - - - - - - - - - - - - - - - - - -
 
+  def valid_id?(kata_id)
+    partial_id?(kata_id) && kata_id.length == 10
+  end
+
   def kata_exists?(kata_id)
+    # TODO: drop valid_id?() check from this
     valid_id?(kata_id) && kata_dir(kata_id).exists?
   end
 
   # - - - - - - - - - - - - - - - - - - -
 
   def create_kata(manifest)
-    #json = JSON.unparse(manifest)
-
-    #kata_id = manifest['id']
-    kata_id = kata_id_generator.kata_id
-    assert_valid_id(kata_id) # DROP
-    refute_kata_exists(kata_id) # DROP
-
-    manifest['id'] = kata_id
+    # Generates a kata-id, puts it in the manifest,
+    # saves the manifest, and returns the kata-id.
+    # Rack calls create_kata() in threads so in
+    # theory you could get a race condition with
+    # both threads attempting to create a
+    # kata with the same id.
+    # Assuming uuidgen is reasonably well
+    # behaved this is extremely unlikely.
+    kata_id = kata_id_generator.generate
     dir = kata_dir(kata_id)
     dir.make
+    manifest['id'] = kata_id
     dir.write(manifest_filename, JSON.unparse(manifest))
     kata_id
   end
@@ -214,7 +221,7 @@ class Storer
 
   private # = = = = = = = = = = = = = = =
 
-  attr_reader :disk, :shell, :id_factory
+  attr_reader :disk, :shell, :kata_id_generator
 
   def write_avatar_increments(kata_id, avatar_name, increments)
     json = JSON.unparse(increments)
@@ -284,10 +291,6 @@ class Storer
     unless partial_id?(kata_id)
       fail invalid('kata_id')
     end
-  end
-
-  def valid_id?(kata_id)
-    partial_id?(kata_id) && kata_id.length == 10
   end
 
   def partial_id?(kata_id)

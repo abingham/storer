@@ -68,14 +68,9 @@ class TestBase < HexMiniTest
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  #def kata_id
-  #  test_id.reverse # reversed so I don't get common outer(id)s
-  #end
-
   def make_kata(id = nil, visible_files = nil)
     manifest = create_manifest(id, visible_files)
     id = storer.create_kata(manifest)
-    #manifest
     id
   end
 

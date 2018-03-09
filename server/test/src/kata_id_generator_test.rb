@@ -1,5 +1,6 @@
+require_relative 'id_generator_stub'
 
-class IdGeneratorTest < TestBase
+class KataIdGeneratorTest < TestBase
 
   def self.hex_prefix
     '79B84'
@@ -8,31 +9,55 @@ class IdGeneratorTest < TestBase
   # - - - - - - - - - - - - - - - -
 
   test '926',
-  'blah blah' do
-  end
-
-
-=begin
-  test '933',
-  'create_kata() with invalid manifest[id] raises' do
-    manifest = create_manifest
-    assert_invalid_kata_id_raises do |invalid_id|
-      manifest['id'] = invalid_id
-      storer.create_kata(manifest)
+  'generates a valid kata-id' do
+    42.times do
+      kata_id = kata_id_generator.generate
+      assert storer.valid_id?(kata_id)
     end
   end
 
-  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # - - - - - - - - - - - - - - - -
+
+  test '927',
+  'you can stub the lower level generated-id' do
+    @id_generator = IdGeneratorStub.new
+    id_generator.stub(test_id)
+    assert_equal test_id, kata_id_generator.generate
+  end
+
+  # - - - - - - - - - - - - - - - -
+
+  test '928',
+  'thus you can stub the kata-id generated in storer.create_kata' do
+    @id_generator = IdGeneratorStub.new
+    id_generator.stub(test_id)
+    assert_equal test_id, storer.create_kata(create_manifest)
+  end
+
+  # - - - - - - - - - - - - - - - -
+
+  test '929',
+  'discards generated kata-ids that are invalid' do
+    @id_generator = IdGeneratorStub.new
+    id_generator.stub('invalid', test_id)
+    assert_equal test_id, storer.create_kata(create_manifest)
+  end
+
+  # - - - - - - - - - - - - - - - -
+
+  test '930',
+  'discards generated kata-ids that already exist' do
+    @id_generator = IdGeneratorStub.new
+    id = make_kata
+    id_generator.stub(id, test_id)
+    assert_equal test_id, storer.create_kata(create_manifest)
+  end
+
+  # - - - - - - - - - - - - - - - -
 
   test 'ABC',
-  'create_kata() with duplicate kata_id raises' do
-    manifest = create_manifest
-    storer.create_kata(manifest)
-    error = assert_raises(ArgumentError) {
-      storer.create_kata(manifest)
-    }
-    assert_invalid_kata_id(error)
+  'discards generated kata-ids that are not completable ' do
+    #...
   end
-=end
 
 end
