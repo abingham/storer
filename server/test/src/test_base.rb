@@ -6,10 +6,6 @@ require 'json'
 
 class TestBase < HexMiniTest
 
-  def storer
-    Storer.new(self)
-  end
-
   def kata_manifest(kata_id)
     storer.kata_manifest(kata_id)
   end
