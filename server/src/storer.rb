@@ -273,20 +273,8 @@ class Storer
 
   # - - - - - - - - - - -
 
-  def refute_kata_exists(kata_id)
-    if kata_exists?(kata_id)
-      fail invalid('kata_id')
-    end
-  end
-
   def assert_kata_exists(kata_id)
     unless kata_exists?(kata_id)
-      fail invalid('kata_id')
-    end
-  end
-
-  def assert_valid_id(kata_id)
-    unless valid_id?(kata_id)
       fail invalid('kata_id')
     end
   end
