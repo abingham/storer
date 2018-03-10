@@ -13,7 +13,8 @@ class Storer
   attr_reader :path
 
   # - - - - - - - - - - - - - - - - - - -
-  # kata-id completion(s)
+  # completion(s)
+  # - - - - - - - - - - - - - - - - - - -
   # 6 hex chars are all that need to be entered
   # to enable id-auto-complete which is
   # 16^6 == 16,777,216 possibilities.
@@ -65,7 +66,6 @@ class Storer
   end
 
   def kata_exists?(kata_id)
-    # TODO: drop valid_id?() check from this
     valid_id?(kata_id) && kata_dir(kata_id).exists?
   end
 
@@ -81,9 +81,9 @@ class Storer
     # Assuming uuidgen is reasonably well
     # behaved this is extremely unlikely.
     kata_id = kata_id_generator.generate
+    manifest['id'] = kata_id
     dir = kata_dir(kata_id)
     dir.make
-    manifest['id'] = kata_id
     dir.write(manifest_filename, JSON.unparse(manifest))
     kata_id
   end
@@ -93,7 +93,8 @@ class Storer
   def kata_manifest(kata_id)
     assert_kata_exists(kata_id)
     dir = kata_dir(kata_id)
-    JSON.parse(dir.read(manifest_filename))
+    json = dir.read(manifest_filename)
+    JSON.parse(json)
   end
 
   # - - - - - - - - - - - - - - - - - - -
@@ -105,7 +106,7 @@ class Storer
   end
 
   # - - - - - - - - - - - - - - - - - - -
-  # avatar start
+  # avatar
   # - - - - - - - - - - - - - - - - - - -
 
   def avatar_exists?(kata_id, avatar_name)
@@ -143,8 +144,6 @@ class Storer
   end
 
   # - - - - - - - - - - - - - - - - - - -
-  # avatar action!
-  # - - - - - - - - - - - - - - - - - - -
 
   def avatar_ran_tests(kata_id, avatar_name, files, now, output, colour)
     assert_kata_exists(kata_id)
@@ -159,8 +158,6 @@ class Storer
     write_tag_files(kata_id, avatar_name, tag, files)
   end
 
-  # - - - - - - - - - - - - - - - - - - -
-  # avatar info
   # - - - - - - - - - - - - - - - - - - -
 
   def avatar_increments(kata_id, avatar_name)
@@ -214,6 +211,8 @@ class Storer
     end
   end
 
+  # - - - - - - - - - - - - - - - - - - -
+  # tags
   # - - - - - - - - - - - - - - - - - - -
 
   def tags_visible_files(kata_id, avatar_name, was_tag, now_tag)
@@ -271,13 +270,9 @@ class Storer
     'manifest.json'
   end
 
-  # - - - - - - - - - - -
-
-  def assert_kata_exists(kata_id)
-    unless kata_exists?(kata_id)
-      fail invalid('kata_id')
-    end
-  end
+  # - - - - - - - - - - - - - - - - - - - - - - - -
+  # id
+  # - - - - - - - - - - - - - - - - - - - - - - - -
 
   def assert_partial_id(kata_id)
     unless partial_id?(kata_id)
@@ -292,6 +287,16 @@ class Storer
 
   def hex?(char)
     '0123456789ABCDEF'.include?(char)
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - -
+  # kata
+  # - - - - - - - - - - - - - - - - - - - - - - - -
+
+  def assert_kata_exists(kata_id)
+    unless kata_exists?(kata_id)
+      fail invalid('kata_id')
+    end
   end
 
   def kata_dir(kata_id)
@@ -310,6 +315,8 @@ class Storer
     kata_id.upcase[2..-1] # eg '6A3327FE' 8-chars long
   end
 
+  # - - - - - - - - - - - - - - - - - - - - - - - -
+  # avatar
   # - - - - - - - - - - - - - - - - - - - - - - - -
 
   def assert_avatar_exists(kata_id, avatar_name)
@@ -330,6 +337,8 @@ class Storer
     dir_join(kata_path(kata_id), avatar_name)
   end
 
+  # - - - - - - - - - - - - - - - - - - - - - - - -
+  # tag
   # - - - - - - - - - - - - - - - - - - - - - - - -
 
   def assert_tag_exists(kata_id, avatar_name, tag)
