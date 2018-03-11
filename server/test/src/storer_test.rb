@@ -48,7 +48,7 @@ class StorerTest < TestBase
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
-  # invalid kata_id raises on any other method
+  # invalid kata_id on any other method raises
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'AC2',
@@ -130,7 +130,7 @@ class StorerTest < TestBase
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  # invalid avatar-name on any other method raises
+  # invalid avatar-name raises on any other method
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'B5F',
@@ -184,8 +184,26 @@ class StorerTest < TestBase
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
-  #TODO other methods...
+
+  test '173',
+  %w( tag_visible_files with invalid avatar_name raises ) do
+    kata_id = make_kata
+    error = assert_raises(ArgumentError) {
+      storer.tag_visible_files(kata_id, 'xxx', 20)
+    }
+    assert_equal 'invalid avatar_name', error.message
+  end
+
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  test '174',
+  %w( tags_visible_files with invalid avatar_name raises ) do
+    kata_id = make_kata
+    error = assert_raises(ArgumentError) {
+      storer.tags_visible_files(kata_id, 'xxx', 20, 21)
+    }
+    assert_equal 'invalid avatar_name', error.message
+  end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # invalid tag on any method raises
@@ -212,11 +230,8 @@ class StorerTest < TestBase
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'B99',
-  'after create_kata(manifest) manifest has only stored properties' do
-    id = make_kata
-    manifest = kata_manifest(id)
+  'after create_kata(manifest) manifest has id/created properties' do
     expected = %w(
-      id
       created
       display_name
       exercise
@@ -225,7 +240,12 @@ class StorerTest < TestBase
       runner_choice
       visible_files
     )
+    manifest = create_manifest
     assert_equal expected.sort, manifest.keys.sort
+
+    id = storer.create_kata(manifest)
+    manifest = kata_manifest(id)
+    assert_equal (expected << 'id').sort, manifest.keys.sort
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -367,7 +387,6 @@ class StorerTest < TestBase
 
   test '170',
   %w( tag_visible_files with valid +ve tag ) do
-    #TODO: refactor to lose dependency on 420B05BA0A
     visible_files = storer.tag_visible_files('420B05BA0A', 'dolphin', 20)
     expected = %w(
       Calcolatrice.java
@@ -383,7 +402,6 @@ class StorerTest < TestBase
 
   test '171',
   %w( tag_visible_files with -1 tag is last tag ) do
-    #TODO: refactor to lose dependency on 420B05BA0A
     visible_files = storer.tag_visible_files('420B05BA0A', 'dolphin', -1)
     expected = %w(
       Calcolatrice.java
@@ -398,29 +416,7 @@ class StorerTest < TestBase
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '172',
-  %w( tag_visible_files raises when kata_id is invalid ) do
-    error = assert_raises(ArgumentError) {
-      storer.tag_visible_files('xxx', 'dolphin', 20)
-    }
-    assert_equal 'invalid kata_id', error.message
-  end
-
-  # - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-  test '173',
-  %w( tag_visible_files raises when avatar_name is invalid ) do
-    kata_id = make_kata
-    error = assert_raises(ArgumentError) {
-      storer.tag_visible_files(kata_id, 'xxx', 20)
-    }
-    assert_equal 'invalid avatar_name', error.message
-  end
-
-  # - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-  test '174',
   %w( tag_visible_files raises when tag is invalid ) do
-    #TODO: refactor to lose dependency on 420B05BA0A
     error = assert_raises(ArgumentError) {
       storer.tag_visible_files('420B05BA0A', 'dolphin', 21)
     }

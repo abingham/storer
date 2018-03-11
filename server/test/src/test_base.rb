@@ -81,6 +81,7 @@ class TestBase < HexMiniTest
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   include AllAvatarsNames
+  include Externals
 
   def starter
     StarterService.new
@@ -119,6 +120,5 @@ class TestBase < HexMiniTest
     end
   end
 
-  include Externals
 
 end
