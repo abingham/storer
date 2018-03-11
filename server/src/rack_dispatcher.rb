@@ -6,7 +6,7 @@ class RackDispatcher
 
   def call(env)
     request = Rack::Request.new(env)
-    name, args = validated_name_args(request)
+    name, args = name_args(request)
     triple({ name => storer.send(name, *args) })
   rescue Exception => error
     triple({ 'exception' => error.message })
@@ -16,7 +16,7 @@ class RackDispatcher
 
   include Externals
 
-  def validated_name_args(request)
+  def name_args(request)
     name = request.path_info[1..-1] # lose leading /
     @json_args = JSON.parse(request.body.read)
     args = case name
@@ -35,13 +35,14 @@ class RackDispatcher
       when /^tag_visible_files$/    then [kata_id, avatar_name, tag]
       when /^tags_visible_files$/   then [kata_id, avatar_name, was_tag, now_tag]
     end
-    if name == 'kata_exists'
-      name += '?'
-    end
-    if name == 'avatar_exists'
-      name += '?'
-    end
+    name += '?' if query?(name)
     [name, args]
+  end
+
+  # - - - - - - - - - - - - - - - -
+
+  def query?(name)
+    name.end_with?('_exists')
   end
 
   # - - - - - - - - - - - - - - - -
