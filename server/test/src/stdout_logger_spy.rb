@@ -1,5 +1,5 @@
 
-class SpyLogger
+class StdoutLoggerSpy
 
   def initialize(_parent)
     @spied = []

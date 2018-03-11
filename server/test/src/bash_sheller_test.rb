@@ -1,5 +1,5 @@
 require_relative 'test_base'
-require_relative 'spy_logger'
+require_relative 'stdout_logger_spy'
 
 class BashShellerTest < TestBase
 
@@ -8,7 +8,7 @@ class BashShellerTest < TestBase
   end
 
   def hex_setup
-    @log = SpyLogger.new(self)
+    @log = StdoutLoggerSpy.new(self)
   end
 
   attr_reader :log
