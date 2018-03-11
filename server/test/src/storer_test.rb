@@ -1,5 +1,4 @@
 require_relative 'test_base'
-require_relative '../../src/all_avatars_names'
 
 class StorerTest < TestBase
 
@@ -429,8 +428,6 @@ class StorerTest < TestBase
   end
 
   private # = = = = = = = = = = = = = = = = = = = = = = =
-
-  include AllAvatarsNames
 
   def lion
     'lion'
