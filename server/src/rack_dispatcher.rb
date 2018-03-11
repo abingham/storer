@@ -6,56 +6,55 @@ class RackDispatcher
 
   def call(env)
     request = Rack::Request.new(env)
-    @args = JSON.parse(request.body.read)
-    case request.path_info
-      when /kata_exists?/
-        body = invoke('kata_exists?', kata_id)
-      when /create_kata/
-        body = invoke('create_kata', manifest)
-      when /kata_manifest/
-        body = invoke('kata_manifest', kata_id)
-      when /kata_increments/
-        body = invoke('kata_increments', kata_id)
-      when /completed/
-        body = invoke('completed', kata_id)
-      when /completions/
-        body = invoke('completions', kata_id)
-      when /avatar_exists?/
-        body = invoke('avatar_exists?', kata_id, avatar_name)
-      when /start_avatar/
-        body = invoke('start_avatar', kata_id, avatar_names)
-      when /started_avatars/
-        body = invoke('started_avatars', kata_id)
-      when /avatar_ran_tests/
-        body = invoke('avatar_ran_tests', kata_id, avatar_name, files, now, output, colour)
-      when /avatar_increments/
-        body = invoke('avatar_increments', kata_id, avatar_name)
-      when /avatar_visible_files/
-        body = invoke('avatar_visible_files', kata_id, avatar_name)
-      when /tag_visible_files/
-        body = invoke('tag_visible_files', kata_id, avatar_name, tag)
-      when /tags_visible_files/
-        body = invoke('tags_visible_files', kata_id, avatar_name, was_tag, now_tag)
-    end
-    [ 200, { 'Content-Type' => 'application/json' }, [ body.to_json ] ]
+    name, args = validated_name_args(request)
+    triple({ name => storer.send(name, *args) })
+  rescue Exception => error
+    triple({ 'exception' => error.message })
   end
 
   private
 
   include Externals
 
-  def invoke(name, *args)
-    { name => storer.send(name, *args) }
-  rescue Exception => e
-    log << "EXCEPTION: #{e.class.name}.#{name} #{e.message}"
-    { 'exception' => e.message }
+  def validated_name_args(request)
+    name = request.path_info[1..-1] # lose leading /
+    @json_args = JSON.parse(request.body.read)
+    args = case name
+      when /^create_kata$/          then [manifest]
+      when /^kata_exists$/          then [kata_id]
+      when /^kata_manifest$/        then [kata_id]
+      when /^kata_increments$/      then [kata_id]
+      when /^completed$/            then [kata_id]
+      when /^completions$/          then [kata_id]
+      when /^started_avatars$/      then [kata_id]
+      when /^start_avatar$/         then [kata_id, avatar_names]
+      when /^avatar_exists$/        then [kata_id, avatar_name]
+      when /^avatar_increments$/    then [kata_id, avatar_name]
+      when /^avatar_visible_files$/ then [kata_id, avatar_name]
+      when /^avatar_ran_tests$/     then [kata_id, avatar_name, files, now, output, colour]
+      when /^tag_visible_files$/    then [kata_id, avatar_name, tag]
+      when /^tags_visible_files$/   then [kata_id, avatar_name, was_tag, now_tag]
+    end
+    if name == 'kata_exists'
+      name += '?'
+    end
+    if name == 'avatar_exists'
+      name += '?'
+    end
+    [name, args]
+  end
+
+  # - - - - - - - - - - - - - - - -
+
+  def triple(body)
+    [ 200, { 'Content-Type' => 'application/json' }, [ body.to_json ] ]
   end
 
   # - - - - - - - - - - - - - - - -
 
   def self.request_args(*names)
     names.each { |name|
-      define_method name, &lambda { @args[name.to_s] }
+      define_method name, &lambda { @json_args[name.to_s] }
     }
   end
 
