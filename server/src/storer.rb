@@ -1,4 +1,5 @@
 require_relative 'all_avatars_names'
+require_relative 'base16'
 require 'json'
 
 class Storer
@@ -284,11 +285,7 @@ class Storer
 
   def partial_id?(kata_id)
     kata_id.is_a?(String) &&
-      kata_id.chars.all? { |char| hex?(char) }
-  end
-
-  def hex?(char)
-    '0123456789ABCDEF'.include?(char)
+      kata_id.chars.all? { |char| Base16.alphabet.include?(char) }
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - -
