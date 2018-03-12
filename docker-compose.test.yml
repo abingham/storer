@@ -38,6 +38,17 @@ services:
     volumes:
       - ./server/test:${CYBER_DOJO_HOME}/test:ro
 
+  # - - - - - - - - - - - - - - - - - - - - - - -
+  # monitoring
+
+  prometheus:
+    container_name: test_storer_prometheus
+
+  grafana:
+    container_name: test_storer_grafana
+    ports:
+      - '3001:3001'
+
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # starter is handy in tests for creating kata-manifests
 

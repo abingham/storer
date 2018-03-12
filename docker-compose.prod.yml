@@ -13,3 +13,14 @@ services:
       - ${CYBER_DOJO_STORER_SERVICE_PORT}:${CYBER_DOJO_STORER_SERVICE_PORT}
     volumes_from:
       - container:${CYBER_DOJO_KATA_DATA_CONTAINER_NAME}:rw
+
+  # - - - - - - - - - - - - - - - - - - - - - - -
+  # monitoring
+
+  prometheus:
+    container_name: cyber-dojo-prometheus
+
+  grafana:
+    container_name: cyber-dojo-grafana
+    ports:
+      - '3000:3000'

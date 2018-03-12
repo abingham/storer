@@ -31,13 +31,11 @@ services:
   prometheus:
     image: cyberdojo/prometheus
     init: true
-    container_name: cyber-dojo-prometheus
     cpu_shares: 128
 
   grafana:
     image: cyberdojo/grafana
     init: true
-    container_name: cyber-dojo-grafana
     cpu_shares: 128
     volumes:
       - grafana_data:/var/lib/grafana
@@ -45,5 +43,3 @@ services:
       - prometheus
     env_file:
       - ./grafana.env
-    ports:
-      - '3000:3000'
