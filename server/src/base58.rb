@@ -10,30 +10,28 @@ class Base58
     size.times.map{ letter }.join
   end
 
-  def self.letter
-    alphabet[index]
-  end
-
-  def self.index
-    SecureRandom.random_number(alphabet.size)
-  end
-
   def self.string?(s)
     s.is_a?(String) &&
       s.chars.all?{ |char| letter?(char) }
   end
 
-  def self.letter?(char)
-    char.is_a?(String) &&
-      char.size == 1 &&
-        alphabet.include?(char)
+  # - - - - - - - - - - - - - -
+
+  private_class_method def self.letter
+    alphabet[index]
   end
 
-  def self.alphabet
+  private_class_method def self.index
+    SecureRandom.random_number(alphabet.size)
+  end
+
+  private_class_method def self.letter?(char)
+    alphabet.include?(char)
+  end
+
+  private_class_method def self.alphabet
     @@ALPHABET
   end
-
-  private
 
   @@ALPHABET = %w{
     0 1 2 3 4 5 6 7 8 9

@@ -9,15 +9,11 @@ class IdGeneratorTest < TestBase
   # - - - - - - - - - - - - - - - -
 
   test '926',
-  'generates raw kata-ids' do
-    id = id_generator.generate
-    assert_equal 'String', id.class.name
-    assert_equal 10, id.size
+  'generates Base58 kata-ids' do
     42.times do
-      id.chars.each do |char|
-        assert Base58.letter?(char),
-             "Base58.letter?(#{char})" + id
-      end
+      id = id_generator.generate
+      assert Base58.string?(id), "Base58.string?(#{id})"
+      assert_equal 10, id.size
     end
   end
 

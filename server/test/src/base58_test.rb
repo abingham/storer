@@ -8,19 +8,10 @@ class Base58Test < TestBase
   end
 
   test '064', %w(
-  alphabet has 58 characters ) do
-    assert_equal 58, Base58.alphabet.size
-  end
-
-  # - - - - - - - - - - - - - - - - - - -
-
-  test '065', %w(
-  char generates all letters in alphabet randomly ) do
+  alphabet has 58 characters none of which are missed ) do
     counts = {}
-    10000.times do
-      letter = Base58.letter
-      counts[letter] ||= 0
-      counts[letter] += 1
+    Base58.string(10000).chars.each do |ch|
+      counts[ch] = true
     end
     assert_equal 58, counts.keys.size
   end
@@ -41,54 +32,22 @@ class Base58Test < TestBase
 
   # - - - - - - - - - - - - - - - - - - -
 
-  test '067', %w(
-  index generates 0..57 randomly ) do
-    1000.times do
-      index = Base58.index
-      assert index >= 0, index
-      assert index < 58, index
-    end
-  end
-
-  # - - - - - - - - - - - - - - - - - - -
-
   test '068', %w(
   string?(s) true/false ) do
-    assert string?('012AefF98Zz')
+    assert string?('012AaEefFgG89Zz')
     refute string?(nil)
     refute string?([])
     refute string?(25)
-    refute string?('HIJ')
-    refute string?('HiJ')
-    refute string?('NOP')
-    refute string?('NoP')
-  end
-
-  # - - - - - - - - - - - - - - - - - - -
-
-  test '069', %w(
-  letter?(char) true/false ) do
-    assert letter?('0')
-    assert letter?('1')
-    assert letter?('9')
-    assert letter?('a')
-    assert letter?('z')
-    assert letter?('A')
-    assert letter?('Z')
-    refute letter?('o') # oh
-    refute letter?('O') # oh
-    refute letter?('i') # eye
-    refute letter?('I') # eye
+    refute string?('HIJ') # I (India)
+    refute string?('HiJ') # i (india)
+    refute string?('NOP') # O (Oscar)
+    refute string?('NoP') # o (oscar)
   end
 
   private
 
   def string?(s)
     Base58.string?(s)
-  end
-
-  def letter?(char)
-    Base58.letter?(char)
   end
 
 end
