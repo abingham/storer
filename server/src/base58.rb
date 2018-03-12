@@ -7,15 +7,19 @@ require 'securerandom'
 class Base58
 
   def self.string(size)
-    size.times.map{ char }.join
+    size.times.map{ letter }.join
   end
 
-  def self.char
+  def self.letter
     alphabet[index]
   end
 
   def self.index
     SecureRandom.random_number(alphabet.size)
+  end
+
+  def self.letter?(char)
+    alphabet.include?(char)
   end
 
   def self.alphabet

@@ -15,12 +15,12 @@ class Base58Test < TestBase
   # - - - - - - - - - - - - - - - - - - -
 
   test '065', %w(
-  char generates all chars in alphabet randomly ) do
+  char generates all letters in alphabet randomly ) do
     counts = {}
     10000.times do
-      char = Base58.char
-      counts[char] ||= 0
-      counts[char] += 1
+      letter = Base58.letter
+      counts[letter] ||= 0
+      counts[letter] += 1
     end
     assert_equal 58, counts.keys.size
   end
@@ -37,6 +37,40 @@ class Base58Test < TestBase
       ids[s] += 1
     end
     assert (repeats - ids.keys.size) <= 1
+  end
+
+  # - - - - - - - - - - - - - - - - - - -
+
+  test '067', %w(
+  index generates 0..57 randomly ) do
+    1000.times do
+      index = Base58.index
+      assert index >= 0, index
+      assert index < 58, index
+    end
+  end
+
+  # - - - - - - - - - - - - - - - - - - -
+
+  test '068', %w(
+  letter?(char) true/false ) do
+    assert letter?('0')
+    assert letter?('1')
+    assert letter?('9')
+    assert letter?('a')
+    assert letter?('z')
+    assert letter?('A')
+    assert letter?('Z')
+    refute letter?('o') # oh
+    refute letter?('O') # oh
+    refute letter?('i') # eye
+    refute letter?('I') # eye
+  end
+
+  private
+
+  def letter?(char)
+    Base58.letter?(char)
   end
 
 end

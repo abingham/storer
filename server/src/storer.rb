@@ -1,5 +1,5 @@
 require_relative 'all_avatars_names'
-require_relative 'base16'
+require_relative 'base58'
 require 'json'
 
 class Storer
@@ -285,7 +285,7 @@ class Storer
 
   def partial_id?(kata_id)
     kata_id.is_a?(String) &&
-      kata_id.chars.all? { |char| Base16.alphabet.include?(char) }
+      kata_id.chars.all? { |char| Base58.letter?(char) }
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - -
@@ -307,11 +307,11 @@ class Storer
   end
 
   def outer(kata_id)
-    kata_id.upcase[0..1]  # eg 'E5' 2-chars long
+    kata_id[0..1]  # eg 'e5' 2-chars long
   end
 
   def inner(kata_id)
-    kata_id.upcase[2..-1] # eg '6A3327FE' 8-chars long
+    kata_id[2..-1] # eg '6aM327PE' 8-chars long
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - -

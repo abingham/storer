@@ -23,7 +23,7 @@ class StorerCompletionTest < TestBase
     invalid_partial_ids = [
       nil,          # not an object
       [],           # not a string
-      'X4',         # not hex chars
+      '=4',         # not Base58 chars
     ].each do |invalid_partial_id|
       error = assert_raises(ArgumentError) {
         storer.completed(invalid_partial_id)

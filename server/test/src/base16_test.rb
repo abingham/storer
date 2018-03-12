@@ -15,12 +15,12 @@ class Base16Test < TestBase
   # - - - - - - - - - - - - - - - - - - -
 
   test '065', %w(
-  char generates all chars in alphabet randomly ) do
+  char generates all letters in alphabet randomly ) do
     counts = {}
     1000.times do
-      char = Base16.char
-      counts[char] ||= 0
-      counts[char] += 1
+      letter = Base16.letter
+      counts[letter] ||= 0
+      counts[letter] += 1
     end
     assert_equal 16, counts.keys.size
   end
@@ -37,6 +37,61 @@ class Base16Test < TestBase
       ids[s] += 1
     end
     assert_equal repeats, ids.keys.size
+  end
+
+  # - - - - - - - - - - - - - - - - - - -
+
+  test '067', %w(
+  index generates 0..15 randomly ) do
+    1000.times do
+      index = Base16.index
+      assert index >= 0, index
+      assert index < 16, index
+    end
+  end
+
+  # - - - - - - - - - - - - - - - - - - -
+
+  test '068', %w(
+  letter?(char) true/false ) do
+    assert letter?('0')
+    assert letter?('1')
+    assert letter?('2')
+    assert letter?('3')
+    assert letter?('4')
+    assert letter?('5')
+    assert letter?('6')
+    assert letter?('7')
+    assert letter?('8')
+    assert letter?('9')
+    assert letter?('A')
+    assert letter?('B')
+    assert letter?('C')
+    assert letter?('D')
+    assert letter?('E')
+    assert letter?('F')
+
+    refute letter?('a')
+    refute letter?('b')
+    refute letter?('c')
+    refute letter?('d')
+    refute letter?('e')
+    refute letter?('f')
+    refute letter?('g')
+    refute letter?('G')
+    refute letter?('Z')
+    refute letter?('o') # oh
+    refute letter?('O') # oh
+    refute letter?('i') # eye
+    refute letter?('I') # eye
+    refute letter?('a')
+    refute letter?('z')
+  end
+
+  private
+
+  def letter?(char)
+    Base16.letter?(char)
   end
 
 end

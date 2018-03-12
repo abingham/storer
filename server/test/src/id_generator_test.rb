@@ -15,8 +15,8 @@ class IdGeneratorTest < TestBase
     assert_equal 10, id.size
     42.times do
       id.chars.each do |char|
-        assert "0123456789ABCDEF".include?(char),
-             "\"0123456789ABCDEF\".include?(#{char})" + id
+        assert Base58.letter?(char),
+             "Base58.letter?(#{char})" + id
       end
     end
   end

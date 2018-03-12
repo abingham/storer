@@ -1,9 +1,9 @@
-require_relative 'base16'
+require_relative 'base58'
 
 class IdGenerator
 
   def generate
-    Base16.string(10)
+    Base58.string(10)
   end
 
 end
