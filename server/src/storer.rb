@@ -37,6 +37,8 @@ class Storer
     unless outer_dir.exists?
       return kata_id
     end
+    # As the number of inner dirs increases this
+    # gets sloooooow...
     dirs = outer_dir.each_dir.select { |inner_dir|
       inner_dir.start_with?(inner(kata_id))
     }
