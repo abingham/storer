@@ -14,8 +14,15 @@ class Base16
     SecureRandom.random_number(alphabet.size)
   end
 
+  def self.string?(s)
+    s.is_a?(String) &&
+      s.chars.all?{ |char| letter?(char) }
+  end
+
   def self.letter?(char)
-    alphabet.include?(char)
+    char.is_a?(String) &&
+      char.size == 1 &&
+        alphabet.include?(char)
   end
 
   def self.alphabet

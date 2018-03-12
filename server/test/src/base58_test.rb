@@ -53,6 +53,20 @@ class Base58Test < TestBase
   # - - - - - - - - - - - - - - - - - - -
 
   test '068', %w(
+  string?(s) true/false ) do
+    assert string?('012AefF98Zz')
+    refute string?(nil)
+    refute string?([])
+    refute string?(25)
+    refute string?('HIJ')
+    refute string?('HiJ')
+    refute string?('NOP')
+    refute string?('NoP')
+  end
+
+  # - - - - - - - - - - - - - - - - - - -
+
+  test '069', %w(
   letter?(char) true/false ) do
     assert letter?('0')
     assert letter?('1')
@@ -68,6 +82,10 @@ class Base58Test < TestBase
   end
 
   private
+
+  def string?(s)
+    Base58.string?(s)
+  end
 
   def letter?(char)
     Base58.letter?(char)

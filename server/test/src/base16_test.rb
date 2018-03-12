@@ -53,6 +53,18 @@ class Base16Test < TestBase
   # - - - - - - - - - - - - - - - - - - -
 
   test '068', %w(
+  string?(s) true/false ) do
+    assert string?('012AF98')
+    refute string?(nil)
+    refute string?([])
+    refute string?(25)
+    refute string?('f')
+    refute string?('Fg')
+  end
+
+  # - - - - - - - - - - - - - - - - - - -
+
+  test '069', %w(
   letter?(char) true/false ) do
     assert letter?('0')
     assert letter?('1')
@@ -89,6 +101,10 @@ class Base16Test < TestBase
   end
 
   private
+
+  def string?(s)
+    Base16.string?(s)
+  end
 
   def letter?(char)
     Base16.letter?(char)

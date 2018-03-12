@@ -284,8 +284,7 @@ class Storer
   end
 
   def partial_id?(kata_id)
-    kata_id.is_a?(String) &&
-      kata_id.chars.all? { |char| Base58.letter?(char) }
+    Base58.string?(kata_id)
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - -
