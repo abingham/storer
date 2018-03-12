@@ -2,7 +2,7 @@ require 'securerandom'
 
 # Similar to https://en.wikipedia.org/wiki/Base58
 # o) includes the digits zero and one.
-# o) excludes the letter IO (eye,oh) both lowercase and uppercase
+# o) excludes the letter IO (India,Oscar) both lowercase and uppercase
 
 class Base58
 
