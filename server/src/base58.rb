@@ -7,11 +7,15 @@ require 'securerandom'
 class Base58
 
   def self.string(size)
-    (0...size).map{ char }.join
+    size.times.map{ char }.join
   end
 
   def self.char
-    alphabet[SecureRandom.random_number(58)]
+    alphabet[index]
+  end
+
+  def self.index
+    SecureRandom.random_number(alphabet.size)
   end
 
   def self.alphabet
@@ -20,7 +24,6 @@ class Base58
 
   private
 
-  # drops: IO io
   @@ALPHABET = %w{
     0 1 2 3 4 5 6 7 8 9
     A B C D E F G H   J K L M N   P Q R S T U V W X Y Z
