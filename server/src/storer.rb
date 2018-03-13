@@ -81,8 +81,8 @@ class Storer
     # theory you could get a race condition with
     # both threads attempting to create a
     # kata with the same id.
-    # Assuming uuidgen is reasonably well
-    # behaved this is extremely unlikely.
+    # Assuming id generation is reasonably well
+    # behaved (random) this is extremely unlikely.
     kata_id = kata_id_generator.generate
     manifest['id'] = kata_id
     dir = kata_dir(kata_id)
@@ -279,7 +279,7 @@ class Storer
 
   def assert_partial_id(kata_id)
     unless partial_id?(kata_id)
-      fail invalid('kata_id')
+      invalid('kata_id')
     end
   end
 
@@ -293,7 +293,7 @@ class Storer
 
   def assert_kata_exists(kata_id)
     unless kata_exists?(kata_id)
-      fail invalid('kata_id')
+      invalid('kata_id')
     end
   end
 
@@ -319,7 +319,7 @@ class Storer
 
   def assert_avatar_exists(kata_id, avatar_name)
     unless avatar_exists?(kata_id, avatar_name)
-      fail invalid('avatar_name')
+      invalid('avatar_name')
     end
   end
 
@@ -341,13 +341,13 @@ class Storer
 
   def assert_tag_exists(kata_id, avatar_name, tag)
     unless tag_exists?(kata_id, avatar_name, tag)
-      fail invalid('tag')
+      invalid('tag')
     end
   end
 
   def assert_valid_tag(tag)
     unless valid_tag?(tag)
-      fail invalid('tag')
+      invalid('tag')
     end
   end
 
@@ -375,7 +375,7 @@ class Storer
   end
 
   def invalid(message)
-    ArgumentError.new("invalid #{message}")
+    fail ArgumentError.new("invalid #{message}")
   end
 
   # - - - - - - - - - - -
