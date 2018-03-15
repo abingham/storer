@@ -9,27 +9,6 @@ class StorerKataManifestTest < TestBase
 
   #- - - - - - - - - - - - - - - - - - - - - - - -
 
-  test '34A',
-  'kata_manifest is raw manifest with no defaults applied' do
-    assert_no_default 'tab_size'
-    assert_no_default 'progress_regexs'
-    assert_no_default 'lowlight_filenames'
-    assert_no_default 'max_seconds'
-    assert_no_default 'filename_extension'
-    assert_no_default 'highlight_filenames'
-  end
-
-  # - - - - - - - - - - - - - - - - - - - -
-
-  def assert_no_default(name)
-    manifest = create_manifest
-    manifest.delete(name)
-    kata_id = storer.create_kata(manifest)
-    assert_nil storer.kata_manifest(kata_id)[name]
-  end
-
-  # - - - - - - - - - - - - - - - - - - - -
-
   test 'E2A',
   'new-style kata not involving renaming (dolphin, 20 lights)' do
     kata_id = stubbed('420B05BA0A')
@@ -126,13 +105,14 @@ class StorerKataManifestTest < TestBase
 
     @manifest = storer.kata_manifest(kata_id)
     expected_keys = %w(
-      id created tab_size visible_files exercise
+      id created tab_size visible_files exercise filename_extension
       display_name image_name runner_choice
     )
     assert_equal expected_keys.sort, @manifest.keys.sort
     assert_id kata_id
     assert_created [2013,2,18, 13,22,10]
     assert_exercise 'Calc_Stats'
+    assert_filename_extension '.c'
     assert_tab_size 4
     assert_display_name 'C (gcc), assert'
     assert_image_name 'cyberdojofoundation/gcc_assert'
@@ -161,13 +141,14 @@ class StorerKataManifestTest < TestBase
 
     @manifest = storer.kata_manifest(kata_id)
     expected_keys = %w(
-      id created exercise visible_files tab_size
+      id created exercise visible_files tab_size filename_extension
       display_name image_name runner_choice
     )
     assert_equal expected_keys.sort, @manifest.keys.sort
     assert_id kata_id
     assert_created [2014,11,20, 9,55,58]
     assert_exercise 'Poker_Hands'
+    assert_filename_extension '.rb'
     assert_tab_size 2
     assert_display_name 'Ruby, RSpec'
     assert_image_name 'cyberdojofoundation/ruby_rspec'
@@ -195,7 +176,7 @@ class StorerKataManifestTest < TestBase
 
     @manifest = storer.kata_manifest(kata_id)
     expected_keys = %w(
-      id created exercise visible_files tab_size
+      id created exercise visible_files tab_size filename_extension
       display_name image_name runner_choice
     )
     assert_equal expected_keys.sort, @manifest.keys.sort
@@ -203,6 +184,7 @@ class StorerKataManifestTest < TestBase
     assert_created [2016,8,1, 22,54,33]
     assert_exercise 'Fizz_Buzz'
     assert_tab_size 4
+    assert_filename_extension '.py'
     assert_display_name 'Python, py.test'
     assert_image_name 'cyberdojofoundation/python_pytest'
     assert_runner_choice 'stateless'
