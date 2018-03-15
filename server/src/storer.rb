@@ -1,5 +1,6 @@
 require_relative 'all_avatars_names'
 require_relative 'base58'
+require_relative 'updater'
 require 'json'
 
 class Storer
@@ -97,7 +98,7 @@ class Storer
     assert_kata_exists(kata_id)
     dir = kata_dir(kata_id)
     json = dir.read(manifest_filename)
-    JSON.parse(json)
+    Updater.updated(JSON.parse(json))
   end
 
   # - - - - - - - - - - - - - - - - - - -
