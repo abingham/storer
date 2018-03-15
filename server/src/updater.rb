@@ -335,8 +335,8 @@ class Updater
       "runner_choice" => "stateless"
     },
     "Ruby, Test::Unit" => {
-      "image_name" => "cyberdojofoundation/ruby_test_unit_sinatra",
-      "runner_choice" => "processful"
+      "image_name" => "cyberdojofoundation/ruby_test_unit",
+      "runner_choice" => "stateless"
     },
 
     "Rust, test" => {
