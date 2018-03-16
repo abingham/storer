@@ -138,6 +138,17 @@ class StorerServiceTest < TestBase
     avatar_ran_tests(kata_id, lion, files, now, output, colour)
   end
 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  test '5EE',
+  'you can fork from any tag' do
+    id = '420B05BA0A'
+    tag = 20
+    now = [2018,3,16,9,57,19]
+    forked_id = tag_fork(id, 'dolphin', tag, now)
+    refute_equal forked_id, id
+  end
+
   private
 
   def make_manifest
