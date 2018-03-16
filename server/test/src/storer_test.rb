@@ -61,18 +61,18 @@ class StorerTest < TestBase
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '965',
-  'started_avatars() with invalid kata_id raises' do
+  'avatars_started() with invalid kata_id raises' do
     assert_invalid_kata_id_raises { |invalid_id|
-      started_avatars(invalid_id)
+      avatars_started(invalid_id)
     }
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '5DF',
-  'start_avatar() with invalid kata_id raises' do
+  'avatar_start() with invalid kata_id raises' do
     assert_bad_kata_id_raises { |invalid_id|
-      start_avatar(invalid_id, [lion])
+      avatar_start(invalid_id, [lion])
     }
   end
 
@@ -258,11 +258,11 @@ class StorerTest < TestBase
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  # create_kata
+  # kata_create
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'B99',
-  'after create_kata(manifest) manifest has id/created properties' do
+  'after kata_create(manifest) manifest has id/created properties' do
     expected = %w(
       created
       display_name
@@ -275,19 +275,19 @@ class StorerTest < TestBase
     manifest = create_manifest
     assert_equal expected.sort, manifest.keys.sort
 
-    id = storer.create_kata(manifest)
+    id = storer.kata_create(manifest)
     manifest = kata_manifest(id)
     assert_equal (expected << 'id').sort, manifest.keys.sort
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  # start_avatar
+  # avatar_start
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'A6B',
   'before starting an avatar none exist' do
     id = make_kata
-    assert_equal([], started_avatars(id))
+    assert_equal([], avatars_started(id))
     assert_equal({}, kata_increments(id))
   end
 
@@ -299,7 +299,7 @@ class StorerTest < TestBase
     rogue = 'flintstone'
     disk[kata_path(id) + '/' + rogue].make
     assert_equal [rogue], disk[kata_path(id)].each_dir.collect { |name| name }
-    assert_equal [], started_avatars(id)
+    assert_equal [], avatars_started(id)
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -307,7 +307,7 @@ class StorerTest < TestBase
   test 'CBF',
   'avatar_start(not-an-avatar-name) is nil' do
     id = make_kata
-    assert_nil start_avatar(id, ['pencil'])
+    assert_nil avatar_start(id, ['pencil'])
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -319,8 +319,8 @@ class StorerTest < TestBase
     avatar's increments already have tag zero
   ) do
     id = make_kata
-    assert_equal lion, start_avatar(id, [lion])
-    assert_equal [lion], started_avatars(id)
+    assert_equal lion, avatar_start(id, [lion])
+    assert_equal [lion], avatars_started(id)
     expected_filenames = %w(
       cyber-dojo.sh
       hiker.h
@@ -341,8 +341,8 @@ class StorerTest < TestBase
     assert_equal [tag0], avatar_increments(id, lion)
     assert_equal( { lion => [tag0] }, kata_increments(id))
 
-    assert_equal tiger, start_avatar(id, [tiger])
-    assert_equal [lion,tiger].sort, started_avatars(id).sort
+    assert_equal tiger, avatar_start(id, [tiger])
+    assert_equal [lion,tiger].sort, avatars_started(id).sort
     assert_equal [tag0], avatar_increments(id, tiger)
     assert_equal( { lion => [tag0], tiger => [tag0] }, kata_increments(id))
   end
@@ -353,10 +353,10 @@ class StorerTest < TestBase
   'avatar_start succeeds 64 times then kata is full' do
     id = make_kata
     all_avatars_names.size.times do
-      start_avatar(id, all_avatars_names)
+      avatar_start(id, all_avatars_names)
     end
-    assert_equal all_avatars_names.sort, started_avatars(id).sort
-    assert_nil start_avatar(id, all_avatars_names)
+    assert_equal all_avatars_names.sort, avatars_started(id).sort
+    assert_nil avatar_start(id, all_avatars_names)
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -369,7 +369,7 @@ class StorerTest < TestBase
     visible_files are retrievable by explicit tag
   ) do
     kata_id = make_kata(starting_files)
-    start_avatar(kata_id, [lion])
+    avatar_start(kata_id, [lion])
     was_tag = 0
 
     avatar_ran_tests(*make_args(kata_id, edited_files))
@@ -591,7 +591,7 @@ class StorerTest < TestBase
 
   def assert_bad_tag_raises
     kata_id = make_kata
-    start_avatar(kata_id, [lion])
+    avatar_start(kata_id, [lion])
     bad_tags.each do |bad_tag|
       error = assert_raises(ArgumentError) {
         yield kata_id, lion, bad_tag
@@ -608,7 +608,7 @@ class StorerTest < TestBase
 
   def assert_bad_tag_pair_raises
     kata_id = make_kata
-    start_avatar(kata_id, [lion])
+    avatar_start(kata_id, [lion])
     bad_tag_pairs.each do |was_tag, now_tag|
       error = assert_raises(ArgumentError) {
         yield kata_id, lion, was_tag, now_tag

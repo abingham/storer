@@ -32,7 +32,7 @@ Asks whether the kata with the given kata_id exists.
 
 - - - -
 
-## POST create_kata
+## POST kata_create
 Creates a kata from the given json manifest.
 - parameter, eg
 ```
@@ -48,6 +48,11 @@ Creates a kata from the given json manifest.
                 "tab_size": 4,
       ...
     }
+```
+- returns the id of the kata created from the given manifest, eg
+```
+  { "kata_create": "A551C528C3"
+  }
 ```
 
 - - - -
@@ -153,7 +158,7 @@ has started in the kata with the given kata_id.
 
 - - - -
 
-## POST start_avatar
+## POST avatar_start
 Attempts to starts an avatar, with a name in the given list, in the kata with the given kata_id.
 If successful, returns the name of the started avatar, otherwise "nil".
 - parameters, eg
@@ -164,13 +169,13 @@ If successful, returns the name of the started avatar, otherwise "nil".
 ```
 - returns the name of the started avatar if successful, otherwise nil, eg
 ```
-  { "start_avatar": "lion" }
-  { "start_avatar": "nil"  }
+  { "avatar_start": "lion" }
+  { "avatar_start": "nil"  }
 ```
 
 - - - -
 
-## GET started_avatars
+## GET avatars_started
 Returns the names of all avatars who have started in the kata with the given kata_id.
 - parameter, eg
 ```
@@ -178,7 +183,7 @@ Returns the names of all avatars who have started in the kata with the given kat
 ```
 - returns, eg
 ```
-  { "started_avatars": [ "rhino", "cheetah", "starfish" ] }
+  { "avatars_started": [ "rhino", "cheetah", "starfish" ] }
 ```
 
 - - - -
@@ -249,6 +254,27 @@ given avatar_name_, in the kata with the given kata_id.
 
 - - - -
 
+## GET tag_fork
+Creates a new kata forked from the visible files of the avatar with the
+given avatar_name, in the kata with the given kata_id,
+with the given tag number.
+- parameters, eg
+```
+  {     "kata_id": "A551C528C3",
+    "avatar_name": "rhino",
+            "tag": 2
+  }
+```
+- returns, the id of the forked kata, eg
+```
+  { "tag_fork": {
+       "id" : "8EDB6C141A"
+    }
+  }
+```
+
+- - - -
+
 ## GET tag_visible_files
 Returns the set of visible files, for the avatar with the
 given avatar_name, in the kata with the given kata_id,
@@ -300,27 +326,6 @@ given tag numbers.
          "fizzbuzz.tests.c" : "#include <assert.h>\n...",
          "cyber-dojo.sh"    : "make --always-make"
       }
-    }
-  }
-```
-
-- - - -
-
-## GET tag_fork
-Creates a new kata forked from the visible files of the avatar with the
-given avatar_name, in the kata with the given kata_id,
-with the given tag number.
-- parameters, eg
-```
-  {     "kata_id": "A551C528C3",
-    "avatar_name": "rhino",
-            "tag": 2
-  }
-```
-- returns, the id of the forked kata, eg
-```
-  { "tag_fork": {
-       "id" : "8EDB6C141A"
     }
   }
 ```

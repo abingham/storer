@@ -18,7 +18,7 @@ class StorerServiceTest < TestBase
   test '6E7',
   'retrieved manifest contains kata-id' do
     manifest = make_manifest
-    kata_id = create_kata(manifest)
+    kata_id = kata_create(manifest)
     manifest['id'] = kata_id
     assert_equal manifest, kata_manifest(kata_id)
   end
@@ -26,16 +26,16 @@ class StorerServiceTest < TestBase
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '5F9',
-  'after create_kata() then',
+  'after kata_create() then',
   'kata_exists?() is true',
   "and the kata's manifest can be retrieved",
   "and the kata's id can be completed",
   'and no avatars have yet started' do
     manifest = make_manifest
-    kata_id = create_kata(manifest)
+    kata_id = kata_create(manifest)
 
     assert kata_exists?(kata_id)
-    assert_equal [], started_avatars(kata_id)
+    assert_equal [], avatars_started(kata_id)
     assert_equal({}, kata_increments(kata_id))
 
     too_short = kata_id[0..4]
@@ -49,7 +49,7 @@ class StorerServiceTest < TestBase
   test '507',
   'completions' do
     manifest = make_manifest
-    kata_id = create_kata(manifest)
+    kata_id = kata_create(manifest)
     outer = kata_id[0..1]
     inner = kata_id[2..-1]
     assert completions(outer).include?(inner)
@@ -58,25 +58,25 @@ class StorerServiceTest < TestBase
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '990',
-  'after kata_start_avatar() succeeds',
+  'after avatar_start() succeeds',
   'then another avatar has started',
   'and has no traffic-lights yet' do
-    kata_id = create_kata(make_manifest)
+    kata_id = kata_create(make_manifest)
 
     refute avatar_exists?(kata_id, lion)
-    assert_equal lion, start_avatar(kata_id, [lion])
+    assert_equal lion, avatar_start(kata_id, [lion])
     assert avatar_exists?(kata_id, lion)
 
     assert_equal [tag0], avatar_increments(kata_id, lion)
     assert_equal({ lion => [tag0] }, kata_increments(kata_id))
     assert_equal starting_files, avatar_visible_files(kata_id, lion)
-    assert_equal [lion], started_avatars(kata_id)
+    assert_equal [lion], avatars_started(kata_id)
 
-    assert_equal salmon, start_avatar(kata_id, [salmon])
+    assert_equal salmon, avatar_start(kata_id, [salmon])
     assert_equal [tag0], avatar_increments(kata_id, salmon)
     assert_equal({ lion => [tag0], salmon => [tag0] }, kata_increments(kata_id))
     assert_equal starting_files, avatar_visible_files(kata_id, salmon)
-    assert_equal [lion,salmon].sort, started_avatars(kata_id).sort
+    assert_equal [lion,salmon].sort, avatars_started(kata_id).sort
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -85,8 +85,8 @@ class StorerServiceTest < TestBase
   'after avatar_ran_tests()',
   'then there is one more traffic-light',
   'and visible_files can be retrieved for any tag' do
-    kata_id = create_kata(make_manifest)
-    assert_equal lion, start_avatar(kata_id, [lion])
+    kata_id = kata_create(make_manifest)
+    assert_equal lion, avatar_start(kata_id, [lion])
 
     tag1_files = starting_files
     tag1_files.delete('hiker.h')
@@ -127,8 +127,8 @@ class StorerServiceTest < TestBase
     # This test fails if docker-compose.yml uses
     # [read_only:true] without also using
     # [tmpfs: /tmp]
-    kata_id = create_kata(make_manifest)
-    assert_equal lion, start_avatar(kata_id, [lion])
+    kata_id = kata_create(make_manifest)
+    assert_equal lion, avatar_start(kata_id, [lion])
 
     files = starting_files
     files['very_large'] = 'X'*1024*500

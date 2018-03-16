@@ -7,7 +7,7 @@ class StorerPosixFsTest < TestBase
   end
 
   test '4C0',
-  'start_avatar on multiple threads doesnt start the same avatar twice' do
+  'avatar_start on multiple threads doesnt start the same avatar twice' do
     20.times do |n|
       kata_id = make_kata
       started = []
@@ -17,20 +17,20 @@ class StorerPosixFsTest < TestBase
       names = []
       threads.size.times { |i|
         threads[i] = Thread.new {
-          name = storer.start_avatar(kata_id, animals)
+          name = storer.avatar_start(kata_id, animals)
           names << name unless name.nil?
         }
       }
       threads.size.times { |i| threads[i].join }
       assert_equal animals.sort, names.sort
-      assert_equal names.sort, storer.started_avatars(kata_id).sort
+      assert_equal names.sort, storer.avatars_started(kata_id).sort
     end
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'A31',
-  'start_avatar on multiple processes doesnt start the same avatar twice' do
+  'avatar_start on multiple processes doesnt start the same avatar twice' do
     20.times do |n|
       kata_id = make_kata
       started = []
@@ -40,7 +40,7 @@ class StorerPosixFsTest < TestBase
       read_pipe, write_pipe = IO.pipe
       pids.size.times { |i|
         pids[i] = Process.fork {
-          name = storer.start_avatar(kata_id, animals)
+          name = storer.avatar_start(kata_id, animals)
           write_pipe.puts "#{name} " unless name.nil?
         }
       }
@@ -49,7 +49,7 @@ class StorerPosixFsTest < TestBase
       names = read_pipe.read.split
       read_pipe.close
       assert_equal animals.sort, names.sort
-      assert_equal names.sort, storer.started_avatars(kata_id).sort
+      assert_equal names.sort, storer.avatars_started(kata_id).sort
     end
   end
 

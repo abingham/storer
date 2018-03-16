@@ -21,16 +21,24 @@ class RackDispatcher
     @json_args = JSON.parse(request.body.read)
     args = case name
       when /^create_kata$/          then [manifest]
+      when /^started_avatars$/      then [kata_id]
+      when /^start_avatar$/         then [kata_id, avatar_names]
+
+      when /^kata_create$/          then [manifest]
+
       when /^kata_exists$/,
            /^kata_manifest$/,
            /^kata_increments$/,
            /^completed$/,
            /^completions$/,
-           /^started_avatars$/      then [kata_id]
-      when /^start_avatar$/         then [kata_id, avatar_names]
+           /^avatars_started$/      then [kata_id]
+
+      when /^avatar_start$/         then [kata_id, avatar_names]
+
       when /^avatar_exists$/,
            /^avatar_increments$/,
            /^avatar_visible_files$/ then [kata_id, avatar_name]
+
       when /^avatar_ran_tests$/     then [kata_id, avatar_name, files, now, output, colour]
       when /^tag_fork$/             then [kata_id, avatar_name, tag, now]
       when /^tag_visible_files$/    then [kata_id, avatar_name, tag]

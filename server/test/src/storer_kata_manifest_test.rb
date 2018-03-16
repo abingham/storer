@@ -158,7 +158,7 @@ class StorerKataManifestTest < TestBase
   def stubbed(kata_id)
     @id_generator = IdGeneratorStub.new
     id_generator.stub(kata_id)
-    # DONT call storer.create_kata()
+    # DONT call storer.kata_create()
     # The test rig is volume-mounting known katas
     kata_id
   end

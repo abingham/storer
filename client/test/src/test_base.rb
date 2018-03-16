@@ -3,8 +3,8 @@ require_relative '../../src/storer_service'
 
 class TestBase < HexMiniTest
 
-  def create_kata(manifest)
-    storer.create_kata(manifest)
+  def kata_create(manifest)
+    storer.kata_create(manifest)
   end
 
   def kata_exists?(kata_id)
@@ -35,12 +35,12 @@ class TestBase < HexMiniTest
     storer.avatar_exists?(kata_id, avatar_name)
   end
 
-  def start_avatar(kata_id, avatar_names)
-    storer.start_avatar(kata_id, avatar_names)
+  def avatar_start(kata_id, avatar_names)
+    storer.avatar_start(kata_id, avatar_names)
   end
 
-  def started_avatars(kata_id)
-    storer.started_avatars(kata_id)
+  def avatars_started(kata_id)
+    storer.avatars_started(kata_id)
   end
 
   # - - - - - - - - - - - - - - -

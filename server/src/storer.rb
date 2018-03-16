@@ -76,9 +76,13 @@ class Storer
   # - - - - - - - - - - - - - - - - - - -
 
   def create_kata(manifest)
+    kata_create(manifest)
+  end
+
+  def kata_create(manifest)
     # Generates a kata-id, puts it in the manifest,
     # saves the manifest, and returns the kata-id.
-    # Rack calls create_kata() in threads so in
+    # Rack calls kata_create() in threads so in
     # theory you could get a race condition with
     # both threads attempting to create a
     # kata with the same id.
@@ -104,7 +108,7 @@ class Storer
   # - - - - - - - - - - - - - - - - - - -
 
   def kata_increments(kata_id)
-    Hash[started_avatars(kata_id).map { |name|
+    Hash[avatars_started(kata_id).map { |name|
       [name, avatar_increments(kata_id, name)]
     }]
   end
@@ -122,7 +126,11 @@ class Storer
   # - - - - - - - - - - - - - - - - - - -
 
   def start_avatar(kata_id, avatar_names)
-    # storer.kata_start_avatar() relies on mkdir being
+    avatar_start(kata_id, avatar_names)
+  end
+
+  def avatar_start(kata_id, avatar_names)
+    # storer.avatar_start() relies on mkdir being
     # atomic on a (non NFS) POSIX file system.
     # Otherwise two laptops in the same practice session
     # could start as the same animal.
@@ -142,6 +150,10 @@ class Storer
   # - - - - - - - - - - - - - - - - - - -
 
   def started_avatars(kata_id)
+    avatars_started(kata_id)
+  end
+
+  def avatars_started(kata_id)
     assert_kata_exists(kata_id)
     started = kata_dir(kata_id).each_dir.collect { |name| name }
     started & all_avatars_names
@@ -197,7 +209,7 @@ class Storer
     manifest = kata_manifest(kata_id)
     manifest['visible_files'] = visible_files
     manifest['created'] = now
-    forked_id = create_kata(manifest)
+    forked_id = kata_create(manifest)
     forked_id
   end
 

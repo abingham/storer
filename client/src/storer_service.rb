@@ -6,7 +6,7 @@ class StorerService
     get(__method__, kata_id)
   end
 
-  def create_kata(manifest)
+  def kata_create(manifest)
     post(__method__, manifest)
   end
 
@@ -34,11 +34,11 @@ class StorerService
     get(__method__, kata_id, avatar_name)
   end
 
-  def start_avatar(kata_id, avatar_names)
+  def avatar_start(kata_id, avatar_names)
     post(__method__, kata_id, avatar_names)
   end
 
-  def started_avatars(kata_id)
+  def avatars_started(kata_id)
     get(__method__, kata_id)
   end
 

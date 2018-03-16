@@ -20,12 +20,12 @@ class TestBase < HexMiniTest
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  def start_avatar(kata_id, avatars)
-    storer.start_avatar(kata_id, avatars)
+  def avatar_start(kata_id, avatars)
+    storer.avatar_start(kata_id, avatars)
   end
 
-  def started_avatars(kata_id)
-    storer.started_avatars(kata_id)
+  def avatars_started(kata_id)
+    storer.avatars_started(kata_id)
   end
 
   def avatar_exists?(kata_id, name)
@@ -70,7 +70,7 @@ class TestBase < HexMiniTest
 
   def make_kata(visible_files = nil)
     manifest = create_manifest(visible_files)
-    storer.create_kata(manifest)
+    storer.kata_create(manifest)
   end
 
   def create_manifest(visible_files = nil)

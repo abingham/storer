@@ -28,10 +28,10 @@ class KataIdGeneratorTest < TestBase
   # - - - - - - - - - - - - - - - -
 
   test '928',
-  'thus you can stub the kata-id generated in storer.create_kata' do
+  'thus you can stub the kata-id generated in storer.kata_create' do
     @id_generator = IdGeneratorStub.new
     id_generator.stub(test_id)
-    assert_equal test_id, storer.create_kata(create_manifest)
+    assert_equal test_id, storer.kata_create(create_manifest)
   end
 
   # - - - - - - - - - - - - - - - -
@@ -40,7 +40,7 @@ class KataIdGeneratorTest < TestBase
   'discards generated kata-ids that are invalid' do
     @id_generator = IdGeneratorStub.new
     id_generator.stub('invalid', test_id)
-    assert_equal test_id, storer.create_kata(create_manifest)
+    assert_equal test_id, storer.kata_create(create_manifest)
   end
 
   # - - - - - - - - - - - - - - - -
@@ -50,7 +50,7 @@ class KataIdGeneratorTest < TestBase
     @id_generator = IdGeneratorStub.new
     id = make_kata
     id_generator.stub(id, test_id)
-    assert_equal test_id, storer.create_kata(create_manifest)
+    assert_equal test_id, storer.kata_create(create_manifest)
   end
 
   # - - - - - - - - - - - - - - - -
