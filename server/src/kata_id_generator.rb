@@ -20,6 +20,7 @@ class KataIdGenerator
     storer.valid_id?(id) &&
       !storer.kata_exists?(id)
       #&& storer.completable(id)
+      #&& does not contains lowercase L ?
   end
 
   def id_generator
