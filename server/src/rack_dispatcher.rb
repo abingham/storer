@@ -20,28 +20,24 @@ class RackDispatcher
     name = request.path_info[1..-1] # lose leading /
     @json_args = JSON.parse(request.body.read)
     args = case name
-      when /^create_kata$/          then [manifest]
-      when /^started_avatars$/      then [kata_id]
-      when /^start_avatar$/         then [kata_id, avatar_names]
-
       when /^kata_create$/          then [manifest]
-
       when /^kata_exists$/,
            /^kata_manifest$/,
-           /^kata_increments$/,
-           /^completed$/,
-           /^completions$/,
-           /^avatars_started$/      then [kata_id]
+           /^kata_increments$/      then [kata_id]
 
+      when /^completed$/,
+           /^completions$/          then [kata_id]
+
+      when /^avatars_started$/      then [kata_id]
       when /^avatar_start$/         then [kata_id, avatar_names]
-
       when /^avatar_exists$/,
            /^avatar_increments$/,
            /^avatar_visible_files$/ then [kata_id, avatar_name]
-
       when /^avatar_ran_tests$/     then [kata_id, avatar_name, files, now, output, colour]
+
       when /^tag_fork$/             then [kata_id, avatar_name, tag, now]
       when /^tag_visible_files$/    then [kata_id, avatar_name, tag]
+
       when /^tags_visible_files$/   then [kata_id, avatar_name, was_tag, now_tag]
     end
     name += '?' if query?(name)

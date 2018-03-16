@@ -75,10 +75,6 @@ class Storer
 
   # - - - - - - - - - - - - - - - - - - -
 
-  def create_kata(manifest)
-    kata_create(manifest)
-  end
-
   def kata_create(manifest)
     # Generates a kata-id, puts it in the manifest,
     # saves the manifest, and returns the kata-id.
@@ -125,10 +121,6 @@ class Storer
 
   # - - - - - - - - - - - - - - - - - - -
 
-  def start_avatar(kata_id, avatar_names)
-    avatar_start(kata_id, avatar_names)
-  end
-
   def avatar_start(kata_id, avatar_names)
     # storer.avatar_start() relies on mkdir being
     # atomic on a (non NFS) POSIX file system.
@@ -148,10 +140,6 @@ class Storer
   end
 
   # - - - - - - - - - - - - - - - - - - -
-
-  def started_avatars(kata_id)
-    avatars_started(kata_id)
-  end
 
   def avatars_started(kata_id)
     assert_kata_exists(kata_id)
