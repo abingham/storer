@@ -200,7 +200,7 @@ class StorerTest < TestBase
     kata_id = make_kata
     now = [2018,3,16,9,57,19]
     error = assert_raises(ArgumentError) {
-      storer.tag_fork(kata_id, 'xxx', 20, now)
+      tag_fork(kata_id, 'xxx', 20, now)
     }
     assert_equal 'invalid avatar_name', error.message
   end
@@ -211,7 +211,7 @@ class StorerTest < TestBase
   %w( tag_visible_files with invalid avatar_name raises ) do
     kata_id = make_kata
     error = assert_raises(ArgumentError) {
-      storer.tag_visible_files(kata_id, 'xxx', 20)
+      tag_visible_files(kata_id, 'xxx', 20)
     }
     assert_equal 'invalid avatar_name', error.message
   end
@@ -222,7 +222,7 @@ class StorerTest < TestBase
   %w( tags_visible_files with invalid avatar_name raises ) do
     kata_id = make_kata
     error = assert_raises(ArgumentError) {
-      storer.tags_visible_files(kata_id, 'xxx', 20, 21)
+      tags_visible_files(kata_id, 'xxx', 20, 21)
     }
     assert_equal 'invalid avatar_name', error.message
   end
@@ -360,7 +360,7 @@ class StorerTest < TestBase
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  # ran_tests
+  # avatar_ran_tests
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '3CF', %w(
@@ -372,7 +372,7 @@ class StorerTest < TestBase
     start_avatar(kata_id, [lion])
     was_tag = 0
 
-    storer.avatar_ran_tests(*make_args(kata_id, edited_files))
+    avatar_ran_tests(*make_args(kata_id, edited_files))
     now_tag = 1
 
     # traffic-lights
@@ -422,11 +422,11 @@ class StorerTest < TestBase
     id = '420B05BA0A'
     tag = 20
     now = [2018,3,16,9,57,19]
-    forked_id = storer.tag_fork(id, 'dolphin', tag, now)
+    forked_id = tag_fork(id, 'dolphin', tag, now)
     refute_equal forked_id, id
 
-    manifest = storer.kata_manifest(id)
-    forked_manifest = storer.kata_manifest(forked_id)
+    manifest = kata_manifest(id)
+    forked_manifest = kata_manifest(forked_id)
     assert_equal manifest.keys.sort, forked_manifest.keys.sort
     manifest.keys.each do |key|
       case key
@@ -452,7 +452,7 @@ class StorerTest < TestBase
 
   test '170',
   %w( tag_visible_files with valid +ve tag ) do
-    visible_files = storer.tag_visible_files('420B05BA0A', 'dolphin', 20)
+    visible_files = tag_visible_files('420B05BA0A', 'dolphin', 20)
     expected = %w(
       Calcolatrice.java
       HikerTest.java
@@ -467,7 +467,7 @@ class StorerTest < TestBase
 
   test '171',
   %w( tag_visible_files with -1 tag is last tag ) do
-    visible_files = storer.tag_visible_files('420B05BA0A', 'dolphin', -1)
+    visible_files = tag_visible_files('420B05BA0A', 'dolphin', -1)
     expected = %w(
       Calcolatrice.java
       HikerTest.java
@@ -483,7 +483,7 @@ class StorerTest < TestBase
   test '172',
   %w( tag_visible_files raises when tag is invalid ) do
     error = assert_raises(ArgumentError) {
-      storer.tag_visible_files('420B05BA0A', 'dolphin', 21)
+      tag_visible_files('420B05BA0A', 'dolphin', 21)
     }
     assert_equal 'invalid tag', error.message
   end
@@ -591,7 +591,7 @@ class StorerTest < TestBase
 
   def assert_bad_tag_raises
     kata_id = make_kata
-    storer.start_avatar(kata_id, [lion])
+    start_avatar(kata_id, [lion])
     bad_tags.each do |bad_tag|
       error = assert_raises(ArgumentError) {
         yield kata_id, lion, bad_tag
@@ -608,7 +608,7 @@ class StorerTest < TestBase
 
   def assert_bad_tag_pair_raises
     kata_id = make_kata
-    storer.start_avatar(kata_id, [lion])
+    start_avatar(kata_id, [lion])
     bad_tag_pairs.each do |was_tag, now_tag|
       error = assert_raises(ArgumentError) {
         yield kata_id, lion, was_tag, now_tag
