@@ -32,6 +32,7 @@ class RackDispatcher
            /^avatar_increments$/,
            /^avatar_visible_files$/ then [kata_id, avatar_name]
       when /^avatar_ran_tests$/     then [kata_id, avatar_name, files, now, output, colour]
+      when /^tag_fork$/             then [kata_id, avatar_name, tag, now]
       when /^tag_visible_files$/    then [kata_id, avatar_name, tag]
       when /^tags_visible_files$/   then [kata_id, avatar_name, was_tag, now_tag]
     end

@@ -306,6 +306,27 @@ given tag numbers.
 
 - - - -
 
+## GET tag_fork
+Creates a new kata forked from the visible files of the avatar with the
+given avatar_name, in the kata with the given kata_id,
+with the given tag number.
+- parameters, eg
+```
+  {     "kata_id": "A551C528C3",
+    "avatar_name": "rhino",
+            "tag": 2
+  }
+```
+- returns, the id of the forked kata, eg
+```
+  { "tag_fork": {
+       "id" : "8EDB6C141A"
+    }
+  }
+```
+
+- - - -
+
 * [Take me to cyber-dojo's home github repo](https://github.com/cyber-dojo/cyber-dojo).
 * [Take me to http://cyber-dojo.org](http://cyber-dojo.org).
 

@@ -54,6 +54,10 @@ class TestBase < HexMiniTest
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+  def tag_fork(kata_id, name, tag, now)
+    storer.tag_fork(kata_id, name, tag, now)
+  end
+
   def tag_visible_files(kata_id, name, tag)
     storer.tag_visible_files(kata_id, name, tag)
   end

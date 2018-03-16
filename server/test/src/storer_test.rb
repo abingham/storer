@@ -113,6 +113,16 @@ class StorerTest < TestBase
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+  test '916',
+  'tag_fork() with invalid kata_id raises' do
+    now = [2018,3,16,9,57,19]
+    assert_bad_kata_id_raises { |invalid_id|
+      tag_fork(invalid_id, lion, tag=3, now)
+    }
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
   test '917',
   'tag_visible_files() with invalid kata_id raises' do
     assert_bad_kata_id_raises { |invalid_id|
@@ -185,7 +195,19 @@ class StorerTest < TestBase
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  test '173',
+  test '072',
+  %w( tag_fork with invalid avatar_name raises ) do
+    kata_id = make_kata
+    now = [2018,3,16,9,57,19]
+    error = assert_raises(ArgumentError) {
+      storer.tag_fork(kata_id, 'xxx', 20, now)
+    }
+    assert_equal 'invalid avatar_name', error.message
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  test '073',
   %w( tag_visible_files with invalid avatar_name raises ) do
     kata_id = make_kata
     error = assert_raises(ArgumentError) {
@@ -196,7 +218,7 @@ class StorerTest < TestBase
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  test '174',
+  test '074',
   %w( tags_visible_files with invalid avatar_name raises ) do
     kata_id = make_kata
     error = assert_raises(ArgumentError) {
@@ -208,6 +230,16 @@ class StorerTest < TestBase
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # invalid tag on any method raises
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  test '380',
+  'tag_fork() with invalid tag raises' do
+    now = [2018,3,16,9,57,19]
+    assert_bad_tag_raises { |valid_id, valid_name, bad_tag|
+      tag_fork(valid_id, valid_name, bad_tag, now)
+    }
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '381',
   'tag_visible_files() with invalid tag raises' do
@@ -378,6 +410,39 @@ class StorerTest < TestBase
     hash = tags_visible_files(kata_id, lion, was_tag, now_tag)
     assert_hash_equal was_tag_visible_files, hash['was_tag']
     assert_hash_equal now_tag_visible_files, hash['now_tag']
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # tag_fork
+  # test-data: 420B05BA0A, dolphin, 20 rags
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  test '818',
+  %w( tag_fork with valid arguments ) do
+    id = '420B05BA0A'
+    tag = 20
+    now = [2018,3,16,9,57,19]
+    forked_id = storer.tag_fork(id, 'dolphin', tag, now)
+    refute_equal forked_id, id
+
+    manifest = storer.kata_manifest(id)
+    forked_manifest = storer.kata_manifest(forked_id)
+    assert_equal manifest.keys.sort, forked_manifest.keys.sort
+    manifest.keys.each do |key|
+      case key
+        when 'id'
+          assert_equal id, manifest['id']
+          assert_equal forked_id, forked_manifest['id']
+        when 'created'
+          refute_equal manifest['created'], forked_manifest['created']
+          assert_equal now, forked_manifest['created']
+        when 'visible_files'
+          refute_equal manifest['visible_files'], forked_manifest['visible_files']
+          assert_equal tag_visible_files(id, 'dolphin', tag), forked_manifest['visible_files']
+        else
+          assert_equal manifest[key], forked_manifest[key]
+      end
+    end
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
