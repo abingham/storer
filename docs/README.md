@@ -36,7 +36,7 @@ Asks whether the kata with the given kata_id exists.
 Creates a kata from the given json manifest.
 - parameter, eg
 ```
-    {
+    { "manifest": {
                    "created": [2017,12,15, 11,13,38],
                 "image_name": "cyberdojofoundation/gcc_assert",
              "visible_files": {        "hiker.h": "#ifndef HIKER_INCLUDED...",
@@ -52,7 +52,7 @@ Creates a kata from the given json manifest.
                "max_seconds": 10,
         "filename_extension": ".c",
                   "tab_size": 4,
-      ...
+      }
     }
 ```
 - returns the id of the kata created from the given manifest, eg
@@ -88,7 +88,7 @@ Returns the manifest used to create the kata with the given kata_id.
                "max_seconds": 10,
         "filename_extension": ".c",
                   "tab_size": 4,
-        ...
+                          ...
       }
     }
 ```
@@ -112,7 +112,7 @@ Returns avatar_increments for each started avatar in the kata with the given kat
     ],
     'tiger': [
         {  "event": "created", "time": [2016,12,5, 11,15,18], "number": 0 },
-        { "colour": "amber",   "time": [2016,12,6, 11,16, 2], "number": 1 },
+        { "colour": "amber",   "time": [2016,12,6, 11,16, 2], "number": 1 }
     ]
   }
 ```
