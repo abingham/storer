@@ -24,7 +24,7 @@ Asks whether the kata with the given kata_id exists.
 ```
   { "kata_id": "15B9AD6C42" }
 ```
-- returns true if it does, false if it doesn't.
+- returns true if it does, false if it doesn't, eg
 ```
   { "kata_exists?": true   }
   { "kata_exists?": false  }
@@ -121,7 +121,7 @@ Returns avatar_increments for each started avatar in the kata with the given kat
 
 ## GET completed
 If it exists, returns the 10-digit kata_id which uniquely completes
-the given kata_id, otherwise leaves it unchanged.
+the given kata_id, otherwise returns the empty string.
 - parameter, the 6-digit kata-id to complete, eg
 ```
   { "kata_id": "A551C5" } # must be at least 6 characters long.
@@ -129,7 +129,7 @@ the given kata_id, otherwise leaves it unchanged.
 - returns, eg
 ```
   { "completed": "A551C528C3"  } # completed
-  { "completed": "A551C5"      } # not completed
+  { "completed": ""            } # not completed
 ```
 
 - - - -

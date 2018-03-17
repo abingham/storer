@@ -39,7 +39,7 @@ class StorerServiceTest < TestBase
     assert_equal({}, kata_increments(kata_id))
 
     too_short = kata_id[0..4]
-    assert_equal too_short, completed(too_short)
+    assert_equal '', completed(too_short)
 
     assert_equal kata_id, completed(kata_id[0..5])
   end

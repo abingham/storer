@@ -17,10 +17,6 @@ class Storer
   # - - - - - - - - - - - - - - - - - - -
   # completion(s)
   # - - - - - - - - - - - - - - - - - - -
-  # 6 hex chars are all that need to be entered
-  # to enable id-auto-complete which is
-  # 16^6 == 16,777,216 possibilities.
-  # - - - - - - - - - - - - - - - - - - -
 
   def completed(kata_id) # 6 chars long
     assert_partial_id(kata_id)
@@ -33,11 +29,11 @@ class Storer
     # the full id of a cyber-dojo and potentially interfere
     # with a live session.
     unless kata_id.length >= 6
-      return kata_id
+      return ''
     end
     outer_dir = disk[dir_join(path, outer(kata_id))]
     unless outer_dir.exists?
-      return kata_id
+      return ''
     end
     # As the number of inner dirs increases this
     # gets sloooooow...
@@ -45,7 +41,7 @@ class Storer
       inner_dir.start_with?(inner(kata_id))
     }
     unless dirs.length == 1
-      return kata_id
+      return ''
     end
     outer(kata_id) + dirs[0] # success!
   end
