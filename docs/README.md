@@ -37,15 +37,21 @@ Creates a kata from the given json manifest.
 - parameter, eg
 ```
     {
-                 "kata_id": "A551C528C3",
-              "image_name": "cyberdojofoundation/gcc_assert",
-           "visible_files": {        "hiker.h": "#ifndef HIKER_INCLUDED...",
-                                     "hiker.c": "#include \"hiker.h\"...",
-                              "hiker.tests.c" : "#include <assert.h>\n...",
-                              "cyber-dojo.sh" : "make --always-make"
-                            },
-      "filename_extension": ".c",
-                "tab_size": 4,
+                   "created": [2017,12,15, 11,13,38],
+                "image_name": "cyberdojofoundation/gcc_assert",
+             "visible_files": {        "hiker.h": "#ifndef HIKER_INCLUDED...",
+                                       "hiker.c": "#include \"hiker.h\"...",
+                                "hiker.tests.c" : "#include <assert.h>\n...",
+                                 "instructions" : "Write a program that...",
+                                     "makefile" : "CFLAGS += -I. -Wall...",
+                                "cyber-dojo.sh" : "make"
+                              },
+             "runner_choice": "stateless",
+              "display_name": "C (gcc), assert",
+                  "exercise": "Fizz_Buzz",
+               "max_seconds": 10,
+        "filename_extension": ".c",
+                  "tab_size": 4,
       ...
     }
 ```
@@ -72,7 +78,9 @@ Returns the manifest used to create the kata with the given kata_id.
              "visible_files": {        "hiker.h": "ifndef HIKER_INCLUDED\n...",
                                        "hiker.c": "#include \"hiker.h\"...",
                                 "hiker.tests.c" : "#include <assert.h>\n...",
-                                "cyber-dojo.sh" : "make --always-make"
+                                 "instructions" : "Write a program that...",
+                                     "makefile" : "CFLAGS += -I. -Wall...",
+                                "cyber-dojo.sh" : "make"
                               },
              "runner_choice": "stateless",
               "display_name": "C (gcc), assert",
@@ -97,14 +105,14 @@ Returns avatar_increments for each started avatar in the kata with the given kat
 ```
   { "kata_increments": {
     'lion': [
-        {  "event": "created", "time": [2016,12,5,11,15,18], "number": 0 },
-        { "colour": "red,      "time": [2016,12,6,12,31,15], "number": 1 },
-        { "colour": "green",   "time": [2016,12,6,12,32,56], "number": 2 },
-        { "colour": "amber",   "time": [2016,12,6,12,43,19], "number": 3 }
+        {  "event": "created", "time": [2016,12,5, 11,15,18], "number": 0 },
+        { "colour": "red,      "time": [2016,12,6, 12,31,15], "number": 1 },
+        { "colour": "green",   "time": [2016,12,6, 12,32,56], "number": 2 },
+        { "colour": "amber",   "time": [2016,12,6, 12,43,19], "number": 3 }
     ],
     'tiger': [
-        {  "event": "created", "time": [2016,12,5,11,15,18], "number": 0 },
-        { "colour": "amber",   "time": [2016,12,6,11,16, 2], "number": 1 },
+        {  "event": "created", "time": [2016,12,5, 11,15,18], "number": 0 },
+        { "colour": "amber",   "time": [2016,12,6, 11,16, 2], "number": 1 },
     ]
   }
 ```
@@ -114,7 +122,7 @@ Returns avatar_increments for each started avatar in the kata with the given kat
 ## GET completed
 If it exists, returns the 10-digit kata_id which uniquely completes
 the given kata_id, otherwise leaves it unchanged.
-- parameter, eg
+- parameter, the 6-digit kata-id to complete, eg
 ```
   { "kata_id": "A551C5" } # must be at least 6 characters long.
 ```
@@ -134,8 +142,12 @@ Returns all the kata_id's starting with the given 2-digit long kata_id.
 ```
 - returns, eg
 ```
-  { "completions": [ "A551C528C3", "A5DA2CDC58", "A5EAFE6E53" ]  }
-  { "completions": [ ]  }
+  { "completions": [
+       "A551C528C3",
+       "A5DA2CDC58",
+       "A5EAFE6E53"
+    ]
+  }
 ```
 
 - - - -
@@ -150,7 +162,7 @@ has started in the kata with the given kata_id.
     "avatar_name": "salmon"
   }
 ```
-- returns true if it does, false if it doesn't
+- returns true if it does, false if it doesn't, eg
 ```
   { "avatar_exists?": true   }
   { "avatar_exists?": false  }
@@ -183,7 +195,12 @@ Returns the names of all avatars who have started in the kata with the given kat
 ```
 - returns, eg
 ```
-  { "avatars_started": [ "rhino", "cheetah", "starfish" ] }
+  { "avatars_started": [
+      "rhino",
+      "cheetah",
+      "starfish"
+    ]
+  }
 ```
 
 - - - -
@@ -200,9 +217,11 @@ which produced the given output, with the given colour.
           "files": {        "hiker.h": "ifndef HIKER_INCLUDED\n...",
                             "hiker.c": "#include \"hiker.h\"...",
                      "hiker.tests.c" : "#include <assert.h>\n...",
-                     "cyber-dojo.sh" : "make --always-make"
+                      "instructions" : "Write a program that...",
+                          "makefile" : "CFLAGS += -I. -Wall...",
+                     "cyber-dojo.sh" : "make"
                    }
-            "now": [2016,12,6,12,31,15],
+            "now": [2016,12,6, 12,31,15],
          "output": "Assert failed: answer() == 42",
          "colour": "red"
   }
@@ -222,10 +241,10 @@ given avatar_name, in the kata with the given kata_id.
 - returns, eg
 ```
   { "avatar_increments": [
-      {  "event": "created", "time": [2016,12,5,11,15,18], "number": 0 },
-      { "colour": "red,      "time": [2016,12,6,12,31,15], "number": 1 },
-      { "colour": "green",   "time": [2016,12,6,12,32,56], "number": 2 },
-      { "colour": "amber",   "time": [2016,12,6,12,43,19], "number": 3 }
+      {  "event": "created", "time": [2016,12,5, 11,15,18], "number": 0 },
+      { "colour": "red,      "time": [2016,12,6, 12,31,15], "number": 1 },
+      { "colour": "green",   "time": [2016,12,6, 12,32,56], "number": 2 },
+      { "colour": "amber",   "time": [2016,12,6, 12,43,19], "number": 3 }
     ]
   }
 ```
@@ -234,7 +253,7 @@ given avatar_name, in the kata with the given kata_id.
 
 ## GET avatar_visible_files
 Returns the most recent set of visible files, for the avatar with the
-given avatar_name_, in the kata with the given kata_id.
+given avatar_name, in the kata with the given kata_id.
 - parameters, eg
 ```
   {     "kata_id": "A551C528C3",
@@ -247,7 +266,9 @@ given avatar_name_, in the kata with the given kata_id.
       "hiker.h"       : "ifndef HIKER_INCLUDED\n...",
       "hiker.c"       : "#include \"hiker.h\"...",
       "hiker.tests.c" : "#include <assert.h>...",
-      "cyber-dojo.sh" : "make --always-make"
+       "instructions" : "Write a program that...",
+           "makefile" : "CFLAGS += -I. -Wall...",
+      "cyber-dojo.sh" : "make"
     }
   }
 ```
@@ -292,7 +313,9 @@ with the given tag number.
        "hiker.h"       : "#ifndef HIKER_INCLUDED\n...",
        "hiker.c"       : "#include \"hiker.h\"\n...",
        "hiker.tests.c" : "#include <assert.h>\n...",
-       "cyber-dojo.sh" : "make --always-make"
+        "instructions" : "Write a program that...",
+            "makefile" : "CFLAGS += -I. -Wall...",
+       "cyber-dojo.sh" : "make"
     }
   }
 ```
@@ -318,13 +341,15 @@ given tag numbers.
          "hiker.h"       : "#ifndef HIKER_INCLUDED\n...",
          "hiker.c"       : "#include \"hiker.h\"\n...",
          "hiker.tests.c" : "#include <assert.h>\n...",
-         "cyber-dojo.sh" : "make --always-make"
+         "cyber-dojo.sh" : "make",
+         ...
       },
       "now_files": {
          "fizzbuzz.h"       : "#ifndef FIZZBUZZ_INCLUDED\n...",
          "fizzbuzz.c"       : "#include \"fizzbuzz.h\"\n...",
          "fizzbuzz.tests.c" : "#include <assert.h>\n...",
-         "cyber-dojo.sh"    : "make --always-make"
+         "cyber-dojo.sh"    : "make",
+         ...
       }
     }
   }
