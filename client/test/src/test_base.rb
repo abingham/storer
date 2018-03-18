@@ -45,8 +45,8 @@ class TestBase < HexMiniTest
 
   # - - - - - - - - - - - - - - -
 
-  def avatar_ran_tests(kata_id, avatar_name, files, now, output, colour)
-    storer.avatar_ran_tests(kata_id, avatar_name, files, now, output, colour)
+  def avatar_ran_tests(kata_id, avatar_name, files, now, stdout, stderr, colour)
+    storer.avatar_ran_tests(kata_id, avatar_name, files, now, stdout, stderr, colour)
   end
 
   # - - - - - - - - - - - - - - -

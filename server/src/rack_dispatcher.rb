@@ -29,11 +29,12 @@ class RackDispatcher
            /^completions$/          then [kata_id]
 
       when /^avatars_started$/      then [kata_id]
+
       when /^avatar_start$/         then [kata_id, avatar_names]
       when /^avatar_exists$/,
            /^avatar_increments$/,
            /^avatar_visible_files$/ then [kata_id, avatar_name]
-      when /^avatar_ran_tests$/     then [kata_id, avatar_name, files, now, output, colour]
+      when /^avatar_ran_tests$/     then [kata_id, avatar_name, files, now, stdout, stderr, colour]
 
       when /^tag_fork$/             then [kata_id, avatar_name, tag, now]
       when /^tag_visible_files$/    then [kata_id, avatar_name, tag]
@@ -66,7 +67,7 @@ class RackDispatcher
 
   request_args :manifest
   request_args :kata_id, :avatar_name, :avatar_names
-  request_args :files, :now, :output, :colour, :tag
+  request_args :files, :now, :stdout, :stderr, :colour, :tag
   request_args :was_tag, :now_tag
 
 end

@@ -32,13 +32,14 @@ class TestBase < HexMiniTest
     storer.avatar_exists?(kata_id, name)
   end
 
-  def avatar_ran_tests(kata_id, name, files, now, output, colour)
+  def avatar_ran_tests(kata_id, name, files, now, stdout, stderr, colour)
     args = [
       kata_id,
       name,
       files,
       now,
-      output,
+      stdout,
+      stderr,
       colour
     ]
     storer.avatar_ran_tests(*args)

@@ -145,7 +145,7 @@ class Storer
 
   # - - - - - - - - - - - - - - - - - - -
 
-  def avatar_ran_tests(kata_id, avatar_name, files, now, output, colour)
+  def avatar_ran_tests(kata_id, avatar_name, files, now, stdout, stderr, colour)
     assert_kata_exists(kata_id)
     assert_avatar_exists(kata_id, avatar_name)
     increments = read_avatar_increments(kata_id, avatar_name)
@@ -154,7 +154,7 @@ class Storer
     write_avatar_increments(kata_id, avatar_name, increments)
     # don't alter caller's files argument
     files = files.clone
-    files['output'] = output
+    files['output'] = stdout + stderr
     write_tag_files(kata_id, avatar_name, tag, files)
   end
 

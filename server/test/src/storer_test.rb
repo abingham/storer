@@ -104,7 +104,8 @@ class StorerTest < TestBase
         lion,
         starting_files,
         time_now,
-        output,
+        stdout,
+        stderr,
         red
       ]
       avatar_ran_tests(*args)
@@ -169,7 +170,8 @@ class StorerTest < TestBase
         invalid_avatar_name,
         starting_files,
         time_now,
-        output,
+        stdout,
+        stderr,
         red
       ]
       avatar_ran_tests(*args)
@@ -186,7 +188,8 @@ class StorerTest < TestBase
         lion, # valid but does not exist
         starting_files,
         time_now,
-        output,
+        stdout,
+        stderr,
         red
       ]
       avatar_ran_tests(*args)
@@ -281,7 +284,7 @@ class StorerTest < TestBase
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  # avatar_start
+  # avatar_start, avatars_started
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'A6B',
@@ -390,7 +393,7 @@ class StorerTest < TestBase
     assert_equal({ lion => expected }, kata_increments(kata_id))
     # current tag
     visible_files = avatar_visible_files(kata_id, lion)
-    assert_equal output, visible_files['output'], 'output'
+    assert_equal stdout+stderr, visible_files['output'], 'output'
     edited_files.each do |filename,content|
       assert_equal content, visible_files[filename], filename
     end
@@ -402,7 +405,7 @@ class StorerTest < TestBase
     end
     # now_tag
     now_tag_visible_files = tag_visible_files(kata_id, lion, now_tag)
-    assert_equal output, now_tag_visible_files['output'], 'output'
+    assert_equal stdout+stderr, now_tag_visible_files['output'], 'output'
     edited_files.each do |filename,content|
       assert_equal content, now_tag_visible_files[filename], filename
     end
@@ -507,14 +510,18 @@ class StorerTest < TestBase
   end
 
   def make_args(id, files)
-    [ id, lion, files, time_now, output, red ]
+    [ id, lion, files, time_now, stdout, stderr, red ]
   end
 
   def time_now
     [2016, 12, 2, 6, 14, 57]
   end
 
-  def output
+  def stdout
+    ''
+  end
+
+  def stderr
     'Assertion failed: answer() == 42'
   end
 

@@ -91,28 +91,30 @@ class StorerServiceTest < TestBase
     tag1_files = starting_files
     tag1_files.delete('hiker.h')
     now = [2016, 12, 5, 21, 01, 34]
-    output = 'missing include'
+    stdout = 'missing include'
+    stderr = 'assert failed'
     colour = 'amber'
-    avatar_ran_tests(kata_id, lion, tag1_files, now, output, colour)
+    avatar_ran_tests(kata_id, lion, tag1_files, now, stdout, stderr, colour)
     expected = []
     expected << tag0
     expected << { 'colour' => colour, 'time' => now, 'number' => tag=1 }
     assert_equal expected, avatar_increments(kata_id, lion)
     assert_equal({ lion => expected }, kata_increments(kata_id))
-    tag1_files['output'] = output
+    tag1_files['output'] = stdout + stderr
     assert_equal tag1_files, tag_visible_files(kata_id, lion, tag=1)
 
     tag2_files = tag1_files.clone
     tag2_files.delete('output')
     tag2_files['readme.txt'] = 'Your task is to print...'
     now = [2016, 12, 6, 9, 31, 56]
-    output = 'All tests passed'
+    stdout = 'All tests passed'
+    stderr = ''
     colour = 'green'
-    avatar_ran_tests(kata_id, lion, tag2_files, now, output, colour)
+    avatar_ran_tests(kata_id, lion, tag2_files, now, stdout, stderr, colour)
     expected << { 'colour' => colour, 'time' => now, 'number' => tag=2 }
     assert_equal expected, avatar_increments(kata_id, lion)
     assert_equal( { lion => expected }, kata_increments(kata_id))
-    tag2_files['output'] = output
+    tag2_files['output'] = stdout + stderr
     assert_equal tag1_files, tag_visible_files(kata_id, lion, tag=1)
     assert_equal tag2_files, tag_visible_files(kata_id, lion, tag=2)
     hash = tags_visible_files(kata_id, lion, was_tag=1, now_tag=2)
@@ -133,9 +135,10 @@ class StorerServiceTest < TestBase
     files = starting_files
     files['very_large'] = 'X'*1024*500
     now = [2016, 12, 5, 21, 01, 34]
-    output = 'missing include'
+    stdout = 'missing include'
+    stderr = 'assertion failed'
     colour = 'amber'
-    avatar_ran_tests(kata_id, lion, files, now, output, colour)
+    avatar_ran_tests(kata_id, lion, files, now, stdout, stderr, colour)
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -

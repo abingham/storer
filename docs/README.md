@@ -209,7 +209,7 @@ Returns the names of all avatars who have started in the kata with the given kat
 ## POST avatar_ran_tests
 Tells the storer that the avatar with the given avatar_name, in the kata
 with the given kata_id, submitted the given visible files, at the given time,
-which produced the given output, with the given colour.
+which produced the given stdout, stderr, with the given traffic-light colour.
 - parameters, eg
 ```
   {     "kata_id": "A551C528C3",
@@ -222,7 +222,8 @@ which produced the given output, with the given colour.
                      "cyber-dojo.sh" : "make"
                    }
             "now": [2016,12,6, 12,31,15],
-         "output": "Assert failed: answer() == 42",
+         "stdout": "",
+         "stderr": "Assert failed: answer() == 42",
          "colour": "red"
   }
 ```
