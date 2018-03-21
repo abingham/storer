@@ -73,10 +73,10 @@ Returns the manifest used to create the kata with the given kata_id.
 ```
     { "kata_manifest": {
                    "kata_id": "A551C528C3",
-                   "created": [ 2017,12,15,11,13,38 ],
+                   "created": [2017,12,15, 11,13,38],
                 "image_name": "cyberdojofoundation/gcc_assert",
-             "visible_files": {        "hiker.h": "ifndef HIKER_INCLUDED\n...",
-                                       "hiker.c": "#include \"hiker.h\"...",
+             "visible_files": {       "hiker.h" : "ifndef HIKER_INCLUDED\n...",
+                                      "hiker.c" : "#include \"hiker.h\"...",
                                 "hiker.tests.c" : "#include <assert.h>\n...",
                                  "instructions" : "Write a program that...",
                                      "makefile" : "CFLAGS += -I. -Wall...",
@@ -214,8 +214,8 @@ which produced the given stdout, stderr, with the given traffic-light colour.
 ```
   {     "kata_id": "A551C528C3",
     "avatar_name": "rhino",
-          "files": {        "hiker.h": "ifndef HIKER_INCLUDED\n...",
-                            "hiker.c": "#include \"hiker.h\"...",
+          "files": {       "hiker.h" : "ifndef HIKER_INCLUDED\n...",
+                           "hiker.c" : "#include \"hiker.h\"...",
                      "hiker.tests.c" : "#include <assert.h>\n...",
                       "instructions" : "Write a program that...",
                           "makefile" : "CFLAGS += -I. -Wall...",
@@ -264,8 +264,8 @@ given avatar_name, in the kata with the given kata_id.
 - returns, eg
 ```
   { "avatar_visible_files": {
-      "hiker.h"       : "ifndef HIKER_INCLUDED\n...",
-      "hiker.c"       : "#include \"hiker.h\"...",
+            "hiker.h" : "ifndef HIKER_INCLUDED\n...",
+            "hiker.c" : "#include \"hiker.h\"...",
       "hiker.tests.c" : "#include <assert.h>...",
        "instructions" : "Write a program that...",
            "makefile" : "CFLAGS += -I. -Wall...",
@@ -311,8 +311,8 @@ with the given tag number.
 - returns, eg
 ```
   { "tag_visible_files": {
-       "hiker.h"       : "#ifndef HIKER_INCLUDED\n...",
-       "hiker.c"       : "#include \"hiker.h\"\n...",
+             "hiker.h" : "#ifndef HIKER_INCLUDED\n...",
+             "hiker.c" : "#include \"hiker.h\"\n...",
        "hiker.tests.c" : "#include <assert.h>\n...",
         "instructions" : "Write a program that...",
             "makefile" : "CFLAGS += -I. -Wall...",
@@ -339,17 +339,17 @@ given tag numbers.
 ```
   { "tags_visible_files": {
       "was_files": {
-         "hiker.h"       : "#ifndef HIKER_INCLUDED\n...",
-         "hiker.c"       : "#include \"hiker.h\"\n...",
-         "hiker.tests.c" : "#include <assert.h>\n...",
-         "cyber-dojo.sh" : "make",
+                  "hiker.h" : "#ifndef HIKER_INCLUDED\n...",
+                  "hiker.c" : "#include \"hiker.h\"\n...",
+            "hiker.tests.c" : "#include <assert.h>\n...",
+            "cyber-dojo.sh" : "make",
          ...
       },
       "now_files": {
-         "fizzbuzz.h"       : "#ifndef FIZZBUZZ_INCLUDED\n...",
-         "fizzbuzz.c"       : "#include \"fizzbuzz.h\"\n...",
+               "fizzbuzz.h" : "#ifndef FIZZBUZZ_INCLUDED\n...",
+               "fizzbuzz.c" : "#include \"fizzbuzz.h\"\n...",
          "fizzbuzz.tests.c" : "#include <assert.h>\n...",
-         "cyber-dojo.sh"    : "make",
+            "cyber-dojo.sh" : "make",
          ...
       }
     }
