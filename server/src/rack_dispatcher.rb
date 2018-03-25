@@ -28,9 +28,6 @@ class RackDispatcher
       when /^katas_completed$/,
            /^katas_completions$/    then [partial_id]
 
-      when /^completed$/,
-           /^completions$/          then [kata_id]
-
       when /^avatars_started$/      then [kata_id]
 
       when /^avatar_start$/         then [kata_id, avatar_names]
