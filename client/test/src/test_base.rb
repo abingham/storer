@@ -21,12 +21,12 @@ class TestBase < HexMiniTest
 
   # - - - - - - - - - - - - - - -
 
-  def completed(kata_id)
-    storer.completed(kata_id)
+  def katas_completed(partial_id)
+    storer.katas_completed(partial_id)
   end
 
-  def completions(kata_id)
-    storer.completions(kata_id)
+  def katas_completions(partial_id)
+    storer.katas_completions(partial_id)
   end
 
   # - - - - - - - - - - - - - - -

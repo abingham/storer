@@ -25,6 +25,9 @@ class RackDispatcher
            /^kata_manifest$/,
            /^kata_increments$/      then [kata_id]
 
+      when /^katas_completed$/,
+           /^katas_completions$/    then [partial_id]
+
       when /^completed$/,
            /^completions$/          then [kata_id]
 
@@ -66,6 +69,7 @@ class RackDispatcher
   end
 
   request_args :manifest
+  request_args :partial_id
   request_args :kata_id, :avatar_name, :avatar_names
   request_args :files, :now, :stdout, :stderr, :colour, :tag
   request_args :was_tag, :now_tag

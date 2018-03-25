@@ -18,6 +18,10 @@ class Storer
   # completion(s)
   # - - - - - - - - - - - - - - - - - - -
 
+  def katas_completed(partial_id)
+    completed(partial_id)
+  end
+
   def completed(kata_id) # 6 chars long
     assert_partial_id(kata_id)
     # If at least 6 characters of the kata_id are provided
@@ -47,6 +51,10 @@ class Storer
   end
 
   # - - - - - - - - - - - - - - - - - - -
+
+  def katas_completions(partial_id)
+    completions(partial_id)
+  end
 
   def completions(small_id) # 2-chars long
     # TODO: assert small-id is valid

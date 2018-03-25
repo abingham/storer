@@ -20,12 +20,12 @@ class StorerService
 
   # - - - - - - - - - - - -
 
-  def completed(kata_id)
-    get(__method__, kata_id)
+  def katas_completed(partial_id)
+    get(__method__, partial_id)
   end
 
-  def completions(kata_id)
-    get(__method__, kata_id)
+  def katas_completions(partial_id)
+    get(__method__, partial_id)
   end
 
   # - - - - - - - - - - - -

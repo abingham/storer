@@ -39,20 +39,20 @@ class StorerServiceTest < TestBase
     assert_equal({}, kata_increments(kata_id))
 
     too_short = kata_id[0..4]
-    assert_equal '', completed(too_short)
+    assert_equal '', katas_completed(too_short)
 
-    assert_equal kata_id, completed(kata_id[0..5])
+    assert_equal kata_id, katas_completed(kata_id[0..5])
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '507',
-  'completions' do
+  'katas_completions' do
     manifest = make_manifest
     kata_id = kata_create(manifest)
     outer = kata_id[0..1]
     inner = kata_id[2..-1]
-    assert completions(outer).include?(inner)
+    assert katas_completions(outer).include?(inner)
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
