@@ -38,8 +38,8 @@ class RackDispatcher
            /^kata_manifest$/,
            /^kata_increments$/      then [kata_id]
 
-      when /^katas_completed$/,
-           /^katas_completions$/    then [partial_id]
+      when /^katas_completed$/      then [partial_id]
+      when /^katas_completions$/    then [outer_id]
 
       when /^avatar_start$/         then [kata_id, avatar_names]
       when /^avatar_exists$/,
@@ -92,9 +92,19 @@ class RackDispatcher
   # method arguments
   # - - - - - - - - - - - - - - - -
 
+  def outer_id
+    arg = @json_args['outer_id']
+    unless Base58.string?(arg) && arg.length == 2
+      malformed('partial_id')
+    end
+    arg
+  end
+
+  # - - - - - - - - - - - - - - - -
+
   def partial_id
     arg = @json_args['partial_id']
-    unless Base58.string?(arg) && arg.length < 10
+    unless Base58.string?(arg) && (6..10).include?(arg.length)
       malformed('partial_id')
     end
     arg

@@ -41,9 +41,6 @@ class StorerServiceTest < TestBase
     assert_equal [], avatars_started(kata_id)
     assert_equal({}, kata_increments(kata_id))
 
-    too_short = kata_id[0..4]
-    assert_equal '', katas_completed(too_short)
-
     assert_equal kata_id, katas_completed(kata_id[0..5])
   end
 

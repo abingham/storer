@@ -24,8 +24,8 @@ class StorerService
     get(__method__, partial_id)
   end
 
-  def katas_completions(partial_id)
-    get(__method__, partial_id)
+  def katas_completions(outer_id)
+    get(__method__, outer_id)
   end
 
   # - - - - - - - - - - - -

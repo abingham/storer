@@ -25,8 +25,8 @@ class TestBase < HexMiniTest
     storer.katas_completed(partial_id)
   end
 
-  def katas_completions(partial_id)
-    storer.katas_completions(partial_id)
+  def katas_completions(outer_id)
+    storer.katas_completions(outer_id)
   end
 
   # - - - - - - - - - - - - - - -
