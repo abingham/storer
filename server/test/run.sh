@@ -9,17 +9,17 @@ fi
 readonly MY_DIR="$( cd "$( dirname "${0}" )" && pwd )"
 readonly TEST_LOG=${CYBER_DOJO_COVERAGE_ROOT}/test.log
 
-mkdir -p ${CYBER_DOJO_COVERAGE_ROOT}
-cd ${MY_DIR}/src
+mkdir -p "${CYBER_DOJO_COVERAGE_ROOT}"
+cd "${MY_DIR}/src" || exit
 
 readonly FILES=(*_test.rb)
-readonly ARGS=(${*})
+readonly ARGS=("${*}")
 
 ruby -e "([ '../coverage.rb' ] + %w(${FILES[*]})).each{ |file| require './'+file }" \
-  -- ${ARGS[@]} | tee ${TEST_LOG}
+  -- "${ARGS[@]}" | tee "${TEST_LOG}"
 
-cd ${MY_DIR} \
+cd "${MY_DIR}" \
   && ruby ./check_test_results.rb \
-       ${TEST_LOG} \
-       ${CYBER_DOJO_COVERAGE_ROOT}/index.html \
-          > ${CYBER_DOJO_COVERAGE_ROOT}/done.txt
+       "${TEST_LOG}" \
+       "${CYBER_DOJO_COVERAGE_ROOT}/index.html" \
+          > "${CYBER_DOJO_COVERAGE_ROOT}/done.txt"

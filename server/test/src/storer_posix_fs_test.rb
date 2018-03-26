@@ -6,6 +6,8 @@ class StorerPosixFsTest < TestBase
     '701B5'
   end
 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
   test '4C0',
   'avatar_start on multiple threads doesnt start the same avatar twice' do
     20.times do |n|
