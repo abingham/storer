@@ -1,39 +1,31 @@
+require_relative '../../src/rack_dispatcher'
+require_relative 'rack_request_stub'
 require_relative 'test_base'
 
 class RackDispatcherTest < TestBase
-
-=begin
 
   def self.hex_prefix
     'D6479'
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-  test 'C1C',
-  'katas_completed with invalid kata_id raises' do
-    invalid_partial_ids = [
-      nil,          # not an object
-      [],           # not a string
-      '=4',         # not Base58 chars
-    ].each do |invalid_partial_id|
-      error = assert_raises(ArgumentError) {
-        storer.katas_completed(invalid_partial_id)
-      }
-      assert error.message.end_with?('invalid kata_id'), error.message
-    end
-  end
-
-  # - - - - - - - - - - - - - - - - - - - - - - - - - -
-  # kata_exists? never raises
+  # malformed kata-id on any method raises
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '6B7',
-  'kata_exists? is false for invalid kata_id' do
-    invalid_kata_ids.each do |invalid_id|
-      refute kata_exists?(invalid_id), invalid_id
+  'kata_exists? raises if kata-id is malformed' do
+    malformed_kata_ids.each do |malformed_kata_id|
+      args = {
+        kata_id:malformed_kata_id
+      }
+      expected = {
+        exception:'kata_id:malformed'
+      }
+      assert_rack_call('kata_exists', args, expected)
     end
   end
+
+=begin
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
   # avatar_exists? never raises
@@ -57,6 +49,22 @@ class RackDispatcherTest < TestBase
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
   # invalid kata_id on any other method raises
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  test 'C1C',
+  'katas_completed with malformed kata_id raises' do
+    invalid_partial_ids = [
+      nil,          # not an object
+      [],           # not a string
+      '=4',         # not Base58 chars
+    ].each do |invalid_partial_id|
+      error = assert_raises(ArgumentError) {
+        storer.katas_completed(invalid_partial_id)
+      }
+      assert error.message.end_with?('invalid kata_id'), error.message
+    end
+  end
+
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'AC2',
@@ -339,18 +347,6 @@ class RackDispatcherTest < TestBase
     end
   end
 
-  def invalid_kata_ids
-    [
-      nil,          # not an object
-      [],           # not a string
-      '',           # not 10 chars
-      '34',         # not 10 chars
-      '345',        # not 10 chars
-      '123456789',  # not 10 chars
-      'ABCDEF123X'  # not 10 hex chars
-    ]
-  end
-
   def assert_invalid_kata_id(error)
     assert invalid?(error, 'kata_id'), error.message
   end
@@ -427,5 +423,37 @@ class RackDispatcherTest < TestBase
   end
 
 =end
+
+  def malformed_kata_ids
+    [
+      nil,          # not an object
+      [],           # not a string
+      '',           # not 10 chars
+      '34',         # not 10 chars
+      '345',        # not 10 chars
+      '123456789',  # not 10 chars
+      'ABCDEF123='  # not Base58 chars
+    ]
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - -
+
+  def assert_rack_call(path_info, args, expected)
+    assert_rack_call_raw(path_info, args.to_json, expected)
+  end
+
+  def assert_rack_call_raw(path_info, args, expected)
+    tuple = rack_call(path_info, args)
+    assert_equal 200, tuple[0]
+    assert_equal({ 'Content-Type' => 'application/json' }, tuple[1])
+    assert_equal [ expected.to_json ], tuple[2]
+  end
+
+  def rack_call(path_info, args)
+    refute path_info.end_with?('?'), 'http drops trailing ?'
+    rack = RackDispatcher.new(RackRequestStub)
+    env = { path_info:path_info, body:args }
+    rack.call(env)
+  end
 
 end

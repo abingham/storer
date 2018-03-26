@@ -6,8 +6,14 @@ require 'rack'
 
 class RackDispatcher
 
+  def initialize(request = Rack::Request)
+    @request = request
+  end
+
+  # - - - - - - - - - - - - - - - -
+
   def call(env)
-    request = Rack::Request.new(env)
+    request = @request.new(env)
     name, args = validated_name_args(request)
     triple({ name => storer.send(name, *args) })
   rescue StandardError => error
@@ -18,7 +24,7 @@ class RackDispatcher
     triple({ 'exception' => error.class.name })
   end
 
-  private
+  private # = = = = = = = = = = = =
 
   include AllAvatarsNames
   include Externals
