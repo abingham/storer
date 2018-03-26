@@ -1,5 +1,3 @@
-require_relative 'all_avatars_names'
-require_relative 'base58'
 require_relative 'updater'
 require 'json'
 
@@ -18,8 +16,7 @@ class Storer
   # completion(s)
   # - - - - - - - - - - - - - - - - - - -
 
-  def katas_completed(partial_id) # 6 chars long
-    assert_partial_id(partial_id)
+  def katas_completed(partial_id)
     # If at least 6 characters of the kata_id are provided
     # attempt to complete it into the full characters. Doing
     # completion with fewer characters would likely result in
@@ -50,8 +47,8 @@ class Storer
 
   # for Batch-Method iteration over large number of katas...
 
-  def katas_completions(partial_id) # 2-chars long
-    # TODO: assert partial-id is valid
+  def katas_completions(partial_id)
+    # TODO: assert 2-digits long
     unless disk[dir_join(path, partial_id)].exists?
       return []
     end
@@ -62,12 +59,8 @@ class Storer
   # kata
   # - - - - - - - - - - - - - - - - - - -
 
-  def valid_id?(kata_id)
-    partial_id?(kata_id) && kata_id.length == 10
-  end
-
   def kata_exists?(kata_id)
-    valid_id?(kata_id) && kata_dir(kata_id).exists?
+    kata_dir(kata_id).exists?
   end
 
   # - - - - - - - - - - - - - - - - - - -
@@ -111,9 +104,7 @@ class Storer
   # - - - - - - - - - - - - - - - - - - -
 
   def avatar_exists?(kata_id, avatar_name)
-    valid_id?(kata_id) &&
-      valid_avatar?(avatar_name) &&
-        avatar_dir(kata_id, avatar_name).exists?
+    avatar_dir(kata_id, avatar_name).exists?
   end
 
   # - - - - - - - - - - - - - - - - - - -
@@ -203,8 +194,6 @@ class Storer
   def tag_visible_files(kata_id, avatar_name, tag)
     assert_kata_exists(kata_id)
     assert_avatar_exists(kata_id, avatar_name)
-    assert_valid_tag(tag)
-    tag = tag.to_i
     if tag == -1
       tag = avatar_increments(kata_id, avatar_name).size - 1
     end
@@ -283,20 +272,6 @@ class Storer
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - -
-  # id
-  # - - - - - - - - - - - - - - - - - - - - - - - -
-
-  def assert_partial_id(kata_id)
-    unless partial_id?(kata_id)
-      invalid('kata_id')
-    end
-  end
-
-  def partial_id?(kata_id)
-    Base58.string?(kata_id)
-  end
-
-  # - - - - - - - - - - - - - - - - - - - - - - - -
   # kata
   # - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -332,10 +307,6 @@ class Storer
     end
   end
 
-  def valid_avatar?(avatar_name)
-    all_avatars_names.include?(avatar_name)
-  end
-
   def avatar_dir(kata_id, avatar_name)
     disk[avatar_path(kata_id, avatar_name)]
   end
@@ -352,16 +323,6 @@ class Storer
     unless tag_exists?(kata_id, avatar_name, tag)
       invalid('tag')
     end
-  end
-
-  def assert_valid_tag(tag)
-    unless valid_tag?(tag)
-      invalid('tag')
-    end
-  end
-
-  def valid_tag?(tag)
-    tag.is_a?(Integer)
   end
 
   def tag_exists?(kata_id, avatar_name, tag)
@@ -383,8 +344,8 @@ class Storer
     File.join(*args)
   end
 
-  def invalid(message)
-    fail ArgumentError.new("invalid #{message}")
+  def invalid(name)
+    fail ArgumentError.new("#{name}:invalid")
   end
 
   # - - - - - - - - - - -

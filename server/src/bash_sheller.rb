@@ -1,5 +1,9 @@
 require 'open3'
 
+# Used by
+# o) DirWriter.make
+# o) Storer.tag_visible_files
+
 class BashSheller
 
   def initialize(external)

@@ -3,14 +3,17 @@ require 'json'
 
 class StorerServiceTest < TestBase
 
-  def self.hex_prefix; '6AA1B'; end
+  def self.hex_prefix
+    '6AA1B'
+  end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '966',
-  'bad kata-id on any method raises' do
-    error = assert_raises { kata_manifest(test_id) }
-    assert_equal 'StorerService:kata_manifest:invalid kata_id', error.message
+  'malformed kata-id on any method raises' do
+    error = assert_raises { kata_manifest(nil) }
+    expected = 'StorerService:kata_manifest:kata_id:malformed'
+    assert_equal expected, error.message
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -

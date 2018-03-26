@@ -28,7 +28,7 @@ class Updater
     # removed manifest['language] property
     # These coupled a manifest to a start-point
     # Better for the manifest to be self-contained
-    display_name = language_2_display_name(manifest['language'])
+    display_name = language_to_display_name(manifest['language'])
     # add new properties
     manifest['display_name'] = display_name
     manifest['image_name'] = cache(display_name)['image_name']
@@ -37,7 +37,7 @@ class Updater
     manifest.delete('unit_test_framework')
   end
 
-  def self.language_2_display_name(language)
+  def self.language_to_display_name(language)
     parts = language.split('-', 2).map(&:strip)
     Renamer.renamed(parts).join(', ')
   end

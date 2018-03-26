@@ -18,6 +18,14 @@ class TestBase < HexMiniTest
     storer.kata_exists?(kata_id)
   end
 
+  def katas_completed(partial_id)
+    storer.katas_completed(partial_id)
+  end
+
+  def katas_completions(partial_id)
+    storer.katas_completions(partial_id)
+  end
+
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   def avatar_start(kata_id, avatars)
@@ -124,6 +132,5 @@ class TestBase < HexMiniTest
       assert_equal value, actual[symbol.to_s], symbol.to_s
     end
   end
-
 
 end

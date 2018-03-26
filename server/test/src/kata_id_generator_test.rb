@@ -1,3 +1,4 @@
+require_relative '../../src/base58'
 require_relative 'id_generator_stub'
 
 class KataIdGeneratorTest < TestBase
@@ -12,7 +13,7 @@ class KataIdGeneratorTest < TestBase
   'generates a valid kata-id' do
     42.times do
       kata_id = kata_id_generator.generate
-      assert storer.valid_id?(kata_id)
+      assert Base58.string?(kata_id)
     end
   end
 

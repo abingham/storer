@@ -1,3 +1,4 @@
+require_relative 'base58'
 
 class KataIdGenerator
 
@@ -17,7 +18,7 @@ class KataIdGenerator
   private
 
   def valid?(id)
-    storer.valid_id?(id) &&
+    Base58.string?(id) &&
       !storer.kata_exists?(id)
       #&& storer.completable(id)
       #&& does not contains lowercase L ?
