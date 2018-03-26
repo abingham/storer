@@ -31,7 +31,7 @@ class RackDispatcher
 
   def validated_name_args(request)
     name = request.path_info[1..-1] # lose leading /
-    @json_args = JSON.parse(request.body.read)
+    @json_args = json_parse(request.body.read)
     args = case name
       when /^kata_create$/          then [manifest]
       when /^kata_exists$/,
@@ -53,9 +53,19 @@ class RackDispatcher
       when /^tag_visible_files$/    then [kata_id, avatar_name, tag]
 
       when /^tags_visible_files$/   then [kata_id, avatar_name, was_tag, now_tag]
+      else
+        raise ArgumentError.new('unknown-method')
     end
     name += '?' if query?(name)
     [name, args]
+  end
+
+  # - - - - - - - - - - - - - - - -
+
+  def json_parse(s)
+    JSON.parse(s)
+  rescue
+    raise ArgumentError.new('!json')
   end
 
   # - - - - - - - - - - - - - - - -

@@ -9,21 +9,63 @@ class RackDispatcherTest < TestBase
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  test 'E5C', %w( raises when request name is unknown ) do
+    assert_rack_call('xyz', {}, { exception:'unknown-method' })
+  end
+
+  test 'E5D', %w( raises when json is malformed ) do
+    assert_rack_call_raw('xyz', 'abc', { exception:'!json' })
+    assert_rack_call_raw('xyz', '{"x":nil}', { exception:'!json' })
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
   # malformed kata-id on any method raises
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '6B7',
   'kata_exists? raises if kata-id is malformed' do
     malformed_kata_ids.each do |malformed_kata_id|
-      args = {
-        kata_id:malformed_kata_id
-      }
-      expected = {
-        exception:'kata_id:malformed'
-      }
+      args = { kata_id:malformed_kata_id }
+      expected = { exception:'kata_id:malformed' }
       assert_rack_call('kata_exists', args, expected)
     end
   end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  test '6B8',
+  'avatar_exists? raises if avatar-name is malformed' do
+    malformed_avatar_names.each do |malformed_avatar_name|
+      args = {
+        kata_id:'1234567890',
+        avatar_name:malformed_avatar_name
+      }
+      expected = {
+        exception:'avatar_name:malformed'
+      }
+      assert_rack_call('avatar_exists', args, expected)
+    end
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  test '6B9',
+  'tag_fork raises if tag is malformed' do
+    malformed_tags.each do |malformed_tag|
+      args = {
+        kata_id:'1234567890',
+        avatar_name:'salmon',
+        tag:malformed_tag
+      }
+      expected = {
+        exception:'tag:malformed'
+      }
+      assert_rack_call('tag_fork', args, expected)
+    end
+  end
+
+
 
 =begin
 
@@ -332,66 +374,6 @@ class RackDispatcherTest < TestBase
 
   # - - - - - - - - - - - - - - - - - - - - - - - -
 
-  def assert_bad_kata_id_raises
-    valid_but_no_kata = 'F6316A5C7C'
-    (invalid_kata_ids + [ valid_but_no_kata ]).each do |bad_id|
-      error = assert_raises(ArgumentError) { yield bad_id }
-      assert_invalid_kata_id(error)
-    end
-  end
-
-  def assert_invalid_kata_id_raises
-    invalid_kata_ids.each do |invalid_id|
-      error = assert_raises(ArgumentError) { yield invalid_id }
-      assert_invalid_kata_id(error)
-    end
-  end
-
-  def assert_invalid_kata_id(error)
-    assert invalid?(error, 'kata_id'), error.message
-  end
-
-  # - - - - - - - - - - - - - - - - - - - - - - - -
-
-  def assert_invalid_avatar_raises
-    kata_id = make_kata
-    invalid_avatar_names.each do |invalid_name|
-      error = assert_raises(ArgumentError) {
-        yield kata_id, invalid_name
-      }
-      assert invalid?(error, 'avatar_name'), error.message
-    end
-  end
-
-  def invalid_avatar_names
-    [
-      nil,     # not an object
-      [],      # not a string
-      '',      # not a name
-      'blurb', # not a name
-      'dolpin' # not a name (dolphin has an H)
-    ]
-  end
-
-  # - - - - - - - - - - - - - - - - - - - - - - - -
-
-  def assert_bad_tag_raises
-    kata_id = make_kata
-    avatar_start(kata_id, [lion])
-    bad_tags.each do |bad_tag|
-      error = assert_raises(ArgumentError) {
-        yield kata_id, lion, bad_tag
-      }
-      assert invalid?(error, 'tag'), error.message
-    end
-  end
-
-  def bad_tags
-    [ nil, [], 'sunglasses', 999 ]
-  end
-
-  # - - - - - - - - - - - - - - - - - - - - - - - -
-
   def assert_bad_tag_pair_raises
     kata_id = make_kata
     avatar_start(kata_id, [lion])
@@ -438,9 +420,34 @@ class RackDispatcherTest < TestBase
 
   # - - - - - - - - - - - - - - - - - - - - - - - -
 
+  def malformed_avatar_names
+    [
+      nil,     # not an object
+      [],      # not a string
+      '',      # not a name
+      'blurb', # not a name
+      'dolpin' # not a name (dolphin has an H)
+    ]
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - -
+
+  def malformed_tags
+    [
+      nil,          # not Integer
+      [],           # not Integer
+      'sunglasses', # not Integer
+      '42'          # not Integer
+    ]
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - -
+
   def assert_rack_call(path_info, args, expected)
     assert_rack_call_raw(path_info, args.to_json, expected)
   end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - -
 
   def assert_rack_call_raw(path_info, args, expected)
     tuple = rack_call(path_info, args)
@@ -448,6 +455,8 @@ class RackDispatcherTest < TestBase
     assert_equal({ 'Content-Type' => 'application/json' }, tuple[1])
     assert_equal [ expected.to_json ], tuple[2]
   end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - -
 
   def rack_call(path_info, args)
     refute path_info.end_with?('?'), 'http drops trailing ?'
