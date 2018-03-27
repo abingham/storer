@@ -35,8 +35,8 @@ class TestBase < HexMiniTest
     storer.avatar_exists?(kata_id, avatar_name)
   end
 
-  def avatar_start(kata_id, avatar_names)
-    storer.avatar_start(kata_id, avatar_names)
+  def avatar_start(kata_id, avatars_names)
+    storer.avatar_start(kata_id, avatars_names)
   end
 
   def avatars_started(kata_id)

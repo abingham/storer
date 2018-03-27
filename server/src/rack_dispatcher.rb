@@ -41,7 +41,7 @@ class RackDispatcher
       when /^katas_completed$/      then [partial_id]
       when /^katas_completions$/    then [outer_id]
 
-      when /^avatar_start$/         then [kata_id, avatar_names]
+      when /^avatar_start$/         then [kata_id, avatars_names]
       when /^avatar_exists$/,
            /^avatar_increments$/,
            /^avatar_visible_files$/ then [kata_id, avatar_name]
@@ -125,7 +125,7 @@ class RackDispatcher
 
   # - - - - - - - - - - - - - - - -
 
-  def avatar_names
+  def avatars_names
     arg_name = __method__.to_s
     arg = @json_args[arg_name]
     unless arg.is_a?(Array)

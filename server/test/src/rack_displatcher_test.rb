@@ -36,26 +36,16 @@ class RackDispatcherTest < TestBase
 
   test '6B7',
   'avatar_start raises if avatar_names is malformed' do
-    malformed_avatar_names.each do |malformed|
+    malformed_avatars_names.each do |malformed|
       args = {
         kata_id:'1234567890',
         avatar_names:malformed
       }
       expected = {
-        exception:'avatar_names:malformed'
+        exception:'avatars_names:malformed'
       }
       assert_rack_call('avatar_start', args, expected)
     end
-  end
-
-  def malformed_avatar_names
-    [
-      nil,       # not an Array
-      [],        # empty Array
-      [''],      # not a name
-      ['blurb'], # not a name
-      ['dolpin'] # not a name (dolphin has an H)
-    ]
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -476,6 +466,18 @@ class RackDispatcherTest < TestBase
       '345',        # not 10 chars
       '123456789',  # not 10 chars
       'ABCDEF123='  # not Base58 chars
+    ]
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - -
+
+  def malformed_avatars_names
+    [
+      nil,       # not an Array
+      [],        # empty Array
+      [''],      # not a name
+      ['blurb'], # not a name
+      ['dolpin'] # not a name (dolphin has an H)
     ]
   end
 
