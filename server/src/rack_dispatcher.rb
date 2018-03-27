@@ -224,8 +224,18 @@ class RackDispatcher
 
   # - - - - - - - - - - - - - - - -
 
-  request_args :manifest
-  request_args :now, :colour
+  def colour
+    arg_name = __method__.to_s
+    arg = @json_args[arg_name]
+    unless ['red','amber','green','timed_out'].include?(arg)
+      malformed(arg_name)
+    end
+    arg
+  end
+
+  # - - - - - - - - - - - - - - - -
+
+  request_args :manifest, :now
 
   # - - - - - - - - - - - - - - - -
 

@@ -139,6 +139,18 @@ class RackDispatcherTest < TestBase
     assert_rack_call('avatar_ran_tests', args, expected)
   end
 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  test '6BF',
+  'avatar_ran_tests raises if colour is malformed' do
+    expected = { exception:'colour:malformed' }
+    args = avatar_ran_tests_args
+    args[:colour] = nil
+    assert_rack_call('avatar_ran_tests', args, expected)
+    args[:colour] = 42
+    assert_rack_call('avatar_ran_tests', args, expected)
+  end
+
   private # = = = = = = = = = = = = = = = = = = = = = =
 
   def avatar_ran_tests_args
