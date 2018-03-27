@@ -60,7 +60,7 @@ class RackDispatcherTest < TestBase
     malformed_avatars_names.each do |malformed|
       args = {
         kata_id:'1234567890',
-        avatar_names:malformed
+        avatars_names:malformed
       }
       assert_rack_call('avatar_start', args, expected)
     end
@@ -209,10 +209,38 @@ class RackDispatcherTest < TestBase
   end
 
   test '823',
+  'avatar_start raises when kata_id is invalid' do
+    expected = { exception:'kata_id:invalid' }
+    args = { kata_id:'1234567890', avatars_names:['lion'] }
+    assert_rack_call('avatar_start', args, expected)
+  end
+
+  test '824',
   'avatars_started raises when kata_id is invalid' do
     expected = { exception:'kata_id:invalid' }
     args = { kata_id:'1234567890' }
     assert_rack_call('avatars_started', args, expected)
+  end
+
+  test '825',
+  'tag_visible_files raises when kata_id is invalid' do
+    expected = { exception:'kata_id:invalid' }
+    args = { kata_id:'1234567890', avatar_name:'lion', tag:12 }
+    assert_rack_call('tag_visible_files', args, expected)
+  end
+
+  test '826',
+  'tags_visible_files raises when kata_id is invalid' do
+    expected = { exception:'kata_id:invalid' }
+    args = { kata_id:'1234567890', avatar_name:'lion', was_tag:1, now_tag:2 }
+    assert_rack_call('tags_visible_files', args, expected)
+  end
+
+  test '827',
+  'avatar_ran_tests raises when kata_id is invalid' do
+    expected = { exception:'kata_id:invalid' }
+    args = avatar_ran_tests_args
+    assert_rack_call('avatar_ran_tests', args, expected)
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
