@@ -46,14 +46,12 @@ class Storer
 
   # - - - - - - - - - - - - - - - - - - -
 
-  # for Batch-Method iteration over large number of katas...
-
-  def katas_completions(partial_id)
-    # TODO: assert 2-digits long
-    unless disk[dir_join(path, partial_id)].exists?
+  def katas_completions(outer_id)
+    # for Batch-Method iteration over large number of katas...
+    unless disk[dir_join(path, outer_id)].exists?
       return []
     end
-    disk[dir_join(path, partial_id)].each_dir.collect { |dir| dir }
+    disk[dir_join(path, outer_id)].each_dir.collect { |dir| dir }
   end
 
   # - - - - - - - - - - - - - - - - - - -
