@@ -20,7 +20,7 @@ class RackDispatcherTest < TestBase
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
-  # malformed kata-id on any method raises
+  # malformed arg on any method raises
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '6B7',
@@ -65,6 +65,41 @@ class RackDispatcherTest < TestBase
     end
   end
 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  test '6BA',
+  'tags_visible_files raises if was_tag is malformed' do
+    malformed_tags.each do |malformed_tag|
+      args = {
+        kata_id:'1234567890',
+        avatar_name:'salmon',
+        was_tag:malformed_tag,
+        now_tag:23
+      }
+      expected = {
+        exception:'was_tag:malformed'
+      }
+      assert_rack_call('tags_visible_files', args, expected)
+    end
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  test '6BB',
+  'tags_visible_files raises if now_tag is malformed' do
+    malformed_tags.each do |malformed_tag|
+      args = {
+        kata_id:'1234567890',
+        avatar_name:'salmon',
+        was_tag:23,
+        now_tag:malformed_tag
+      }
+      expected = {
+        exception:'now_tag:malformed'
+      }
+      assert_rack_call('tags_visible_files', args, expected)
+    end
+  end
 
 
 =begin

@@ -95,7 +95,7 @@ class RackDispatcher
   def outer_id
     arg = @json_args['outer_id']
     unless Base58.string?(arg) && arg.length == 2
-      malformed('partial_id')
+      malformed('outer_id')
     end
     arg
   end
@@ -142,11 +142,30 @@ class RackDispatcher
 
   # - - - - - - - - - - - - - - - -
 
+  def was_tag
+    arg = @json_args['was_tag']
+    unless arg.is_a?(Integer)
+      malformed('was_tag')
+    end
+    arg
+  end
+
+  # - - - - - - - - - - - - - - - -
+
+  def now_tag
+    arg = @json_args['now_tag']
+    unless arg.is_a?(Integer)
+      malformed('now_tag')
+    end
+    arg
+  end
+
+  # - - - - - - - - - - - - - - - -
+
   request_args :manifest
   request_args :avatar_names
   request_args :files, :now, :colour
   request_args :stdout, :stderr
-  request_args :was_tag, :now_tag
 
   # - - - - - - - - - - - - - - - -
 
