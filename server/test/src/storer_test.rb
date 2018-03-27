@@ -35,6 +35,14 @@ class StorerTest < TestBase
   # kata_create
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+  test 'B98',
+  'kata_manifest() on invalid kata_id raises' do
+    error = assert_raises { kata_manifest('1234567890') }
+    assert_equal 'kata_id:invalid', error.message
+  end
+
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
   test 'B99',
   'after kata_create(manifest) manifest has id/created properties' do
     expected = %w(
@@ -213,7 +221,7 @@ class StorerTest < TestBase
   %w( tag_fork with valid arguments ) do
     id = '420B05BA0A'
     tag = 20
-    now = [2018,3,16,9,57,19]
+    now = [2018,3,16, 9,57,19]
     forked_id = tag_fork(id, 'dolphin', tag, now)
     refute_equal forked_id, id
 
@@ -303,7 +311,7 @@ class StorerTest < TestBase
   end
 
   def time_now
-    [2016, 12, 2, 6, 14, 57]
+    [2016,12,2, 6,14,57]
   end
 
   def stdout
