@@ -114,9 +114,7 @@ class Storer
     # Otherwise two laptops in the same practice session
     # could start as the same animal.
     assert_kata_exists(kata_id)
-    # NB: Doing & with swapped args loses randomness!
-    valid_names = avatar_names & all_avatars_names
-    avatar_name = valid_names.detect { |name|
+    avatar_name = avatar_names.detect { |name|
       avatar_dir(kata_id, name).make
     }
     if avatar_name.nil? # full!
