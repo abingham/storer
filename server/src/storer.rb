@@ -166,7 +166,6 @@ class Storer
   # - - - - - - - - - - - - - - - - - - -
 
   def avatar_visible_files(kata_id, avatar_name)
-    assert_kata_exists(kata_id) # TODO:DROP?
     assert_avatar_exists(kata_id, avatar_name)
     rags = read_avatar_increments(kata_id, avatar_name)
     tag = (rags == []) ? 0 : rags[-1]['number']
