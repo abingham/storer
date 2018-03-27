@@ -151,6 +151,18 @@ class RackDispatcherTest < TestBase
     assert_rack_call('avatar_ran_tests', args, expected)
   end
 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  test '6C0',
+  'avatar_ran_tests raises if now is malformed' do
+    expected = { exception:'now:malformed' }
+    args = avatar_ran_tests_args
+    args[:now] = nil
+    assert_rack_call('avatar_ran_tests', args, expected)
+    args[:now] = [2018,3,27, 13,43,-45]
+    assert_rack_call('avatar_ran_tests', args, expected)
+  end
+
   private # = = = = = = = = = = = = = = = = = = = = = =
 
   def avatar_ran_tests_args

@@ -235,7 +235,21 @@ class RackDispatcher
 
   # - - - - - - - - - - - - - - - -
 
-  request_args :manifest, :now
+  def now
+    arg_name = __method__.to_s
+    arg = @json_args[arg_name]
+    unless arg.is_a?(Array)
+      malformed(arg_name)
+    end
+    Time.mktime(*arg)
+    arg
+  rescue ArgumentError
+    malformed(arg_name)
+  end
+
+  # - - - - - - - - - - - - - - - -
+
+  request_args :manifest
 
   # - - - - - - - - - - - - - - - -
 
