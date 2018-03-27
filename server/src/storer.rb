@@ -189,8 +189,6 @@ class Storer
   # - - - - - - - - - - - - - - - - - - -
 
   def tag_visible_files(kata_id, avatar_name, tag)
-    assert_kata_exists(kata_id) # TODO:DROP?
-    assert_avatar_exists(kata_id, avatar_name) # TODO:DROP?
     if tag == -1
       tag = avatar_increments(kata_id, avatar_name).size - 1
     end
