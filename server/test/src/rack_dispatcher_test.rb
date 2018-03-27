@@ -14,6 +14,8 @@ class RackDispatcherTest < TestBase
     assert_rack_call('xyz', {}, { exception:'unknown-method' })
   end
 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
   test 'E5D', %w( raises when json is malformed ) do
     assert_rack_call_raw('xyz', 'abc', { exception:'!json' })
     assert_rack_call_raw('xyz', '{"x":nil}', { exception:'!json' })
@@ -23,8 +25,8 @@ class RackDispatcherTest < TestBase
   # malformed arg on any method raises
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  test '6B6',
-  'kata_exists? raises if kata-id is malformed' do
+  test '6B4',
+  'kata_exists? raises when kata-id is malformed' do
     expected = { exception:'kata_id:malformed' }
     malformed_kata_ids.each do |malformed|
       args = { kata_id:malformed }
@@ -34,8 +36,26 @@ class RackDispatcherTest < TestBase
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+  test '6B5',
+  'katas_completed raises when partial_id is malformed' do
+    expected = { exception:'partial_id:malformed' }
+    args = { partial_id:nil }
+    assert_rack_call('katas_completed', args, expected)
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  test '6B6',
+  'katas_completions raises when outer_id is malformed' do
+    expected = { exception:'outer_id:malformed' }
+    args = { outer_id:nil }
+    assert_rack_call('katas_completions', args, expected)
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
   test '6B7',
-  'avatar_start raises if avatar_names is malformed' do
+  'avatar_start raises when avatar_names is malformed' do
     expected = { exception:'avatars_names:malformed' }
     malformed_avatars_names.each do |malformed|
       args = {
@@ -49,7 +69,7 @@ class RackDispatcherTest < TestBase
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '6B8',
-  'avatar_exists? raises if avatar-name is malformed' do
+  'avatar_exists? raises when avatar-name is malformed' do
     expected = { exception:'avatar_name:malformed' }
     malformed_avatar_names.each do |malformed|
       args = {
@@ -63,7 +83,7 @@ class RackDispatcherTest < TestBase
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '6B9',
-  'tag_fork raises if tag is malformed' do
+  'tag_fork raises when tag is malformed' do
     expected = { exception:'tag:malformed' }
     malformed_tags.each do |malformed|
       args = {
@@ -78,7 +98,7 @@ class RackDispatcherTest < TestBase
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '6BA',
-  'tags_visible_files raises if was_tag is malformed' do
+  'tags_visible_files raises when was_tag is malformed' do
     expected = { exception:'was_tag:malformed' }
     malformed_tags.each do |malformed|
       args = {
@@ -94,7 +114,7 @@ class RackDispatcherTest < TestBase
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '6BB',
-  'tags_visible_files raises if now_tag is malformed' do
+  'tags_visible_files raises when now_tag is malformed' do
     expected = { exception:'now_tag:malformed' }
     malformed_tags.each do |malformed|
       args = {
@@ -110,7 +130,7 @@ class RackDispatcherTest < TestBase
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '6BC',
-  'avatar_ran_tests raises if stdout is malformed' do
+  'avatar_ran_tests raises when stdout is malformed' do
     expected = { exception:'stdout:malformed' }
     args = avatar_ran_tests_args
     args[:stdout] = nil
@@ -120,7 +140,7 @@ class RackDispatcherTest < TestBase
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '6BD',
-  'avatar_ran_tests raises if stderr is malformed' do
+  'avatar_ran_tests raises when stderr is malformed' do
     expected = { exception:'stderr:malformed' }
     args = avatar_ran_tests_args
     args[:stderr] = nil
@@ -130,7 +150,7 @@ class RackDispatcherTest < TestBase
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '6BE',
-  'avatar_ran_tests raises if files is malformed' do
+  'avatar_ran_tests raises when files is malformed' do
     expected = { exception:'files:malformed' }
     args = avatar_ran_tests_args
     args[:files] = nil
@@ -142,7 +162,7 @@ class RackDispatcherTest < TestBase
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '6BF',
-  'avatar_ran_tests raises if colour is malformed' do
+  'avatar_ran_tests raises when colour is malformed' do
     expected = { exception:'colour:malformed' }
     args = avatar_ran_tests_args
     args[:colour] = nil
@@ -154,13 +174,61 @@ class RackDispatcherTest < TestBase
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '6C0',
-  'avatar_ran_tests raises if now is malformed' do
+  'avatar_ran_tests raises when now is malformed' do
     expected = { exception:'now:malformed' }
     args = avatar_ran_tests_args
     args[:now] = nil
     assert_rack_call('avatar_ran_tests', args, expected)
     args[:now] = [2018,3,27, 13,43,-45]
     assert_rack_call('avatar_ran_tests', args, expected)
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # invalid arg on any method raises
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  test '820',
+  'kata_exists raises when kata_id is invalid' do
+    expected = { 'kata_exists?':false }
+    args = { kata_id:'1234567890' }
+    assert_rack_call('kata_exists', args, expected)
+  end
+
+  test '821',
+  'kata_manifest raises when kata_id is invalid' do
+    expected = { exception:'kata_id:invalid' }
+    args = { kata_id:'1234567890' }
+    assert_rack_call('kata_manifest', args, expected)
+  end
+
+  test '822',
+  'kata_increments raises when kata_id is invalid' do
+    expected = { exception:'kata_id:invalid' }
+    args = { kata_id:'1234567890' }
+    assert_rack_call('kata_increments', args, expected)
+  end
+
+  test '823',
+  'avatars_started raises when kata_id is invalid' do
+    expected = { exception:'kata_id:invalid' }
+    args = { kata_id:'1234567890' }
+    assert_rack_call('avatars_started', args, expected)
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  test '923',
+  'katas_completed with well-formed partial_id but no matches' do
+    expected = { 'katas_completed':'' }
+    args = { partial_id:'123456' }
+    assert_rack_call('katas_completed', args, expected)
+  end
+
+  test '924',
+  'katas_completions with well-formed outer_id but no matches' do
+    expected = { 'katas_completions':[] }
+    args = { outer_id:'12' }
+    assert_rack_call('katas_completions', args, expected)
   end
 
   private # = = = = = = = = = = = = = = = = = = = = = =
