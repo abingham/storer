@@ -28,8 +28,8 @@ class TestBase < HexMiniTest
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  def avatar_start(kata_id, avatars)
-    storer.avatar_start(kata_id, avatars)
+  def avatar_start(kata_id, avatar_names)
+    storer.avatar_start(kata_id, avatar_names)
   end
 
   def avatars_started(kata_id)

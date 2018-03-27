@@ -93,9 +93,10 @@ class RackDispatcher
   # - - - - - - - - - - - - - - - -
 
   def outer_id
-    arg = @json_args['outer_id']
+    arg_name = __method__.to_s
+    arg = @json_args[arg_name]
     unless Base58.string?(arg) && arg.length == 2
-      malformed('outer_id')
+      malformed(arg_name)
     end
     arg
   end
@@ -103,9 +104,10 @@ class RackDispatcher
   # - - - - - - - - - - - - - - - -
 
   def partial_id
-    arg = @json_args['partial_id']
+    arg_name = __method__.to_s
+    arg = @json_args[arg_name]
     unless Base58.string?(arg) && (6..10).include?(arg.length)
-      malformed('partial_id')
+      malformed(arg_name)
     end
     arg
   end
@@ -113,9 +115,27 @@ class RackDispatcher
   # - - - - - - - - - - - - - - - -
 
   def kata_id
-    arg = @json_args['kata_id']
+    arg_name = __method__.to_s
+    arg = @json_args[arg_name]
     unless Base58.string?(arg) && arg.length == 10
-      malformed('kata_id')
+      malformed(arg_name)
+    end
+    arg
+  end
+
+  # - - - - - - - - - - - - - - - -
+
+  def avatar_names
+    arg_name = __method__.to_s
+    arg = @json_args[arg_name]
+    unless arg.is_a?(Array)
+      malformed(arg_name)
+    end
+    unless arg.size > 0
+      malformed(arg_name)
+    end
+    unless arg.all? {|name| all_avatars_names.include?(name) }
+      malformed(arg_name)
     end
     arg
   end
@@ -123,9 +143,10 @@ class RackDispatcher
   # - - - - - - - - - - - - - - - -
 
   def avatar_name
-    arg = @json_args['avatar_name']
+    arg_name = __method__.to_s
+    arg = @json_args[arg_name]
     unless all_avatars_names.include?(arg)
-      malformed('avatar_name')
+      malformed(arg_name)
     end
     arg
   end
@@ -133,9 +154,10 @@ class RackDispatcher
   # - - - - - - - - - - - - - - - -
 
   def tag
-    arg = @json_args['tag']
+    arg_name = __method__.to_s
+    arg = @json_args[arg_name]
     unless arg.is_a?(Integer)
-      malformed('tag')
+      malformed(arg_name)
     end
     arg
   end
@@ -143,9 +165,10 @@ class RackDispatcher
   # - - - - - - - - - - - - - - - -
 
   def was_tag
-    arg = @json_args['was_tag']
+    arg_name = __method__.to_s
+    arg = @json_args[arg_name]
     unless arg.is_a?(Integer)
-      malformed('was_tag')
+      malformed(arg_name)
     end
     arg
   end
@@ -153,9 +176,10 @@ class RackDispatcher
   # - - - - - - - - - - - - - - - -
 
   def now_tag
-    arg = @json_args['now_tag']
+    arg_name = __method__.to_s
+    arg = @json_args[arg_name]
     unless arg.is_a?(Integer)
-      malformed('now_tag')
+      malformed(arg_name)
     end
     arg
   end
@@ -163,14 +187,13 @@ class RackDispatcher
   # - - - - - - - - - - - - - - - -
 
   request_args :manifest
-  request_args :avatar_names
   request_args :files, :now, :colour
   request_args :stdout, :stderr
 
   # - - - - - - - - - - - - - - - -
 
-  def malformed(name)
-    raise ArgumentError.new("#{name}:malformed")
+  def malformed(arg_name)
+    raise ArgumentError.new("#{arg_name}:malformed")
   end
 
 end

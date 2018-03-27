@@ -23,10 +23,10 @@ class RackDispatcherTest < TestBase
   # malformed arg on any method raises
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  test '6B7',
+  test '6B6',
   'kata_exists? raises if kata-id is malformed' do
-    malformed_kata_ids.each do |malformed_kata_id|
-      args = { kata_id:malformed_kata_id }
+    malformed_kata_ids.each do |malformed|
+      args = { kata_id:malformed }
       expected = { exception:'kata_id:malformed' }
       assert_rack_call('kata_exists', args, expected)
     end
@@ -34,12 +34,38 @@ class RackDispatcherTest < TestBase
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  test '6B8',
-  'avatar_exists? raises if avatar-name is malformed' do
-    malformed_avatar_names.each do |malformed_avatar_name|
+  test '6B7',
+  'avatar_start raises if avatar_names is malformed' do
+    malformed_avatar_names.each do |malformed|
       args = {
         kata_id:'1234567890',
-        avatar_name:malformed_avatar_name
+        avatar_names:malformed
+      }
+      expected = {
+        exception:'avatar_names:malformed'
+      }
+      assert_rack_call('avatar_start', args, expected)
+    end
+  end
+
+  def malformed_avatar_names
+    [
+      nil,       # not an Array
+      [],        # empty Array
+      [''],      # not a name
+      ['blurb'], # not a name
+      ['dolpin'] # not a name (dolphin has an H)
+    ]
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  test '6B8',
+  'avatar_exists? raises if avatar-name is malformed' do
+    malformed_avatar_names.each do |malformed|
+      args = {
+        kata_id:'1234567890',
+        avatar_name:malformed
       }
       expected = {
         exception:'avatar_name:malformed'
@@ -52,11 +78,11 @@ class RackDispatcherTest < TestBase
 
   test '6B9',
   'tag_fork raises if tag is malformed' do
-    malformed_tags.each do |malformed_tag|
+    malformed_tags.each do |malformed|
       args = {
         kata_id:'1234567890',
         avatar_name:'salmon',
-        tag:malformed_tag
+        tag:malformed
       }
       expected = {
         exception:'tag:malformed'
@@ -69,11 +95,11 @@ class RackDispatcherTest < TestBase
 
   test '6BA',
   'tags_visible_files raises if was_tag is malformed' do
-    malformed_tags.each do |malformed_tag|
+    malformed_tags.each do |malformed|
       args = {
         kata_id:'1234567890',
         avatar_name:'salmon',
-        was_tag:malformed_tag,
+        was_tag:malformed,
         now_tag:23
       }
       expected = {
@@ -87,12 +113,12 @@ class RackDispatcherTest < TestBase
 
   test '6BB',
   'tags_visible_files raises if now_tag is malformed' do
-    malformed_tags.each do |malformed_tag|
+    malformed_tags.each do |malformed|
       args = {
         kata_id:'1234567890',
         avatar_name:'salmon',
         was_tag:23,
-        now_tag:malformed_tag
+        now_tag:malformed
       }
       expected = {
         exception:'now_tag:malformed'
