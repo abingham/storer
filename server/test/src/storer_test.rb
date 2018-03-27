@@ -137,7 +137,7 @@ class StorerTest < TestBase
     error = assert_raises {
       avatar_increments('123456789A', 'salmon')
     }
-    assert_equal 'kata_id:invalid', error.message
+    assert error.message.include? 'invalid'
   end
 
   test '3CE',
@@ -146,7 +146,7 @@ class StorerTest < TestBase
     error = assert_raises {
       avatar_increments(id, 'salmon')
     }
-    assert_equal 'avatar_name:invalid', error.message
+    assert error.message.include? 'invalid'
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

@@ -135,7 +135,6 @@ class Storer
   # - - - - - - - - - - - - - - - - - - -
 
   def avatar_ran_tests(kata_id, avatar_name, files, now, stdout, stderr, colour)
-    assert_kata_exists(kata_id) # TODO:DROP?
     assert_avatar_exists(kata_id, avatar_name)
     increments = read_avatar_increments(kata_id, avatar_name)
     tag = increments.length + 1
@@ -150,7 +149,6 @@ class Storer
   # - - - - - - - - - - - - - - - - - - -
 
   def avatar_increments(kata_id, avatar_name)
-    assert_kata_exists(kata_id) # TODO:DROP?
     assert_avatar_exists(kata_id, avatar_name)
     # Return increments with tag0 to avoid client
     # having to make extra service call
