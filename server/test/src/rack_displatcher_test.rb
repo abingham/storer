@@ -117,6 +117,43 @@ class RackDispatcherTest < TestBase
     end
   end
 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  test '6BC',
+  'avatar_ran_tests raises if stdout is malformed' do
+    args = {
+      kata_id:'1234567890',
+      avatar_name:'lion',
+      files: { 'cyber-dojo.sh' => 'make' },
+      now: [ 2018,3,27, 9,58,01],
+      stdout:nil,
+      stderr:'blah',
+      colour:'red'
+    }
+    expected = {
+      exception:'stdout:malformed'
+    }
+    assert_rack_call('avatar_ran_tests', args, expected)
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  test '6BD',
+  'avatar_ran_tests raises if stderr is malformed' do
+    args = {
+      kata_id:'1234567890',
+      avatar_name:'lion',
+      files: { 'cyber-dojo.sh' => 'make' },
+      now: [ 2018,3,27, 9,58,01],
+      stdout:'blah',
+      stderr:nil,
+      colour:'red'
+    }
+    expected = {
+      exception:'stderr:malformed'
+    }
+    assert_rack_call('avatar_ran_tests', args, expected)
+  end
 
 =begin
 

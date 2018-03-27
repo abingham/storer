@@ -186,9 +186,30 @@ class RackDispatcher
 
   # - - - - - - - - - - - - - - - -
 
+  def stdout
+    arg_name = __method__.to_s
+    arg = @json_args[arg_name]
+    unless arg.is_a?(String)
+      malformed(arg_name)
+    end
+    arg
+  end
+
+  # - - - - - - - - - - - - - - - -
+
+  def stderr
+    arg_name = __method__.to_s
+    arg = @json_args[arg_name]
+    unless arg.is_a?(String)
+      malformed(arg_name)
+    end
+    arg
+  end
+
+  # - - - - - - - - - - - - - - - -
+
   request_args :manifest
   request_args :files, :now, :colour
-  request_args :stdout, :stderr
 
   # - - - - - - - - - - - - - - - -
 
