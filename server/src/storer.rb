@@ -1,3 +1,4 @@
+require_relative 'all_avatars_names'
 require_relative 'updater'
 require 'json'
 
