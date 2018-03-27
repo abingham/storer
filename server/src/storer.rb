@@ -175,6 +175,8 @@ class Storer
   # - - - - - - - - - - - - - - - - - - -
 
   def tag_fork(kata_id, avatar_name, tag, now)
+    assert_kata_exists(kata_id)
+    assert_avatar_exists(kata_id, avatar_name)
     visible_files = tag_visible_files(kata_id, avatar_name, tag)
     manifest = kata_manifest(kata_id)
     manifest['visible_files'] = visible_files
