@@ -81,14 +81,6 @@ class RackDispatcher
   end
 
   # - - - - - - - - - - - - - - - -
-
-  def self.request_args(*names)
-    names.each { |name|
-      define_method name, &lambda { @json_args[name.to_s] }
-    }
-  end
-
-  # - - - - - - - - - - - - - - - -
   # method arguments
   # - - - - - - - - - - - - - - - -
 
@@ -248,8 +240,12 @@ class RackDispatcher
   end
 
   # - - - - - - - - - - - - - - - -
+  # - - - - - - - - - - - - - - - -
 
-  request_args :manifest
+  def manifest
+    arg_name = __method__.to_s
+    @json_args[arg_name]
+  end
 
   # - - - - - - - - - - - - - - - -
 
