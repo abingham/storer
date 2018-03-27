@@ -208,8 +208,24 @@ class RackDispatcher
 
   # - - - - - - - - - - - - - - - -
 
+  def files
+    arg_name = __method__.to_s
+    arg = @json_args[arg_name]
+    unless arg.is_a?(Hash)
+      malformed(arg_name)
+    end
+    arg.values.each do |value|
+      unless value.is_a?(String)
+        malformed(arg_name)
+      end
+    end
+    arg
+  end
+
+  # - - - - - - - - - - - - - - - -
+
   request_args :manifest
-  request_args :files, :now, :colour
+  request_args :now, :colour
 
   # - - - - - - - - - - - - - - - -
 
