@@ -7,9 +7,11 @@ class StdoutLoggerSpyTest < TestBase
     'CD476'
   end
 
+  # - - - - - - - - - - - - - - - -
+
   test '20C',
   'logged message is spied' do
-    external.log = StdoutLoggerSpy.new(nil)
+    external.log = StdoutLoggerSpy.new
     assert_equal [], log.spied
     log << 'hello'
     assert_equal ['hello'], log.spied

@@ -1,7 +1,7 @@
 
 class StdoutLoggerSpy
 
-  def initialize(_parent)
+  def initialize
     @spied = []
   end
 

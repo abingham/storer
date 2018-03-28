@@ -8,7 +8,7 @@ class BashShellerTest < TestBase
   end
 
   def hex_setup
-    external.log = StdoutLoggerSpy.new(self)
+    external.log = StdoutLoggerSpy.new
   end
 
   # - - - - - - - - - - - - - - - - -

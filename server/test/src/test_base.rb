@@ -26,11 +26,11 @@ class TestBase < HexMiniTest
   def log
     external.log
   end
-  def storer
-    external.storer
-  end
   def shell
     external.shell
+  end
+  def storer
+    external.storer
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
