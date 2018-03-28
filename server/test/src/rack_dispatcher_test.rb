@@ -9,18 +9,231 @@ class RackDispatcherTest < TestBase
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  test 'E5D',
-  'dispatch to kata_exists' do
-    assert_dispatch('kata_exists',
-      { kata_id:'1234567890' },
-      'false from StorerSpy.kata_exists?'
+  test 'E5C',
+  'dispatch to kata_create' do
+    assert_dispatch('kata_create',
+      { manifest:bare_manifest },
+      'hello from StorerStub.kata_create'
     )
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+  test 'E5D',
+  'dispatch to kata_exists' do
+    assert_dispatch('kata_exists',
+      { kata_id:well_formed_kata_id },
+      'hello from StorerStub.kata_exists?'
+    )
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  test 'E5E',
+  'dispatch to kata_manifest' do
+    assert_dispatch('kata_manifest',
+      { kata_id:well_formed_kata_id },
+      'hello from StorerStub.kata_manifest'
+    )
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  test 'E5F',
+  'dispatch to kata_increments' do
+    assert_dispatch('kata_increments',
+      { kata_id:well_formed_kata_id},
+      'hello from StorerStub.kata_increments'
+    )
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  test 'E60',
+  'dispatch to katas_completed' do
+    assert_dispatch('katas_completed',
+      { partial_id:well_formed_partial_id},
+      'hello from StorerStub.katas_completed'
+    )
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  test 'E61',
+  'dispatch to katas_completion' do
+    assert_dispatch('katas_completions',
+      { outer_id:well_formed_outer_id},
+      'hello from StorerStub.katas_completions'
+    )
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  test 'E62',
+  'dispatch to avatar_start' do
+    assert_dispatch('avatar_start',
+      { kata_id:well_formed_kata_id,
+        avatars_names: [ 'lion', 'salmon' ]
+      },
+      'hello from StorerStub.avatar_start'
+    )
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  test 'E63',
+  'dispatch to avatars_started' do
+    assert_dispatch('avatars_started',
+      { kata_id:well_formed_kata_id },
+      'hello from StorerStub.avatars_started'
+    )
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  test 'E64',
+  'dispatch to avatar_exists' do
+    assert_dispatch('avatar_exists',
+      { kata_id:well_formed_kata_id,
+        avatar_name:well_formed_avatar_name
+      },
+      'hello from StorerStub.avatar_exists?'
+    )
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  test 'E65',
+  'dispatch to avatar_increments' do
+    assert_dispatch('avatar_increments',
+      { kata_id:well_formed_kata_id,
+        avatar_name:well_formed_avatar_name
+      },
+      'hello from StorerStub.avatar_increments'
+    )
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  test 'E66',
+  'dispatch to avatar_visible_files' do
+    assert_dispatch('avatar_visible_files',
+      { kata_id:well_formed_kata_id,
+        avatar_name:well_formed_avatar_name
+      },
+      'hello from StorerStub.avatar_visible_files'
+    )
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  test 'E67',
+  'dispatch to avatar_ran_tests' do
+    assert_dispatch('avatar_ran_tests',
+      { kata_id:well_formed_kata_id,
+        avatar_name:well_formed_avatar_name,
+        files:well_formed_files,
+        now:well_formed_now,
+        stdout:well_formed_stdout,
+        stderr:well_formed_stderr,
+        colour:well_formed_colour
+      },
+      'hello from StorerStub.avatar_ran_tests'
+    )
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  test 'E68',
+  'dispatch to tag_fork' do
+    assert_dispatch('tag_fork',
+      { kata_id:well_formed_kata_id,
+        avatar_name:well_formed_avatar_name,
+        tag:well_formed_tag,
+        now:well_formed_now
+      },
+      'hello from StorerStub.tag_fork'
+    )
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  test 'E69',
+  'dispatch to tag_visible_files' do
+    assert_dispatch('tag_visible_files',
+      { kata_id:well_formed_kata_id,
+        avatar_name:well_formed_avatar_name,
+        tag:well_formed_tag
+      },
+      'hello from StorerStub.tag_visible_files'
+    )
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  test 'E70',
+  'dispatch to tags_visible_files' do
+    assert_dispatch('tags_visible_files',
+      { kata_id:well_formed_kata_id,
+        avatar_name:well_formed_avatar_name,
+        was_tag:well_formed_was_tag,
+        now_tag:well_formed_now_tag
+      },
+      'hello from StorerStub.tags_visible_files'
+    )
+  end
 
   private
+
+  def well_formed_kata_id
+    '1234567890'
+  end
+
+  def well_formed_partial_id
+    '123456'
+  end
+
+  def well_formed_outer_id
+    '12'
+  end
+
+  def well_formed_avatar_name
+    'lion'
+  end
+
+  def well_formed_files
+    { 'cyber-dojo.sh' => 'make' }
+  end
+
+  def well_formed_now
+    [2018,3,28, 21,11,39]
+  end
+
+  def well_formed_stdout
+    'tweedle-dee'
+  end
+
+  def well_formed_stderr
+    'tweedle-dum'
+  end
+
+  def well_formed_colour
+    'red'
+  end
+
+  def well_formed_tag
+    4
+  end
+
+  def well_formed_was_tag
+    7
+  end
+
+  def well_formed_now_tag
+    8
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   def assert_dispatch(name, args, stubbed)
     qname = name.end_with?('exists') ? name+'?' : name
