@@ -32,7 +32,7 @@ class StorerTest < TestBase
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-  # kata_create
+  # kata_manifest
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'B98',
@@ -41,6 +41,8 @@ class StorerTest < TestBase
     assert_equal 'kata_id:invalid', error.message
   end
 
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # kata_create
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'B99',
@@ -63,6 +65,16 @@ class StorerTest < TestBase
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # kata_increments
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  test '822',
+  'kata_increments raises when kata_id is invalid' do
+    error = assert_raises { kata_increments('1234567890') }
+    assert_equal 'kata_id:invalid', error.message
+  end
+
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # avatar_start, avatars_started, avatar_exists?
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -74,6 +86,18 @@ class StorerTest < TestBase
     refute avatar_exists?(id, lion)
     assert_equal lion, avatar_start(id, [lion])
     assert avatar_exists?(id, lion)
+  end
+
+  test '823',
+  'avatar_start raises when kata_id is invalid' do
+    error = assert_raises { avatar_start('1234567890', 'lion') }
+    assert_equal 'kata_id:invalid', error.message
+  end
+
+  test '824',
+  'avatars_started raises when kata_id is invalid' do
+    error = assert_raises { avatars_started('1234567890') }
+    assert_equal 'kata_id:invalid', error.message
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -141,7 +165,7 @@ class StorerTest < TestBase
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '3CD',
-  'kata_id that does not exist raises' do
+  'avatar_increments:kata_id that does not exist raises' do
     error = assert_raises {
       avatar_increments('123456789A', 'salmon')
     }
@@ -149,7 +173,7 @@ class StorerTest < TestBase
   end
 
   test '3CE',
-  'avatar that does not exist raises' do
+  'avatar_increments:avatar_name that does not exist raises' do
     id = make_kata
     error = assert_raises {
       avatar_increments(id, 'salmon')

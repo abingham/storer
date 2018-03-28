@@ -8,20 +8,6 @@ class RackDispatcherInvalidArgsTest < TestBase
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  test '821',
-  'kata_manifest raises when kata_id is invalid' do
-    expected = { exception:'kata_id:invalid' }
-    args = { kata_id:'1234567890' }
-    assert_rack_call('kata_manifest', args, expected)
-  end
-
-  test '822',
-  'kata_increments raises when kata_id is invalid' do
-    expected = { exception:'kata_id:invalid' }
-    args = { kata_id:'1234567890' }
-    assert_rack_call('kata_increments', args, expected)
-  end
-
   test '823',
   'avatar_start raises when kata_id is invalid' do
     expected = { exception:'kata_id:invalid' }
@@ -58,13 +44,6 @@ class RackDispatcherInvalidArgsTest < TestBase
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-  test '820',
-  'kata_exists false' do
-    expected = { 'kata_exists?':false }
-    args = { kata_id:'1234567890' }
-    assert_rack_call('kata_exists', args, expected)
-  end
 
   test '923',
   'katas_completed with well-formed partial_id but no matches' do

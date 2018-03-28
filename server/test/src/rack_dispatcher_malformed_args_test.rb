@@ -114,6 +114,13 @@ class RackDispatcherMalformedArgsTest < TestBase
     end
   end
 
+  test '7B7',
+  'avatars_started raises when kata_id is malformed' do
+    expected = { exception:'kata_id:malformed' }
+    args = { kata_id:nil }
+    assert_rack_call('avatars_started', args, expected)
+  end
+
   def malformed_avatars_names
     [
       nil,       # not an Array
