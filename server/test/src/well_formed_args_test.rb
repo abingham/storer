@@ -13,7 +13,7 @@ class WellFormedArgsTest < TestBase
   test 'A04',
   'ctor raises when its string arg is not valid json' do
     expected = 'json:malformed'
-    # abc is not a valid top-level element
+    # abc is not a valid top-level json element
     error = assert_raises { WellFormedArgs.new('abc') }
     assert_equal expected, error.message
     # nil is null in json
@@ -31,7 +31,7 @@ class WellFormedArgsTest < TestBase
   test '591',
   'manifest does not raise when well-formed' do
     manifest = bare_manifest
-    json = { 'manifest' => manifest }.to_json
+    json = { manifest:manifest }.to_json
     assert_equal manifest, WellFormedArgs.new(json).manifest
   end
 
