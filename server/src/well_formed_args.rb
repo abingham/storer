@@ -9,7 +9,7 @@ class WellFormedArgs
   def initialize(s)
     @args = JSON.parse(s)
   rescue
-    raise ArgumentError.new('!json')
+    raise ArgumentError.new('json:malformed')
   end
 
   # - - - - - - - - - - - - - - - -

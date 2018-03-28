@@ -1,6 +1,8 @@
-require_relative 'hex_mini_test'
+require_relative '../../src/rack_dispatcher'
 require_relative '../../src/all_avatars_names'
 require_relative '../../src/externals'
+require_relative 'rack_request_stub'
+require_relative 'hex_mini_test'
 require_relative 'starter_service'
 require 'json'
 
@@ -123,6 +125,33 @@ class TestBase < HexMiniTest
     ENV['CYBER_DOJO_KATAS_ROOT']
   end
 
+  # - - - - - - - - - - - - - - - - - - - - - - - -
+
+  def avatar_ran_tests_args
+    {
+      kata_id:'1234567890',
+      avatar_name:'lion',
+      files: { 'cyber-dojo.sh' => 'make' },
+      now: [2018,3,27, 9,58,01],
+      stdout:'tweedle-dee',
+      stderr:'tweedle-dum',
+      colour:'red'
+    }
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - -
+
+  def bare_manifest
+    {
+      display_name:'C (gcc), assert',
+      visible_files:{ 'cyber-dojo.sh':'make' },
+      image_name:'cyberdojofoundation/gcc_assert',
+      runner_choice:'stateless'
+    }.dup
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - -
+
   def assert_hash_equal(expected, actual)
     diagnostic = ''
     diagnostic += "expected[#{expected.keys.sort}]\n"
@@ -131,6 +160,28 @@ class TestBase < HexMiniTest
     expected.each do |symbol,value|
       assert_equal value, actual[symbol.to_s], symbol.to_s
     end
+  end
+
+  def assert_rack_call(path_info, args, expected)
+    assert_rack_call_raw(path_info, args.to_json, expected)
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - -
+
+  def assert_rack_call_raw(path_info, args, expected)
+    tuple = rack_call(path_info, args)
+    assert_equal 200, tuple[0]
+    assert_equal({ 'Content-Type' => 'application/json' }, tuple[1])
+    assert_equal [ expected.to_json ], tuple[2], args
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - -
+
+  def rack_call(path_info, args)
+    refute path_info.end_with?('?'), 'http drops trailing ?'
+    rack = RackDispatcher.new(RackRequestStub)
+    env = { path_info:path_info, body:args }
+    rack.call(env)
   end
 
 end
