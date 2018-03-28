@@ -9,29 +9,13 @@ class ExternalTest < TestBase
   # - - - - - - - - - - - - - - - - -
 
   test '543',
-  'default storer is Storer' do
-    assert_equal 'Storer', storer.class.name
-  end
-
-  # - - - - - - - - - - - - - - - - -
-
-  test '920',
-  'default disk is DiskWriter' do
-    assert_equal 'DiskWriter', disk.class.name
-  end
-
-  # - - - - - - - - - - - - - - - - -
-
-  test '3EC',
-  'default log is StdoutLogger' do
-    assert_equal 'StdoutLogger', log.class.name
-  end
-
-  # - - - - - - - - - - - - - - - - -
-
-  test '1B1',
-  'default shell is BashSheller' do
-    assert_equal 'BashSheller', shell.class.name
+  'default externals are set' do
+    assert_equal 'DiskWriter',      disk.class.name
+    assert_equal 'IdGenerator',     id_generator.class.name
+    assert_equal 'KataIdGenerator', kata_id_generator.class.name
+    assert_equal 'StdoutLogger',    log.class.name
+    assert_equal 'BashSheller',     shell.class.name
+    assert_equal 'Storer',          storer.class.name
   end
 
 end
