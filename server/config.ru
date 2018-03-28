@@ -12,4 +12,4 @@ $stdout.sync = true
 $stderr.sync = true
 
 external = External.new
-run RackDispatcher.new(external.storer)
+run RackDispatcher.new(external.storer, Rack::Request)

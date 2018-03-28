@@ -1,9 +1,8 @@
 require_relative 'well_formed_args'
-require 'rack'
 
 class RackDispatcher
 
-  def initialize(storer, request = Rack::Request)
+  def initialize(storer, request)
     @storer = storer
     @request = request
   end
