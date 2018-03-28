@@ -156,12 +156,13 @@ class StorerServiceTest < TestBase
 
   def make_manifest
     {
+      'display_name' => 'C (gcc), assert',
       'image_name' => 'cyberdojofoundation/gcc_assert',
       'visible_files' => starting_files,
       'created' => creation_time,
+      'exercise' => 'Fizz_Buzz',
       'max_seconds' => 10,
       'runner_choice' => 'stateless',
-      'highlight_filenames' => [],
       'filename_extension' => '.c',
       'tab_size' => 4
     }

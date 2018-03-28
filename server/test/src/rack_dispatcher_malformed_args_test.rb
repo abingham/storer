@@ -41,6 +41,8 @@ class RackDispatcherMalformedArgsTest < TestBase
       bare_manifest.merge({display_name:42}),          # ! String
       bare_manifest.merge({image_name:42}),            # ! String
       bare_manifest.merge({runner_choice:42}),         # ! String
+      bare_manifest.merge({filename_extension:true}),  # ! String
+      bare_manifest.merge({exercise:true}),            # ! String
       bare_manifest.merge({visible_files:[]}),         # ! Hash
       bare_manifest.merge({visible_files:{
         'cyber-dojo.sh':42                     # file content must be String

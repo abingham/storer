@@ -24,7 +24,7 @@ class WellFormedArgs
     arg.keys.each do |key|
       value = arg[key]
       case key
-      when 'display_name', 'image_name', 'runner_choice', 'filename_extension'
+      when 'display_name', 'image_name', 'runner_choice', 'filename_extension', 'exercise'
         malformed unless value.is_a?(String)
       when 'visible_files'
         malformed unless value.is_a?(Hash)
@@ -214,6 +214,7 @@ class WellFormedArgs
   end
 
   KNOWN_KEYS = REQUIRED_KEYS + %w(
+    exercise
     filename_extension
     highlight_filenames
     progress_regexs
@@ -226,7 +227,7 @@ class WellFormedArgs
   def is_time?(arg)
     return false unless arg.is_a?(Array)
     return false unless arg.size == 6
-    return false unless arg.all? { |arg| arg.is_a?(Integer) }
+    return false unless arg.all? { |n| n.is_a?(Integer) }
     Time.mktime(*arg)
     true
   rescue
