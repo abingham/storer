@@ -10,7 +10,7 @@ class Base58Test < TestBase
   test '064', %w(
   alphabet has 58 characters none of which are missed ) do
     counts = {}
-    Base58.string(10000).chars.each do |ch|
+    Base58.string(5000).chars.each do |ch|
       counts[ch] = true
     end
     assert_equal 58, counts.keys.size
@@ -19,15 +19,15 @@ class Base58Test < TestBase
   # - - - - - - - - - - - - - - - - - - -
 
   test '066', %w(
-  at most one 6-digit string duplicate in 100,000 repeats ) do
+  no 6-digit string duplicate in 50,000 repeats ) do
     ids = {}
-    repeats = 100000
+    repeats = 50000
     repeats.times do
       s = Base58.string(6)
       ids[s] ||= 0
       ids[s] += 1
     end
-    assert (repeats - ids.keys.size) <= 1
+    assert_equal 0, repeats - ids.keys.size
   end
 
   # - - - - - - - - - - - - - - - - - - -
