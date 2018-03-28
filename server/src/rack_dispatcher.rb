@@ -28,7 +28,7 @@ class RackDispatcher
 
   def validated_name_args(request)
     name = request.path_info[1..-1] # lose leading /
-    @wargs = WellFormedArgs.new(request.body.read)
+    @well_formed_args = WellFormedArgs.new(request.body.read)
     args = case name
       when /^kata_create$/          then [manifest]
       when /^kata_exists$/,
@@ -67,7 +67,7 @@ class RackDispatcher
 
   def self.well_formed_args(*names)
       names.each do |name|
-        define_method name, &lambda { @wargs.send(name) }
+        define_method name, &lambda { @well_formed_args.send(name) }
       end
   end
 

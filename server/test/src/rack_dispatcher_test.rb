@@ -25,14 +25,6 @@ class RackDispatcherTest < TestBase
   # malformed arg on any method raises
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  def malformed_manifests
-    [
-      [],                                 # not a Hash
-      { 'runner_choice':42 },             # value not a string
-      { 'runner_choice':'stateless' },    # required key missing
-    ]
-  end
-
   test '6B3',
   'kata_create raises when manifest is malformed' do
     expected = { exception:'manifest:malformed' }
@@ -41,6 +33,38 @@ class RackDispatcherTest < TestBase
       assert_rack_call('kata_create', args, expected)
     end
   end
+
+  def malformed_manifests
+    [
+      [],                                     # not a Hash
+      {},                                     # required key missing
+      bare.merge({x:'unknown'}),              # unknown key
+      bare.merge({display_name:42}),          # must be string
+      bare.merge({image_name:42}),            # must be string
+      bare.merge({runner_choice:42}),         # must be string
+      bare.merge({visible_files:[]}),         # must be a Hash
+      bare.merge({visible_files:{
+        'cyber-dojo.sh':42                     # file content must be String
+      }}),
+      bare.merge({highlight_filenames:1}),     # must be Array
+      bare.merge({highlight_filenames:[1]}),   # must be Array of Strings
+      bare.merge({progress_regexs:{}}),        # must be Array
+      bare.merge({progress_regexs:[1]}),       # must be Array of Strings
+      bare.merge({tab_size:true}),             # must be Integer
+      bare.merge({max_seconds:nil}),           # must be Integer
+    ]
+  end
+
+  def bare
+    {
+      display_name:'C (gcc), assert',
+      visible_files:{ 'cyber-dojo.sh':'make' },
+      image_name:'cyberdojofoundation/gcc_assert',
+      runner_choice:'stateless'
+    }.dup
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '6B4',
   'kata_exists? raises when kata-id is malformed' do
@@ -204,13 +228,6 @@ class RackDispatcherTest < TestBase
   # invalid arg on any method raises
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  test '820',
-  'kata_exists raises when kata_id is invalid' do
-    expected = { 'kata_exists?':false }
-    args = { kata_id:'1234567890' }
-    assert_rack_call('kata_exists', args, expected)
-  end
-
   test '821',
   'kata_manifest raises when kata_id is invalid' do
     expected = { exception:'kata_id:invalid' }
@@ -261,6 +278,22 @@ class RackDispatcherTest < TestBase
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  test '819',
+  'kata_create returns kata-id when sucessful' do
+    tuple = rack_call('kata_create', { manifest:bare }.to_json)
+    assert_equal 200, tuple[0]
+    assert_equal({ 'Content-Type' => 'application/json' }, tuple[1])
+    json = JSON.parse(tuple[2][0])
+    assert_equal 'kata_create', json.keys[0], tuple[2]
+  end
+
+  test '820',
+  'kata_exists false' do
+    expected = { 'kata_exists?':false }
+    args = { kata_id:'1234567890' }
+    assert_rack_call('kata_exists', args, expected)
+  end
 
   test '923',
   'katas_completed with well-formed partial_id but no matches' do
@@ -351,7 +384,7 @@ class RackDispatcherTest < TestBase
     tuple = rack_call(path_info, args)
     assert_equal 200, tuple[0]
     assert_equal({ 'Content-Type' => 'application/json' }, tuple[1])
-    assert_equal [ expected.to_json ], tuple[2]
+    assert_equal [ expected.to_json ], tuple[2], args
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - -
