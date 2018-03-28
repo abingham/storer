@@ -59,15 +59,6 @@ class RackDispatcherInvalidArgsTest < TestBase
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  test '819',
-  'kata_create returns kata-id when sucessful' do
-    tuple = rack_call('kata_create', { manifest:bare_manifest }.to_json)
-    assert_equal 200, tuple[0]
-    assert_equal({ 'Content-Type' => 'application/json' }, tuple[1])
-    json = JSON.parse(tuple[2][0])
-    assert_equal 'kata_create', json.keys[0], tuple[2]
-  end
-
   test '820',
   'kata_exists false' do
     expected = { 'kata_exists?':false }
@@ -82,10 +73,21 @@ class RackDispatcherInvalidArgsTest < TestBase
     assert_rack_call('katas_completed', args, expected)
   end
 
-  test '924',
-  'katas_completions with well-formed outer_id but no matches' do
-    expected = { 'katas_completions':[] }
-    args = { outer_id:'12' }
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  test '819',
+  'kata_create returns kata-id when sucessful' do
+    tuple = rack_call('kata_create', { manifest:bare_manifest }.to_json)
+    assert_equal 200, tuple[0]
+    assert_equal({ 'Content-Type' => 'application/json' }, tuple[1])
+    json = JSON.parse(tuple[2][0])
+    assert_equal 'kata_create', json.keys[0], tuple[2]
+
+    kata_id = json['kata_create']
+    outer_id = kata_id[0..1]
+    inner_id = kata_id[2..-1]
+    expected = { 'katas_completions':[ inner_id ] }
+    args = { outer_id:outer_id }
     assert_rack_call('katas_completions', args, expected)
   end
 
