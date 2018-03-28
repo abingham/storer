@@ -90,7 +90,7 @@ class StorerTest < TestBase
 
   test '823',
   'avatar_start raises when kata_id is invalid' do
-    error = assert_raises { avatar_start('1234567890', 'lion') }
+    error = assert_raises { avatar_start('1234567890', lion) }
     assert_equal 'kata_id:invalid', error.message
   end
 

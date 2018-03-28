@@ -45,9 +45,7 @@ class WellFormedArgs
 
   def outer_id
     @arg_name = __method__.to_s
-    unless Base58.string?(arg) && arg.length == 2
-      malformed
-    end
+    malformed unless Base58.string?(arg) && arg.length == 2
     arg
   end
 
@@ -55,9 +53,7 @@ class WellFormedArgs
 
   def partial_id
     @arg_name = __method__.to_s
-    unless Base58.string?(arg) && (6..10).include?(arg.length)
-      malformed
-    end
+    malformed unless Base58.string?(arg) && (6..10).include?(arg.length)
     arg
   end
 
@@ -65,9 +61,7 @@ class WellFormedArgs
 
   def kata_id
     @arg_name = __method__.to_s
-    unless Base58.string?(arg) && arg.length == 10
-      malformed
-    end
+    malformed unless Base58.string?(arg) && arg.length == 10
     arg
   end
 
@@ -75,15 +69,9 @@ class WellFormedArgs
 
   def avatars_names
     @arg_name = __method__.to_s
-    unless arg.is_a?(Array)
-      malformed
-    end
-    unless arg.size > 0
-      malformed
-    end
-    unless arg.all? {|name| all_avatars_names.include?(name) }
-      malformed
-    end
+    malformed unless arg.is_a?(Array)
+    malformed unless arg.size > 0
+    malformed unless arg.all? {|name| all_avatars_names.include?(name) }
     arg
   end
 
@@ -91,9 +79,7 @@ class WellFormedArgs
 
   def avatar_name
     @arg_name = __method__.to_s
-    unless all_avatars_names.include?(arg)
-      malformed
-    end
+    malformed unless all_avatars_names.include?(arg)
     arg
   end
 
@@ -101,9 +87,7 @@ class WellFormedArgs
 
   def tag
     @arg_name = __method__.to_s
-    unless arg.is_a?(Integer)
-      malformed
-    end
+    malformed unless arg.is_a?(Integer)
     arg
   end
 
@@ -111,9 +95,7 @@ class WellFormedArgs
 
   def was_tag
     @arg_name = __method__.to_s
-    unless arg.is_a?(Integer)
-      malformed
-    end
+    malformed unless arg.is_a?(Integer)
     arg
   end
 
@@ -121,9 +103,7 @@ class WellFormedArgs
 
   def now_tag
     @arg_name = __method__.to_s
-    unless arg.is_a?(Integer)
-      malformed
-    end
+    malformed unless arg.is_a?(Integer)
     arg
   end
 
@@ -131,9 +111,7 @@ class WellFormedArgs
 
   def stdout
     @arg_name = __method__.to_s
-    unless arg.is_a?(String)
-      malformed
-    end
+    malformed unless arg.is_a?(String)
     arg
   end
 
@@ -141,9 +119,7 @@ class WellFormedArgs
 
   def stderr
     @arg_name = __method__.to_s
-    unless arg.is_a?(String)
-      malformed
-    end
+    malformed unless arg.is_a?(String)
     arg
   end
 
@@ -151,13 +127,9 @@ class WellFormedArgs
 
   def files
     @arg_name = __method__.to_s
-    unless arg.is_a?(Hash)
-      malformed
-    end
+    malformed unless arg.is_a?(Hash)
     arg.values.each do |value|
-      unless value.is_a?(String)
-        malformed
-      end
+      malformed unless value.is_a?(String)
     end
     arg
   end
@@ -176,9 +148,9 @@ class WellFormedArgs
 
   def now
     @arg_name = __method__.to_s
-    unless arg.is_a?(Array)
-      malformed
-    end
+    malformed unless arg.is_a?(Array)
+    malformed unless arg.length == 6
+    malformed unless arg.all?{ |n| n.is_a?(Integer) }
     Time.mktime(*arg)
     arg
   rescue ArgumentError
