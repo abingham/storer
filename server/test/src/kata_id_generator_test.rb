@@ -21,7 +21,7 @@ class KataIdGeneratorTest < TestBase
 
   test '927',
   'you can stub the lower level generated-id' do
-    @id_generator = IdGeneratorStub.new
+    external.id_generator = IdGeneratorStub.new
     id_generator.stub(test_id)
     assert_equal test_id, kata_id_generator.generate
   end
@@ -30,7 +30,7 @@ class KataIdGeneratorTest < TestBase
 
   test '928',
   'thus you can stub the kata-id generated in storer.kata_create' do
-    @id_generator = IdGeneratorStub.new
+    external.id_generator = IdGeneratorStub.new
     id_generator.stub(test_id)
     assert_equal test_id, storer.kata_create(create_manifest)
   end
@@ -39,7 +39,7 @@ class KataIdGeneratorTest < TestBase
 
   test '929',
   'discards generated kata-ids that are invalid' do
-    @id_generator = IdGeneratorStub.new
+    external.id_generator = IdGeneratorStub.new
     id_generator.stub('invalid', test_id)
     assert_equal test_id, storer.kata_create(create_manifest)
   end
@@ -48,7 +48,7 @@ class KataIdGeneratorTest < TestBase
 
   test '930',
   'discards generated kata-ids that already exist' do
-    @id_generator = IdGeneratorStub.new
+    external.id_generator = IdGeneratorStub.new
     id = make_kata
     id_generator.stub(id, test_id)
     assert_equal test_id, storer.kata_create(create_manifest)

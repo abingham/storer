@@ -9,7 +9,7 @@ class StdoutLoggerSpyTest < TestBase
 
   test '20C',
   'logged message is spied' do
-    @log = StdoutLoggerSpy.new(nil)
+    external.log = StdoutLoggerSpy.new(nil)
     assert_equal [], log.spied
     log << 'hello'
     assert_equal ['hello'], log.spied

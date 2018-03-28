@@ -6,6 +6,8 @@ class DiskWriterTest < TestBase
     'FDF13'
   end
 
+  # - - - - - - - - - - - - - - - - - - - - - - - - -
+
   test '437',
   'dir.name does not ends in /' do
     dir = disk['/tmp/437']
@@ -63,9 +65,7 @@ class DiskWriterTest < TestBase
     assert_equal [], dir.each_dir.entries
   end
 
-  # - - - - - - - - - - - - - - - - - - - - - - - - -
-
-  private
+  private # = = = = = = = = = = = = = = = =
 
   def filename
     'limerick.txt'

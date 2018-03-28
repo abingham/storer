@@ -8,10 +8,8 @@ class BashShellerTest < TestBase
   end
 
   def hex_setup
-    @log = StdoutLoggerSpy.new(self)
+    external.log = StdoutLoggerSpy.new(self)
   end
-
-  attr_reader :log
 
   # - - - - - - - - - - - - - - - - -
   # exec()

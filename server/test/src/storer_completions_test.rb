@@ -103,7 +103,7 @@ class StorerCompletionTest < TestBase
   private
 
   def stubbed_make_katas(kata_ids)
-    @id_generator = IdGeneratorStub.new
+    external.id_generator = IdGeneratorStub.new
     id_generator.stub(*kata_ids)
     kata_ids.size.times { make_kata }
   end

@@ -1,12 +1,39 @@
 require_relative '../../src/rack_dispatcher'
 require_relative '../../src/all_avatars_names'
-require_relative '../../src/externals'
+require_relative '../../src/external'
 require_relative 'rack_request_stub'
 require_relative 'hex_mini_test'
 require_relative 'starter_service'
 require 'json'
 
 class TestBase < HexMiniTest
+
+  def external
+    @external ||= External.new
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  def disk
+    external.disk
+  end
+  def id_generator
+    external.id_generator
+  end
+  def kata_id_generator
+    external.kata_id_generator
+  end
+  def log
+    external.log
+  end
+  def storer
+    external.storer
+  end
+  def shell
+    external.shell
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   def kata_manifest(kata_id)
     storer.kata_manifest(kata_id)
@@ -96,7 +123,6 @@ class TestBase < HexMiniTest
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   include AllAvatarsNames
-  include Externals
 
   def starter
     StarterService.new
@@ -163,6 +189,8 @@ class TestBase < HexMiniTest
     end
   end
 
+  # - - - - - - - - - - - - - - - - - - - - - - - -
+
   def assert_rack_call(path_info, args, expected)
     assert_rack_call_raw(path_info, args.to_json, expected)
   end
@@ -180,7 +208,7 @@ class TestBase < HexMiniTest
 
   def rack_call(path_info, args)
     refute path_info.end_with?('?'), 'http drops trailing ?'
-    rack = RackDispatcher.new(RackRequestStub)
+    rack = RackDispatcher.new(storer, RackRequestStub)
     env = { path_info:path_info, body:args }
     rack.call(env)
   end

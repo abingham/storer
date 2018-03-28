@@ -1,10 +1,10 @@
-require_relative 'externals'
 require_relative 'well_formed_args'
 require 'rack'
 
 class RackDispatcher
 
-  def initialize(request = Rack::Request)
+  def initialize(storer, request = Rack::Request)
+    @storer = storer
     @request = request
   end
 
@@ -13,7 +13,7 @@ class RackDispatcher
   def call(env)
     request = @request.new(env)
     name, args = validated_name_args(request)
-    triple({ name => storer.send(name, *args) })
+    triple({ name => @storer.send(name, *args) })
   rescue StandardError => error
     triple({ 'exception' => error.message })
   #rescue Exception => error
@@ -23,8 +23,6 @@ class RackDispatcher
   end
 
   private # = = = = = = = = = = = =
-
-  include Externals
 
   def validated_name_args(request)
     name = request.path_info[1..-1] # lose leading /

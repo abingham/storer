@@ -1,8 +1,6 @@
 require_relative 'test_base'
 
-class ExternalsTest < TestBase
-
-  include Externals
+class ExternalTest < TestBase
 
   def self.hex_prefix
     '7A9B4'
