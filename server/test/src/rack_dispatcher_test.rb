@@ -25,6 +25,23 @@ class RackDispatcherTest < TestBase
   # malformed arg on any method raises
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+  def malformed_manifests
+    [
+      [],                                 # not a Hash
+      { 'runner_choice':42 },             # value not a string
+      { 'runner_choice':'stateless' },    # required key missing
+    ]
+  end
+
+  test '6B3',
+  'kata_create raises when manifest is malformed' do
+    expected = { exception:'manifest:malformed' }
+    malformed_manifests.each do |malformed|
+      args = { manifest:malformed }
+      assert_rack_call('kata_create', args, expected)
+    end
+  end
+
   test '6B4',
   'kata_exists? raises when kata-id is malformed' do
     expected = { exception:'kata_id:malformed' }

@@ -1,6 +1,5 @@
 require_relative 'externals'
 require_relative 'well_formed_args'
-require 'json'
 require 'rack'
 
 class RackDispatcher
@@ -26,11 +25,10 @@ class RackDispatcher
   private # = = = = = = = = = = = =
 
   include Externals
-  include WellFormedArgs
 
   def validated_name_args(request)
     name = request.path_info[1..-1] # lose leading /
-    @json_args = json_parse(request.body.read)
+    @wargs = WellFormedArgs.new(request.body.read)
     args = case name
       when /^kata_create$/          then [manifest]
       when /^kata_exists$/,
@@ -59,24 +57,30 @@ class RackDispatcher
     [name, args]
   end
 
+  private # - - - - - - - - - - - - - - - -
+
+  def triple(body)
+    [ 200, { 'Content-Type' => 'application/json' }, [ body.to_json ] ]
+  end
+
   # - - - - - - - - - - - - - - - -
 
-  def json_parse(s)
-    JSON.parse(s)
-  rescue
-    raise ArgumentError.new('!json')
+  def self.well_formed_args(*names)
+      names.each do |name|
+        define_method name, &lambda { @wargs.send(name) }
+      end
   end
+
+  well_formed_args :manifest
+  well_formed_args :kata_id, :partial_id, :outer_id
+  well_formed_args :avatars_names, :avatar_name
+  well_formed_args :files, :now, :stdout, :stderr, :colour
+  well_formed_args :tag, :was_tag, :now_tag
 
   # - - - - - - - - - - - - - - - -
 
   def query?(name)
     name.end_with?('_exists')
-  end
-
-  # - - - - - - - - - - - - - - - -
-
-  def triple(body)
-    [ 200, { 'Content-Type' => 'application/json' }, [ body.to_json ] ]
   end
 
 end
