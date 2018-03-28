@@ -34,6 +34,8 @@ class WellFormedArgs
         value.each { |val|  malformed unless val.is_a?(String) }
       when 'tab_size', 'max_seconds'
         malformed unless value.is_a?(Integer)
+      when 'created'
+        malformed unless is_time?(value)
       end
     end
     arg
@@ -202,6 +204,7 @@ class WellFormedArgs
     visible_files
     image_name
     runner_choice
+    created
   )
 
   # - - - - - - - - - - - - - - - -
@@ -217,6 +220,18 @@ class WellFormedArgs
     tab_size
     max_seconds
   )
+
+  # - - - - - - - - - - - - - - - -
+
+  def is_time?(arg)
+    return false unless arg.is_a?(Array)
+    return false unless arg.size == 6
+    return false unless arg.all? { |arg| arg.is_a?(Integer) }
+    Time.mktime(*arg)
+    true
+  rescue
+    false
+  end
 
   # - - - - - - - - - - - - - - - -
 

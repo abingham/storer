@@ -162,9 +162,7 @@ class StorerServiceTest < TestBase
       'max_seconds' => 10,
       'runner_choice' => 'stateless',
       'highlight_filenames' => [],
-      'lowlight_filenames' => [ 'cyber-dojo.sh', 'makefile', 'Makefile', 'unity.license.txt' ],
-      'filename_extension' => '',
-      'progress_regexs' => [],
+      'filename_extension' => '.c',
       'tab_size' => 4
     }
   end

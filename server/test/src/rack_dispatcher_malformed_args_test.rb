@@ -33,6 +33,7 @@ class RackDispatcherMalformedArgsTest < TestBase
   end
 
   def malformed_manifests
+    bad_time = [2018,-3,28, 11,33,13]
     [
       [],                                              # ! Hash
       {},                                              # required key missing
@@ -44,12 +45,15 @@ class RackDispatcherMalformedArgsTest < TestBase
       bare_manifest.merge({visible_files:{
         'cyber-dojo.sh':42                     # file content must be String
       }}),
-      bare_manifest.merge({highlight_filenames:1}),    # ! Array
+      bare_manifest.merge({highlight_filenames:1}),    # ! Array of Strings
       bare_manifest.merge({highlight_filenames:[1]}),  # ! Array of Strings
-      bare_manifest.merge({progress_regexs:{}}),       # ! Array
+      bare_manifest.merge({progress_regexs:{}}),       # ! Array of Strings
       bare_manifest.merge({progress_regexs:[1]}),      # ! Array of Strings
       bare_manifest.merge({tab_size:true}),            # ! Integer
       bare_manifest.merge({max_seconds:nil}),          # ! Integer
+      bare_manifest.merge({created:nil}),              # ! Array of 6 Integers
+      bare_manifest.merge({created:['s']}),            # ! Array of 6 Integers
+      bare_manifest.merge({created:bad_time}),         # ! Time
     ]
   end
 
