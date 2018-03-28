@@ -54,11 +54,4 @@ class KataIdGeneratorTest < TestBase
     assert_equal test_id, storer.kata_create(create_manifest)
   end
 
-  # - - - - - - - - - - - - - - - -
-
-  test 'ABC',
-  'discards generated kata-ids that are not completable ' do
-    #...
-  end
-
 end

@@ -7,6 +7,8 @@ class Base58Test < TestBase
     'F3A59'
   end
 
+  # - - - - - - - - - - - - - - - - - - -
+
   test '064', %w(
   alphabet has 58 characters none of which are missed ) do
     counts = {}
