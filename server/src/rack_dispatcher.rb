@@ -16,10 +16,10 @@ class RackDispatcher
     triple({ name => storer.send(name, *args) })
   rescue StandardError => error
     triple({ 'exception' => error.message })
-  rescue Exception => error
-    puts error.message
-    puts error.backtrace
-    triple({ 'exception' => error.class.name })
+  #rescue Exception => error
+    #puts error.message
+    #puts error.backtrace
+    #triple({ 'exception' => error.class.name })
   end
 
   private # = = = = = = = = = = = =
