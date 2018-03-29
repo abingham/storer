@@ -24,7 +24,7 @@ class WellFormedArgs
     arg.keys.each do |key|
       value = arg[key]
       case key
-      when 'display_name', 'image_name', 'runner_choice', 'filename_extension', 'exercise'
+      when 'display_name', 'image_name', 'runner_choice', 'exercise'
         malformed unless value.is_a?(String)
       when 'visible_files'
         malformed unless value.is_a?(Hash)
@@ -36,6 +36,10 @@ class WellFormedArgs
         malformed unless value.is_a?(Integer)
       when 'created'
         malformed unless is_time?(value)
+      when 'filename_extension'
+        value = [ value ] if value.is_a?(String)
+        malformed unless value.is_a?(Array)
+        value.each { |val| malformed unless val.is_a?(String) }
       end
     end
     arg

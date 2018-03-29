@@ -33,6 +33,9 @@ class WellFormedArgsTest < TestBase
     manifest = bare_manifest
     json = { manifest:manifest }.to_json
     assert_equal manifest, WellFormedArgs.new(json).manifest
+    manifest['filename_extension'] = '.c'
+    json = { manifest:manifest }.to_json
+    assert_equal manifest, WellFormedArgs.new(json).manifest
   end
 
   test '592',
@@ -42,7 +45,7 @@ class WellFormedArgsTest < TestBase
       error = assert_raises {
         WellFormedArgs.new(json).manifest
       }
-      assert_equal 'manifest:malformed', error.message
+      assert_equal 'manifest:malformed', error.message, malformed
     end
   end
 
@@ -55,7 +58,8 @@ class WellFormedArgsTest < TestBase
       bare_manifest.merge({display_name:42}),          # ! String
       bare_manifest.merge({image_name:42}),            # ! String
       bare_manifest.merge({runner_choice:42}),         # ! String
-      bare_manifest.merge({filename_extension:true}),  # ! String
+      bare_manifest.merge({filename_extension:true}),  # ! String && ! Array
+      bare_manifest.merge({filename_extension:{}}),    # ! String && ! Array
       bare_manifest.merge({exercise:true}),            # ! String
       bare_manifest.merge({visible_files:[]}),         # ! Hash
       bare_manifest.merge({visible_files:{
