@@ -38,6 +38,7 @@ Creates a kata from the given json manifest.
 ```
     { "manifest": {
                    "created": [2017,12,15, 11,13,38],
+              "display_name": "C (gcc), assert",
                 "image_name": "cyberdojofoundation/gcc_assert",
              "visible_files": {        "hiker.h": "#ifndef HIKER_INCLUDED...",
                                        "hiker.c": "#include \"hiker.h\"...",
@@ -47,7 +48,6 @@ Creates a kata from the given json manifest.
                                 "cyber-dojo.sh" : "make"
                               },
              "runner_choice": "stateless",
-              "display_name": "C (gcc), assert",
                   "exercise": "Fizz_Buzz",
                "max_seconds": 10,
         "filename_extension": ".c",
@@ -74,6 +74,7 @@ Returns the manifest used to create the kata with the given kata_id.
     { "kata_manifest": {
                    "kata_id": "A551C528C3",
                    "created": [2017,12,15, 11,13,38],
+              "display_name": "C (gcc), assert",
                 "image_name": "cyberdojofoundation/gcc_assert",
              "visible_files": {       "hiker.h" : "ifndef HIKER_INCLUDED\n...",
                                       "hiker.c" : "#include \"hiker.h\"...",
@@ -83,12 +84,10 @@ Returns the manifest used to create the kata with the given kata_id.
                                 "cyber-dojo.sh" : "make"
                               },
              "runner_choice": "stateless",
-              "display_name": "C (gcc), assert",
                   "exercise": "Fizz_Buzz",
                "max_seconds": 10,
         "filename_extension": ".c",
-                  "tab_size": 4,
-                          ...
+                  "tab_size": 4
       }
     }
 ```
@@ -119,30 +118,30 @@ Returns avatar_increments for each started avatar in the kata with the given kat
 
 - - - -
 
-## GET completed
+## GET katas_completed
 If it exists, returns the 10-digit kata_id which uniquely completes
 the given kata_id, otherwise returns the empty string.
 - parameter, the 6-digit kata-id to complete, eg
 ```
-  { "kata_id": "A551C5" } # must be at least 6 characters long.
+  { "partial_id": "A551C5" } # must be at least 6 characters long.
 ```
 - returns, eg
 ```
-  { "completed": "A551C528C3"  } # completed
-  { "completed": ""            } # not completed
+  { "katas_completed": "A551C528C3"  } # completed
+  { "katas_completed": ""            } # not completed
 ```
 
 - - - -
 
-## GET completions
+## GET katas_completions
 Returns all the kata_id's starting with the given 2-digit long kata_id.
 - parameter, eg
 ```
-  { "kata_id": "A5" }
+  { "outer_id": "A5" }
 ```
 - returns, eg
 ```
-  { "completions": [
+  { "katas_completions": [
        "A551C528C3",
        "A5DA2CDC58",
        "A5EAFE6E53"
@@ -276,7 +275,7 @@ given avatar_name, in the kata with the given kata_id.
 
 - - - -
 
-## GET tag_fork
+## POST tag_fork
 Creates a new kata forked from the visible files of the avatar with the
 given avatar_name, in the kata with the given kata_id,
 with the given tag number.
@@ -289,9 +288,7 @@ with the given tag number.
 ```
 - returns, the id of the forked kata, eg
 ```
-  { "tag_fork": {
-       "id" : "8EDB6C141A"
-    }
+  { "tag_fork": "8EDB6C141A"
   }
 ```
 
