@@ -11,6 +11,16 @@ class RackDispatcherTest < TestBase
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+  test 'E5A',
+  'dispatch raises when any argument is malformed' do
+    assert_dispatch_raises('kata_increments',
+      { kata_id:malformed_kata_id },
+      'kata_id:malformed'
+    )
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
   test 'E5C',
   'dispatch to kata_create' do
     assert_dispatch('kata_create',
@@ -187,6 +197,10 @@ class RackDispatcherTest < TestBase
 
   private
 
+  def malformed_kata_id
+    '==' # ! Base58 String
+  end
+
   def well_formed_kata_id
     '1234567890'
   end
@@ -240,6 +254,20 @@ class RackDispatcherTest < TestBase
   def assert_dispatch(name, args, stubbed)
     qname = name.end_with?('exists') ? name+'?' : name
     expected = { qname => stubbed }
+    rack = RackDispatcher.new(StorerStub.new, RackRequestStub)
+    env = { path_info:name, body:args.to_json }
+
+    tuple = rack.call(env)
+
+    assert_equal 200, tuple[0]
+    assert_equal({ 'Content-Type' => 'application/json' }, tuple[1])
+    assert_equal [ expected.to_json ], tuple[2], args
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  def assert_dispatch_raises(name, args, msg)
+    expected = { 'exception' => msg }
     rack = RackDispatcher.new(StorerStub.new, RackRequestStub)
     env = { path_info:name, body:args.to_json }
 
