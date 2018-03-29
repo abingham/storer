@@ -163,15 +163,15 @@ has started in the kata with the given kata_id.
 ```
 - returns true if it does, false if it doesn't, eg
 ```
-  { "avatar_exists?": true   }
-  { "avatar_exists?": false  }
+  { "avatar_exists?": true  }
+  { "avatar_exists?": false }
 ```
 
 - - - -
 
 ## POST avatar_start
 Attempts to starts an avatar, with a name in the given list, in the kata with the given kata_id.
-If successful, returns the name of the started avatar, otherwise "nil".
+If successful, returns the name of the started avatar, otherwise null.
 - parameters, eg
 ```
   {      "kata_id": "A551C528C3",
@@ -181,7 +181,7 @@ If successful, returns the name of the started avatar, otherwise "nil".
 - returns the name of the started avatar if successful, otherwise nil, eg
 ```
   { "avatar_start": "lion" }
-  { "avatar_start": "nil"  }
+  { "avatar_start": null   }
 ```
 
 - - - -
