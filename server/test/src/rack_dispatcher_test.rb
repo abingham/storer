@@ -12,6 +12,13 @@ class RackDispatcherTest < TestBase
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'E5A',
+  'dispatch raises when method name is unknown' do
+    assert_dispatch_raises('unknown', {}, 'json:invalid')
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  test 'E5B',
   'dispatch raises when any argument is malformed' do
     assert_dispatch_raises('kata_increments',
       { kata_id:malformed_kata_id },
@@ -253,21 +260,18 @@ class RackDispatcherTest < TestBase
 
   def assert_dispatch(name, args, stubbed)
     qname = name.end_with?('exists') ? name+'?' : name
-    expected = { qname => stubbed }
-    rack = RackDispatcher.new(StorerStub.new, RackRequestStub)
-    env = { path_info:name, body:args.to_json }
-
-    tuple = rack.call(env)
-
-    assert_equal 200, tuple[0]
-    assert_equal({ 'Content-Type' => 'application/json' }, tuple[1])
-    assert_equal [ expected.to_json ], tuple[2], args
+    assert_rack_call(name, args, { qname => stubbed })
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   def assert_dispatch_raises(name, args, msg)
-    expected = { 'exception' => msg }
+    assert_rack_call(name, args, { 'exception' => msg })
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  def assert_rack_call(name, args, expected)
     rack = RackDispatcher.new(StorerStub.new, RackRequestStub)
     env = { path_info:name, body:args.to_json }
 

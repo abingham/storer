@@ -48,7 +48,7 @@ class RackDispatcher
 
       when /^tags_visible_files$/   then [kata_id, avatar_name, was_tag, now_tag]
       else
-        raise ArgumentError.new('json:malformed')
+        raise ArgumentError.new('json:invalid')
     end
     name += '?' if query?(name)
     [name, args]
