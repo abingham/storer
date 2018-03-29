@@ -203,7 +203,6 @@ Returns the names of all avatars who have started in the kata with the given kat
 ```
 
 - - - -
-- - - -
 
 ## POST avatar_ran_tests
 Tells the storer that the avatar with the given avatar_name, in the kata
@@ -273,6 +272,7 @@ given avatar_name, in the kata with the given kata_id.
   }
 ```
 
+- - - -
 - - - -
 
 ## POST tag_fork
