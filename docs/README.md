@@ -120,8 +120,8 @@ Returns avatar_increments for each started avatar in the kata with the given kat
 
 ## GET katas_completed
 If it exists, returns the 10-digit kata_id which uniquely completes
-the given kata_id, otherwise returns the empty string.
-- parameter, the 6-digit kata-id to complete, eg
+the given partial_id, otherwise returns the empty string.
+- parameter, the 6-digit partial-id to complete, eg
 ```
   { "partial_id": "A551C5" } # must be at least 6 characters long.
 ```
@@ -134,7 +134,7 @@ the given kata_id, otherwise returns the empty string.
 - - - -
 
 ## GET katas_completions
-Returns all the kata_id's starting with the given 2-digit long kata_id.
+Returns all the kata_id's starting with the given 2-digit long outer_id.
 - parameter, eg
 ```
   { "outer_id": "A5" }
