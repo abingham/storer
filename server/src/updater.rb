@@ -9,25 +9,22 @@ class Updater
     if manifest['runner_choice'].nil?
       change_2_added_runner_choice(manifest)
     end
+    if manifest['filename_extension'].nil?
+      change_3_required_filename_extension(manifest)
+    end
     # remove dead properties
     manifest.delete('browser')
     manifest.delete('red_amber_green')
-    # while we're here...
-    if manifest['filename_extension'].nil?
-      display_name = manifest['display_name']
-      fe = cache(display_name)['filename_extension']
-      manifest['filename_extension'] = fe
-    end
     manifest
   end
 
   private
 
   def self.change_1_removed_language(manifest)
-    # removed manifest['unit_test_framework'] property
-    # removed manifest['language] property
-    # These coupled a manifest to a start-point
-    # Better for the manifest to be self-contained
+    # Removed manifest['unit_test_framework'] property.
+    # Removed manifest['language] property.
+    # These coupled a manifest to a start-point.
+    # Better for the manifest to be self-contained.
     display_name = language_to_display_name(manifest['language'])
     # add new properties
     manifest['display_name'] = display_name
@@ -45,9 +42,19 @@ class Updater
   # - - - - - - - - - - - - - - - - -
 
   def self.change_2_added_runner_choice(manifest)
-    # added manifest['runner_choice'] property
+    # Added manifest['runner_choice'] as required property.
     display_name = manifest['display_name']
     manifest['runner_choice'] = cache(display_name)['runner_choice']
+  end
+
+  # - - - - - - - - - - - - - - - - -
+
+  def self.change_3_required_filename_extension(manifest)
+    # Made filename_extension a require property.
+    # Selects where filenames appear in filename list.
+    display_name = manifest['display_name']
+    fe = cache(display_name)['filename_extension']
+    manifest['filename_extension'] = fe
   end
 
   # - - - - - - - - - - - - - - - - -
