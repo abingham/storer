@@ -48,6 +48,8 @@ COPY . ${CYBER_DOJO_HOME}
 RUN  chown -R storer ${CYBER_DOJO_HOME}
 USER storer
 
+ARG SHA
+RUN echo ${SHA} > /app/sha.txt
 
 ARG PORT
 EXPOSE ${PORT}

@@ -15,6 +15,7 @@ services:
       args:
         - CYBER_DOJO_HOME=${CYBER_DOJO_HOME}
         - PORT=${CYBER_DOJO_STORER_SERVICE_PORT}
+        - SHA=${SHA}
     user: storer
     image: cyberdojo/storer
     init: true
