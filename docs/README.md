@@ -22,7 +22,7 @@ API:
 Returns the git commit sha used to create the docker image.
 - parameters, none
 ```
-  { }
+  {}
 ```
 - returns the sha, eg
 ```
