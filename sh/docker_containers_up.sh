@@ -29,6 +29,6 @@ wait_till_up()
   exit 1
 }
 
-wait_till_up 'test_storer_server'
-wait_till_up 'test_storer_client'
-wait_till_up 'test_storer_starter_server'
+wait_till_up 'test-storer-server'
+wait_till_up 'test-storer-client'
+wait_till_up 'test-storer-starter-server'

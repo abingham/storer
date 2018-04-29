@@ -10,9 +10,9 @@ services:
         - CYBER_DOJO_HOME=${CYBER_DOJO_HOME}
         - PORT=${CYBER_DOJO_STORER_CLIENT_PORT}
     user: nobody
-    image: cyberdojo/storer_client
+    image: cyberdojo/storer-client
     init: true
-    container_name: test_storer_client
+    container_name: test-storer-client
     read_only: true
     tmpfs: /tmp
     depends_on:
@@ -31,7 +31,7 @@ services:
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   storer:
-    container_name: test_storer_server
+    container_name: test-storer-server
     environment:
       - CYBER_DOJO_COVERAGE_ROOT
     restart: 'no'
@@ -42,10 +42,10 @@ services:
   # monitoring
 
   prometheus:
-    container_name: test_storer_prometheus
+    container_name: test-storer-prometheus
 
   grafana:
-    container_name: test_storer_grafana
+    container_name: test-storer-grafana
     ports:
       - '3001:3001'
 
@@ -56,7 +56,7 @@ services:
     user: nobody
     image: cyberdojo/starter
     init: true
-    container_name: test_storer_starter_server
+    container_name: test-storer-starter-server
     read_only: true
     tmpfs: /tmp
     environment:

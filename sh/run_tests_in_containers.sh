@@ -3,8 +3,8 @@
 readonly ROOT_DIR="$( cd "$( dirname "${0}" )" && cd .. && pwd )"
 readonly MY_NAME="${ROOT_DIR##*/}"
 
-readonly SERVER_CID=$(docker ps --all --quiet --filter "name=${MY_NAME}_server")
-readonly CLIENT_CID=$(docker ps --all --quiet --filter "name=${MY_NAME}_client")
+readonly SERVER_CID=$(docker ps --all --quiet --filter "name=${MY_NAME}-server")
+readonly CLIENT_CID=$(docker ps --all --quiet --filter "name=${MY_NAME}-client")
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -46,12 +46,22 @@ run_client_tests()
 
 server_status=0
 client_status=0
-run_server_tests "$@"
-run_client_tests "$@"
+
+if [ "$1" = "server" ]; then
+  shift
+  run_server_tests "$@"
+elif [ "$1" = "client" ]; then
+  shift
+  run_client_tests "$@"
+else
+  run_server_tests "$@"
+  run_client_tests "$@"
+fi
 
 if [[ ( ${server_status} == 0 && ${client_status} == 0 ) ]]; then
   echo '------------------------------------------------------'
   echo 'All passed'
+  "${ROOT_DIR}/sh/docker_containers_down.sh"
   exit 0
 else
   echo
