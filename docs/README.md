@@ -26,7 +26,7 @@ Returns the git commit sha used to create the docker image.
 ```
 - returns the sha, eg
 ```
-  { "sha": "b28b3e13c0778fe409a50d23628f631f87920ce5" }
+  { "sha": "afe46e4bba4c7c5b630ef7fceda52f29001a10da" }
 ```
 
 - - - -
