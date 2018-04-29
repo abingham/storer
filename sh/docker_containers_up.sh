@@ -32,3 +32,8 @@ wait_till_up()
 wait_till_up 'test-storer-server'
 wait_till_up 'test-storer-client'
 wait_till_up 'test-storer-starter-server'
+
+# There is a bug somewhere. The following command gives
+# `/home/storer` is not a directory.
+#
+# docker logs test-storer-server

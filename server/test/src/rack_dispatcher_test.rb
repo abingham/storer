@@ -202,6 +202,15 @@ class RackDispatcherTest < TestBase
     )
   end
 
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  test 'E71',
+  'dispatch to sha' do
+    assert_dispatch('sha', {},
+      'hello from StorerStub.sha'
+    )
+  end
+
   private
 
   def malformed_kata_id

@@ -13,6 +13,10 @@ class Storer
 
   attr_reader :path
 
+  def sha
+    IO.read('/app/sha.txt').strip
+  end
+
   # - - - - - - - - - - - - - - - - - - -
   # completion(s)
   # - - - - - - - - - - - - - - - - - - -

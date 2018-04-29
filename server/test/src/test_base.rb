@@ -33,6 +33,12 @@ class TestBase < HexMiniTest
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+  def sha
+    storer.sha
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
   def kata_manifest(kata_id)
     storer.kata_manifest(kata_id)
   end

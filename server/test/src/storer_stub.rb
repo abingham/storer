@@ -1,6 +1,10 @@
 
 class StorerStub
 
+  def sha
+    "hello from #{self.class.name}.#{__method__}"
+  end
+
   def kata_create(_)
     "hello from #{self.class.name}.#{__method__}"
   end
