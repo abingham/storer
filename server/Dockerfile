@@ -48,8 +48,12 @@ COPY . ${CYBER_DOJO_HOME}
 RUN  chown -R storer ${CYBER_DOJO_HOME}
 USER storer
 
+# - - - - - - - - - - - - - - - - -
+# git commit sha image is built from
+# - - - - - - - - - - - - - - - - -
+
 ARG SHA
-RUN echo ${SHA} > /app/sha.txt
+RUN echo ${SHA} > ${CYBER_DOJO_HOME}/sha.txt
 
 ARG PORT
 EXPOSE ${PORT}
