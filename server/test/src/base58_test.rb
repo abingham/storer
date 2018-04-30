@@ -35,8 +35,18 @@ class Base58Test < TestBase
   # - - - - - - - - - - - - - - - - - - -
 
   test '068', %w(
-  string?(s) true/false ) do
+  string?(s) true ) do
     assert string?('012AaEefFgG89Zz')
+    assert string?('345BbCcDdEeFfGg')
+    assert string?('678HhJjKkLlMmNn')
+    assert string?('999PpQqRrSsTtUu')
+    assert string?('263VvWwXxYyZz11')
+  end
+
+  # - - - - - - - - - - - - - - - - - - -
+
+  test '069', %w(
+  string?(s) false ) do
     refute string?(nil)
     refute string?([])
     refute string?(25)

@@ -15,21 +15,21 @@ class Base58
       s.chars.all?{ |char| letter?(char) }
   end
 
-  # - - - - - - - - - - - - - -
+  private
 
-  private_class_method def self.letter
+  def self.letter
     alphabet[index]
   end
 
-  private_class_method def self.index
+  def self.index
     SecureRandom.random_number(alphabet.size)
   end
 
-  private_class_method def self.letter?(char)
+  def self.letter?(char)
     alphabet.include?(char)
   end
 
-  private_class_method def self.alphabet
+  def self.alphabet
     @@ALPHABET
   end
 
