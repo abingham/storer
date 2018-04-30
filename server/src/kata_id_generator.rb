@@ -19,9 +19,9 @@ class KataIdGenerator
 
   def valid?(id)
     Base58.string?(id) &&
-      !storer.kata_exists?(id)
-      #&& storer.completable(id)
-      #&& does not contains lowercase L ?
+      !storer.kata_exists?(id) &&
+        !id.include?('L') &&
+          !id.include?('l')
   end
 
   def id_generator
