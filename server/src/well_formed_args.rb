@@ -29,7 +29,7 @@ class WellFormedArgs
       when 'visible_files'
         malformed unless value.is_a?(Hash)
         value.each { |_filename,content| malformed unless content.is_a?(String) }
-      when 'highlight_filenames','progress_regexs'
+      when 'highlight_filenames','progress_regexs','hidden_filenames'
         malformed unless value.is_a?(Array)
         value.each { |val|  malformed unless val.is_a?(String) }
       when 'tab_size', 'max_seconds'
@@ -193,6 +193,7 @@ class WellFormedArgs
     exercise
     filename_extension
     highlight_filenames
+    hidden_filenames
     progress_regexs
     tab_size
     max_seconds
