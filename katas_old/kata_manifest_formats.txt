@@ -16,7 +16,7 @@ Contain the following 7 keys
 
 Note that they do _not_ contain the image_name key
 which has to be retrieved via starter.manifest(language).
-This currently couples them to starter (via web).
+This coupled them to starter (via web).
 
 
 New-style kata manifest.json files

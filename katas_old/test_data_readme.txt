@@ -29,19 +29,20 @@ id           avatar       lights     language         renaming?
 
 
 
-Getting the test data
-=====================
-
-The source is the cyber-dojo/converter github repo
-which contains the file katas_42.tgz which I untarred to 42/... dirs
+How I got the test data
+=======================
+I got all the katas with an outer-id of 42 from the running server
+using scripts/get256.sh
+This file is katas_42.tgz on the converter repo.
+I untarred this to 42/... dirs
   $ cd cyberdojo/storer
   $ tar -xf katas_42.tgz
-I then extracted the five 42/... katas as follows (tar_1_kata.sh is in converter repo)
-  $ ./tar_1_kata.sh 42 0BD5D5BE
-  $ ./tar_1_kata.sh 42 1AFD7EC5
-  $ ./tar_1_kata.sh 42 1F303E80
-  $ ./tar_1_kata.sh 42 0B05BA0A
-  $ ./tar_1_kata.sh 42 0F2A2979
+I then extracted the five 42/... katas as follows
+  $ tar_1_kata.sh 42 0BD5D5BE
+  $ tar_1_kata.sh 42 1AFD7EC5
+  $ tar_1_kata.sh 42 1F303E80
+  $ tar_1_kata.sh 42 0B05BA0A
+  $ tar_1_kata.sh 42 0F2A2979
 
 
 Alternatively you could get katas out of a running cyber-dojo server
