@@ -139,7 +139,6 @@ class Storer
   # - - - - - - - - - - - - - - - - - - -
 
   def avatar_ran_tests(kata_id, avatar_name, files, now, stdout, stderr, colour)
-    assert_kata_exists(kata_id)
     assert_avatar_exists(kata_id, avatar_name)
     increments = read_avatar_increments(kata_id, avatar_name)
     tag = rag_count(kata_id, avatar_name, increments) + 1
@@ -179,7 +178,6 @@ class Storer
   # - - - - - - - - - - - - - - - - - - -
 
   def tag_fork(kata_id, avatar_name, tag, now)
-    assert_kata_exists(kata_id)
     assert_avatar_exists(kata_id, avatar_name)
     visible_files = tag_visible_files(kata_id, avatar_name, tag)
     manifest = kata_manifest(kata_id)
@@ -192,7 +190,6 @@ class Storer
   # - - - - - - - - - - - - - - - - - - -
 
   def tag_visible_files(kata_id, avatar_name, tag)
-    assert_kata_exists(kata_id)
     assert_avatar_exists(kata_id, avatar_name)
     if tag == -1
       tag = rag_count(kata_id, avatar_name) - 1
