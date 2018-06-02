@@ -141,7 +141,7 @@ class Storer
   def avatar_ran_tests(kata_id, avatar_name, files, now, stdout, stderr, colour)
     assert_avatar_exists(kata_id, avatar_name)
     increments = read_avatar_increments(kata_id, avatar_name)
-    tag = rag_count(kata_id, avatar_name, increments) + 1
+    tag = most_recent_tag(kata_id, avatar_name, increments) + 1
     increments << { 'colour' => colour, 'time' => now, 'number' => tag }
     write_avatar_increments(kata_id, avatar_name, increments)
     # don't alter caller's files argument
@@ -169,7 +169,7 @@ class Storer
 
   def avatar_visible_files(kata_id, avatar_name)
     assert_avatar_exists(kata_id, avatar_name)
-    tag = rag_count(kata_id, avatar_name)
+    tag = most_recent_tag(kata_id, avatar_name)
     tag_visible_files(kata_id, avatar_name, tag)
   end
 
@@ -192,7 +192,7 @@ class Storer
   def tag_visible_files(kata_id, avatar_name, tag)
     assert_avatar_exists(kata_id, avatar_name)
     if tag == -1
-      tag = rag_count(kata_id, avatar_name) - 1
+      tag = most_recent_tag(kata_id, avatar_name) - 1
     end
     assert_tag_exists(kata_id, avatar_name, tag)
     if tag == 0 # tag zero is a special case
@@ -324,7 +324,7 @@ class Storer
 
   def tag_exists?(kata_id, avatar_name, tag)
     # Has to work with old git-format and new non-git format
-    0 <= tag && tag <= rag_count(kata_id, avatar_name)
+    0 <= tag && tag <= most_recent_tag(kata_id, avatar_name)
   end
 
   def tag_dir(kata_id, avatar_name, tag)
@@ -337,10 +337,9 @@ class Storer
 
   # - - - - - - - - - - -
 
-  def rag_count(kata_id, avatar_name, increments = nil)
+  def most_recent_tag(kata_id, avatar_name, increments = nil)
     increments ||= read_avatar_increments(kata_id, avatar_name)
-    rags = increments.select { |entry| entry.has_key?('colour') }
-    (rags == []) ? 0 : rags.last['number']
+    increments.size
   end
 
   # - - - - - - - - - - -
@@ -360,25 +359,24 @@ class Storer
 end
 
 #- - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# tags vs rags
+# tags vs lights
 #- - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# rag is an acronym for Red-Amber-Green (== light)
-#
 # When a new avatar enters a dojo its initial
 # "tag-zero" is *not* recorded in its increments.json
 # file which starts as []
-# Maybe it should be but isn't for existing dojos
+# Maybe it should be but it isn't for existing dojos
 # (created in the old git format) and so for backwards
 # compatibility it stays that way.
 #
-# Every test event stores an entry in the increments.json
+# Every test event stores a tag entry in the increments.json
 # file. eg
 # [
+#   ...
 #   {
 #     'colour' => 'red',
 #     'time'   => [2014, 2, 15, 8, 54, 6],
 #     'number' => 1
-#   },
+#   }
 # ]
 #
 # At the moment the only event that creates an
@@ -386,12 +384,23 @@ end
 #
 # However, it's conceivable I may create finer grained
 # tags than just [test] events, eg
-#    o) "event":"file new"
-#    o) "event":"file rename"
-#    o) "event":"file delete"
-#    o) "event":"file open"
-#    o) "event":"file edit"
+#    o) "file new/rename/delete"
+#    o) "file open/edit"
 #
 # If this happens the difference between tags and lights
-# will be more pronounced.
+# will be more pronounced. Viz, lights will become a proper
+# subset of tags. For example, increments.json could be
+#
+# [
+#   ...
+#   { 'event'  => 'file new',
+#     'time'   => [2014, 2, 15, 8, 54, 6],
+#     'number' => 23
+#   },
+#   {
+#     'colour' => 'red',
+#     'time'   => [2014, 2, 15, 8, 54, 6],
+#     'number' => 24
+#   }
+# ]
 # ------------------------------------------------------
