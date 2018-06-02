@@ -75,7 +75,7 @@ class Storer
     # theory you could get a race condition with
     # both threads attempting to create a
     # kata with the same id.
-    # Assuming id generation is reasonably well
+    # Assuming base58 id generation is reasonably well
     # behaved (random) this is extremely unlikely.
     kata_id = kata_id_generator.generate
     manifest['id'] = kata_id
@@ -142,7 +142,7 @@ class Storer
     assert_kata_exists(kata_id)
     assert_avatar_exists(kata_id, avatar_name)
     increments = read_avatar_increments(kata_id, avatar_name)
-    tag = increments.length + 1
+    tag = rag_count(kata_id, avatar_name, increments) + 1
     increments << { 'colour' => colour, 'time' => now, 'number' => tag }
     write_avatar_increments(kata_id, avatar_name, increments)
     # don't alter caller's files argument
@@ -170,8 +170,7 @@ class Storer
 
   def avatar_visible_files(kata_id, avatar_name)
     assert_avatar_exists(kata_id, avatar_name)
-    rags = read_avatar_increments(kata_id, avatar_name)
-    tag = (rags == []) ? 0 : rags[-1]['number']
+    tag = rag_count(kata_id, avatar_name)
     tag_visible_files(kata_id, avatar_name, tag)
   end
 
@@ -196,7 +195,7 @@ class Storer
     assert_kata_exists(kata_id)
     assert_avatar_exists(kata_id, avatar_name)
     if tag == -1
-      tag = avatar_increments(kata_id, avatar_name).size - 1
+      tag = rag_count(kata_id, avatar_name) - 1
     end
     assert_tag_exists(kata_id, avatar_name, tag)
     if tag == 0 # tag zero is a special case
@@ -328,7 +327,7 @@ class Storer
 
   def tag_exists?(kata_id, avatar_name, tag)
     # Has to work with old git-format and new non-git format
-    0 <= tag && tag <= read_avatar_increments(kata_id, avatar_name).size
+    0 <= tag && tag <= rag_count(kata_id, avatar_name)
   end
 
   def tag_dir(kata_id, avatar_name, tag)
@@ -337,6 +336,14 @@ class Storer
 
   def tag_path(kata_id, avatar_name, tag)
     dir_join(avatar_path(kata_id, avatar_name), tag.to_s)
+  end
+
+  # - - - - - - - - - - -
+
+  def rag_count(kata_id, avatar_name, increments = nil)
+    increments ||= read_avatar_increments(kata_id, avatar_name)
+    rags = increments.select { |entry| entry.has_key?('colour') }
+    (rags == []) ? 0 : rags.last['number']
   end
 
   # - - - - - - - - - - -
@@ -356,12 +363,14 @@ class Storer
 end
 
 #- - - - - - - - - - - - - - - - - - - - - - - - - - - -
-# tags vs lights
+# tags vs rags
 #- - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# rag is an acronym for Red-Amber-Green (== light)
+#
 # When a new avatar enters a dojo its initial
 # "tag-zero" is *not* recorded in its increments.json
-# file which starts as [ ]
-# It probably should be but isn't for existing dojos
+# file which starts as []
+# Maybe it should be but isn't for existing dojos
 # (created in the old git format) and so for backwards
 # compatibility it stays that way.
 #
@@ -380,11 +389,11 @@ end
 #
 # However, it's conceivable I may create finer grained
 # tags than just [test] events, eg
-#    o) creating a new file
-#    o) renaming a file
-#    o) deleting a file
-#    o) opening a different file
-#    o) editing a file
+#    o) "event":"file new"
+#    o) "event":"file rename"
+#    o) "event":"file delete"
+#    o) "event":"file open"
+#    o) "event":"file edit"
 #
 # If this happens the difference between tags and lights
 # will be more pronounced.
