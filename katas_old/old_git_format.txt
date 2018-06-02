@@ -17,7 +17,6 @@ Note that I provide the tgz file and the test run untar it into the container.
 I do not provide (in the storer git repo) the already untarred 5A/... dir.
 This is because having a sub-dir with a .git dir in a git repo is problematic.
 
-
 Old Git format details
 ----------------------
 E.g, if the kata-id=F72C61785F, avatar=lion, tag=17

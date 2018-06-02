@@ -1,10 +1,11 @@
 #!/bin/bash
 
+# See gcloud-notes.txt
 source /Users/jonjagger/Applications/google-cloud-sdk/path.bash.inc
 
 readonly PROJECT=cyber-dojo
-readonly INSTANCE=ssd-server
 readonly ZONE=europe-west1-b
+readonly INSTANCE=${1:-ssd-server}
 
 echo "creating katas_$1.tgz on server..."
 gcloud compute --project "${PROJECT}" ssh --zone "${ZONE}" "${INSTANCE}" \
