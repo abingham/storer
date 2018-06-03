@@ -192,7 +192,7 @@ class Storer
   def tag_visible_files(kata_id, avatar_name, tag)
     assert_avatar_exists(kata_id, avatar_name)
     if tag == -1
-      tag = most_recent_tag(kata_id, avatar_name) - 1
+      tag = most_recent_tag(kata_id, avatar_name)
     end
     assert_tag_exists(kata_id, avatar_name, tag)
     if tag == 0 # tag zero is a special case
