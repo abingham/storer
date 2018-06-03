@@ -83,7 +83,7 @@ class StorerServiceTest < TestBase
 
   test 'A20',
   'avatar_ran_tests() returns increments' do
-    # This is an Batch-Method optimization to avoid web service
+    # This is an optimization to avoid web service
     # having to make a call back to storer to get the
     # tag numbers for the new traffic-light's diff handler.
     kata_id = kata_create(make_manifest)
