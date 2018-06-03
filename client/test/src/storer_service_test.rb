@@ -81,6 +81,38 @@ class StorerServiceTest < TestBase
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+  test 'A20',
+  'avatar_ran_tests() returns increments' do
+    # This is an Batch-Method optimization to avoid web service
+    # having to make a call back to storer to get the
+    # tag numbers for the new traffic-light's diff handler.
+    kata_id = kata_create(make_manifest)
+    assert_equal lion, avatar_start(kata_id, [lion])
+
+    tag1_files = starting_files
+    tag1_files.delete('hiker.h')
+    now = [2016,12,5, 21,1,34]
+    stdout = 'missing include'
+    stderr = 'assert failed'
+    colour = 'amber'
+    tags = avatar_ran_tests(kata_id, lion, tag1_files, now, stdout, stderr, colour)
+
+    expected = [
+      {"colour"=>"amber", "time"=>[2016,12,5, 21,1,34], "number"=>1}
+    ]
+    assert_equal expected, tags
+
+    now = [2016,12,5, 21,2,15]
+    tags = avatar_ran_tests(kata_id, lion, tag1_files, now, stdout, stderr, colour)
+    expected = [
+      {"colour"=>"amber", "time"=>[2016,12,5, 21,1,34], "number"=>1},
+      {"colour"=>"amber", "time"=>[2016,12,5, 21,2,15], "number"=>2}
+    ]
+    assert_equal expected, tags
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
   test 'A21',
   'after avatar_ran_tests()',
   'then there is one more traffic-light',

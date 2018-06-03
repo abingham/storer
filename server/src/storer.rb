@@ -148,6 +148,7 @@ class Storer
     files = files.clone
     files['output'] = stdout + stderr
     write_tag_files(kata_id, avatar_name, tag, files)
+    increments
   end
 
   # - - - - - - - - - - - - - - - - - - -
