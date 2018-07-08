@@ -9,7 +9,7 @@ services:
       args:
         - ALPINE_VERSION=${ALPINE_VERSION}
         - CYBER_DOJO_HOME=${CYBER_DOJO_HOME}
-        - PORT=${CYBER_DOJO_STORER_CLIENT_PORT}
+        - PORT=${STORER_CLIENT_PORT}
     user: nobody
     image: cyberdojo/storer-client
     init: true
@@ -22,12 +22,12 @@ services:
     volumes:
       - ./client/test:${CYBER_DOJO_HOME}/test:ro
     environment:
-      - CYBER_DOJO_STORER_SERVICE_NAME
-      - CYBER_DOJO_STORER_SERVICE_PORT
+      - STORER_SERVICE_NAME=storer
+      - STORER_SERVICE_PORT
       - CYBER_DOJO_KATAS_ROOT
       - CYBER_DOJO_COVERAGE_ROOT
     ports:
-      - ${CYBER_DOJO_STORER_CLIENT_PORT}:${CYBER_DOJO_STORER_CLIENT_PORT}
+      - ${STORER_CLIENT_PORT}:${STORER_CLIENT_PORT}
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 

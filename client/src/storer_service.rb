@@ -77,11 +77,11 @@ class StorerService
   include HttpJsonService
 
   def hostname
-    ENV['CYBER_DOJO_STORER_SERVICE_NAME']
+    ENV['STORER_SERVICE_NAME']
   end
 
   def port
-    ENV['CYBER_DOJO_STORER_SERVICE_PORT']
+    ENV['STORER_SERVICE_PORT']
   end
 
 end
