@@ -13,4 +13,4 @@ SimpleCov.start do
 end
 
 SimpleCov.root cov_root
-SimpleCov.coverage_dir '/tmp/coverage'
+SimpleCov.coverage_dir ENV['STORER_COVERAGE_ROOT']
