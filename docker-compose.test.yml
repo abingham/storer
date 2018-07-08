@@ -7,6 +7,7 @@ services:
     build:
       context: client
       args:
+        - ALPINE_VERSION=${ALPINE_VERSION}
         - CYBER_DOJO_HOME=${CYBER_DOJO_HOME}
         - PORT=${CYBER_DOJO_STORER_CLIENT_PORT}
     user: nobody
@@ -57,9 +58,11 @@ services:
     image: cyberdojo/starter
     init: true
     container_name: test-storer-starter-server
+    expose: [ "${STARTER_SERVICE_PORT}" ]
     read_only: true
     tmpfs: /tmp
     environment:
-      - CYBER_DOJO_START_POINTS_ROOT
+      - STARTER_SERVICE_PORT
+      - START_POINTS_ROOT
     volumes:
-      - ./start_points:${CYBER_DOJO_START_POINTS_ROOT}:ro
+      - ./start_points:${START_POINTS_ROOT}:ro
