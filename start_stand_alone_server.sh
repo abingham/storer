@@ -13,4 +13,4 @@ docker-compose \
   --file ${MY_DIR}/docker-compose.prod.yml \
   up -d
 
-echo "Don't forget to open port ${CYBER_DOJO_STORER_SERVICE_PORT}"
+echo "Don't forget to open port ${STORER_SERVICE_PORT}"

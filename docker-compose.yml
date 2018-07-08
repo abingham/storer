@@ -15,15 +15,16 @@ services:
       args:
         - ALPINE_VERSION=${ALPINE_VERSION}
         - CYBER_DOJO_HOME=${CYBER_DOJO_HOME}
-        - PORT=${STORER_SERVICE_PORT}
         - SHA=${SHA}
     user: storer
     image: cyberdojo/storer
+    expose: [ "${STORER_SERVICE_PORT}" ]
     init: true
     read_only: true
     tmpfs: /tmp
     environment:
       - CYBER_DOJO_KATAS_ROOT
+      - STORER_SERVICE_PORT
     depends_on:
       - prometheus
 

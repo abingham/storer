@@ -57,12 +57,6 @@ ARG SHA
 RUN echo ${SHA} > ${CYBER_DOJO_HOME}/sha.txt
 
 # - - - - - - - - - - - - - - - - -
-# bring it up
-# - - - - - - - - - - - - - - - - -
-
-ARG PORT
-EXPOSE ${PORT}
-ENV PORT=${PORT}
 
 CMD [ "./up.sh" ]
 
