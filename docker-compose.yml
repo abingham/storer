@@ -14,7 +14,7 @@ services:
       context: server
       args:
         - ALPINE_VERSION=${ALPINE_VERSION}
-        - CYBER_DOJO_HOME=${CYBER_DOJO_HOME}
+        - STORER_HOME=${STORER_HOME}
         - SHA=${SHA}
     user: storer
     image: cyberdojo/storer

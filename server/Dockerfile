@@ -21,9 +21,9 @@ RUN apk --update --no-cache add \
 # install ruby gems
 # - - - - - - - - - - - - - -
 
-ARG             CYBER_DOJO_HOME
-COPY Gemfile  ${CYBER_DOJO_HOME}/
-WORKDIR       ${CYBER_DOJO_HOME}
+ARG             STORER_HOME
+COPY Gemfile  ${STORER_HOME}/
+WORKDIR       ${STORER_HOME}
 
 RUN apk --update add --virtual build-dependencies build-base \
   && bundle config --global silence_root_warning 1 \
@@ -45,8 +45,8 @@ RUN apk --update --no-cache add \
 # - - - - - - - - - - - - - -
 
 RUN adduser -D -H -u 19661 storer
-COPY . ${CYBER_DOJO_HOME}
-RUN  chown -R storer ${CYBER_DOJO_HOME}
+COPY . ${STORER_HOME}
+RUN  chown -R storer ${STORER_HOME}
 USER storer
 
 # - - - - - - - - - - - - - - - - -
@@ -54,12 +54,8 @@ USER storer
 # - - - - - - - - - - - - - - - - -
 
 ARG SHA
-RUN echo ${SHA} > ${CYBER_DOJO_HOME}/sha.txt
+RUN echo ${SHA} > ${STORER_HOME}/sha.txt
 
 # - - - - - - - - - - - - - - - - -
 
 CMD [ "./up.sh" ]
-
-# Note that you cannot do this (call contents of up.sh directly in a CMD)
-# CMD [ "bundle", "exec", "rackup", "--host", "0.0.0.0", "-p", "${PORT}" ]
-# because ${...} expansions do not work in a CMD
