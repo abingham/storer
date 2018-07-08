@@ -81,7 +81,7 @@ class StorerService
   end
 
   def port
-    ENV['STORER_SERVICE_PORT']
+    ENV['STORER_SERVICE_PORT'].to_i
   end
 
 end
