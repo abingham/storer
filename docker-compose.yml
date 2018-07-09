@@ -13,9 +13,9 @@ services:
     build:
       context: server
       args:
-        - ALPINE_VERSION=${ALPINE_VERSION}
-        - STORER_HOME=${STORER_HOME}
-        - SHA=${SHA}
+        - ALPINE_VERSION
+        - STORER_HOME
+        - SHA
     user: storer
     image: cyberdojo/storer
     expose: [ "${STORER_SERVICE_PORT}" ]

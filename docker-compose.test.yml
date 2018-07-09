@@ -7,8 +7,8 @@ services:
     build:
       context: client
       args:
-        - ALPINE_VERSION=${ALPINE_VERSION}
-        - STORER_HOME=${STORER_HOME}
+        - ALPINE_VERSION
+        - STORER_HOME
     user: nobody
     image: cyberdojo/storer-client
     expose: [ "${STORER_CLIENT_PORT}" ]
