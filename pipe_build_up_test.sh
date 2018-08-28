@@ -3,8 +3,6 @@ set -e
 
 readonly MY_DIR="$( cd "$( dirname "${0}" )" && pwd )"
 
-export SHA=$(cd "${MY_DIR}" && git rev-parse HEAD)
-
 . "${MY_DIR}/env.test"
 . "${MY_DIR}/env.common"
 
