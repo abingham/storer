@@ -28,7 +28,7 @@ class Updater
     display_name = language_to_display_name(manifest['language'])
     # add new properties
     manifest['display_name'] = display_name
-    manifest['image_name'] = cache(display_name)['image_name']
+    manifest['image_name'] ||= cache(display_name)['image_name']
     # remove old properties
     manifest.delete('language')
     manifest.delete('unit_test_framework')

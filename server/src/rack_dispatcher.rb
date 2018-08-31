@@ -16,9 +16,14 @@ class RackDispatcher
   rescue StandardError => error
     triple({ 'exception' => error.message })
   #rescue Exception => error
-    #puts error.message
-    #puts error.backtrace
-    #triple({ 'exception' => error.class.name })
+    #STDERR.puts error.message
+    #STDERR.puts error.backtrace
+    #STDERR.flush
+    #info = ""
+    #info += error.class.name
+    #info += error.message
+    #info += error.backtrace.to_s
+    #triple({ 'exception' => info })
   end
 
   private # = = = = = = = = = = = =
