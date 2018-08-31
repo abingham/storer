@@ -9,6 +9,22 @@ class StorerKataManifestTest < TestBase
 
   #- - - - - - - - - - - - - - - - - - - - - - - -
 
+  test '456',
+  'failing test case from when Seb upgraded the cucumber server' do
+    kata_id = stubbed('1F00C1BFC8')
+    raw = raw_manifest(kata_id)
+    assert_equal 'Shouty, Ruby', raw['display_name']
+    updated = storer.kata_manifest(kata_id)
+    assert_unchanged(raw, updated, %w(
+      id created
+      display_name image_name runner_choice visible_files
+      filename_extension highlight_filenames lowlight_filenames progress_regexs tab_size
+    ))
+    assert_dropped(raw, updated, 'language')
+  end
+
+  #- - - - - - - - - - - - - - - - - - - - - - - -
+
   test 'E2A',
   'new-style kata not involving renaming (dolphin, 20 lights)' do
     kata_id = stubbed('420B05BA0A')

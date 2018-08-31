@@ -26,7 +26,8 @@ using something like this:
      --volumes-from ${CONTAINER_NAME}:ro \
      --volume $(pwd):/backup:rw \
      alpine:latest \
-     tar -zcf /backup/backup_5A0F824303.tgz -C ${VOLUME_PATH}/5A 0F824303
+     tar -zcf /backup/backup_${OUTER}${INNER}.tgz \
+       -C ${VOLUME_PATH}/${OUTER} ${INNER}
 
 
 

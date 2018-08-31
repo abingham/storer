@@ -27,5 +27,9 @@ id           avatar       lights     language         renaming?
 42/0B05BA0A  dolphin      20         Java-JUnit       no
 42/0F2A2979  snake        0          PHP-PHPUnit      no
 
-
+There is one defect-driven kata (it has a custom display-name)
+---------------------------------------------------------------
+id           avatar       lights     language         renaming?
+---------------------------------------------------------------
+1f/00C1BFC8  turtle       2          Ruby-Cucumber    no
 
