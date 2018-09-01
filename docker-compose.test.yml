@@ -26,14 +26,11 @@ services:
       - STORER_SERVICE_NAME=storer
       - STORER_SERVICE_PORT
       - CYBER_DOJO_KATAS_ROOT
-      - STORER_COVERAGE_ROOT
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   storer:
     container_name: test-storer-server
-    environment:
-      - STORER_COVERAGE_ROOT
     restart: 'no'
     volumes:
       - ./server/test:${STORER_HOME}/test:ro
