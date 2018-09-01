@@ -21,9 +21,9 @@ class Base58Test < TestBase
   # - - - - - - - - - - - - - - - - - - -
 
   test '066', %w(
-  no 6-digit string duplicate in 50,000 repeats ) do
+  no 6-digit string duplicate in 25,000 repeats ) do
     ids = {}
-    repeats = 50000
+    repeats = 25000
     repeats.times do
       s = Base58.string(6)
       ids[s] ||= 0
