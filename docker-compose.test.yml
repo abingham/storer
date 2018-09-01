@@ -50,11 +50,11 @@ services:
     image: cyberdojo/starter
     init: true
     container_name: test-storer-starter-server
-    expose: [ "${STARTER_SERVICE_PORT}" ]
+    expose: [ "4527" ]
     read_only: true
     tmpfs: /tmp
     environment:
-      - STARTER_SERVICE_PORT
+      - STARTER_SERVICE_PORT=4527
       - START_POINTS_ROOT
     volumes:
       - ./start_points:${START_POINTS_ROOT}:ro
