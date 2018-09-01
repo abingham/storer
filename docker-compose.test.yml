@@ -8,7 +8,7 @@ services:
       context: client
       args:
         - ALPINE_VERSION=3.7
-        - STORER_HOME
+        - STORER_HOME=/app
     user: nobody
     image: cyberdojo/storer-client
     init: true
@@ -19,7 +19,7 @@ services:
       - storer
     restart: 'no'
     volumes:
-      - ./client/test:${STORER_HOME}/test:ro
+      - ./client/test:/app/test:ro
     environment:
       - CYBER_DOJO_KATAS_ROOT
 
@@ -29,7 +29,7 @@ services:
     container_name: test-storer-server
     restart: 'no'
     volumes:
-      - ./server/test:${STORER_HOME}/test:ro
+      - ./server/test:/app/test:ro
 
   # - - - - - - - - - - - - - - - - - - - - - - -
   # monitoring
