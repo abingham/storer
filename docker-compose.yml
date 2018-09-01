@@ -13,7 +13,7 @@ services:
     build:
       context: server
       args:
-        - ALPINE_VERSION
+        - ALPINE_VERSION=3.7
         - STORER_HOME
         - SHA
     user: storer
