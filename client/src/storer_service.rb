@@ -77,11 +77,11 @@ class StorerService
   include HttpJsonService
 
   def hostname
-    ENV['STORER_SERVICE_NAME']
+    'storer'
   end
 
   def port
-    ENV['STORER_SERVICE_PORT'].to_i
+    4577
   end
 
 end

@@ -58,7 +58,5 @@ RUN echo ${SHA} > ${STORER_HOME}/sha.txt
 
 # - - - - - - - - - - - - - - - - -
 
-ARG STORER_SERVICE_PORT
-ENV STORER_SERVICE_PORT=${STORER_SERVICE_PORT}
-EXPOSE ${STORER_SERVICE_PORT}
+EXPOSE 4577
 CMD [ "./up.sh" ]

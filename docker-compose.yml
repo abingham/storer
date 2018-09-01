@@ -15,7 +15,6 @@ services:
       args:
         - ALPINE_VERSION=3.7
         - STORER_HOME
-        - STORER_SERVICE_PORT
         - SHA
     user: storer
     image: cyberdojo/storer
