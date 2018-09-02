@@ -13,8 +13,6 @@ services:
     build:
       context: server
       args:
-        - ALPINE_VERSION=3.7
-        - STORER_HOME=/app
         - SHA
     user: storer
     image: cyberdojo/storer

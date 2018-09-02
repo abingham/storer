@@ -1,14 +1,12 @@
-ARG   ALPINE_VERSION
-FROM  alpine:${ALPINE_VERSION}
+FROM  alpine:3.7
 LABEL maintainer=jon@jaggersoft.com
 
 # - - - - - - - - - - - - - -
 # install ruby+
 #   o) git is needed for reading katas in old git-format
-#   o) tar is needed to tar-pipe old git-kata in tests. This allows
-#      docker-compose.yml to set read_only:true which is what
-#      commander does in its docker-compose.yml file.
-#      Also needed to tar-pipe test coverage out of tmpfs.
+#   o) tar is needed in tests to
+#      - tar-pipe old git-katas into the katas/ dir.
+#      - tar-pipe test coverage out of /tmp tmpfs dir.
 # - - - - - - - - - - - - - -
 
 RUN apk --update --no-cache add \
@@ -21,7 +19,7 @@ RUN apk --update --no-cache add \
 # install ruby gems
 # - - - - - - - - - - - - - -
 
-ARG             STORER_HOME
+ARG             STORER_HOME=/app
 COPY Gemfile  ${STORER_HOME}/
 WORKDIR       ${STORER_HOME}
 

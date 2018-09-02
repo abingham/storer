@@ -6,9 +6,6 @@ services:
   storer_client:
     build:
       context: client
-      args:
-        - ALPINE_VERSION=3.7
-        - STORER_HOME=/app
     user: nobody
     image: cyberdojo/storer-client
     init: true
