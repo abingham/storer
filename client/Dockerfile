@@ -3,7 +3,6 @@ LABEL maintainer=jon@jaggersoft.com
 
 # - - - - - - - - - - - - - -
 # install ruby+
-#   o) git is needed for reading katas in old git-format
 #   o) tar is needed in tests to
 #      - tar-pipe old git-katas into the katas/ dir.
 #      - tar-pipe test coverage out of /tmp tmpfs dir.
@@ -32,6 +31,7 @@ RUN apk --update add --virtual build-dependencies build-base \
 
 # - - - - - - - - - - - - - -
 # install non-commons
+# o) git is needed for reading katas in old git-format
 # - - - - - - - - - - - - - -
 
 RUN apk --update --no-cache add \
