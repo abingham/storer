@@ -31,5 +31,5 @@ There is one defect-driven kata (it has a custom display-name)
 ---------------------------------------------------------------
 id           avatar       lights     language         renaming?
 ---------------------------------------------------------------
-1f/00C1BFC8  turtle       2          Ruby-Cucumber    no
+1F/00C1BFC8  turtle       2          Ruby-Cucumber    no
 
