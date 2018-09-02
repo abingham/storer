@@ -19,7 +19,6 @@ services:
     user: storer
     image: cyberdojo/storer
     init: true
-    read_only: true
     tmpfs: /tmp
     environment:
       - CYBER_DOJO_KATAS_ROOT

@@ -13,7 +13,6 @@ services:
     image: cyberdojo/storer-client
     init: true
     container_name: test-storer-client
-    read_only: true
     tmpfs: /tmp
     depends_on:
       - storer
