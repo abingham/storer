@@ -1,13 +1,13 @@
 #!/bin/bash
 set -e
 
-# called from pipe_build_up_test.sh
+# called from start_stand_alone_server.sh
 
 readonly MY_DIR="$( cd "$( dirname "${0}" )" && pwd )"
 readonly CONTEXT_DIR=${MY_DIR}
 readonly TAG=cyberdojo/storer_kata
 
-. ${MY_DIR}/../env.prod
+source ${MY_DIR}/../env.prod
 
 docker rm \
   --force \

@@ -20,8 +20,6 @@ services:
     image: cyberdojo/storer
     init: true
     tmpfs: /tmp
-    environment:
-      - CYBER_DOJO_KATAS_ROOT
     depends_on:
       - prometheus
 

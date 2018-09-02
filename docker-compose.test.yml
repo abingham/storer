@@ -17,8 +17,6 @@ services:
     depends_on:
       - storer
     restart: 'no'
-    environment:
-      - CYBER_DOJO_KATAS_ROOT
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 

@@ -152,7 +152,7 @@ class TestBase < HexMiniTest
   end
 
   def cyber_dojo_katas_root
-    ENV['CYBER_DOJO_KATAS_ROOT']
+    storer.path
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - -

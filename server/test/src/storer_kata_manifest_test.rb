@@ -184,7 +184,7 @@ class StorerKataManifestTest < TestBase
   def raw_manifest(kata_id)
     outer = kata_id[0..1]
     inner = kata_id[2..-1]
-    dir = [ENV['CYBER_DOJO_KATAS_ROOT'],outer,inner].join('/')
+    dir = [cyber_dojo_katas_root,outer,inner].join('/')
     JSON.parse(IO.read(dir + '/manifest.json'))
   end
 

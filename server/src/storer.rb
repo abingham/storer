@@ -5,7 +5,7 @@ require 'json'
 class Storer
 
   def initialize(external)
-    @path = ENV['CYBER_DOJO_KATAS_ROOT']
+    @path = '/usr/src/cyber-dojo/katas'
     @disk = external.disk
     @shell = external.shell
     @kata_id_generator = external.kata_id_generator
