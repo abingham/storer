@@ -18,8 +18,6 @@ services:
     depends_on:
       - storer
     restart: 'no'
-    volumes:
-      - ./client/test:/app/test:ro
     environment:
       - CYBER_DOJO_KATAS_ROOT
 
@@ -28,8 +26,6 @@ services:
   storer:
     container_name: test-storer-server
     restart: 'no'
-    volumes:
-      - ./server/test:/app/test:ro
 
   # - - - - - - - - - - - - - - - - - - - - - - -
   # monitoring
