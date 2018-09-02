@@ -11,9 +11,9 @@ class StorerTest < TestBase
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '218',
-  'path is set to ENV[CYBER_DOJO_KATAS_ROOT] which is off /tmp for tests' do
+  'katas_root is set to same as prod but there is no volume-mount so its emphemeral' do
     assert_equal cyber_dojo_katas_root, storer.path
-    assert_equal '/tmp/cyber-dojo/katas', storer.path
+    assert_equal '/usr/src/cyber-dojo/katas', storer.path
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
