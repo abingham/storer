@@ -1,5 +1,6 @@
-require 'json'
+require_relative 'client_error'
 require_relative 'well_formed_args'
+require 'json'
 
 class RackDispatcher
 
@@ -13,7 +14,8 @@ class RackDispatcher
   def call(env)
     request = @request.new(env)
     name, args = validated_name_args(request)
-    triple(200, { name => @storer.send(name, *args) })
+    result = @storer.send(name, *args)
+    json_triple(200, { name => result })
   rescue => error
     info = {
       'exception' => {
@@ -24,7 +26,7 @@ class RackDispatcher
     }
     $stderr.puts JSON.pretty_generate(info)
     $stderr.flush
-    triple(400, info)
+    json_triple(code_400_500(error), info)
   end
 
   private # = = = = = = = = = = = =
@@ -55,7 +57,7 @@ class RackDispatcher
 
       when /^tags_visible_files$/   then [kata_id, avatar_name, was_tag, now_tag]
       else
-        raise ArgumentError.new('json:invalid')
+        raise ClientError, 'json:malformed'
     end
     name += '?' if query?(name)
     [name, args]
@@ -63,8 +65,16 @@ class RackDispatcher
 
   private # - - - - - - - - - - - - - - - -
 
-  def triple(n, body)
-    [ n, { 'Content-Type' => 'application/json' }, [ body.to_json ] ]
+  def json_triple(n, body)
+    [ n, { 'Content-Type' => 'application/json' }, [ to_json(body) ] ]
+  end
+
+  def to_json(o)
+    JSON.pretty_generate(o)
+  end
+
+  def code_400_500(error)
+    error.is_a?(ClientError) ? 400 : 500
   end
 
   # - - - - - - - - - - - - - - - -

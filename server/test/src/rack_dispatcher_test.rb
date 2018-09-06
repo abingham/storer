@@ -13,7 +13,11 @@ class RackDispatcherTest < TestBase
 
   test 'E5A',
   'dispatch raises when method name is unknown' do
-    assert_dispatch_raises('unknown', {}, 'json:invalid')
+    assert_dispatch_raises('unknown',
+      {},
+      400,
+      'ClientError',
+      'json:malformed')
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -22,6 +26,8 @@ class RackDispatcherTest < TestBase
   'dispatch raises when any argument is malformed' do
     assert_dispatch_raises('kata_increments',
       { kata_id:malformed_kata_id },
+      500,
+      'ArgumentError',
       'kata_id:malformed'
     )
   end
@@ -274,12 +280,12 @@ class RackDispatcherTest < TestBase
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  def assert_dispatch_raises(name, args, message)
+  def assert_dispatch_raises(name, args, status, class_name, message)
     tuple,stderr = with_captured_stderr { rack_call(name, args) }
-    assert_equal 400, tuple[0]
+    assert_equal status, tuple[0]
     assert_equal({ 'Content-Type' => 'application/json' }, tuple[1])
-    assert_exception(tuple[2][0], 'ArgumentError', message)
-    assert_exception(stderr, 'ArgumentError', message)
+    assert_exception(tuple[2][0], class_name, message)
+    assert_exception(stderr, class_name, message)
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -312,7 +318,7 @@ class RackDispatcherTest < TestBase
     tuple = rack_call(name, args)
     assert_equal 200, tuple[0]
     assert_equal({ 'Content-Type' => 'application/json' }, tuple[1])
-    assert_equal [ expected.to_json ], tuple[2], args
+    assert_equal [ to_json(expected) ], tuple[2], args
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -321,6 +327,12 @@ class RackDispatcherTest < TestBase
     rack = RackDispatcher.new(StorerStub.new, RackRequestStub)
     env = { path_info:name, body:args.to_json }
     rack.call(env)
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  def to_json(o)
+    JSON.pretty_generate(o)
   end
 
 end
