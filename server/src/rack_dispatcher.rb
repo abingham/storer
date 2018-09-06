@@ -24,7 +24,7 @@ class RackDispatcher
         'backtrace' => error.backtrace
       }
     }
-    $stderr.puts JSON.pretty_generate(info)
+    $stderr.puts pretty(info)
     $stderr.flush
     json_triple(status(error), info)
   end
@@ -66,10 +66,10 @@ class RackDispatcher
   private # - - - - - - - - - - - - - - - -
 
   def json_triple(n, body)
-    [ n, { 'Content-Type' => 'application/json' }, [ to_json(body) ] ]
+    [ n, { 'Content-Type' => 'application/json' }, [ pretty(body) ] ]
   end
 
-  def to_json(o)
+  def pretty(o)
     JSON.pretty_generate(o)
   end
 
