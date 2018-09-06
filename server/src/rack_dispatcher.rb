@@ -26,7 +26,7 @@ class RackDispatcher
     }
     $stderr.puts JSON.pretty_generate(info)
     $stderr.flush
-    json_triple(code_400_500(error), info)
+    json_triple(status(error), info)
   end
 
   private # = = = = = = = = = = = =
@@ -73,7 +73,7 @@ class RackDispatcher
     JSON.pretty_generate(o)
   end
 
-  def code_400_500(error)
+  def status(error)
     error.is_a?(ClientError) ? 400 : 500
   end
 
