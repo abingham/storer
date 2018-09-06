@@ -1,3 +1,4 @@
+require 'json'
 require_relative 'well_formed_args'
 
 class RackDispatcher
@@ -12,18 +13,18 @@ class RackDispatcher
   def call(env)
     request = @request.new(env)
     name, args = validated_name_args(request)
-    triple({ name => @storer.send(name, *args) })
-  rescue StandardError => error
-    triple({ 'exception' => error.message })
-  #rescue Exception => error
-    #STDERR.puts error.message
-    #STDERR.puts error.backtrace
-    #STDERR.flush
-    #info = ""
-    #info += error.class.name
-    #info += error.message
-    #info += error.backtrace.to_s
-    #triple({ 'exception' => info })
+    triple(200, { name => @storer.send(name, *args) })
+  rescue => error
+    info = {
+      'exception' => {
+        'class' => error.class.name,
+        'message' => error.message,
+        'backtrace' => error.backtrace
+      }
+    }
+    $stderr.puts JSON.pretty_generate(info)
+    $stderr.flush
+    triple(400, info)
   end
 
   private # = = = = = = = = = = = =
@@ -62,8 +63,8 @@ class RackDispatcher
 
   private # - - - - - - - - - - - - - - - -
 
-  def triple(body)
-    [ 200, { 'Content-Type' => 'application/json' }, [ body.to_json ] ]
+  def triple(n, body)
+    [ n, { 'Content-Type' => 'application/json' }, [ body.to_json ] ]
   end
 
   # - - - - - - - - - - - - - - - -

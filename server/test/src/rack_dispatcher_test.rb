@@ -274,21 +274,53 @@ class RackDispatcherTest < TestBase
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  def assert_dispatch_raises(name, args, msg)
-    assert_rack_call(name, args, { 'exception' => msg })
+  def assert_dispatch_raises(name, args, message)
+    tuple,stderr = with_captured_stderr { rack_call(name, args) }
+    assert_equal 400, tuple[0]
+    assert_equal({ 'Content-Type' => 'application/json' }, tuple[1])
+    assert_exception(tuple[2][0], 'ArgumentError', message)
+    assert_exception(stderr, 'ArgumentError', message)
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  def assert_exception(s, class_name, message)
+    json = JSON.parse(s)
+    exception = json['exception']
+    refute_nil exception
+    assert_equal class_name, exception['class']
+    assert_equal message, exception['message']
+    assert_equal 'Array', exception['backtrace'].class.name
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  def with_captured_stderr
+    begin
+      old_stderr = $stderr
+      $stderr = StringIO.new('', 'w')
+      tuple = yield
+      return [ tuple, $stderr.string ]
+    ensure
+      $stderr = old_stderr
+    end
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   def assert_rack_call(name, args, expected)
-    rack = RackDispatcher.new(StorerStub.new, RackRequestStub)
-    env = { path_info:name, body:args.to_json }
-
-    tuple = rack.call(env)
-
+    tuple = rack_call(name, args)
     assert_equal 200, tuple[0]
     assert_equal({ 'Content-Type' => 'application/json' }, tuple[1])
     assert_equal [ expected.to_json ], tuple[2], args
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  def rack_call(name, args)
+    rack = RackDispatcher.new(StorerStub.new, RackRequestStub)
+    env = { path_info:name, body:args.to_json }
+    rack.call(env)
   end
 
 end

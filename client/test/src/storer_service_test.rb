@@ -12,8 +12,13 @@ class StorerServiceTest < TestBase
   test '966',
   'malformed kata-id on any method raises' do
     error = assert_raises { kata_manifest(nil) }
-    expected = 'StorerService:kata_manifest:kata_id:malformed'
-    assert_equal expected, error.message
+    assert_equal 'ServiceError', error.class.name
+    assert_equal 'StorerService', error.service_name
+    assert_equal 'kata_manifest', error.method_name
+    json = JSON.parse(error.message)
+    assert_equal 'ArgumentError', json['class']
+    assert_equal 'kata_id:malformed', json['message']
+    assert_equal 'Array', json['backtrace'].class.name
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -122,7 +127,7 @@ class StorerServiceTest < TestBase
 
     tag1_files = starting_files
     tag1_files.delete('hiker.h')
-    now = [2016, 12, 5, 21, 01, 34]
+    now = [2016,12,5, 21,1,34]
     stdout = 'missing include'
     stderr = 'assert failed'
     colour = 'amber'
@@ -138,7 +143,7 @@ class StorerServiceTest < TestBase
     tag2_files = tag1_files.clone
     tag2_files.delete('output')
     tag2_files['readme.txt'] = 'Your task is to print...'
-    now = [2016, 12, 6, 9, 31, 56]
+    now = [2016,12,6, 9,31,56]
     stdout = 'All tests passed'
     stderr = ''
     colour = 'green'
@@ -166,7 +171,7 @@ class StorerServiceTest < TestBase
 
     files = starting_files
     files['very_large'] = 'X'*1024*500
-    now = [2016, 12, 5, 21, 01, 34]
+    now = [2016,12,5, 21,1,34]
     stdout = 'missing include'
     stderr = 'assertion failed'
     colour = 'amber'
@@ -179,7 +184,7 @@ class StorerServiceTest < TestBase
   'you can fork from any tag' do
     id = '420B05BA0A'
     tag = 20
-    now = [2018,3,16,9,57,19]
+    now = [2018,3,16, 9,57,19]
     forked_id = tag_fork(id, 'dolphin', tag, now)
     refute_equal forked_id, id
   end
@@ -225,7 +230,7 @@ class StorerServiceTest < TestBase
   end
 
   def creation_time
-    [ 2016, 12, 15, 17, 26, 34 ]
+    [ 2016,12,15, 17,26,34 ]
   end
 
 end

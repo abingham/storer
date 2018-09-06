@@ -8,8 +8,5 @@ use Rack::Deflater, if: ->(_, _, _, body) { body.any? && body[0].length > 512 }
 use Prometheus::Middleware::Collector
 use Prometheus::Middleware::Exporter
 
-$stdout.sync = true
-$stderr.sync = true
-
 external = External.new
 run RackDispatcher.new(external.storer, Rack::Request)
