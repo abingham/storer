@@ -15,7 +15,7 @@ class RackDispatcher
     request = @request.new(env)
     name, args = validated_name_args(request)
     result = @storer.send(name, *args)
-    json_triple(200, { name => result })
+    json_response(200, { name => result })
   rescue => error
     info = {
       'exception' => {
@@ -26,7 +26,7 @@ class RackDispatcher
     }
     $stderr.puts pretty(info)
     $stderr.flush
-    json_triple(status(error), info)
+    json_response(status(error), info)
   end
 
   private # = = = = = = = = = = = =
@@ -65,8 +65,8 @@ class RackDispatcher
 
   private # - - - - - - - - - - - - - - - -
 
-  def json_triple(n, body)
-    [ n, { 'Content-Type' => 'application/json' }, [ pretty(body) ] ]
+  def json_response(status, body)
+    [ status, { 'Content-Type' => 'application/json' }, [ pretty(body) ] ]
   end
 
   def pretty(o)
@@ -80,9 +80,9 @@ class RackDispatcher
   # - - - - - - - - - - - - - - - -
 
   def self.well_formed_args(*names)
-      names.each do |name|
-        define_method name, &lambda { @well_formed_args.send(name) }
-      end
+    names.each do |name|
+      define_method name, &lambda { @well_formed_args.send(name) }
+    end
   end
 
   well_formed_args :manifest
