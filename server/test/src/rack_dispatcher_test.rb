@@ -281,10 +281,10 @@ class RackDispatcherTest < TestBase
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   def assert_dispatch_raises(name, args, status, class_name, message)
-    tuple,stderr = with_captured_stderr { rack_call(name, args) }
-    assert_equal status, tuple[0]
-    assert_equal({ 'Content-Type' => 'application/json' }, tuple[1])
-    assert_exception(tuple[2][0], class_name, message)
+    response,stderr = with_captured_stderr { rack_call(name, args) }
+    assert_equal status, response[0]
+    assert_equal({ 'Content-Type' => 'application/json' }, response[1])
+    assert_exception(response[2][0], class_name, message)
     assert_exception(stderr, class_name, message)
   end
 
@@ -305,8 +305,8 @@ class RackDispatcherTest < TestBase
     begin
       old_stderr = $stderr
       $stderr = StringIO.new('', 'w')
-      tuple = yield
-      return [ tuple, $stderr.string ]
+      response = yield
+      return [ response, $stderr.string ]
     ensure
       $stderr = old_stderr
     end
@@ -315,10 +315,10 @@ class RackDispatcherTest < TestBase
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   def assert_rack_call(name, args, expected)
-    tuple = rack_call(name, args)
-    assert_equal 200, tuple[0]
-    assert_equal({ 'Content-Type' => 'application/json' }, tuple[1])
-    assert_equal [ to_json(expected) ], tuple[2], args
+    response = rack_call(name, args)
+    assert_equal 200, response[0]
+    assert_equal({ 'Content-Type' => 'application/json' }, response[1])
+    assert_equal [ to_json(expected) ], response[2], args
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
