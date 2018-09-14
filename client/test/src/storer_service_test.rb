@@ -11,12 +11,11 @@ class StorerServiceTest < TestBase
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'F4C',
-  'generates Base58 ids' do
-    42.times do
-      generated = iid
-      assert Base58.string?(generated), "Base58.string?(#{generated})"
-      assert_equal 10, iid.size
-    end
+  'iid generates an available Base58 id' do
+    generated = iid
+    assert Base58.string?(generated), "Base58.string?(#{generated})"
+    assert_equal 10, iid.size
+    refute kata_exists?(generated)
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
