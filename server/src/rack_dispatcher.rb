@@ -35,7 +35,8 @@ class RackDispatcher
     name = request.path_info[1..-1] # lose leading /
     @well_formed_args = WellFormedArgs.new(request.body.read)
     args = case name
-      when /^sha$/                  then []
+      when /^sha$/,
+           /^iid$/                  then []
       when /^kata_create$/          then [manifest]
       when /^kata_exists$/,
            /^kata_manifest$/,

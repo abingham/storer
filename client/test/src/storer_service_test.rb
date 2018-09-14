@@ -1,10 +1,22 @@
 require_relative 'test_base'
+require_relative 'base58'
 require 'json'
 
 class StorerServiceTest < TestBase
 
   def self.hex_prefix
     '6AA1B'
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  test 'F4C',
+  'generates Base58 ids' do
+    42.times do
+      generated = iid
+      assert Base58.string?(generated), "Base58.string?(#{generated})"
+      assert_equal 10, iid.size
+    end
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -

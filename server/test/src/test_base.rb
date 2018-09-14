@@ -39,6 +39,10 @@ class TestBase < HexMiniTest
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+  def iid()
+    storer.iid()
+  end
+
   def kata_manifest(kata_id)
     storer.kata_manifest(kata_id)
   end
