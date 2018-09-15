@@ -17,10 +17,6 @@ class Storer
     IO.read('/app/sha.txt').strip
   end
 
-  def iid
-    kata_id_generator.generate
-  end
-
   # - - - - - - - - - - - - - - - - - - -
   # completion(s)
   # - - - - - - - - - - - - - - - - - - -

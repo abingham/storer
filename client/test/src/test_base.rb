@@ -3,10 +3,6 @@ require_relative '../../src/storer_service'
 
 class TestBase < HexMiniTest
 
-  def iid
-    storer.iid
-  end
-
   def kata_create(manifest)
     storer.kata_create(manifest)
   end
