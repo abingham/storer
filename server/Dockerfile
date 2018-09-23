@@ -10,7 +10,7 @@ RUN adduser -D -H -u 19661 storer
 ARG                    STORER_HOME=/app
 COPY .               ${STORER_HOME}
 RUN  chown -R storer ${STORER_HOME}
-USER storer
+#USER storer
 
 # - - - - - - - - - - - - - - - - -
 # git commit sha image is built from

@@ -34,8 +34,8 @@ jobs:
             helm init --client-only
             helm repo add praqma https://praqma-helm-repo.s3.amazonaws.com/
             # temporarily turn off --reuse-values to get storer deployed
-            #helm upgrade --install --reuse-values --namespace=beta --set image.storer.tag=${CIRCLE_SHA1:0:7} beta-cyber-dojo praqma/cyber-dojo
-            helm upgrade --install --namespace=beta --set image.storer.tag=${CIRCLE_SHA1:0:7} beta-cyber-dojo praqma/cyber-dojo
+            helm upgrade --install --reuse-values --namespace=beta --set image.storer.tag=${CIRCLE_SHA1:0:7} beta-cyber-dojo praqma/cyber-dojo
+            # helm upgrade --install --namespace=beta --set image.storer.tag=${CIRCLE_SHA1:0:7} beta-cyber-dojo praqma/cyber-dojo
 
 workflows:
   version: 2
