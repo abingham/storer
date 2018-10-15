@@ -1,14 +1,16 @@
 #!/bin/bash
 set -e
 
-readonly MY_DIR="$( cd "$( dirname "${0}" )" && pwd )"
+readonly ROOT_DIR="$( cd "$( dirname "${0}" )" && pwd )"
+readonly MY_NAME="${ROOT_DIR##*/}"
+readonly SH_DIR="${ROOT_DIR}/sh"
 
-source "${MY_DIR}/env.test"
-
-"${MY_DIR}/sh/docker_containers_down.sh"
-"${MY_DIR}/sh/build_docker_images.sh"
-"${MY_DIR}/sh/docker_containers_up.sh"
-"${MY_DIR}/katas_old/tar_pipe_in.sh"
-if "${MY_DIR}/sh/run_tests_in_containers.sh" "$@"; then
-  "${MY_DIR}/sh/docker_containers_down.sh"
+"${SH_DIR}/docker_containers_down.sh"
+"${SH_DIR}/build_docker_images.sh"
+"${SH_DIR}/docker_containers_up.sh"
+"${ROOT_DIR}/katas_old/tar_pipe_in.sh"
+if "${SH_DIR}/run_tests_in_containers.sh" "$@"; then
+  "${SH_DIR}/docker_containers_down.sh"
+  docker rmi "cyberdojo/${MY_NAME}-client" > /dev/null 2>&1
+  docker image prune --force > /dev/null 2>&1
 fi
