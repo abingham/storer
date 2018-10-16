@@ -12,6 +12,9 @@ class Updater
     if manifest['filename_extension'].nil?
       change_3_required_filename_extension(manifest)
     end
+    if manifest['lowlight_filenames']
+      change4_removed_lowlight_filenames(manifest)
+    end
     # remove dead properties
     manifest.delete('browser')
     manifest.delete('red_amber_green')
@@ -55,6 +58,12 @@ class Updater
     display_name = manifest['display_name']
     fe = cache(display_name)['filename_extension']
     manifest['filename_extension'] = fe
+  end
+
+  # - - - - - - - - - - - - - - - - -
+
+  def self.change4_removed_lowlight_filenames(manifest)
+    manifest.delete('lowlight_filenames')
   end
 
   # - - - - - - - - - - - - - - - - -
