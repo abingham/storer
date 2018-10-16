@@ -4,21 +4,25 @@ require 'json'
 
 class RackDispatcher
 
-  def initialize(storer, request)
+  def initialize(storer, request_class)
     @storer = storer
-    @request = request
+    @request_class = request_class
   end
 
   # - - - - - - - - - - - - - - - -
 
   def call(env)
-    request = @request.new(env)
-    name, args = validated_name_args(request)
-    result = @storer.send(name, *args)
+    request = @request_class.new(env)
+    path = request.path_info[1..-1] # lose leading /
+    body = request.body.read
+    name, args = validated_name_args(path, body)
+    result = @storer.public_send(name, *args)
     json_response(200, plain({ name => result }))
   rescue => error
     diagnostic = pretty({
       'exception' => {
+        'path' => path,
+        'body' => body,
         'class' => 'StorerService',
         'message' => error.message,
         'backtrace' => error.backtrace
@@ -31,9 +35,8 @@ class RackDispatcher
 
   private # = = = = = = = = = = = =
 
-  def validated_name_args(request)
-    name = request.path_info[1..-1] # lose leading /
-    @well_formed_args = WellFormedArgs.new(request.body.read)
+  def validated_name_args(name, body)
+    @well_formed_args = WellFormedArgs.new(body)
     args = case name
       when /^sha$/                  then []
       when /^kata_create$/          then [manifest]
