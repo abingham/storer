@@ -15,18 +15,18 @@ class RackDispatcher
     request = @request.new(env)
     name, args = validated_name_args(request)
     result = @storer.send(name, *args)
-    json_response(200, { name => result })
+    json_response(200, plain({ name => result }))
   rescue => error
-    info = {
+    diagnostic = pretty({
       'exception' => {
         'class' => 'StorerService',
         'message' => error.message,
         'backtrace' => error.backtrace
       }
-    }
-    $stderr.puts(pretty(info))
+    })
+    $stderr.puts(diagnostic)
     $stderr.flush
-    json_response(status(error), info)
+    json_response(code(error), diagnostic)
   end
 
   private # = = = = = = = = = = = =
@@ -66,15 +66,23 @@ class RackDispatcher
   private # - - - - - - - - - - - - - - - -
 
   def json_response(status, body)
-    [ status, { 'Content-Type' => 'application/json' }, [ pretty(body) ] ]
+    [ status, { 'Content-Type' => 'application/json' }, [ body ] ]
+  end
+
+  def plain(body)
+    JSON.generate(body)
   end
 
   def pretty(o)
     JSON.pretty_generate(o)
   end
 
-  def status(error)
-    error.is_a?(ClientError) ? 400 : 500
+  def code(error)
+    if error.is_a?(ClientError)
+      400 # client_error
+    else
+      500 # server_error
+    end
   end
 
   # - - - - - - - - - - - - - - - -

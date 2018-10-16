@@ -319,7 +319,7 @@ class RackDispatcherTest < TestBase
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   def to_json(o)
-    JSON.pretty_generate(o)
+    JSON.generate(o)
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
