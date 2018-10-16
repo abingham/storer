@@ -16,7 +16,7 @@ class StorerServiceTest < TestBase
     assert_equal 'StorerService', error.service_name
     assert_equal 'kata_manifest', error.method_name
     json = JSON.parse(error.message)
-    assert_equal 'ArgumentError', json['class']
+    assert_equal 'StorerService', json['class']
     assert_equal 'kata_id:malformed', json['message']
     assert_equal 'Array', json['backtrace'].class.name
   end

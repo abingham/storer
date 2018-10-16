@@ -19,12 +19,12 @@ class RackDispatcher
   rescue => error
     info = {
       'exception' => {
-        'class' => error.class.name,
+        'class' => 'StorerService',
         'message' => error.message,
         'backtrace' => error.backtrace
       }
     }
-    $stderr.puts pretty(info)
+    $stderr.puts(pretty(info))
     $stderr.flush
     json_response(status(error), info)
   end

@@ -16,7 +16,7 @@ class RackDispatcherTest < TestBase
     assert_dispatch_raises('unknown',
       {},
       400,
-      'ClientError',
+      'StorerService',
       'json:malformed')
   end
 
@@ -27,7 +27,7 @@ class RackDispatcherTest < TestBase
     assert_dispatch_raises('kata_increments',
       { kata_id:malformed_kata_id },
       500,
-      'ArgumentError',
+      'StorerService',
       'kata_id:malformed'
     )
   end
