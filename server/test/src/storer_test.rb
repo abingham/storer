@@ -266,7 +266,6 @@ class StorerTest < TestBase
           assert_equal manifest[key], forked_manifest[key]
       end
     end
-    refute manifest.keys.include?('lowlight_filenames')
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -

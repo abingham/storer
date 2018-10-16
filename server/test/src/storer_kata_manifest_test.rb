@@ -18,7 +18,7 @@ class StorerKataManifestTest < TestBase
     assert_unchanged(raw, updated, %w(
       id created
       display_name image_name runner_choice visible_files
-      filename_extension highlight_filenames lowlight_filenames progress_regexs tab_size
+      filename_extension highlight_filenames progress_regexs tab_size
     ))
     assert_dropped(raw, updated, 'language')
   end
@@ -34,7 +34,7 @@ class StorerKataManifestTest < TestBase
     assert_unchanged(raw, updated, %w(
       id created
       display_name exercise image_name runner_choice visible_files
-      filename_extension highlight_filenames lowlight_filenames progress_regexs tab_size
+      filename_extension highlight_filenames progress_regexs tab_size
     ))
     assert_dropped(raw, updated, 'language')
   end
@@ -50,7 +50,7 @@ class StorerKataManifestTest < TestBase
     assert_unchanged(raw, updated, %w(
       id created
       display_name exercise image_name runner_choice visible_files
-      filename_extension highlight_filenames lowlight_filenames progress_regexs tab_size
+      filename_extension highlight_filenames progress_regexs tab_size
     ))
     assert_dropped(raw, updated, 'language')
   end
@@ -131,7 +131,7 @@ class StorerKataManifestTest < TestBase
 
     assert_unchanged(raw, updated,
       %w( id created display_name exercise image_name visible_files
-          filename_extension highlight_filenames lowlight_filenames
+          filename_extension highlight_filenames
           progress_regexs tab_size )
     )
     assert_dropped(raw, updated,
