@@ -27,6 +27,19 @@ class DiskWriterTest < TestBase
 
   # - - - - - - - - - - - - - - - - - - - - - - - - -
 
+  test '341',
+  'dir.rm removes a directory' do
+    dir = disk['tmp/34/C6BBF2AE']
+    refute dir.exists?
+    assert dir.make
+    assert dir.exists?
+    dir.rm
+    refute dir.exists?
+    assert dir.make
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - -
+
   test '61F',
   'dir.exists?(filename) false when file does not exist, true when it does' do
     dir = disk['/tmp/61F']

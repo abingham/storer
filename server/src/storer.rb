@@ -87,6 +87,14 @@ class Storer
 
   # - - - - - - - - - - - - - - - - - - -
 
+  def kata_delete(kata_id)
+    assert_kata_exists(kata_id)
+    dir = kata_dir(kata_id)
+    dir.rm
+  end
+
+  # - - - - - - - - - - - - - - - - - - -
+
   def kata_manifest(kata_id)
     assert_kata_exists(kata_id)
     dir = kata_dir(kata_id)

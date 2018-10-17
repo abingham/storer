@@ -40,7 +40,8 @@ class RackDispatcher
     args = case name
       when /^sha$/                  then []
       when /^kata_create$/          then [manifest]
-      when /^kata_exists$/,
+      when /^kata_delete$/,
+           /^kata_exists$/,
            /^kata_manifest$/,
            /^kata_increments$/      then [kata_id]
 

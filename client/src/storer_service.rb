@@ -10,6 +10,10 @@ class StorerService
     post(__method__, manifest)
   end
 
+  def kata_delete(kata_id)
+    post(__method__, kata_id)
+  end
+
   def kata_manifest(kata_id)
     get(__method__, kata_id)
   end

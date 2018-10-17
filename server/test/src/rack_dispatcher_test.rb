@@ -35,10 +35,14 @@ class RackDispatcherTest < TestBase
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'E5C',
-  'dispatch to kata_create' do
+  'dispatch to kata_create and kata_delete' do
     assert_dispatch('kata_create',
       { manifest:bare_manifest },
       'hello from StorerStub.kata_create'
+    )
+    assert_dispatch('kata_delete',
+      { kata_id:well_formed_kata_id },
+      'hello from StorerStub.kata_delete'
     )
   end
 

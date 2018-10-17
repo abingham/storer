@@ -20,6 +20,10 @@ class DirWriter
     output != ''
   end
 
+  def rm
+    shell.exec("rm -rf #{name}")
+  end
+
   def exists?(filename = nil)
     if filename.nil?
       File.directory?(name)

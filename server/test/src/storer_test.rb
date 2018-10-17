@@ -65,6 +65,19 @@ class StorerTest < TestBase
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+  # kata_delete
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  test 'D64',
+  'kata_delete removes a previously created kata' do
+    manifest = create_manifest
+    id = storer.kata_create(manifest)
+    assert storer.kata_exists?(id)
+    storer.kata_delete(id)
+    refute storer.kata_exists?(id)
+  end
+
+  #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # kata_increments
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 

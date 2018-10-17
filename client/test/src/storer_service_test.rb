@@ -51,6 +51,17 @@ class StorerServiceTest < TestBase
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+  test '735',
+  'after kata_delete then kata_exists? is false' do
+    manifest = make_manifest
+    kata_id = kata_create(manifest)
+    assert kata_exists?(kata_id)
+    kata_delete(kata_id)
+    refute kata_exists?(kata_id)
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
   test '507',
   'katas_completions' do
     manifest = make_manifest

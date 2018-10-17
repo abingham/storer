@@ -3,12 +3,16 @@ require_relative '../../src/storer_service'
 
 class TestBase < HexMiniTest
 
+  def kata_exists?(kata_id)
+    storer.kata_exists?(kata_id)
+  end
+
   def kata_create(manifest)
     storer.kata_create(manifest)
   end
 
-  def kata_exists?(kata_id)
-    storer.kata_exists?(kata_id)
+  def kata_delete(kata_id)
+    storer.kata_delete(kata_id)
   end
 
   def kata_manifest(kata_id)

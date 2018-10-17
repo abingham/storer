@@ -5,11 +5,15 @@ class StorerStub
     "hello from #{self.class.name}.#{__method__}"
   end
 
+  def kata_exists?(_)
+    "hello from #{self.class.name}.#{__method__}"
+  end
+
   def kata_create(_)
     "hello from #{self.class.name}.#{__method__}"
   end
 
-  def kata_exists?(_)
+  def kata_delete(_)
     "hello from #{self.class.name}.#{__method__}"
   end
 
