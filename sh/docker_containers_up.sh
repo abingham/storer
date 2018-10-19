@@ -7,7 +7,8 @@ source "${ROOT_DIR}/env.test"
 docker-compose \
   --file "${ROOT_DIR}/docker-compose.yml" \
   --file "${ROOT_DIR}/docker-compose.test.yml" \
-  up -d \
+  up \
+  --detach \
   --force-recreate
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - -
