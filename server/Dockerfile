@@ -21,6 +21,6 @@ RUN echo ${SHA} > ${STORER_HOME}/sha.txt
 
 # - - - - - - - - - - - - - - - - -
 
-#USER storer
+USER storer
 EXPOSE 4577
 CMD [ "./up.sh" ]
