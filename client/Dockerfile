@@ -8,7 +8,7 @@ LABEL maintainer=jon@jaggersoft.com
 ARG                            STORER_HOME=/app
 COPY .                       ${STORER_HOME}
 RUN  chown -R nobody:nogroup ${STORER_HOME}
-USER nobody
 
+USER nobody
 EXPOSE 4578
 CMD [ "./up.sh" ]
