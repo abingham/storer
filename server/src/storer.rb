@@ -22,17 +22,10 @@ class Storer
   # - - - - - - - - - - - - - - - - - - -
 
   def katas_completed(partial_id)
-    # If at least 6 characters of the kata_id are provided
-    # attempt to complete it into the full characters. Doing
+    # A partial_id has at least 6 characters. Doing
     # completion with fewer characters would likely result in
-    # a lot of disk activity and no unique outcome. Also, if
-    # completion was attempted for a very short id (say 3
-    # characters) it would provide a way for anyone to find
-    # the full id of a cyber-dojo and potentially interfere
-    # with a live session.
-    unless partial_id.length >= 6
-      return ''
-    end
+    # a lot of disk activity and no unique outcome.
+    
     outer_dir = disk[dir_join(path, outer(partial_id))]
     unless outer_dir.exists?
       return ''

@@ -20,20 +20,6 @@ class StorerCompletionTest < TestBase
   # katas_completed()
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  test '42E',
-  'katas_completed(id) is empty-string when id is less than 6 chars in length',
-  'because trying to complete from a short id will waste time going through',
-  'lots of candidates (on disk) with the likely outcome of no unique result' do
-    kata_id = make_kata
-    5.times do |n|
-      partial_id = kata_id[0...n]
-      assert_equal n, partial_id.length
-      assert_equal '', katas_completed(partial_id)
-    end
-  end
-
-  #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
   test '071',
   'katas_completed(id) is empty-string when no matches' do
     id = test_id
