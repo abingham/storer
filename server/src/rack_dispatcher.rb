@@ -97,11 +97,11 @@ class RackDispatcher
     end
   end
 
-  well_formed_args :manifest
-  well_formed_args :kata_id, :partial_id, :outer_id
-  well_formed_args :avatars_names, :avatar_name
-  well_formed_args :files, :now, :stdout, :stderr, :colour
-  well_formed_args :tag, :was_tag, :now_tag
+  well_formed_args :manifest,
+                   :kata_id, :partial_id, :outer_id,
+                   :avatars_names, :avatar_name,
+                   :files, :now, :stdout, :stderr, :colour,
+                   :tag, :was_tag, :now_tag
 
   # - - - - - - - - - - - - - - - -
 

@@ -71,7 +71,7 @@ class RackDispatcherTest < TestBase
   test 'E5F',
   'dispatch to kata_increments' do
     assert_dispatch('kata_increments',
-      { kata_id:well_formed_kata_id},
+      { kata_id:well_formed_kata_id },
       'hello from StorerStub.kata_increments'
     )
   end
@@ -79,11 +79,21 @@ class RackDispatcherTest < TestBase
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'E60',
-  'dispatch to katas_completed' do
+  'dispatch to katas_completed with well-formed partial_id' do
     assert_dispatch('katas_completed',
-      { partial_id:well_formed_partial_id},
+      { partial_id:well_formed_partial_id },
       'hello from StorerStub.katas_completed'
     )
+  end
+
+  test 'F61',
+  'dispatch to katas_completed with malformed partial_id raises' do
+    assert_dispatch_raises('katas_completed',
+      { partial_id:'12345' },
+      500,
+      'StorerService',
+      'partial_id:malformed'
+    )    
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -91,7 +101,7 @@ class RackDispatcherTest < TestBase
   test 'E61',
   'dispatch to katas_completion' do
     assert_dispatch('katas_completions',
-      { outer_id:well_formed_outer_id},
+      { outer_id:well_formed_outer_id },
       'hello from StorerStub.katas_completions'
     )
   end
