@@ -25,20 +25,16 @@ class Storer
     # A partial_id has at least 6 characters. Doing
     # completion with fewer characters would likely result in
     # a lot of disk activity and no unique outcome.
-    
     outer_dir = disk[dir_join(path, outer(partial_id))]
     unless outer_dir.exists?
-      return ''
+      return []
     end
     # As the number of inner dirs increases this
-    # gets sloooooow...
+    # will get sloooooow...
     dirs = outer_dir.each_dir.select { |inner_dir|
       inner_dir.start_with?(inner(partial_id))
     }
-    unless dirs.length == 1
-      return ''
-    end
-    outer(partial_id) + dirs[0] # success!
+    dirs.map {|inner_dir| outer(partial_id) + inner_dir }
   end
 
   # - - - - - - - - - - - - - - - - - - -

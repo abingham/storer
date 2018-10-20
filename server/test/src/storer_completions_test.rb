@@ -21,32 +21,33 @@ class StorerCompletionTest < TestBase
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test '071',
-  'katas_completed(id) is empty-string when no matches' do
+  'katas_completed() is empty-array when no matches' do
     id = test_id
-    (0..7).each do |size|
-      partial_id = id[0..size]
-      assert_equal '', katas_completed(partial_id)
+    (6..10).each do |size|
+      partial_id = id[0...size]
+      assert_equal size, partial_id.size
+      assert_equal [], katas_completed(partial_id)
     end
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  test '23B',
-  'katas_completed(id) is empty-string when 6+ chars and more than one match' do
-    partial_id = 'B05DE4782'
-    assert_equal 9, partial_id.size
-    kata_ids = [ partial_id+'5', partial_id+'6' ]
-    stubbed_make_katas(kata_ids)
-    assert_equal '', katas_completed(partial_id)
+  test '093',
+  'katas_completed() with one match' do
+    kata_id = make_kata
+    partial_id = kata_id[0..5]
+    assert_equal [kata_id], katas_completed(partial_id)
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-  test '093',
-  'katas_completed(id) completes when 6+ chars and 1 match' do
-    kata_id = make_kata
-    partial_id = kata_id[0..5]
-    assert_equal kata_id, katas_completed(partial_id)
+  test '23B',
+  'katas_completed() with more than one match' do
+    partial_id = 'B05DE4782'
+    assert_equal 9, partial_id.size
+    kata_ids = [ partial_id+'5', partial_id+'6' ]
+    stubbed_make_katas(kata_ids)
+    assert_equal kata_ids.sort, katas_completed(partial_id).sort
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
