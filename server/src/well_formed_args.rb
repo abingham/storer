@@ -2,7 +2,7 @@ require_relative 'all_avatars_names'
 require_relative 'base58'
 require 'json'
 
-# Checks for arguments synactic correctness
+# Checks for arguments syntactic correctness
 
 class WellFormedArgs
 

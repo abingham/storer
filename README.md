@@ -379,5 +379,3 @@ given tag numbers.
 * [Take me to http://cyber-dojo.org](http://cyber-dojo.org).
 
 ![cyber-dojo.org home page](https://github.com/cyber-dojo/cyber-dojo/blob/master/shared/home_page_snapshot.png)
-
-
