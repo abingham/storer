@@ -142,7 +142,6 @@ class StorerTest < TestBase
       hiker.tests.c
       instructions
       makefile
-      output
     ).sort
     assert_equal expected_filenames, avatar_visible_files(id, lion).keys.sort
     assert_equal expected_filenames, tag_visible_files(id, lion, tag=0).keys.sort
