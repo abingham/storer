@@ -11,7 +11,7 @@ services:
 
   storer:
     build:
-      context: server
+      context: .
       args:
         - SHA
     user: storer
