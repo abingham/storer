@@ -18,9 +18,12 @@ class StorerKataManifestTest < TestBase
     assert_unchanged(raw, updated, %w(
       id created
       display_name image_name runner_choice visible_files
-      filename_extension highlight_filenames progress_regexs tab_size
+      highlight_filenames progress_regexs tab_size
     ))
     assert_dropped(raw, updated, 'language')
+    assert_changed(raw, updated, {
+      'filename_extension' => [ '.rb' ]
+    })
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - -
@@ -34,9 +37,12 @@ class StorerKataManifestTest < TestBase
     assert_unchanged(raw, updated, %w(
       id created
       display_name exercise image_name runner_choice visible_files
-      filename_extension highlight_filenames progress_regexs tab_size
+      highlight_filenames progress_regexs tab_size
     ))
     assert_dropped(raw, updated, 'language')
+    assert_changed(raw, updated, {
+      'filename_extension' => [ '.java' ]
+    })
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - -
@@ -50,9 +56,12 @@ class StorerKataManifestTest < TestBase
     assert_unchanged(raw, updated, %w(
       id created
       display_name exercise image_name runner_choice visible_files
-      filename_extension highlight_filenames progress_regexs tab_size
+      highlight_filenames progress_regexs tab_size
     ))
     assert_dropped(raw, updated, 'language')
+    assert_changed(raw, updated, {
+      'filename_extension' => [ '.php' ]
+    })
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - -
@@ -73,7 +82,7 @@ class StorerKataManifestTest < TestBase
       'display_name' => 'C (gcc), assert',
       'image_name' => 'cyberdojofoundation/gcc_assert',
       'runner_choice' => 'stateless',
-      'filename_extension' => '.c'
+      'filename_extension' => [ '.c', '.h' ]
     })
   end
 
@@ -95,7 +104,7 @@ class StorerKataManifestTest < TestBase
       'display_name' => 'Ruby, RSpec',
       'image_name' => 'cyberdojofoundation/ruby_rspec',
       'runner_choice' => 'stateless',
-      'filename_extension' => '.rb'
+      'filename_extension' => [ '.rb' ]
     })
   end
 
@@ -117,7 +126,7 @@ class StorerKataManifestTest < TestBase
       'display_name' => 'Python, py.test',
       'image_name' => 'cyberdojofoundation/python_pytest',
       'runner_choice' => 'stateless',
-      'filename_extension' => '.py'
+      'filename_extension' => [ '.py' ]
     })
   end
 
@@ -131,14 +140,16 @@ class StorerKataManifestTest < TestBase
 
     assert_unchanged(raw, updated,
       %w( id created display_name exercise image_name visible_files
-          filename_extension highlight_filenames
-          progress_regexs tab_size )
+          highlight_filenames progress_regexs tab_size )
     )
     assert_dropped(raw, updated,
       %w( language red_amber_green )
     )
     assert_added(raw, updated, {
-      'runner_choice' => 'stateless',
+      'runner_choice' => 'stateless'
+    })
+    assert_changed(raw, updated, {
+      'filename_extension' => [ '.py' ]
     })
   end
 
@@ -165,6 +176,15 @@ class StorerKataManifestTest < TestBase
     properties.keys.each do |property|
       assert_nil raw[property]
       refute_nil updated[property]
+      assert_equal properties[property], updated[property]
+    end
+  end
+
+  def assert_changed(raw, updated, properties)
+    properties.keys.each do |property|
+      refute_nil raw[property]
+      refute_nil updated[property]
+      refute_equal raw[property], updated[property]
       assert_equal properties[property], updated[property]
     end
   end

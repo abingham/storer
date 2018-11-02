@@ -27,8 +27,7 @@ class StorerServiceTest < TestBase
   'retrieved manifest contains kata-id' do
     manifest = make_manifest
     kata_id = kata_create(manifest)
-    manifest['id'] = kata_id
-    assert_equal manifest, kata_manifest(kata_id)
+    assert_equal kata_id, kata_manifest(kata_id)['id']
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -

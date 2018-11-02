@@ -6,8 +6,8 @@ class Updater
     change_1_removed_language(manifest)
     change_2_added_runner_choice(manifest)
     change_3_required_filename_extension(manifest)
-    change_4_removed_lowlight_filenames(manifest)
     # remove dead properties
+    manifest.delete('lowlight_filenames')
     manifest.delete('browser')
     manifest.delete('red_amber_green')
     manifest
@@ -51,20 +51,24 @@ class Updater
   # - - - - - - - - - - - - - - - - -
 
   def self.change_3_required_filename_extension(manifest)
-    if manifest['filename_extension']
+    # Made filename_extension a required property.
+    # Selects where filenames appear in filename list.
+    # Also made it an array for languages like C/C++
+    # which have more than one extension.
+    fe = manifest['filename_extension']
+    if fe.is_a?(Array)
       return
     end
-    # Made filename_extension a require property.
-    # Selects where filenames appear in filename list.
+    if fe.is_a?(String)
+      manifest['filename_extension'] = [ fe ]
+      return
+    end
     display_name = manifest['display_name']
     fe = cache(display_name)['filename_extension']
+    if fe.is_a?(String)
+      fe = [ fe ]
+    end
     manifest['filename_extension'] = fe
-  end
-
-  # - - - - - - - - - - - - - - - - -
-
-  def self.change_4_removed_lowlight_filenames(manifest)
-    manifest.delete('lowlight_filenames')
   end
 
   # - - - - - - - - - - - - - - - - -
@@ -108,33 +112,33 @@ class Updater
     "C (clang), Cgreen" => {
       "image_name" => "cyberdojofoundation/clang_cgreen",
       "runner_choice" => "stateless",
-      "filename_extension" => ".c"
+      "filename_extension" => [ ".c", ".h" ]
     },
     "C (clang), assert" => {
       "image_name" => "cyberdojofoundation/clang_assert",
       "runner_choice" => "stateless",
-      "filename_extension" => ".c"
+      "filename_extension" => [ ".c", ".h" ]
     },
 
     "C (gcc), Cgreen" => {
       "image_name" => "cyberdojofoundation/gcc_cgreen",
       "runner_choice" => "stateless",
-      "filename_extension" => ".c"
+      "filename_extension" => [ ".c", ".h" ]
     },
     "C (gcc), CppUTest" => {
       "image_name" => "cyberdojofoundation/gcc_cpputest",
       "runner_choice" => "stateful",
-      "filename_extension" => ".c"
+      "filename_extension" => [ ".c", ".h" ]
     },
     "C (gcc), GoogleTest" => {
       "image_name" => "cyberdojofoundation/gcc_googletest",
       "runner_choice" => "stateless",
-      "filename_extension" => ".c"
+      "filename_extension" => [ ".c", ".h" ]
     },
     "C (gcc), assert" => {
       "image_name" => "cyberdojofoundation/gcc_assert",
       "runner_choice" => "stateless",
-      "filename_extension" => ".c"
+      "filename_extension" => [ ".c", ".h" ]
     },
 
     "C#, Moq" => {
@@ -157,68 +161,68 @@ class Updater
     "C++ (clang++), Cgreen" => {
       "image_name" => "cyberdojofoundation/clangpp_cgreen",
       "runner_choice" => "stateless",
-      "filename_extension" => ".cpp"
+      "filename_extension" => [ ".cpp", ".hpp" ]
     },
     "C++ (clang++), GoogleMock" => {
       "image_name" => "cyberdojofoundation/clangpp_googlemock",
       "runner_choice" => "stateless",
-      "filename_extension" => ".cpp"
+      "filename_extension" => [ ".cpp", ".hpp" ]
     },
     "C++ (clang++), GoogleTest" => {
       "image_name" => "cyberdojofoundation/clangpp_googletest",
       "runner_choice" => "stateless",
-      "filename_extension" => ".cpp"
+      "filename_extension" => [ ".cpp", ".hpp" ]
     },
     "C++ (clang++), Igloo" => {
       "image_name" => "cyberdojofoundation/clangpp_igloo",
       "runner_choice" => "stateless",
-      "filename_extension" => ".cpp"
+      "filename_extension" => [ ".cpp", ".hpp" ]
     },
     "C++ (clang++), assert" => {
       "image_name" => "cyberdojofoundation/clangpp_assert",
       "runner_choice" => "stateless",
-      "filename_extension" => ".cpp"
+      "filename_extension" => [ ".cpp", ".hpp" ]
     },
 
     "C++ (g++), Boost.Test" => {
       "image_name" => "cyberdojofoundation/gpp_boosttest",
       "runner_choice" => "stateless",
-      "filename_extension" => ".cpp"
+      "filename_extension" => [ ".cpp", ".hpp" ]
     },
     "C++ (g++), Catch" => {
       "image_name" => "cyberdojofoundation/gpp_catch",
       "runner_choice" => "stateful",
-      "filename_extension" => ".cpp"
+      "filename_extension" => [ ".cpp", ".hpp" ]
     },
     "C++ (g++), Cgreen" => {
       "image_name" => "cyberdojofoundation/gpp_cgreen",
       "runner_choice" => "stateless",
-      "filename_extension" => ".cpp"
+      "filename_extension" => [ ".cpp", ".hpp" ]
     },
     "C++ (g++), CppUTest" => {
       "image_name" => "cyberdojofoundation/gpp_cpputest",
       "runner_choice" => "stateful",
-      "filename_extension" => ".cpp"
+      "filename_extension" => [ ".cpp", ".hpp" ]
     },
     "C++ (g++), GoogleMock" => {
       "image_name" => "cyberdojofoundation/gpp_googlemock",
       "runner_choice" => "stateless",
-      "filename_extension" => ".cpp"
+      "filename_extension" => [ ".cpp", ".hpp" ]
     },
     "C++ (g++), GoogleTest" => {
       "image_name" => "cyberdojofoundation/gpp_googletest",
       "runner_choice" => "stateless",
-      "filename_extension" => ".cpp"
+      "filename_extension" => [ ".cpp", ".hpp" ]
     },
     "C++ (g++), Igloo" => {
       "image_name" => "cyberdojofoundation/gpp_igloo",
       "runner_choice" => "stateless",
-      "filename_extension" => ".cpp"
+      "filename_extension" => [ ".cpp", ".hpp" ]
     },
     "C++ (g++), assert" => {
       "image_name" => "cyberdojofoundation/gpp_assert",
       "runner_choice" => "stateless",
-      "filename_extension" => ".cpp"
+      "filename_extension" => [ ".cpp", ".hpp" ]
     },
 
     "Chapel, assert" => {
