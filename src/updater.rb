@@ -3,18 +3,10 @@ require_relative 'renamer'
 class Updater
 
   def self.updated(manifest)
-    if manifest['language']
-      change_1_removed_language(manifest)
-    end
-    if manifest['runner_choice'].nil?
-      change_2_added_runner_choice(manifest)
-    end
-    if manifest['filename_extension'].nil?
-      change_3_required_filename_extension(manifest)
-    end
-    if manifest['lowlight_filenames']
-      change4_removed_lowlight_filenames(manifest)
-    end
+    change_1_removed_language(manifest)
+    change_2_added_runner_choice(manifest)
+    change_3_required_filename_extension(manifest)
+    change_4_removed_lowlight_filenames(manifest)
     # remove dead properties
     manifest.delete('browser')
     manifest.delete('red_amber_green')
@@ -24,6 +16,9 @@ class Updater
   private
 
   def self.change_1_removed_language(manifest)
+    unless manifest['language']
+      return
+    end
     # Removed manifest['unit_test_framework'] property.
     # Removed manifest['language] property.
     # These coupled a manifest to a start-point.
@@ -45,6 +40,9 @@ class Updater
   # - - - - - - - - - - - - - - - - -
 
   def self.change_2_added_runner_choice(manifest)
+    if manifest['runner_choice']
+      return
+    end
     # Added manifest['runner_choice'] as required property.
     display_name = manifest['display_name']
     manifest['runner_choice'] = cache(display_name)['runner_choice']
@@ -53,6 +51,9 @@ class Updater
   # - - - - - - - - - - - - - - - - -
 
   def self.change_3_required_filename_extension(manifest)
+    if manifest['filename_extension']
+      return
+    end
     # Made filename_extension a require property.
     # Selects where filenames appear in filename list.
     display_name = manifest['display_name']
@@ -62,7 +63,7 @@ class Updater
 
   # - - - - - - - - - - - - - - - - -
 
-  def self.change4_removed_lowlight_filenames(manifest)
+  def self.change_4_removed_lowlight_filenames(manifest)
     manifest.delete('lowlight_filenames')
   end
 
