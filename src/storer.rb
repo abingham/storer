@@ -88,7 +88,7 @@ class Storer
     assert_kata_exists(kata_id)
     dir = kata_dir(kata_id)
     json = dir.read(manifest_filename)
-    Updater.updated(JSON.parse(json))
+    Updater.updated(JSON.parse!(json))
   end
 
   # - - - - - - - - - - - - - - - - - - -
@@ -202,7 +202,7 @@ class Storer
       path = avatar_path(kata_id, avatar_name)
       git = "git show #{tag}:#{manifest_filename}"
       src = shell.cd_exec(path, git)[0]
-      JSON.parse(src)
+      JSON.parse!(src)
     end
   end
 
@@ -235,7 +235,7 @@ class Storer
     # to maintain compatibility with old git-format
     dir = avatar_dir(kata_id, avatar_name)
     json = dir.read(increments_filename)
-    JSON.parse(json)
+    JSON.parse!(json)
   end
 
   def increments_filename
@@ -254,7 +254,7 @@ class Storer
   def read_tag_files(kata_id, avatar_name, tag)
     dir = tag_dir(kata_id, avatar_name, tag)
     json = dir.read(manifest_filename)
-    JSON.parse(json)
+    JSON.parse!(json)
   end
 
   def manifest_filename
