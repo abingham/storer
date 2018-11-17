@@ -1,6 +1,6 @@
 require_relative 'test_base'
 
-class OldKatasTest < TestBase
+class UpdaterTest < TestBase
 
   def self.hex_prefix
     '9B191'
