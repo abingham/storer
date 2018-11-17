@@ -19,6 +19,9 @@ class OldKatasTest < TestBase
       ['7EA354ED66', 'Ruby, Approval'],
       ['7EC98B56F7', 'Java, JUnit-Mockito'],
       ['7EA0979D3E', 'Java, Approval'],
+      ['7E246F2339', 'C (gcc), Unity'],
+      ['7E12E5A294', 'C (gcc), Unity'],
+      ['7E53732F00', 'Clojure, clojure.test']
     ]
     kata_ids.each do |e|
       kata_id = e[0]
@@ -32,9 +35,6 @@ class OldKatasTest < TestBase
 
   test '0D5',
   'katas that also have no entry in the Updater.cache' do
-    # ['7E246F2339', 'C (gcc), Unity']  --> No entry in cache
-    # ['7E12E5A294', 'C (gcc), Unity']
-    # ['7E53732F00', 'Clojure, .test']
     # ['7EC7A19DF3', 'Java Countdown, Round 1']
   end
 
