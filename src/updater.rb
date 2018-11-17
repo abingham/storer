@@ -79,8 +79,7 @@ class Updater
 
   # - - - - - - - - - - - - - - - - -
 
-  CACHE =
-  {
+  CACHE = {
     "Asm, assert" => {
       "image_name" => "cyberdojofoundation/nasm_assert",
       "runner_choice" => "stateless",
@@ -301,6 +300,11 @@ class Updater
       "filename_extension" => ".hs"
     },
 
+    "Java, Approval" => {
+      "image_name" => "cyberdojofoundation/java_approval",
+      "runner_choice" => "stateless",
+      "filename_extension" => ".java"
+    },
     "Java, Cucumber" => {
       "image_name" => "cyberdojofoundation/java_cucumber_pico",
       "runner_choice" => "stateless",
@@ -324,6 +328,11 @@ class Updater
     "Java, JUnit-Sqlite" => {
       "image_name" => "cyberdojofoundation/java_junit_sqlite",
       "runner_choice" => "stateful",
+      "filename_extension" => ".java"
+    },
+    "Java, JUnit-Mockito" => {
+      "image_name" => "cyberdojofoundation/java_mockito",
+      "runner_choice" => "stateless",
       "filename_extension" => ".java"
     },
     "Java, Mockito" => {
@@ -409,6 +418,11 @@ class Updater
       "filename_extension" => ".R"
     },
 
+    "Ruby, Approval" => {
+      "image_name" => "cyberdojofoundation/ruby_approval",
+      "runner_choice" => "stateless",
+      "filename_extension" => ".rb"
+    },
     "Ruby, Cucumber" => {
       "image_name" => "cyberdojofoundation/ruby_cucumber",
       "runner_choice" => "stateless",
@@ -434,6 +448,12 @@ class Updater
       "image_name" => "cyberdojofoundation/rust_test",
       "runner_choice" => "stateless",
       "filename_extension" => ".rs"
+    },
+
+    "Scala, scalatest" => {
+      "image_name" => "cyberdojofoundation/scala_scalatest",
+      "runner_choice" => "stateless",
+      "filename_extension" => ".scala"
     },
 
     "Swift, Swordfish" => {
