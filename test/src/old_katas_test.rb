@@ -33,9 +33,18 @@ class OldKatasTest < TestBase
 
   # - - - - - - - - - - - - - - - -
 
-  test '0D5',
-  'katas that also have no entry in the Updater.cache' do
-    # ['7EC7A19DF3', 'Java Countdown, Round 1']
+  test '0D5', %w(
+  katas that are from custom setup
+  whose manifest had no runner_choice
+  but are for a well-known image_name ) do
+    kata_ids = [
+      ['7EC7A19DF3', 'Java Countdown, Round 1']
+    ]
+    kata_ids.each do |kata_id, display_name|
+      manifest = kata_manifest(kata_id)
+      assert_equal display_name, manifest['display_name'], kata_id
+      refute_nil manifest['runner_choice']
+    end
   end
 
 end
