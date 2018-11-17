@@ -23,9 +23,7 @@ class UpdaterTest < TestBase
       ['7E12E5A294', 'C (gcc), Unity'],
       ['7E53732F00', 'Clojure, clojure.test']
     ]
-    kata_ids.each do |e|
-      kata_id = e[0]
-      display_name = e[1]
+    kata_ids.each do |kata_id, display_name|
       manifest = kata_manifest(kata_id)
       assert_equal display_name, manifest['display_name'], kata_id
     end
