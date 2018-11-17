@@ -13,7 +13,7 @@ class Renamer
     ['C']            => ['C (gcc)',      'assert'],
     ['C++']          => ['C++ (g++)',    'assert'],
     ['C#']           => ['C#',           'NUnit'],
-    ['Clojure']      => ['Clojure',      '.test'],
+    ['Clojure']      => ['Clojure',      'clojure.test'],
     ['CoffeeScript'] => ['CoffeeScript', 'jasmine'],
     ['Erlang']       => ['Erlang',       'eunit'],
     ['Go']           => ['Go',           'testing'],
@@ -26,6 +26,7 @@ class Renamer
     ['Ruby']         => ['Ruby',         'Test::Unit'],
     ['Scala']        => ['Scala',        'scalatest'],
     # renamed
+    ['Clojure', '.test'] => ['Clojure', 'clojure.test'],
     ['C++', 'catch'         ] => ['C++ (g++)' , 'Catch'],
     ['Java', 'ApprovalTests'] => ['Java', 'Approval'], # offline
     ['Java',       'JUnit','Mockito']  => ['Java',       'Mockito'],
