@@ -46,19 +46,16 @@ class Updater
     display_name = manifest['display_name']
     entry = cache(display_name)
     if entry
-      # probably a non-custom practice-session
+      # a non-custom practice-session
       manifest['runner_choice'] = entry['runner_choice']
       return
     end
-    image_name = manifest['image_name']
-    if image_name
-      # probably a custom practice-session
-      found = CACHE.find { |_key,entry|
-        entry['image_name'] == image_name
-      }
-      if found
-        manifest['runner_choice'] = found[1]['runner_choice']
-      end
+    # a custom practice-session
+    found = CACHE.values.find { |entry|
+      entry['image_name'] == manifest['image_name']
+    }
+    if found
+      manifest['runner_choice'] = found['runner_choice']
     end
   end
 
