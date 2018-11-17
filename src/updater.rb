@@ -29,6 +29,8 @@ class Updater
     manifest.delete('unit_test_framework')
   end
 
+  # - - - - - - - - - - - - - - - - -
+
   def self.language_to_display_name(language)
     parts = language.split('-', 2).map(&:strip)
     Renamer.renamed(parts).join(', ')
