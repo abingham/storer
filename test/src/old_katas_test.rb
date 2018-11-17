@@ -31,9 +31,7 @@ class OldKatasTest < TestBase
   # - - - - - - - - - - - - - - - -
 
   test '0D5',
-  'katas that also failed other reasons' do
-    # ['7E53666BFE', 'Java, JUnit']
-    # ['7EBAEC5207', 'Javascript, assert']
+  'katas that also have no entry in the Updater.cache' do
     # ['7E246F2339', 'C (gcc), Unity']  --> No entry in cache
     # ['7E12E5A294', 'C (gcc), Unity']
     # ['7E53732F00', 'Clojure, .test']
