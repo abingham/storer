@@ -6,10 +6,7 @@ class Updater
     change_1_removed_language(manifest)
     change_2_added_runner_choice(manifest)
     change_3_required_filename_extension(manifest)
-    # remove dead properties
-    manifest.delete('lowlight_filenames')
-    manifest.delete('browser')
-    manifest.delete('red_amber_green')
+    delete_dead_properties(manifest)
     manifest
   end
 
@@ -69,6 +66,24 @@ class Updater
       fe = [ fe ]
     end
     manifest['filename_extension'] = fe
+  end
+
+  # - - - - - - - - - - - - - - - - -
+
+  def self.delete_dead_properties(manifest)
+    names = %w(
+      lowlight_filenames
+      browser
+      red_amber_green
+      diff_id
+      diff_language
+      diff_exercise
+      diff_avatar
+      diff_tag
+    )
+    names.each do |name|
+      manifest.delete(name)
+    end
   end
 
   # - - - - - - - - - - - - - - - - -
