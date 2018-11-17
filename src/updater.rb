@@ -154,6 +154,11 @@ class Updater
       "runner_choice" => "stateless",
       "filename_extension" => [ ".c", ".h" ]
     },
+    "C (gcc), Unity" => {
+      "image_name" => "cyberdojofoundation/gcc_unity",
+      "runner_choice" => "stateless",
+      "filename_extension" => [ ".c", ".h" ]
+    },
 
     "C#, Moq" => {
       "image_name" => "cyberdojofoundation/csharp_moq",
