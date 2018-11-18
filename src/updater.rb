@@ -362,11 +362,6 @@ class Updater
       "runner_choice" => "stateful",
       "filename_extension" => ".java"
     },
-    "Java, JUnit-Mockito" => {
-      "image_name" => "cyberdojofoundation/java_mockito",
-      "runner_choice" => "stateless",
-      "filename_extension" => ".java"
-    },
     "Java, Mockito" => {
       "image_name" => "cyberdojofoundation/java_mockito",
       "runner_choice" => "stateless",

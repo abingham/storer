@@ -26,17 +26,18 @@ class Renamer
     ['Ruby']         => ['Ruby',         'Test::Unit'],
     ['Scala']        => ['Scala',        'scalatest'],
     # renamed
-    ['Clojure', '.test'] => ['Clojure', 'clojure.test'],
-    ['C++', 'catch'         ] => ['C++ (g++)' , 'Catch'],
-    ['Java', 'ApprovalTests'] => ['Java', 'Approval'], # offline
+    ['Clojure', '.test']               => ['Clojure', 'clojure.test'],
+    ['C++', 'catch' ]                  => ['C++ (g++)' , 'Catch'],
+    ['Java', 'ApprovalTests']          => ['Java', 'Approval'],
     ['Java',       'JUnit','Mockito']  => ['Java',       'Mockito'],
+    ['Java',       'JUnit-Mockito']    => ['Java',       'Mockito'],
     ['Javascript', 'mocha_chai_sinon'] => ['Javascript', 'Mocha+chai+sinon'],
     ['Perl',       'TestSimple']       => ['Perl',       'Test::Simple'],
     ['Ruby',       'Rspec']            => ['Ruby',       'RSpec'], # capital S
     ['Ruby',       'TestUnit']         => ['Ruby',       'Test::Unit'],
     ['Python',     'pytest']           => ['Python',     'py.test'], # dot
     # - in the wrong place
-    ['Java', '1.8_Approval']     => ['Java', 'Approval'],  # offline
+    ['Java', '1.8_Approval']     => ['Java', 'Approval'],
     ['Java', '1.8_Cucumber']     => ['Java', 'Cucumber'],
     ['Java', '1.8_JMock']        => ['Java', 'JMock'],
     ['Java', '1.8_JUnit']        => ['Java', 'JUnit'],
