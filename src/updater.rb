@@ -3,7 +3,7 @@ require_relative 'renamer'
 class Updater
 
   def self.updated(manifest)
-    change_1_removed_language(manifest)
+    change_1_decouple_from_start_points(manifest)
     change_2_added_runner_choice(manifest)
     change_3_required_filename_extension(manifest)
     delete_dead_properties(manifest)
@@ -12,21 +12,18 @@ class Updater
 
   private
 
-  def self.change_1_removed_language(manifest)
+  def self.change_1_decouple_from_start_points(manifest)
     unless manifest['language']
       return
     end
-    # Removed manifest['unit_test_framework'] property.
-    # Removed manifest['language] property.
-    # These coupled a manifest to a start-point.
-    # Better for the manifest to be self-contained.
+    # Don't use 'unit_test_framework' or 'language'
+    # properties - as these coupled a manifest to a start-point.
+    # Better for the manifest to be self-contained, so
+    # embed image_name in the manifest.
     display_name = language_to_display_name(manifest['language'])
     # add new properties
     manifest['display_name'] = display_name
     manifest['image_name'] ||= cache(display_name)['image_name']
-    # remove old properties
-    manifest.delete('language')
-    manifest.delete('unit_test_framework')
   end
 
   # - - - - - - - - - - - - - - - - -
@@ -39,10 +36,10 @@ class Updater
   # - - - - - - - - - - - - - - - - -
 
   def self.change_2_added_runner_choice(manifest)
+    # Made 'runner_choice' a required property.
     if manifest['runner_choice']
       return
     end
-    # Added manifest['runner_choice'] as required property.
     display_name = manifest['display_name']
     entry = cache(display_name)
     if entry
@@ -63,7 +60,6 @@ class Updater
 
   def self.change_3_required_filename_extension(manifest)
     # Made filename_extension a required property.
-    # Selects where filenames appear in filename list.
     # Also made it an array for languages like C/C++
     # which have more than one extension.
     fe = manifest['filename_extension']
@@ -86,6 +82,8 @@ class Updater
 
   def self.delete_dead_properties(manifest)
     names = %w(
+      language
+      unit_test_framework
       lowlight_filenames
       browser
       red_amber_green
