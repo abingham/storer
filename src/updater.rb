@@ -107,6 +107,12 @@ class Updater
   # - - - - - - - - - - - - - - - - -
 
   CACHE = {
+    "git, bash" => {
+      "image_name" => "cyberdojofoundation/bash_bats",
+      "runner_choice" => "stateless",
+      "filename_extension" => ".sh"
+    },
+
     "Asm, assert" => {
       "image_name" => "cyberdojofoundation/nasm_assert",
       "runner_choice" => "stateless",
