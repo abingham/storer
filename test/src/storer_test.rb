@@ -53,7 +53,6 @@ class StorerTest < TestBase
       exercise
       filename_extension
       image_name
-      runner_choice
       visible_files
     )
     manifest = create_manifest
@@ -61,7 +60,9 @@ class StorerTest < TestBase
 
     id = storer.kata_create(manifest)
     manifest = kata_manifest(id)
-    assert_equal (expected << 'id').sort, manifest.keys.sort
+    expected << 'id'
+    expected << 'runner_choice'
+    assert_equal expected.sort, manifest.keys.sort
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
