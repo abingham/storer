@@ -8,7 +8,7 @@ docker-compose \
   --file "${ROOT_DIR}/docker-compose.yml" \
   --file "${ROOT_DIR}/docker-compose.test.yml" \
   up \
-  --detach \
+  -d \
   --force-recreate
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - -
