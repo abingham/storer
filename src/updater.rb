@@ -48,8 +48,8 @@ class Updater
       return
     end
     # a custom practice-session
-    found = CACHE.values.find { |entry|
-      entry['image_name'] == manifest['image_name']
+    found = CACHE.values.find { |value|
+      value['image_name'] == manifest['image_name']
     }
     if found
       manifest['runner_choice'] = found['runner_choice']
