@@ -108,15 +108,16 @@ class BashShellerTest < TestBase
 
   test '565',
   "when the cd_exec's cd fails the command is not executed and exit-status is non-zero" do
+    error_msg = "sh: cd: line 1: can't cd to zzzz: No such file or directory" + "\n"
     cd_exec('zzzz', 'echo Hello')
     refute_status 0
     assert_stdout ''
-    assert_stderr "sh: cd: line 1: can't cd to zzzz" + "\n"
+    assert_stderr error_msg
     assert_log [
       'COMMAND:cd zzzz && echo Hello',
       'STATUS:2',
       'STDOUT:',
-      "STDERR:sh: cd: line 1: can't cd to zzzz" + "\n"
+      "STDERR:#{error_msg}"
     ]
   end
 
