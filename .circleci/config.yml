@@ -10,7 +10,7 @@ jobs:
     steps:
       - checkout
       - run:
-          name: build storer docker image and push image to docker hub
+          name: build storer docker image and push to docker hub
           command: |
             set -e
             echo "${DOCKER_PASS}" | docker login -u "${DOCKER_USER}" --password-stdin
@@ -20,23 +20,6 @@ jobs:
             docker tag  cyberdojo/${project}:latest cyberdojo/${project}:beta
             docker push cyberdojo/${project}:${CIRCLE_SHA1:0:7}
             docker push cyberdojo/${project}:beta
-
-  deploy-image-to-beta:
-    docker:
-      - image: lfaoro/gcloud-kubectl-helm
-    steps:
-      - run:
-          name: authenticate with gcloud and deploy with helm
-          command: |
-            set -e
-            echo $GCP_K8S_CREDENTIALS > /gcp/gcp-credentials.json
-            gcloud auth activate-service-account "$SERVICE_ACCOUNT" --key-file=/gcp/gcp-credentials.json
-            gcloud container clusters get-credentials "$CLUSTER" --zone "$ZONE" --project "$PROJECT"
-            helm init --client-only
-            helm repo add praqma https://praqma-helm-repo.s3.amazonaws.com/
-            # temporarily turn off --reuse-values to get storer deployed
-            helm upgrade --install --reuse-values --namespace=beta --set image.storer.tag=${CIRCLE_SHA1:0:7} beta-cyber-dojo praqma/cyber-dojo
-            # helm upgrade --install --namespace=beta --set image.storer.tag=${CIRCLE_SHA1:0:7} beta-cyber-dojo praqma/cyber-dojo
 
 workflows:
   version: 2
@@ -48,7 +31,3 @@ workflows:
             branches:
               only:
                   - master
-      - deploy-image-to-beta:
-          context: cyberdojo-context
-          requires:
-            - build-image
