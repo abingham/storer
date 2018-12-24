@@ -34,6 +34,18 @@ class RackDispatcherTest < TestBase
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+  test 'B5C',
+  'dispatch to sample_id10 and sample_id2' do
+    assert_dispatch('sample_id10', {},
+      'hello from StorerStub.sample_id10'
+    )
+    assert_dispatch('sample_id2', {},
+      'hello from StorerStub.sample_id2'
+    )
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
   test 'E5C',
   'dispatch to kata_create and kata_delete' do
     assert_dispatch('kata_create',
@@ -93,7 +105,7 @@ class RackDispatcherTest < TestBase
       500,
       'StorerService',
       'partial_id:malformed'
-    )    
+    )
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -

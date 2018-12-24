@@ -39,6 +39,8 @@ class RackDispatcher
     @well_formed_args = WellFormedArgs.new(body)
     args = case name
       when /^sha$/                  then []
+      when /^sample_id10$/          then []
+      when /^sample_id2$/           then []
       when /^kata_create$/          then [manifest]
       when /^kata_delete$/,
            /^kata_exists$/,

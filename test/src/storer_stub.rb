@@ -5,6 +5,14 @@ class StorerStub
     "hello from #{self.class.name}.#{__method__}"
   end
 
+  def sample_id10
+    "hello from #{self.class.name}.#{__method__}"
+  end
+
+  def sample_id2
+    "hello from #{self.class.name}.#{__method__}"
+  end
+
   def kata_exists?(_)
     "hello from #{self.class.name}.#{__method__}"
   end
