@@ -130,6 +130,19 @@ Returns avatar_increments for each started avatar in the kata with the given kat
 
 - - - -
 
+## GET sample_id10
+Returns a randomly selected kata_id.
+- parameters, none
+```
+  {}
+```
+- returns the sha, eg
+```
+  { "id10": "A551C528C3" }
+```
+
+- - - -
+
 ## GET katas_completed
 Returns the 10-character kata_ids which uniquely complete
 the given partial_id (if any).
