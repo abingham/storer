@@ -30,6 +30,12 @@ class Storer
     all.sample
   end
 
+  def sample_id2
+    all = []
+    disk[path].each_dir { |id2| all << id2 }
+    all.sample
+  end
+
   # - - - - - - - - - - - - - - - - - - -
   # completion(s)
   # - - - - - - - - - - - - - - - - - - -

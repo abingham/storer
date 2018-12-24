@@ -1,6 +1,6 @@
 require_relative 'test_base'
 
-class StorerSampleId10Test < TestBase
+class StorerSampleTest < TestBase
 
   def self.hex_prefix
     'B564B'
@@ -25,10 +25,20 @@ class StorerSampleId10Test < TestBase
     assert sampled.include?('420BD5D5BE')
     assert sampled.include?('1F00C1BFC8')
     assert sampled.include?('5A0F824303')
-    assert sampled.include?('7E53732F00')    
+    assert sampled.include?('7E53732F00')
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  test '2DF',
+  'sample_id2_returns_a_randomly_selected_2_digit_outer_id' do
+    # test rig has inserted katas named 'old/red' 42.. 1F.. 5A..
+    sampled = 100.times.collect { storer.sample_id2 }.sort.uniq
+    assert sampled.include?('42')
+    assert sampled.include?('1F')
+    assert sampled.include?('5A')
+    assert sampled.include?('7E')
+  end
 
   private
 
