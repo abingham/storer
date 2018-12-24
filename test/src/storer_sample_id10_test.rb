@@ -20,13 +20,12 @@ class StorerSampleId10Test < TestBase
 
   test '1DF',
   'sample_id10_returns_a_randomly_selected_10_digit_kata_id' do
-    kata_ids = %w( 7FC2034534 7FD92F11B0 7F13E86582 )
-    stubbed_make_katas(kata_ids)
-    counts = Hash[kata_ids.map { |id| [id,0] }]
-    (0..42).each { counts[storer.sample_id10] += 1 }
-    counts.each do |kata_id,count|
-      assert count > 0, "#{kata_id}->#{count}"
-    end
+    # test rig has inserted katas named 'old/red' 42.. 1F.. 5A..
+    sampled = 100.times.collect { storer.sample_id10 }.sort.uniq
+    assert sampled.include?('420BD5D5BE')
+    assert sampled.include?('1F00C1BFC8')
+    assert sampled.include?('5A0F824303')
+    assert sampled.include?('7E53732F00')    
   end
 
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

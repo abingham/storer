@@ -22,7 +22,12 @@ class Storer
   # - - - - - - - - - - - - - - - - - - -
 
   def sample_id10
-    '7FC2034534'
+    all = []
+    disk[path].each_dir { |id2| all << katas_completed(id2) }
+    all.flatten!
+    all.delete('.')
+    all.delete('..')
+    all.sample
   end
 
   # - - - - - - - - - - - - - - - - - - -
