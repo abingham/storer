@@ -138,7 +138,20 @@ Returns a randomly selected kata_id.
 ```
 - returns the sha, eg
 ```
-  { "id10": "A551C528C3" }
+  { "sample_id10": "A551C528C3" }
+```
+
+- - - -
+
+## GET sample_id2
+Returns a randomly selected outer_id.
+- parameters, none
+```
+  {}
+```
+- returns the sha, eg
+```
+  { "sample_id2": "A5" }
 ```
 
 - - - -
