@@ -21,7 +21,7 @@ class StorerSampleTest < TestBase
   test '1DF',
   'sample_id10_returns_a_randomly_selected_10_digit_kata_id' do
     # test rig has inserted katas named 'old/red' 42.. 1F.. 5A..
-    sampled = 500.times.collect { storer.sample_id10 }.sort.uniq
+    sampled = 1000.times.collect { storer.sample_id10 }.sort.uniq
     assert sampled.include?('420BD5D5BE'), 'did not sample 420BD5D5BE'
     assert sampled.include?('1F00C1BFC8'), 'did not sample 1F00C1BFC8'
     assert sampled.include?('5A0F824303'), 'did not sample 5A0F824303'
@@ -33,7 +33,7 @@ class StorerSampleTest < TestBase
   test '2DF',
   'sample_id2_returns_a_randomly_selected_2_digit_outer_id' do
     # test rig has inserted katas named 'old/red' 42.. 1F.. 5A..
-    sampled = 500.times.collect { storer.sample_id2 }.sort.uniq
+    sampled = 1000.times.collect { storer.sample_id2 }.sort.uniq
     assert sampled.include?('42'), 'did not sample 42'
     assert sampled.include?('1F'), 'did not sample 1F'
     assert sampled.include?('5A'), 'did not sample 5A'
