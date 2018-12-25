@@ -19,6 +19,8 @@ services:
 
   storer:
     container_name: test-storer-server
+    ports:
+      - 4577:4577
     restart: 'no'
 
   # - - - - - - - - - - - - - - - - - - - - - - -
