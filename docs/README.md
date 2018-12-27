@@ -176,7 +176,7 @@ the given partial_id (if any).
 - - - -
 
 ## GET katas_completions
-Returns all the kata_id's starting with the given 2-digit long outer_id.
+Returns all the kata_id completions for the given 2-digit long outer_id.
 - parameter, eg
 ```
   { "outer_id": "A5" }
@@ -184,9 +184,9 @@ Returns all the kata_id's starting with the given 2-digit long outer_id.
 - returns, eg
 ```
   { "katas_completions": [
-       "A551C528C3",
-       "A5DA2CDC58",
-       "A5EAFE6E53"
+       "51C528C3",
+       "DA2CDC58",
+       "EAFE6E53"
     ]
   }
 ```
