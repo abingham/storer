@@ -132,11 +132,10 @@ class StorerTest < TestBase
   and these must not be listed in avatars_started
   ) do
     # these kata-ids are in the inserter data set called 'red'
-    assert kata_exists?('020123D57E')
-    assert_equal [], avatars_started('020123D57E')
-
-    assert kata_exists?('0237439B3C')
-    assert_equal [], avatars_started('0237439B3C')
+    %w( 020123D57E 0237439B3C ).each do |kata_id|
+      assert kata_exists?(kata_id), "#{kata_id} does not exist!"
+      assert_equal [], avatars_started(kata_id)
+    end
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
