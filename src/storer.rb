@@ -66,7 +66,10 @@ class Storer
     unless disk[dir_join(path, outer_id)].exists?
       return []
     end
-    disk[dir_join(path, outer_id)].each_dir.collect { |dir| dir }
+    disk[dir_join(path, outer_id)]
+      .each_dir
+      .collect { |dir| dir }
+      .reject { |dir| disk[dir_join(path, outer_id, dir)].exists?('DELETED.marker') }
   end
 
   # - - - - - - - - - - - - - - - - - - -
@@ -101,10 +104,15 @@ class Storer
   def kata_delete(kata_id)
     assert_kata_exists(kata_id)
     dir = kata_dir(kata_id)
-    # This is unchecked. Some old katas contain sandbox/ files whose
-    # owner is nobody rather than storer and hence they cannot begin
-    # fully deleted. For example, 0700DC61C6
     dir.rm
+    # Some old katas contain sandbox/ sub-dirs whose owner is
+    # the nobody user rather than the storer user and hence
+    # they cannot be fully deleted. Eg, 0700DC61C6.
+    # However, katas_completions() has to see them as deleted
+    # because the porter relies on this.
+    if dir.exists?
+      dir.write('DELETED.marker', '')
+    end
   end
 
   # - - - - - - - - - - - - - - - - - - -
