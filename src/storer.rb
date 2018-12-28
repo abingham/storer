@@ -101,6 +101,9 @@ class Storer
   def kata_delete(kata_id)
     assert_kata_exists(kata_id)
     dir = kata_dir(kata_id)
+    # This is unchecked. Some old katas contain sandbox/ files whose
+    # owner is nobody rather than storer and hence they cannot begin
+    # fully deleted. For example, 0700DC61C6
     dir.rm
   end
 
