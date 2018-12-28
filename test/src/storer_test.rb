@@ -78,6 +78,27 @@ class StorerTest < TestBase
     refute storer.kata_exists?(id)
   end
 
+  test 'D65', %w(
+  kata_delete(id) cannot fully delete a kata when it is owned by the nobody
+  user instead of the storer user (as some are), but katas_completions() must
+  nevertheless exclude ids of deleted katas from what it returns - the
+  porter service relies on this
+  ) do
+    kata_ids = %w(
+      890C8AE514
+      89716C1BC6
+    )
+    kata_ids.each do |kata_id|
+      stdout = with_captured_stdout { storer.kata_delete(kata_id) }
+      denied = "Permission denied\\nrm: can't remove"
+      diagnostic = ":#{kata_id}:#{stdout}:"
+      assert stdout.include?(denied), diagnostic
+      all89 = storer.katas_completions('89')
+      diagnostic = "storer.katas_completions('89') still includes #{kata_id[2..-1]}"
+      refute all89.include?(kata_id[2..-1]), diagnostic
+    end
+  end
+
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # kata_increments
   #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -384,6 +405,17 @@ class StorerTest < TestBase
 
   def path_join(*args)
     File.join(*args)
+  end
+
+  def with_captured_stdout
+    begin
+      old_stdout = $stdout
+      $stdout = StringIO.new('', 'w')
+      response = yield
+      return $stdout.string
+    ensure
+      $stdout = old_stdout
+    end
   end
 
 end
