@@ -127,6 +127,20 @@ class StorerTest < TestBase
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+  test 'F6F', %w(
+  some avatars have somehow not got an increments.json file
+  and these must not be listed in avatars_started
+  ) do
+    # these kata-ids are in the inserter data set called 'red'
+    assert kata_exists?('020123D57E')
+    assert_equal [], avatars_started('020123D57E')
+
+    assert kata_exists?('0237439B3C')
+    assert_equal [], avatars_started('0237439B3C')
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
   test 'E0C', %w(
     after avatar_starts:
     avatar has no traffic-lights,
