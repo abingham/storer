@@ -151,8 +151,9 @@ class Storer
 
   def avatars_started(kata_id)
     assert_kata_exists(kata_id)
-    started = kata_dir(kata_id).each_dir.collect { |name| name }
-    started & all_avatars_names
+    kata_dir(kata_id).each_dir
+                     .select { |name| avatar_dir(kata_id, name).exists?('increments.json') }
+                     .collect { |name| name }
   end
 
   # - - - - - - - - - - - - - - - - - - -
