@@ -56,4 +56,15 @@ class UpdaterTest < TestBase
     refute manifest.keys.include?('exercise')
   end
 
+  # - - - - - - - - - - - - - - - -
+
+  test '0D7', %w(
+  kata whose manifest has a dead name property
+  which needs to be stripped out
+  ) do
+    kata_id = '346EF637B9'
+    manifest = kata_manifest(kata_id)
+    refute manifest.keys.include?('name')
+  end
+
 end
