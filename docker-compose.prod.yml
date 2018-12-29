@@ -12,14 +12,28 @@ services:
     read_only: true
     volumes_from:
       - container:${CYBER_DOJO_KATA_DATA_CONTAINER_NAME}:rw
+    depends_on:
+      - prometheus
 
   # - - - - - - - - - - - - - - - - - - - - - - -
   # monitoring
 
   prometheus:
+    image: cyberdojo/prometheus
+    init: true
+    cpu_shares: 128
     container_name: cyber-dojo-prometheus
 
   grafana:
+    image: cyberdojo/grafana
+    init: true
+    cpu_shares: 128
     container_name: cyber-dojo-grafana
     ports:
       - '3000:3000'
+    volumes:
+      - grafana_data:/var/lib/grafana
+    depends_on:
+      - prometheus
+    env_file:
+      - ./grafana.env

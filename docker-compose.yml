@@ -18,24 +18,3 @@ services:
     image: cyberdojo/storer
     init: true
     tmpfs: /tmp
-    depends_on:
-      - prometheus
-
-  # - - - - - - - - - - - - - - - - - - - - - - -
-  # monitoring
-
-  prometheus:
-    image: cyberdojo/prometheus
-    init: true
-    cpu_shares: 128
-
-  grafana:
-    image: cyberdojo/grafana
-    init: true
-    cpu_shares: 128
-    volumes:
-      - grafana_data:/var/lib/grafana
-    depends_on:
-      - prometheus
-    env_file:
-      - ./grafana.env

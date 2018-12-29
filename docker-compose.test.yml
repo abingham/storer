@@ -23,17 +23,6 @@ services:
       - 4577:4577
     restart: 'no'
 
-  # - - - - - - - - - - - - - - - - - - - - - - -
-  # monitoring
-
-  prometheus:
-    container_name: test-storer-prometheus
-
-  grafana:
-    container_name: test-storer-grafana
-    ports:
-      - '3001:3001'
-
   # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   # starter is handy in tests for creating kata-manifests
 
