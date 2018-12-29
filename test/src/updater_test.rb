@@ -32,7 +32,7 @@ class UpdaterTest < TestBase
   # - - - - - - - - - - - - - - - -
 
   test '0D5', %w(
-  katas that are from custom setup
+  katas from custom setup
   whose manifest had no runner_choice
   but are for a well-known image_name ) do
     kata_ids = [
@@ -43,6 +43,17 @@ class UpdaterTest < TestBase
       assert_equal display_name, manifest['display_name'], kata_id
       refute_nil manifest['runner_choice']
     end
+  end
+
+  # - - - - - - - - - - - - - - - -
+
+  test '0D6', %w(
+  kata whose manifest has an exercise of null
+  which needs to be stripped out
+  ) do
+    kata_id = '05BF0BCE3C'
+    manifest = kata_manifest(kata_id)
+    refute manifest.keys.include?('exercise')
   end
 
 end
