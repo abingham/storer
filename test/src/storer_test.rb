@@ -80,9 +80,9 @@ class StorerTest < TestBase
 
   test 'D65', %w(
   kata_delete(id) cannot fully delete a kata when it is owned by the nobody
-  user instead of the storer user (as some are), but katas_completions() must
-  nevertheless exclude ids of deleted katas from what it returns - the
-  porter service relies on this
+  user instead of the storer user (as some are), but katas_completions()
+  and kata_exists? must nevertheless exclude ids of deleted katas from what
+  it returns - the porter service relies on this
   ) do
     kata_ids = %w(
       890C8AE514
@@ -93,6 +93,7 @@ class StorerTest < TestBase
       denied = "Permission denied\\nrm: can't remove"
       diagnostic = ":#{kata_id}:#{stdout}:"
       assert stdout.include?(denied), diagnostic
+      refute storer.kata_exists?(kata_id), "!storer.kata_exists?(#{kata_id})"
       all89 = storer.katas_completions('89')
       diagnostic = "storer.katas_completions('89') still includes #{kata_id[2..-1]}"
       refute all89.include?(kata_id[2..-1]), diagnostic

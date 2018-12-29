@@ -77,7 +77,8 @@ class Storer
   # - - - - - - - - - - - - - - - - - - -
 
   def kata_exists?(kata_id)
-    kata_dir(kata_id).exists?
+    dir = kata_dir(kata_id)
+    dir.exists? && !dir.exists?('DELETED.marker')
   end
 
   # - - - - - - - - - - - - - - - - - - -
