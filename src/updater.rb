@@ -92,6 +92,7 @@ class Updater
   def self.delete_dead_properties(manifest)
     names = %w(
       language
+      name
       unit_test_framework
       lowlight_filenames
       browser

@@ -51,7 +51,7 @@ class UpdaterTest < TestBase
   kata whose manifest has an exercise of null
   which needs to be stripped out
   ) do
-    kata_id = '05BF0BCE3C'
+    kata_id = '05BF0BCE3C' # red data-set
     manifest = kata_manifest(kata_id)
     refute manifest.keys.include?('exercise')
   end
@@ -62,7 +62,7 @@ class UpdaterTest < TestBase
   kata whose manifest has a dead name property
   which needs to be stripped out
   ) do
-    kata_id = '346EF637B9'
+    kata_id = '346EF637B9' # red data-set
     manifest = kata_manifest(kata_id)
     refute manifest.keys.include?('name')
   end
