@@ -6,6 +6,7 @@ class Updater
     change_1_decouple_from_start_points(manifest)
     change_2_added_runner_choice(manifest)
     change_3_required_filename_extension(manifest)
+    fixup_bad_data(manifest)
     delete_dead_properties(manifest)
     manifest
   end
@@ -76,6 +77,14 @@ class Updater
       fe = [ fe ]
     end
     manifest['filename_extension'] = fe
+  end
+
+  # - - - - - - - - - - - - - - - - -
+
+  def self.fixup_bad_data(manifest)
+    if manifest['exercise'].nil?
+      manifest.delete('exercise')
+    end
   end
 
   # - - - - - - - - - - - - - - - - -
