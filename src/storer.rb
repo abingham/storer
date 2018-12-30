@@ -237,6 +237,7 @@ class Storer
       path = avatar_path(kata_id, avatar_name)
       git = "git show #{tag}:#{manifest_filename}"
       src = shell.cd_exec(path, git)[0]
+      fail_if_too_large(src, kata_id, avatar_name, tag)
       JSON.parse!(src)
     end
   end
@@ -289,6 +290,7 @@ class Storer
   def read_tag_files(kata_id, avatar_name, tag)
     dir = tag_dir(kata_id, avatar_name, tag)
     json = dir.read(manifest_filename)
+    fail_if_too_large(json, kata_id, avatar_name, tag)
     JSON.parse!(json)
   end
 
@@ -372,6 +374,14 @@ class Storer
   def most_recent_tag(kata_id, avatar_name, increments = nil)
     increments ||= read_avatar_increments(kata_id, avatar_name)
     increments.size
+  end
+
+  # - - - - - - - - - - -
+
+  def fail_if_too_large(src, kata_id, avatar_name, tag)
+    if src.size > (100*1024)
+      raise "#{kata_id}:#{avatar_name}:#{tag}:source is too large"
+    end
   end
 
   # - - - - - - - - - - -

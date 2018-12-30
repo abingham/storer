@@ -163,21 +163,18 @@ class StorerTest < TestBase
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'F6D', %w(
-  storer did protect against large files, euch,
-  retrieving from large files must not cause out-of-memory exception
-  as this will cause the oom-killer to kill the service
+  storer did protect against large files,
+  retrieving from large files caused out-of-memory exception
+  causing the oom-killer to kill the service, euch
   ) do
     kata_id = 'FD3D55C9E3'
-    assert kata_exists?(kata_id), "#{kata_id} does not exist!"
-    assert avatar_exists?(kata_id, 'zebra')
-    incs = avatar_increments(kata_id, 'zebra')
-    incs.each do |inc|
-      index = inc['number']
-      files = tag_visible_files(kata_id, 'zebra', index)
-      files.each do |filename,content|
-        assert content.size < (50*1024), "#{index}:#{filename}:#{content.size}:"
-      end
-    end
+    avatar = 'zebra'
+    index = 10
+    error = assert_raises(RuntimeError) {
+      tag_visible_files(kata_id, avatar, index)
+    }
+    expected = "#{kata_id}:#{avatar}:#{index}:source is too large"
+    assert_equal expected, error.message
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
