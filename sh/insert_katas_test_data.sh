@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-# cyberdojo/inserter image is created in https://github.com/cyber-dojo/porter
+# cyberdojo/inserter image is created in https://github.com/cyber-dojo/inserter
 
 readonly STORER_CONTAINER=test-storer-server
 
