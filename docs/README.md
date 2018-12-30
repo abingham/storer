@@ -5,6 +5,7 @@ alt="cyber-dojo yin/yang logo" width="50px" height="50px"/>
 
 # cyberdojo/storer docker image
 
+- No longer in use. Superseded by [saver](https://github.com/cyber-dojo/saver)
 - A docker-containerized micro-service for [cyber-dojo](http://cyber-dojo.org).
 - Stores the visible files, output, and traffic-light status of every test event.
 - Stores data inside a docker-volume in a docker data-container.
