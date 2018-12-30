@@ -150,13 +150,33 @@ class StorerTest < TestBase
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
 
   test 'F6F', %w(
-  some avatars have somehow not got an increments.json file
+  some avatars have somehow got no increments.json file
   and these must not be listed in avatars_started
   ) do
     # these kata-ids are in the inserter data set called 'red'
     %w( 020123D57E 0237439B3C ).each do |kata_id|
       assert kata_exists?(kata_id), "#{kata_id} does not exist!"
       assert_equal [], avatars_started(kata_id)
+    end
+  end
+
+  # - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+  test 'F6D', %w(
+  storer did protect against large files, euch,
+  retrieving from large files must not cause out-of-memory exception
+  as this will cause the oom-killer to kill the service
+  ) do
+    kata_id = 'FD3D55C9E3'
+    assert kata_exists?(kata_id), "#{kata_id} does not exist!"
+    assert avatar_exists?(kata_id, 'zebra')
+    incs = avatar_increments(kata_id, 'zebra')
+    incs.each do |inc|
+      index = inc['number']
+      files = tag_visible_files(kata_id, 'zebra', index)
+      files.each do |filename,content|
+        assert content.size < (50*1024), "#{index}:#{filename}:#{content.size}:"
+      end
     end
   end
 

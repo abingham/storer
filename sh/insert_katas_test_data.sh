@@ -12,4 +12,4 @@ docker run \
    --volume /var/run/docker.sock:/var/run/docker.sock \
    cyberdojo/inserter \
      ${STORER_CONTAINER} \
-      old red rm_fail
+      old red rm_fail FD
