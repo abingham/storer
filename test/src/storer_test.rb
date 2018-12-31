@@ -167,24 +167,6 @@ class StorerTest < TestBase
   retrieving from large files caused out-of-memory exception
   causing the oom-killer to kill the service, euch
   ) do
-    # TODO: this now passes but its not sufficient
-    # tag_visible_files is still reading the whole file.
-    # I need to find the size of the file (in the git tag)
-    # _before_ I attempt to retrieve it. After some research...
-    # if the tag/index is 13 then
-    # $ git ls-tree -r --long 13
-    # produces this...
-    # 100644 blob 0aa41aca2ef0344fad9c31ecf3f4cdc104d49632     750    increments.json
-    # 100644 blob 9959e8138baa69944195fe3b96f22277510b3214 33675434   manifest.json
-    # 100755 blob 8f58e6df93d2fce6854d17b4f850420e967ece40       5    sandbox/cyber-dojo.sh
-    # 100644 blob 9b28ed8ad5b849f2e0aae25a7ed26ee76c95d9d2      28    sandbox/filesystem.txt
-    # 100644 blob d382f68ae11d079f154f54b468bfe9be2afb47b6     504    sandbox/instructions
-    # 100644 blob 3edb7cbe7aa9e051a6c4d21c624909e7b14a38d7     108    sandbox/makefile
-    # 100644 blob bf0169654298108820ed27ca130a823e07268b61 32583843   sandbox/output
-    # 100644 blob 97758a2fee8538f08cc0ce94f7ca7174a3b28450    7904    sandbox/untitled.c
-    # 100644 blob 2913503e7825bf7afb0d8a536319df1d54e3786b      96    sandbox/untitled.h
-    # 100644 blob 55df3e61dc669f17d6d1cd43ce1c611910c2a474     445    sandbox/untitled.tests.c
-
     kata_id = 'FD3D55C9E3'
     avatar = 'zebra'
     index = 10

@@ -235,9 +235,21 @@ class Storer
       read_tag_files(kata_id, avatar_name, tag)
     else # old git-format
       path = avatar_path(kata_id, avatar_name)
+      # find the size of the file (in the git tag)
+      # _before_ attempting to retrieve it.
+      git_ls = "git ls-tree -r --long #{tag}"
+      ls_src = shell.cd_exec(path, git_ls)[0]
+      ls = {}
+      ls_src.lines.each do |line|
+        # 100644 blob 9959e8138baa69944195fe3b96f22277510b3214 33675434   manifest.json
+        fields = line.split
+        size = fields[3].to_i
+        filename = fields[4]
+        ls[filename] = size
+      end
+      fail_if_too_large(ls[manifest_filename], kata_id, avatar_name, tag)
       git = "git show #{tag}:#{manifest_filename}"
       src = shell.cd_exec(path, git)[0]
-      fail_if_too_large(src, kata_id, avatar_name, tag)
       JSON.parse!(src)
     end
   end
@@ -290,7 +302,6 @@ class Storer
   def read_tag_files(kata_id, avatar_name, tag)
     dir = tag_dir(kata_id, avatar_name, tag)
     json = dir.read(manifest_filename)
-    fail_if_too_large(json, kata_id, avatar_name, tag)
     JSON.parse!(json)
   end
 
@@ -378,8 +389,8 @@ class Storer
 
   # - - - - - - - - - - -
 
-  def fail_if_too_large(src, kata_id, avatar_name, tag)
-    if src.size > (100*1024)
+  def fail_if_too_large(size, kata_id, avatar_name, tag)
+    if size > (100*1024)
       raise "#{kata_id}:#{avatar_name}:#{tag}:source is too large"
     end
   end
