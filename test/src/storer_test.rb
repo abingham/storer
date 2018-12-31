@@ -188,11 +188,15 @@ class StorerTest < TestBase
     kata_id = 'FD3D55C9E3'
     avatar = 'zebra'
     index = 10
+    t1 = Time.now
     error = assert_raises(RuntimeError) {
       tag_visible_files(kata_id, avatar, index)
     }
+    t2 = Time.now
+    took = t2 - t1
     expected = "#{kata_id}:#{avatar}:#{index}:source is too large"
     assert_equal expected, error.message
+    assert took < 5, "took too long"
   end
 
   # - - - - - - - - - - - - - - - - - - - - - - - - - -
